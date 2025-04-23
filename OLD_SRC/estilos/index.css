@@ -1,0 +1,4401 @@
+@font-face {
+    font-family: 'inmediato';
+    src: url('xFonts\Prompt') format('truetype');
+    /* Asegúrate de que la ruta sea correcta */
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background: url("../imgs/3.jpg") no-repeat center center fixed;/* Centra y fija la imagen de fondo */
+    background-size: cover;/* Hace que la imagen de fondo cubra todo el contenedor */
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.blur-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(3px);
+    z-index: 1; /* Asegurarse de que esté detrás del contenido */
+}
+
+.contenedor {
+    display: grid;
+    grid-template-rows: repeat(4, auto);
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    grid-template-areas:
+        "header header header header"
+        "usuario postulacion postulacion postulacion"
+        "usuario postulacion postulacion postulacion"
+        "chats postulacion postulacion postulacion";
+}
+
+/*Codigo del Navbar*/
+.navbar {
+    background-color: #ac001a;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: normal;
+}
+
+.navbar li a:hover {
+    background-color: #d00422;
+}
+
+/*El search es la barra de busqueda todavia no anda*/
+.navbar .search-container {
+    position: relatabive;
+    float: right;
+    max-width: 400px;
+    margin: 0 auto;
+    margin-left: 20px;
+}
+
+.navbar input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/*Este es el boton para la busqueda con una imagen de lupa*/
+.navbar .barcode-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    float: right;
+    border: none;
+    padding: 10px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+}
+
+.navbar .barcode-btn img {
+    width: 14px;
+    height: 14px;
+}
+
+/*El dropdown es el menu desplazable, con imagen*/
+.navbar .dropdown {
+    float: right;
+    position: relative;
+    padding-bottom: 1px;
+    margin-right: 20px;
+}
+
+.navbar .dropbtn {
+    position: left;
+    right: 0;
+    top: 0;
+    border: none;
+    background-color: #ac001a;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.navbar .dropbtn img {
+    width: 20px;
+    height: 20px;
+}
+
+.navbar .dropdown-content {
+    display: none;
+    position: absolute;
+    list-style: none;
+    background-color: #ac001a;
+    width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.navbar .dropdown-content a {
+    color: white;
+    padding: 15px 15px 15px 20px;
+    text-decoration: none;
+    display: block;
+    padding-bottom: 10px;
+}
+
+.navbar .dropdown-content a:hover {
+    background-color: #d00422;
+    border-radius: 10%;
+}
+
+.navbar .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.navbar .dropdown:hover .dropbtn {
+    background-color: #d00422;
+    border-radius: 10%;
+}
+
+/*Esta parte es del boton del usuario*/
+.navbar .userbtn {
+    float: right;
+    position: relative;
+    margin-right: 20px auto;
+    right: 0;
+    top: 0;
+    border: none;
+    background-color: #ac001a;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.navbar .userbtn img {
+    margin-top: 5px;
+    border-radius: 5%;
+    width: 34px;
+    height: 30px;
+}
+
+.navbar .userbtn:hover {
+    background-color: #d00422;
+}
+
+.image{
+    margin: 0 auto;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 1px solid gray;
+    display: inline-block;
+    padding: 3px;
+    border: 3px solid #d2d6de;
+    margin-top: 20px;
+    margin-right: 57px;
+    margin-left: 57px;  
+}
+
+/* Estilos adicionales para la barra de navegación en index.html */
+.header {
+    background-color: #ac001a;
+    grid-area: header;
+    text-align: center;
+}
+
+/* Los estilos adicionales para el usuario, chats, notificaciones y postulaciones */
+.usuario {
+    border: 2px solid rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .4);
+    background-color: rgba(0, 0, 0, .4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    grid-area: usuario;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    /* Asegura que el padding y el borde estén incluidos en el tamaño total del elemento */
+}
+
+.usuario h2 {
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: hidden ;
+}
+
+/* Los estilos adicionales para las etiquetas */
+.eti {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    /* Usar flexbox */
+    justify-content: center;
+    /* Centrar horizontalmente */
+    flex-wrap: wrap;
+    /* Permitir que los elementos se envuelvan si hay muchos */
+}
+
+.eti li {
+
+    margin: 2px;
+    border-radius: 25%;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.eti li a {
+    display: block;
+    color: #000000;
+    text-align: center;
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+/*Esta seccion es la modificacion del chat*/
+.chat {
+    border: 2px solid rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .4);
+    background-color: rgba(0, 0, 0, .4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    grid-area: chats;
+    padding: 15px;
+    text-align: center;
+}
+
+.chat h2 {
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: hidden ;
+}
+
+.chat-item {
+    border-radius: 10px;
+    background-color: #f2f2f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Alinea horizontalmente al centro */
+    margin-bottom: 5px;
+    
+    cursor: pointer;
+    /* Añadir cursor de mano para indicar interactividad */
+}
+
+
+.chat-item img {
+    margin-right: 10px;
+    float: right;
+}
+
+.chat-item p {
+    margin: 0;
+}
+
+.chat-item h3 {
+    cursor: pointer;
+    margin: 0;
+    padding-bottom: 5px;
+}
+
+x.chat-item .info {
+    display: none;
+}
+
+.chat-item.active .info {
+    display: block;
+}
+
+.chat-item.active h3::after {
+    content: "-";
+}
+
+.chat-item h3::after {
+    content: "+";
+    float: right;
+    margin-right: 5px;
+}
+
+/*La postulacion es la parte de las postulaciones de las empresas*/
+.postulacion {
+    border: 2px solid rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .4);
+    background-color: rgba(0, 0, 0, .4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    grid-area: postulacion;
+    padding: 15px;
+    text-align: center;
+}
+
+.postulacion h2 {
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+}
+/* Estilos para los elementos input de tipo texto y textarea dentro de .form-group */
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-family: 'Prompt', sans-serif;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+    border-color: #ac001a;
+    box-shadow: 0 0 5px rgba(172, 0, 26, 0.5);
+    outline: none;
+    background-color: #fff;
+}
+
+/* Estilo para los botones de los formularios */
+input[type="submit"],
+input[type="reset"],
+button {
+    background-color: #ac001a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Prompt', sans-serif;
+    transition: all 0.3s ease;
+}
+
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+button:hover {
+    background-color: #d00422;
+}
+
+/* Estilo para las etiquetas de los inputs */
+.form-group label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    color: #333;
+    font-family: 'Prompt', sans-serif;
+}
+
+/* Estilo para los mensajes de error */
+.form-group .error-message {
+    color: #d9534f;
+    font-size: 14px;
+    margin-top: 5px;
+    font-family: 'Prompt', sans-serif;
+}
+
+/* Estilo para los campos de texto deshabilitados */
+.form-group input[type="text"]:disabled,
+.form-group textarea:disabled {
+    background-color: #e9ecef;
+    border-color: #ced4da;
+    cursor: not-allowed;
+    color: #6c757d;
+}
+
+/* Estilo para los campos de texto con error */
+.form-group input[type="text"].error,
+.form-group textarea.error {
+    border-color: #d9534f;
+    box-shadow: 0 0 5px rgba(217, 83, 79, 0.5);
+}
+
+/* Estilo para los contenedores de los inputs */
+.form-group {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.item {
+    border-bottom: 2px solid #c2bfbf;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Alinea horizontalmente al centro */
+    margin-bottom: 5px;
+    
+    cursor: pointer;
+    /* Añadir cursor de mano para indicar interactividad */
+}
+
+.item h3 {
+    margin: 0;
+    /* Asegura que no haya margen adicional */
+    margin-right: 4px;
+}
+
+.post {
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #f2f2f2;
+    text-align: center;
+    /* Alinea el contenido al centro */
+    padding-bottom: 10px;
+
+}
+
+.info {
+    padding: 10px;
+    display: none;
+    /* Ocultar inicialmente */
+}
+
+.info ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    /* Usar flexbox */
+    justify-content: center;
+    /* Centrar horizontalmente */
+    flex-wrap: wrap;
+    /* Permitir que los elementos se envuelvan si hay muchos */
+}
+
+.info ul li {
+    background-color: #d9d9d9;
+    margin: 2px;
+    border-radius: 25%;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.info ul li a {
+    display: block;
+    color: #000000;
+    text-align: center;
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+.bot1,
+.bot2 {
+    border: 2px solid #cf0000;
+    display: inline-block;
+    /* No ocupar todo el ancho */
+    background-color: #ba0924;
+    margin: 2px;
+    color: #fff;
+    border-radius: 10px;
+    text-decoration: none;
+    padding: 5px 10px;
+    /* Añadir algo de padding para hacer los botones más grandes */
+    cursor: pointer;
+    /* Añadir cursor de mano para indicar interactividad */
+}
+
+.bot1:hover,
+.bot2:hover {
+    background-color: #bd0000;
+    border: 2px solid #ba0924;
+}
+
+/*Acá es la parte responsive*/
+@media screen and (max-width: 768px) {
+    @font-face {
+        font-family: 'inmediato';
+        src: url('xFonts\Prompt') format('truetype');
+        /* Asegúrate de que la ruta sea correcta */
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    .fondo {
+        font-family: 'inmediato', sans-serif;
+        /* Usa la fuente en el cuerpo del documento */
+        margin: 0 0 0 0;
+        padding: 0;
+    }
+
+    .contenedor {
+        display: grid;
+        grid-template-rows: repeat(4, auto);
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 10px;
+        font-family: 'inmediato', sans-serif;
+        /* Usa la fuente en el cuerpo del documento */
+        grid-template-areas:
+            "header header header"
+            "usuario usuario chats"
+            "usuario usuario chats"
+            "postulacion postulacion postulacion"
+            "postulacion postulacion postulacion"
+            "postulacion postulacion postulacion";
+    }
+
+    /*Codigo del Navbar*/
+
+    .navbar {
+        background-color: #ac001a;
+        color: #fff;
+        display: flex;
+        justify-content: flex-start;
+        align-items: normal;
+        height: 30px;
+    }
+
+    .navbar li a:hover {
+        background-color: #d00422;
+    }
+
+    /*El search es la barra de busqueda todavia no anda*/
+    .navbar .search-container {
+        position: relative;
+        float: right;
+        max-width: 400px;
+        margin: 0 auto;
+        margin-left: 20px;
+    }
+
+    .navbar input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    /*Este es el boton para la busqueda con una imagen de lupa*/
+    .navbar .barcode-btn {
+        position: absolute;
+        right: 0;
+        top: 0;
+        float: right;
+        background: #f0f0f0;
+        border: none;
+        padding: 10px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        cursor: pointer;
+    }
+
+    .navbar .barcode-btn img {
+        width: 14px;
+        height: 14px;
+    }
+
+    /*El dropdown es el menu desplazable, con imagen*/
+    .navbar .dropdown {
+        float: right;
+        position: relative;
+        padding-bottom: 1px;
+        margin-right: 20px;
+    }
+
+    .navbar .dropbtn {
+        border: none;
+        background-color: #ac001a;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .navbar .dropdown-content {
+        display: none;
+        position: absolute;
+        list-style: none;
+        background-color: #ac001a;
+        width: 200px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    .navbar .dropdown-content a {
+        color: white;
+        padding: 15px 15px 15px 20px;
+        text-decoration: none;
+        display: block;
+        padding-bottom: 10px;
+    }
+
+    .navbar .dropdown-content a:hover {
+        background-color: #d00422;
+        border-radius: 10%;
+    }
+
+    .navbar .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .navbar .dropdown:hover .dropbtn {
+        background-color: #d00422;
+        border-radius: 10%;
+    }
+
+    /*Esta parte es del boton del usuario*/
+    .navbar .userbtn {
+        float: right;
+        position: relative;
+        margin-right: 20px auto;
+        right: 0;
+        top: 0;
+        border: none;
+        background-color: #ac001a;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .navbar .userbtn img {
+        margin-top: 5px;
+        border-radius: 5%;
+        width: 34px;
+        height: 30px;
+    }
+
+    .navbar .userbtn:hover {
+        background-color: #d00422;
+    }
+
+    /* Estilos adicionales para la barra de navegación en index.html */
+    .header {
+        background-color: #ac001a;
+        grid-area: header;
+        text-align: center;
+    }
+
+    /* Los estilos adicionales para el usuario, chats, notificaciones y postulaciones */
+    .usuario {
+        border: 2px solid rgba(0, 0, 0, .4);
+        background: rgba(0, 0, 0, .4);
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, .4);
+        box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+        border-radius: 5%;
+        grid-area: usuario;
+        padding: 15px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+        /* Asegura que el padding y el borde estén incluidos en el tamaño total del elemento */
+    }
+
+    .usuario h2 {
+        width: calc(100% + 30px);
+        margin: -15px -15px 15px -15px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+
+    /* Los estilos adicionales para las etiquetas */
+    .eti {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        /* Usar flexbox */
+        justify-content: center;
+        /* Centrar horizontalmente */
+        flex-wrap: wrap;
+        /* Permitir que los elementos se envuelvan si hay muchos */
+    }
+
+    .eti li {
+        background-color: #d9d9d9;
+        margin: 2px;
+        border-radius: 25%;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    .eti li a {
+        display: block;
+        color: #000000;
+        text-align: center;
+        padding: 10px 10px;
+        text-decoration: none;
+    }
+
+    /*Esta seccion es la modificacion del chat*/
+    .chat {
+        border: 2px solid rgba(0, 0, 0, .4);
+        background: rgba(0, 0, 0, .4);
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, .4);
+        box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+        border-radius: 5%;
+        grid-area: chats;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .chat h2 {
+        width: calc(100% + 30px);
+        margin: -15px -15px 15px -15px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+
+    .chat-item {
+        border-radius: 10px;
+        background-color: #f2f2f2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* Alinea horizontalmente al centro */
+        margin-bottom: 5px;
+        
+        cursor: pointer;
+        /* Añadir cursor de mano para indicar interactividad */
+    }
+
+    .chat-item img {
+        margin-right: 10px;
+        float: left;
+    }
+
+    .chat-item p {
+        margin: 0;
+    }
+
+    .chat-item h3 {
+        cursor: pointer;
+        margin: 0;
+        padding-bottom: 5px;
+    }
+
+    x.chat-item .info {
+        display: none;
+    }
+
+    .chat-item.active .info {
+        display: block;
+    }
+
+    .chat-item.active h3::after {
+        content: "-";
+    }
+
+    .chat-item h3::after {
+        content: "+";
+        float: right;
+        margin-right: 5px;
+    }
+
+    .chat-item:hover {
+        background-color: #d9d9d9;
+        border: 2px solid #c2bfbf;
+    }
+
+    /*La postulacion es la parte de las postulaciones de las empresas*/
+    .postulacion {
+        border: 2px solid rgba(0, 0, 0, .4);
+        background: rgba(0, 0, 0, .4);
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, .4);
+        box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+        border-radius: 10px;
+        grid-area: postulacion;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .postulacion h2 {
+        width: calc(100% + 30px);
+        margin: -15px -15px 15px -15px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+
+    .item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* Alinea horizontalmente al centro */
+        margin-bottom: 5px;
+        border-bottom: 2px solid #c2bfbf;
+        cursor: pointer;
+        /* Añadir cursor de mano para indicar interactividad */
+    }
+
+    .item h3 {
+        margin: 0;
+        /* Asegura que no haya margen adicional */
+        margin-right: 4px;
+    }
+
+    .post {
+        text-align: center;
+        /* Alinea el contenido al centro */
+        padding-bottom: 10px;
+    }
+
+    .info {
+        display: none;
+        /* Ocultar inicialmente */
+    }
+
+    .bot1,
+    .bot2 {
+        border: 2px solid #cf0000;
+        display: inline-block;
+        /* No ocupar todo el ancho */
+        background-color: #ba0924;
+        margin: 2px;
+        color: #fff;
+        border-radius: 10px;
+        padding: 5px 10px;
+        /* Añadir algo de padding para hacer los botones más grandes */
+        cursor: pointer;
+        /* Añadir cursor de mano para indicar interactividad */
+    }
+
+    .bot1:hover,
+    .bot2:hover {
+        background-color: #da0000;
+        border: 2px solid #ba0924;
+    }
+}@font-face {
+    font-family: 'inmediato';
+    src: url('xFonts\Prompt') format('truetype');
+    /* Asegúrate de que la ruta sea correcta */
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background: url("../imgs/3.jpg") no-repeat center center fixed;/* Centra y fija la imagen de fondo */
+    background-size: cover;/* Hace que la imagen de fondo cubra todo el contenedor */
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.blur-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(3px);
+    z-index: 1; /* Asegurarse de que esté detrás del contenido */
+}
+
+.contenedor {
+    display: grid;
+    grid-template-rows: repeat(4, auto);
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    grid-template-areas:
+        "header header header header"
+        "usuario postulacion postulacion postulacion"
+        "usuario postulacion postulacion postulacion"
+        "chats postulacion postulacion postulacion";
+}
+
+/*Codigo del Navbar*/
+.navbar {
+    background-color: #ac001a;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: normal;
+}
+
+.navbar li a:hover {
+    background-color: #d00422;
+}
+
+/*El search es la barra de busqueda todavia no anda*/
+.navbar .search-container {
+    position: relatabive;
+    float: right;
+    max-width: 400px;
+    margin: 0 auto;
+    margin-left: 20px;
+}
+
+.navbar input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/*Este es el boton para la busqueda con una imagen de lupa*/
+.navbar .barcode-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    float: right;
+    border: none;
+    padding: 10px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+}
+
+.navbar .barcode-btn img {
+    width: 14px;
+    height: 14px;
+}
+
+/*El dropdown es el menu desplazable, con imagen*/
+.navbar .dropdown {
+    float: right;
+    position: relative;
+    padding-bottom: 1px;
+    margin-right: 20px;
+}
+
+.navbar .dropbtn {
+    position: left;
+    right: 0;
+    top: 0;
+    border: none;
+    background-color: #ac001a;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.navbar .dropbtn img {
+    width: 20px;
+    height: 20px;
+}
+
+.navbar .dropdown-content {
+    display: none;
+    position: absolute;
+    list-style: none;
+    background-color: #ac001a;
+    width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.navbar .dropdown-content a {
+    color: white;
+    padding: 15px 15px 15px 20px;
+    text-decoration: none;
+    display: block;
+    padding-bottom: 10px;
+}
+
+.navbar .dropdown-content a:hover {
+    background-color: #d00422;
+    border-radius: 10%;
+}
+
+.navbar .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.navbar .dropdown:hover .dropbtn {
+    background-color: #d00422;
+    border-radius: 10%;
+}
+
+/*Esta parte es del boton del usuario*/
+.navbar .userbtn {
+    float: right;
+    position: relative;
+    margin-right: 20px auto;
+    right: 0;
+    top: 0;
+    border: none;
+    background-color: #ac001a;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.navbar .userbtn img {
+    margin-top: 5px;
+    border-radius: 5%;
+    width: 34px;
+    height: 30px;
+}
+
+.navbar .userbtn:hover {
+    background-color: #d00422;
+}
+
+.image{
+    margin: 0 auto;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 1px solid gray;
+    display: inline-block;
+    padding: 3px;
+    border: 3px solid #d2d6de;
+    margin-top: 20px;
+    margin-right: 57px;
+    margin-left: 57px;  
+}
+
+/* Estilos adicionales para la barra de navegación en index.html */
+.header {
+    background-color: #ac001a;
+    grid-area: header;
+    text-align: center;
+}
+
+/* Los estilos adicionales para el usuario, chats, notificaciones y postulaciones */
+.usuario {
+    border: 2px solid rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .4);
+    background-color: rgba(0, 0, 0, .4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    grid-area: usuario;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    /* Asegura que el padding y el borde estén incluidos en el tamaño total del elemento */
+}
+
+.usuario h2 {
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: hidden ;
+}
+
+/* Los estilos adicionales para las etiquetas */
+.eti {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    /* Usar flexbox */
+    justify-content: center;
+    /* Centrar horizontalmente */
+    flex-wrap: wrap;
+    /* Permitir que los elementos se envuelvan si hay muchos */
+}
+
+.eti li {
+
+    margin: 2px;
+    border-radius: 25%;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.eti li a {
+    display: block;
+    color: #000000;
+    text-align: center;
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+/*Esta seccion es la modificacion del chat*/
+.chat {
+    border: 2px solid rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .4);
+    background-color: rgba(0, 0, 0, .4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    grid-area: chats;
+    padding: 15px;
+    text-align: center;
+}
+
+.chat h2 {
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: hidden ;
+}
+
+.chat-item {
+    border-radius: 10px;
+    background-color: #f2f2f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Alinea horizontalmente al centro */
+    margin-bottom: 5px;
+    
+    cursor: pointer;
+    /* Añadir cursor de mano para indicar interactividad */
+}
+
+
+.chat-item img {
+    margin-right: 10px;
+    float: right;
+}
+
+.chat-item p {
+    margin: 0;
+}
+
+.chat-item h3 {
+    cursor: pointer;
+    margin: 0;
+    padding-bottom: 5px;
+}
+
+x.chat-item .info {
+    display: none;
+}
+
+.chat-item.active .info {
+    display: block;
+}
+
+.chat-item.active h3::after {
+    content: "-";
+}
+
+.chat-item h3::after {
+    content: "+";
+    float: right;
+    margin-right: 5px;
+}
+
+/*La postulacion es la parte de las postulaciones de las empresas*/
+.postulacion {
+    border: 2px solid rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .4);
+    background-color: rgba(0, 0, 0, .4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    grid-area: postulacion;
+    padding: 15px;
+    text-align: center;
+}
+
+.postulacion h2 {
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+}
+/* Estilos para los elementos input de tipo texto y textarea dentro de .form-group */
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-family: 'Prompt', sans-serif;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+    border-color: #ac001a;
+    box-shadow: 0 0 5px rgba(172, 0, 26, 0.5);
+    outline: none;
+    background-color: #fff;
+}
+
+/* Estilo para los botones de los formularios */
+input[type="submit"],
+input[type="reset"],
+button {
+    background-color: #ac001a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Prompt', sans-serif;
+    transition: all 0.3s ease;
+}
+
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+button:hover {
+    background-color: #d00422;
+}
+
+/* Estilo para las etiquetas de los inputs */
+.form-group label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    color: #333;
+    font-family: 'Prompt', sans-serif;
+}
+
+/* Estilo para los mensajes de error */
+.form-group .error-message {
+    color: #d9534f;
+    font-size: 14px;
+    margin-top: 5px;
+    font-family: 'Prompt', sans-serif;
+}
+
+/* Estilo para los campos de texto deshabilitados */
+.form-group input[type="text"]:disabled,
+.form-group textarea:disabled {
+    background-color: #e9ecef;
+    border-color: #ced4da;
+    cursor: not-allowed;
+    color: #6c757d;
+}
+
+/* Estilo para los campos de texto con error */
+.form-group input[type="text"].error,
+.form-group textarea.error {
+    border-color: #d9534f;
+    box-shadow: 0 0 5px rgba(217, 83, 79, 0.5);
+}
+
+/* Estilo para los contenedores de los inputs */
+.form-group {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.item {
+    border-bottom: 2px solid #c2bfbf;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Alinea horizontalmente al centro */
+    margin-bottom: 5px;
+    
+    cursor: pointer;
+    /* Añadir cursor de mano para indicar interactividad */
+}
+
+.item h3 {
+    margin: 0;
+    /* Asegura que no haya margen adicional */
+    margin-right: 4px;
+}
+
+.post {
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #f2f2f2;
+    text-align: center;
+    /* Alinea el contenido al centro */
+    padding-bottom: 10px;
+
+}
+
+.info {
+    padding: 10px;
+    display: none;
+    /* Ocultar inicialmente */
+}
+
+.info ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    /* Usar flexbox */
+    justify-content: center;
+    /* Centrar horizontalmente */
+    flex-wrap: wrap;
+    /* Permitir que los elementos se envuelvan si hay muchos */
+}
+
+.info ul li {
+    background-color: #d9d9d9;
+    margin: 2px;
+    border-radius: 25%;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.info ul li a {
+    display: block;
+    color: #000000;
+    text-align: center;
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+.bot1,
+.bot2 {
+    border: 2px solid #cf0000;
+    display: inline-block;
+    /* No ocupar todo el ancho */
+    background-color: #ba0924;
+    margin: 2px;
+    color: #fff;
+    border-radius: 10px;
+    text-decoration: none;
+    padding: 5px 10px;
+    /* Añadir algo de padding para hacer los botones más grandes */
+    cursor: pointer;
+    /* Añadir cursor de mano para indicar interactividad */
+}
+
+.bot1:hover,
+.bot2:hover {
+    background-color: #bd0000;
+    border: 2px solid #ba0924;
+}
+
+/*Acá es la parte responsive*/
+@media screen and (max-width: 768px) {
+    @font-face {
+        font-family: 'inmediato';
+        src: url('xFonts\Prompt') format('truetype');
+        /* Asegúrate de que la ruta sea correcta */
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    .fondo {
+        font-family: 'inmediato', sans-serif;
+        /* Usa la fuente en el cuerpo del documento */
+        margin: 0 0 0 0;
+        padding: 0;
+    }
+
+    .contenedor {
+        display: grid;
+        grid-template-rows: repeat(4, auto);
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 10px;
+        font-family: 'inmediato', sans-serif;
+        /* Usa la fuente en el cuerpo del documento */
+        grid-template-areas:
+            "header header header"
+            "usuario usuario chats"
+            "usuario usuario chats"
+            "postulacion postulacion postulacion"
+            "postulacion postulacion postulacion"
+            "postulacion postulacion postulacion";
+    }
+
+    /*Codigo del Navbar*/
+
+    .navbar {
+        background-color: #ac001a;
+        color: #fff;
+        display: flex;
+        justify-content: flex-start;
+        align-items: normal;
+        height: 30px;
+    }
+
+    .navbar li a:hover {
+        background-color: #d00422;
+    }
+
+    /*El search es la barra de busqueda todavia no anda*/
+    .navbar .search-container {
+        position: relative;
+        float: right;
+        max-width: 400px;
+        margin: 0 auto;
+        margin-left: 20px;
+    }
+
+    .navbar input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    /*Este es el boton para la busqueda con una imagen de lupa*/
+    .navbar .barcode-btn {
+        position: absolute;
+        right: 0;
+        top: 0;
+        float: right;
+        background: #f0f0f0;
+        border: none;
+        padding: 10px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        cursor: pointer;
+    }
+
+    .navbar .barcode-btn img {
+        width: 14px;
+        height: 14px;
+    }
+
+    /*El dropdown es el menu desplazable, con imagen*/
+    .navbar .dropdown {
+        float: right;
+        position: relative;
+        padding-bottom: 1px;
+        margin-right: 20px;
+    }
+
+    .navbar .dropbtn {
+        border: none;
+        background-color: #ac001a;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .navbar .dropdown-content {
+        display: none;
+        position: absolute;
+        list-style: none;
+        background-color: #ac001a;
+        width: 200px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    .navbar .dropdown-content a {
+        color: white;
+        padding: 15px 15px 15px 20px;
+        text-decoration: none;
+        display: block;
+        padding-bottom: 10px;
+    }
+
+    .navbar .dropdown-content a:hover {
+        background-color: #d00422;
+        border-radius: 10%;
+    }
+
+    .navbar .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .navbar .dropdown:hover .dropbtn {
+        background-color: #d00422;
+        border-radius: 10%;
+    }
+
+    /*Esta parte es del boton del usuario*/
+    .navbar .userbtn {
+        float: right;
+        position: relative;
+        margin-right: 20px auto;
+        right: 0;
+        top: 0;
+        border: none;
+        background-color: #ac001a;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .navbar .userbtn img {
+        margin-top: 5px;
+        border-radius: 5%;
+        width: 34px;
+        height: 30px;
+    }
+
+    .navbar .userbtn:hover {
+        background-color: #d00422;
+    }
+
+    /* Estilos adicionales para la barra de navegación en index.html */
+    .header {
+        background-color: #ac001a;
+        grid-area: header;
+        text-align: center;
+    }
+
+    /* Los estilos adicionales para el usuario, chats, notificaciones y postulaciones */
+    .usuario {
+        border: 2px solid rgba(0, 0, 0, .4);
+        background: rgba(0, 0, 0, .4);
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, .4);
+        box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+        border-radius: 5%;
+        grid-area: usuario;
+        padding: 15px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+        /* Asegura que el padding y el borde estén incluidos en el tamaño total del elemento */
+    }
+
+    .usuario h2 {
+        width: calc(100% + 30px);
+        margin: -15px -15px 15px -15px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+
+    /* Los estilos adicionales para las etiquetas */
+    .eti {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        /* Usar flexbox */
+        justify-content: center;
+        /* Centrar horizontalmente */
+        flex-wrap: wrap;
+        /* Permitir que los elementos se envuelvan si hay muchos */
+    }
+
+    .eti li {
+        background-color: #d9d9d9;
+        margin: 2px;
+        border-radius: 25%;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    .eti li a {
+        display: block;
+        color: #000000;
+        text-align: center;
+        padding: 10px 10px;
+        text-decoration: none;
+    }
+
+    /*Esta seccion es la modificacion del chat*/
+    .chat {
+        border: 2px solid rgba(0, 0, 0, .4);
+        background: rgba(0, 0, 0, .4);
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, .4);
+        box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+        border-radius: 5%;
+        grid-area: chats;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .chat h2 {
+        width: calc(100% + 30px);
+        margin: -15px -15px 15px -15px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+
+    .chat-item {
+        border-radius: 10px;
+        background-color: #f2f2f2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* Alinea horizontalmente al centro */
+        margin-bottom: 5px;
+        
+        cursor: pointer;
+        /* Añadir cursor de mano para indicar interactividad */
+    }
+
+    .chat-item img {
+        margin-right: 10px;
+        float: left;
+    }
+
+    .chat-item p {
+        margin: 0;
+    }
+
+    .chat-item h3 {
+        cursor: pointer;
+        margin: 0;
+        padding-bottom: 5px;
+    }
+
+    x.chat-item .info {
+        display: none;
+    }
+
+    .chat-item.active .info {
+        display: block;
+    }
+
+    .chat-item.active h3::after {
+        content: "-";
+    }
+
+    .chat-item h3::after {
+        content: "+";
+        float: right;
+        margin-right: 5px;
+    }
+
+    .chat-item:hover {
+        background-color: #d9d9d9;
+        border: 2px solid #c2bfbf;
+    }
+
+    /*La postulacion es la parte de las postulaciones de las empresas*/
+    .postulacion {
+        border: 2px solid rgba(0, 0, 0, .4);
+        background: rgba(0, 0, 0, .4);
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, .4);
+        box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+        border-radius: 10px;
+        grid-area: postulacion;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .postulacion h2 {
+        width: calc(100% + 30px);
+        margin: -15px -15px 15px -15px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+
+    .item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* Alinea horizontalmente al centro */
+        margin-bottom: 5px;
+        border-bottom: 2px solid #c2bfbf;
+        cursor: pointer;
+        /* Añadir cursor de mano para indicar interactividad */
+    }
+
+    .item h3 {
+        margin: 0;
+        /* Asegura que no haya margen adicional */
+        margin-right: 4px;
+    }
+
+    .post {
+        text-align: center;
+        /* Alinea el contenido al centro */
+        padding-bottom: 10px;
+    }
+
+    .info {
+        display: none;
+        /* Ocultar inicialmente */
+    }
+
+    .bot1,
+    .bot2 {
+        border: 2px solid #cf0000;
+        display: inline-block;
+        /* No ocupar todo el ancho */
+        background-color: #ba0924;
+        margin: 2px;
+        color: #fff;
+        border-radius: 10px;
+        padding: 5px 10px;
+        /* Añadir algo de padding para hacer los botones más grandes */
+        cursor: pointer;
+        /* Añadir cursor de mano para indicar interactividad */
+    }
+
+    .bot1:hover,
+    .bot2:hover {
+        background-color: #da0000;
+        border: 2px solid #ba0924;
+    }
+}@font-face {
+    font-family: 'inmediato';
+    src: url('xFonts\Prompt') format('truetype');
+    /* Asegúrate de que la ruta sea correcta */
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background: url("../imgs/3.jpg") no-repeat center center fixed;/* Centra y fija la imagen de fondo */
+    background-size: cover;/* Hace que la imagen de fondo cubra todo el contenedor */
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.blur-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(3px);
+    z-index: 1; /* Asegurarse de que esté detrás del contenido */
+}
+
+.contenedor {
+    display: grid;
+    grid-template-rows: repeat(4, auto);
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    grid-template-areas:
+        "header header header header"
+        "usuario postulacion postulacion postulacion"
+        "usuario postulacion postulacion postulacion"
+        "chats postulacion postulacion postulacion";
+}
+
+/*Codigo del Navbar*/
+.navbar {
+    background-color: #ac001a;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: normal;
+}
+
+.navbar li a:hover {
+    background-color: #d00422;
+}
+
+/*El search es la barra de busqueda todavia no anda*/
+.navbar .search-container {
+    position: relatabive;
+    float: right;
+    max-width: 400px;
+    margin: 0 auto;
+    margin-left: 20px;
+}
+
+.navbar input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/*Este es el boton para la busqueda con una imagen de lupa*/
+.navbar .barcode-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    float: right;
+    border: none;
+    padding: 10px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+}
+
+.navbar .barcode-btn img {
+    width: 14px;
+    height: 14px;
+}
+
+/*El dropdown es el menu desplazable, con imagen*/
+.navbar .dropdown {
+    float: right;
+    position: relative;
+    padding-bottom: 1px;
+    margin-right: 20px;
+}
+
+.navbar .dropbtn {
+    position: left;
+    right: 0;
+    top: 0;
+    border: none;
+    background-color: #ac001a;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.navbar .dropbtn img {
+    width: 20px;
+    height: 20px;
+}
+
+.navbar .dropdown-content {
+    display: none;
+    position: absolute;
+    list-style: none;
+    background-color: #ac001a;
+    width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.navbar .dropdown-content a {
+    color: white;
+    padding: 15px 15px 15px 20px;
+    text-decoration: none;
+    display: block;
+    padding-bottom: 10px;
+}
+
+.navbar .dropdown-content a:hover {
+    background-color: #d00422;
+    border-radius: 10%;
+}
+
+.navbar .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.navbar .dropdown:hover .dropbtn {
+    background-color: #d00422;
+    border-radius: 10%;
+}
+
+/*Esta parte es del boton del usuario*/
+.navbar .userbtn {
+    float: right;
+    position: relative;
+    margin-right: 20px auto;
+    right: 0;
+    top: 0;
+    border: none;
+    background-color: #ac001a;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.navbar .userbtn img {
+    margin-top: 5px;
+    border-radius: 5%;
+    width: 34px;
+    height: 30px;
+}
+
+.navbar .userbtn:hover {
+    background-color: #d00422;
+}
+
+.image{
+    margin: 0 auto;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 1px solid gray;
+    display: inline-block;
+    padding: 3px;
+    border: 3px solid #d2d6de;
+    margin-top: 20px;
+    margin-right: 57px;
+    margin-left: 57px;  
+}
+
+/* Estilos adicionales para la barra de navegación en index.html */
+.header {
+    background-color: #ac001a;
+    grid-area: header;
+    text-align: center;
+}
+
+/* Los estilos adicionales para el usuario, chats, notificaciones y postulaciones */
+.usuario {
+    border: 2px solid rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .4);
+    background-color: rgba(0, 0, 0, .4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    grid-area: usuario;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    /* Asegura que el padding y el borde estén incluidos en el tamaño total del elemento */
+}
+
+.usuario h2 {
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: hidden ;
+}
+
+/* Los estilos adicionales para las etiquetas */
+.eti {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    /* Usar flexbox */
+    justify-content: center;
+    /* Centrar horizontalmente */
+    flex-wrap: wrap;
+    /* Permitir que los elementos se envuelvan si hay muchos */
+}
+
+.eti li {
+
+    margin: 2px;
+    border-radius: 25%;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.eti li a {
+    display: block;
+    color: #000000;
+    text-align: center;
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+/*Esta seccion es la modificacion del chat*/
+.chat {
+    border: 2px solid rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .4);
+    background-color: rgba(0, 0, 0, .4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    grid-area: chats;
+    padding: 15px;
+    text-align: center;
+}
+
+.chat h2 {
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: hidden ;
+}
+
+.chat-item {
+    border-radius: 10px;
+    background-color: #f2f2f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Alinea horizontalmente al centro */
+    margin-bottom: 5px;
+    
+    cursor: pointer;
+    /* Añadir cursor de mano para indicar interactividad */
+}
+
+
+.chat-item img {
+    margin-right: 10px;
+    float: right;
+}
+
+.chat-item p {
+    margin: 0;
+}
+
+.chat-item h3 {
+    cursor: pointer;
+    margin: 0;
+    padding-bottom: 5px;
+}
+
+x.chat-item .info {
+    display: none;
+}
+
+.chat-item.active .info {
+    display: block;
+}
+
+.chat-item.active h3::after {
+    content: "-";
+}
+
+.chat-item h3::after {
+    content: "+";
+    float: right;
+    margin-right: 5px;
+}
+
+/*La postulacion es la parte de las postulaciones de las empresas*/
+.postulacion {
+    border: 2px solid rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .4);
+    background-color: rgba(0, 0, 0, .4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    grid-area: postulacion;
+    padding: 15px;
+    text-align: center;
+}
+
+.postulacion h2 {
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+}
+/* Estilos para los elementos input de tipo texto y textarea dentro de .form-group */
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-family: 'Prompt', sans-serif;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+    border-color: #ac001a;
+    box-shadow: 0 0 5px rgba(172, 0, 26, 0.5);
+    outline: none;
+    background-color: #fff;
+}
+
+/* Estilo para los botones de los formularios */
+input[type="submit"],
+input[type="reset"],
+button {
+    background-color: #ac001a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Prompt', sans-serif;
+    transition: all 0.3s ease;
+}
+
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+button:hover {
+    background-color: #d00422;
+}
+
+/* Estilo para las etiquetas de los inputs */
+.form-group label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    color: #333;
+    font-family: 'Prompt', sans-serif;
+}
+
+/* Estilo para los mensajes de error */
+.form-group .error-message {
+    color: #d9534f;
+    font-size: 14px;
+    margin-top: 5px;
+    font-family: 'Prompt', sans-serif;
+}
+
+/* Estilo para los campos de texto deshabilitados */
+.form-group input[type="text"]:disabled,
+.form-group textarea:disabled {
+    background-color: #e9ecef;
+    border-color: #ced4da;
+    cursor: not-allowed;
+    color: #6c757d;
+}
+
+/* Estilo para los campos de texto con error */
+.form-group input[type="text"].error,
+.form-group textarea.error {
+    border-color: #d9534f;
+    box-shadow: 0 0 5px rgba(217, 83, 79, 0.5);
+}
+
+/* Estilo para los contenedores de los inputs */
+.form-group {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.item {
+    border-bottom: 2px solid #c2bfbf;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Alinea horizontalmente al centro */
+    margin-bottom: 5px;
+    
+    cursor: pointer;
+    /* Añadir cursor de mano para indicar interactividad */
+}
+
+.item h3 {
+    margin: 0;
+    /* Asegura que no haya margen adicional */
+    margin-right: 4px;
+}
+
+.post {
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #f2f2f2;
+    text-align: center;
+    /* Alinea el contenido al centro */
+    padding-bottom: 10px;
+
+}
+
+.info {
+    padding: 10px;
+    display: none;
+    /* Ocultar inicialmente */
+}
+
+.info ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    /* Usar flexbox */
+    justify-content: center;
+    /* Centrar horizontalmente */
+    flex-wrap: wrap;
+    /* Permitir que los elementos se envuelvan si hay muchos */
+}
+
+.info ul li {
+    background-color: #d9d9d9;
+    margin: 2px;
+    border-radius: 25%;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.info ul li a {
+    display: block;
+    color: #000000;
+    text-align: center;
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+.bot1,
+.bot2 {
+    border: 2px solid #cf0000;
+    display: inline-block;
+    /* No ocupar todo el ancho */
+    background-color: #ba0924;
+    margin: 2px;
+    color: #fff;
+    border-radius: 10px;
+    text-decoration: none;
+    padding: 5px 10px;
+    /* Añadir algo de padding para hacer los botones más grandes */
+    cursor: pointer;
+    /* Añadir cursor de mano para indicar interactividad */
+}
+
+.bot1:hover,
+.bot2:hover {
+    background-color: #bd0000;
+    border: 2px solid #ba0924;
+}
+
+/*Acá es la parte responsive*/
+@media screen and (max-width: 768px) {
+    @font-face {
+        font-family: 'inmediato';
+        src: url('xFonts\Prompt') format('truetype');
+        /* Asegúrate de que la ruta sea correcta */
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    .fondo {
+        font-family: 'inmediato', sans-serif;
+        /* Usa la fuente en el cuerpo del documento */
+        margin: 0 0 0 0;
+        padding: 0;
+    }
+
+    .contenedor {
+        display: grid;
+        grid-template-rows: repeat(4, auto);
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 10px;
+        font-family: 'inmediato', sans-serif;
+        /* Usa la fuente en el cuerpo del documento */
+        grid-template-areas:
+            "header header header"
+            "usuario usuario chats"
+            "usuario usuario chats"
+            "postulacion postulacion postulacion"
+            "postulacion postulacion postulacion"
+            "postulacion postulacion postulacion";
+    }
+
+    /*Codigo del Navbar*/
+
+    .navbar {
+        background-color: #ac001a;
+        color: #fff;
+        display: flex;
+        justify-content: flex-start;
+        align-items: normal;
+        height: 30px;
+    }
+
+    .navbar li a:hover {
+        background-color: #d00422;
+    }
+
+    /*El search es la barra de busqueda todavia no anda*/
+    .navbar .search-container {
+        position: relative;
+        float: right;
+        max-width: 400px;
+        margin: 0 auto;
+        margin-left: 20px;
+    }
+
+    .navbar input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    /*Este es el boton para la busqueda con una imagen de lupa*/
+    .navbar .barcode-btn {
+        position: absolute;
+        right: 0;
+        top: 0;
+        float: right;
+        background: #f0f0f0;
+        border: none;
+        padding: 10px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        cursor: pointer;
+    }
+
+    .navbar .barcode-btn img {
+        width: 14px;
+        height: 14px;
+    }
+
+    /*El dropdown es el menu desplazable, con imagen*/
+    .navbar .dropdown {
+        float: right;
+        position: relative;
+        padding-bottom: 1px;
+        margin-right: 20px;
+    }
+
+    .navbar .dropbtn {
+        border: none;
+        background-color: #ac001a;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .navbar .dropdown-content {
+        display: none;
+        position: absolute;
+        list-style: none;
+        background-color: #ac001a;
+        width: 200px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    .navbar .dropdown-content a {
+        color: white;
+        padding: 15px 15px 15px 20px;
+        text-decoration: none;
+        display: block;
+        padding-bottom: 10px;
+    }
+
+    .navbar .dropdown-content a:hover {
+        background-color: #d00422;
+        border-radius: 10%;
+    }
+
+    .navbar .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .navbar .dropdown:hover .dropbtn {
+        background-color: #d00422;
+        border-radius: 10%;
+    }
+
+    /*Esta parte es del boton del usuario*/
+    .navbar .userbtn {
+        float: right;
+        position: relative;
+        margin-right: 20px auto;
+        right: 0;
+        top: 0;
+        border: none;
+        background-color: #ac001a;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .navbar .userbtn img {
+        margin-top: 5px;
+        border-radius: 5%;
+        width: 34px;
+        height: 30px;
+    }
+
+    .navbar .userbtn:hover {
+        background-color: #d00422;
+    }
+
+    /* Estilos adicionales para la barra de navegación en index.html */
+    .header {
+        background-color: #ac001a;
+        grid-area: header;
+        text-align: center;
+    }
+
+    /* Los estilos adicionales para el usuario, chats, notificaciones y postulaciones */
+    .usuario {
+        border: 2px solid rgba(0, 0, 0, .4);
+        background: rgba(0, 0, 0, .4);
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, .4);
+        box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+        border-radius: 5%;
+        grid-area: usuario;
+        padding: 15px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+        /* Asegura que el padding y el borde estén incluidos en el tamaño total del elemento */
+    }
+
+    .usuario h2 {
+        width: calc(100% + 30px);
+        margin: -15px -15px 15px -15px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+
+    /* Los estilos adicionales para las etiquetas */
+    .eti {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        /* Usar flexbox */
+        justify-content: center;
+        /* Centrar horizontalmente */
+        flex-wrap: wrap;
+        /* Permitir que los elementos se envuelvan si hay muchos */
+    }
+
+    .eti li {
+        background-color: #d9d9d9;
+        margin: 2px;
+        border-radius: 25%;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    .eti li a {
+        display: block;
+        color: #000000;
+        text-align: center;
+        padding: 10px 10px;
+        text-decoration: none;
+    }
+
+    /*Esta seccion es la modificacion del chat*/
+    .chat {
+        border: 2px solid rgba(0, 0, 0, .4);
+        background: rgba(0, 0, 0, .4);
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, .4);
+        box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+        border-radius: 5%;
+        grid-area: chats;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .chat h2 {
+        width: calc(100% + 30px);
+        margin: -15px -15px 15px -15px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+
+    .chat-item {
+        border-radius: 10px;
+        background-color: #f2f2f2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* Alinea horizontalmente al centro */
+        margin-bottom: 5px;
+        
+        cursor: pointer;
+        /* Añadir cursor de mano para indicar interactividad */
+    }
+
+    .chat-item img {
+        margin-right: 10px;
+        float: left;
+    }
+
+    .chat-item p {
+        margin: 0;
+    }
+
+    .chat-item h3 {
+        cursor: pointer;
+        margin: 0;
+        padding-bottom: 5px;
+    }
+
+    x.chat-item .info {
+        display: none;
+    }
+
+    .chat-item.active .info {
+        display: block;
+    }
+
+    .chat-item.active h3::after {
+        content: "-";
+    }
+
+    .chat-item h3::after {
+        content: "+";
+        float: right;
+        margin-right: 5px;
+    }
+
+    .chat-item:hover {
+        background-color: #d9d9d9;
+        border: 2px solid #c2bfbf;
+    }
+
+    /*La postulacion es la parte de las postulaciones de las empresas*/
+    .postulacion {
+        border: 2px solid rgba(0, 0, 0, .4);
+        background: rgba(0, 0, 0, .4);
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, .4);
+        box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+        border-radius: 10px;
+        grid-area: postulacion;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .postulacion h2 {
+        width: calc(100% + 30px);
+        margin: -15px -15px 15px -15px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+
+    .item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* Alinea horizontalmente al centro */
+        margin-bottom: 5px;
+        border-bottom: 2px solid #c2bfbf;
+        cursor: pointer;
+        /* Añadir cursor de mano para indicar interactividad */
+    }
+
+    .item h3 {
+        margin: 0;
+        /* Asegura que no haya margen adicional */
+        margin-right: 4px;
+    }
+
+    .post {
+        text-align: center;
+        /* Alinea el contenido al centro */
+        padding-bottom: 10px;
+    }
+
+    .info {
+        display: none;
+        /* Ocultar inicialmente */
+    }
+
+    .bot1,
+    .bot2 {
+        border: 2px solid #cf0000;
+        display: inline-block;
+        /* No ocupar todo el ancho */
+        background-color: #ba0924;
+        margin: 2px;
+        color: #fff;
+        border-radius: 10px;
+        padding: 5px 10px;
+        /* Añadir algo de padding para hacer los botones más grandes */
+        cursor: pointer;
+        /* Añadir cursor de mano para indicar interactividad */
+    }
+
+    .bot1:hover,
+    .bot2:hover {
+        background-color: #da0000;
+        border: 2px solid #ba0924;
+    }
+}@font-face {
+    font-family: 'inmediato';
+    src: url('xFonts\Prompt') format('truetype');
+    /* Asegúrate de que la ruta sea correcta */
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background: url("../imgs/3.jpg") no-repeat center center fixed;/* Centra y fija la imagen de fondo */
+    background-size: cover;/* Hace que la imagen de fondo cubra todo el contenedor */
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.blur-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(3px);
+    z-index: 1; /* Asegurarse de que esté detrás del contenido */
+}
+
+.contenedor {
+    display: grid;
+    grid-template-rows: repeat(4, auto);
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    grid-template-areas:
+        "header header header header"
+        "usuario postulacion postulacion postulacion"
+        "usuario postulacion postulacion postulacion"
+        "chats postulacion postulacion postulacion";
+}
+
+/*Codigo del Navbar*/
+.navbar {
+    background-color: #ac001a;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: normal;
+}
+
+.navbar li a:hover {
+    background-color: #d00422;
+}
+
+/*El search es la barra de busqueda todavia no anda*/
+.navbar .search-container {
+    position: relatabive;
+    float: right;
+    max-width: 400px;
+    margin: 0 auto;
+    margin-left: 20px;
+}
+
+.navbar input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/*Este es el boton para la busqueda con una imagen de lupa*/
+.navbar .barcode-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    float: right;
+    border: none;
+    padding: 10px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+}
+
+.navbar .barcode-btn img {
+    width: 14px;
+    height: 14px;
+}
+
+/*El dropdown es el menu desplazable, con imagen*/
+.navbar .dropdown {
+    float: right;
+    position: relative;
+    padding-bottom: 1px;
+    margin-right: 20px;
+}
+
+.navbar .dropbtn {
+    position: left;
+    right: 0;
+    top: 0;
+    border: none;
+    background-color: #ac001a;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.navbar .dropbtn img {
+    width: 20px;
+    height: 20px;
+}
+
+.navbar .dropdown-content {
+    display: none;
+    position: absolute;
+    list-style: none;
+    background-color: #ac001a;
+    width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.navbar .dropdown-content a {
+    color: white;
+    padding: 15px 15px 15px 20px;
+    text-decoration: none;
+    display: block;
+    padding-bottom: 10px;
+}
+
+.navbar .dropdown-content a:hover {
+    background-color: #d00422;
+    border-radius: 10%;
+}
+
+.navbar .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.navbar .dropdown:hover .dropbtn {
+    background-color: #d00422;
+    border-radius: 10%;
+}
+
+/*Esta parte es del boton del usuario*/
+.navbar .userbtn {
+    float: right;
+    position: relative;
+    margin-right: 20px auto;
+    right: 0;
+    top: 0;
+    border: none;
+    background-color: #ac001a;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.navbar .userbtn img {
+    margin-top: 5px;
+    border-radius: 5%;
+    width: 34px;
+    height: 30px;
+}
+
+.navbar .userbtn:hover {
+    background-color: #d00422;
+}
+
+.image{
+    margin: 0 auto;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 1px solid gray;
+    display: inline-block;
+    padding: 3px;
+    border: 3px solid #d2d6de;
+    margin-top: 20px;
+    margin-right: 57px;
+    margin-left: 57px;  
+}
+
+/* Estilos adicionales para la barra de navegación en index.html */
+.header {
+    background-color: #ac001a;
+    grid-area: header;
+    text-align: center;
+}
+
+/* Los estilos adicionales para el usuario, chats, notificaciones y postulaciones */
+.usuario {
+    border: 2px solid rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .4);
+    background-color: rgba(0, 0, 0, .4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    grid-area: usuario;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    /* Asegura que el padding y el borde estén incluidos en el tamaño total del elemento */
+}
+
+.usuario h2 {
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: hidden ;
+}
+
+/* Los estilos adicionales para las etiquetas */
+.eti {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    /* Usar flexbox */
+    justify-content: center;
+    /* Centrar horizontalmente */
+    flex-wrap: wrap;
+    /* Permitir que los elementos se envuelvan si hay muchos */
+}
+
+.eti li {
+
+    margin: 2px;
+    border-radius: 25%;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.eti li a {
+    display: block;
+    color: #000000;
+    text-align: center;
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+/*Esta seccion es la modificacion del chat*/
+.chat {
+    border: 2px solid rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .4);
+    background-color: rgba(0, 0, 0, .4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    grid-area: chats;
+    padding: 15px;
+    text-align: center;
+}
+
+.chat h2 {
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: hidden ;
+}
+
+.chat-item {
+    border-radius: 10px;
+    background-color: #f2f2f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Alinea horizontalmente al centro */
+    margin-bottom: 5px;
+    
+    cursor: pointer;
+    /* Añadir cursor de mano para indicar interactividad */
+}
+
+
+.chat-item img {
+    margin-right: 10px;
+    float: right;
+}
+
+.chat-item p {
+    margin: 0;
+}
+
+.chat-item h3 {
+    cursor: pointer;
+    margin: 0;
+    padding-bottom: 5px;
+}
+
+x.chat-item .info {
+    display: none;
+}
+
+.chat-item.active .info {
+    display: block;
+}
+
+.chat-item.active h3::after {
+    content: "-";
+}
+
+.chat-item h3::after {
+    content: "+";
+    float: right;
+    margin-right: 5px;
+}
+
+/*La postulacion es la parte de las postulaciones de las empresas*/
+.postulacion {
+    border: 2px solid rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .4);
+    background-color: rgba(0, 0, 0, .4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    grid-area: postulacion;
+    padding: 15px;
+    text-align: center;
+}
+
+.postulacion h2 {
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+}
+/* Estilos para los elementos input de tipo texto y textarea dentro de .form-group */
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-family: 'Prompt', sans-serif;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+    border-color: #ac001a;
+    box-shadow: 0 0 5px rgba(172, 0, 26, 0.5);
+    outline: none;
+    background-color: #fff;
+}
+
+/* Estilo para los botones de los formularios */
+input[type="submit"],
+input[type="reset"],
+button {
+    background-color: #ac001a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Prompt', sans-serif;
+    transition: all 0.3s ease;
+}
+
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+button:hover {
+    background-color: #d00422;
+}
+
+/* Estilo para las etiquetas de los inputs */
+.form-group label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    color: #333;
+    font-family: 'Prompt', sans-serif;
+}
+
+/* Estilo para los mensajes de error */
+.form-group .error-message {
+    color: #d9534f;
+    font-size: 14px;
+    margin-top: 5px;
+    font-family: 'Prompt', sans-serif;
+}
+
+/* Estilo para los campos de texto deshabilitados */
+.form-group input[type="text"]:disabled,
+.form-group textarea:disabled {
+    background-color: #e9ecef;
+    border-color: #ced4da;
+    cursor: not-allowed;
+    color: #6c757d;
+}
+
+/* Estilo para los campos de texto con error */
+.form-group input[type="text"].error,
+.form-group textarea.error {
+    border-color: #d9534f;
+    box-shadow: 0 0 5px rgba(217, 83, 79, 0.5);
+}
+
+/* Estilo para los contenedores de los inputs */
+.form-group {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.item {
+    border-bottom: 2px solid #c2bfbf;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Alinea horizontalmente al centro */
+    margin-bottom: 5px;
+    
+    cursor: pointer;
+    /* Añadir cursor de mano para indicar interactividad */
+}
+
+.item h3 {
+    margin: 0;
+    /* Asegura que no haya margen adicional */
+    margin-right: 4px;
+}
+
+.post {
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #f2f2f2;
+    text-align: center;
+    /* Alinea el contenido al centro */
+    padding-bottom: 10px;
+
+}
+
+.info {
+    padding: 10px;
+    display: none;
+    /* Ocultar inicialmente */
+}
+
+.info ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    /* Usar flexbox */
+    justify-content: center;
+    /* Centrar horizontalmente */
+    flex-wrap: wrap;
+    /* Permitir que los elementos se envuelvan si hay muchos */
+}
+
+.info ul li {
+    background-color: #d9d9d9;
+    margin: 2px;
+    border-radius: 25%;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.info ul li a {
+    display: block;
+    color: #000000;
+    text-align: center;
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+.bot1,
+.bot2 {
+    border: 2px solid #cf0000;
+    display: inline-block;
+    /* No ocupar todo el ancho */
+    background-color: #ba0924;
+    margin: 2px;
+    color: #fff;
+    border-radius: 10px;
+    text-decoration: none;
+    padding: 5px 10px;
+    /* Añadir algo de padding para hacer los botones más grandes */
+    cursor: pointer;
+    /* Añadir cursor de mano para indicar interactividad */
+}
+
+.bot1:hover,
+.bot2:hover {
+    background-color: #bd0000;
+    border: 2px solid #ba0924;
+}
+
+/*Acá es la parte responsive*/
+@media screen and (max-width: 768px) {
+    @font-face {
+        font-family: 'inmediato';
+        src: url('xFonts\Prompt') format('truetype');
+        /* Asegúrate de que la ruta sea correcta */
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    .fondo {
+        font-family: 'inmediato', sans-serif;
+        /* Usa la fuente en el cuerpo del documento */
+        margin: 0 0 0 0;
+        padding: 0;
+    }
+
+    .contenedor {
+        display: grid;
+        grid-template-rows: repeat(4, auto);
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 10px;
+        font-family: 'inmediato', sans-serif;
+        /* Usa la fuente en el cuerpo del documento */
+        grid-template-areas:
+            "header header header"
+            "usuario usuario chats"
+            "usuario usuario chats"
+            "postulacion postulacion postulacion"
+            "postulacion postulacion postulacion"
+            "postulacion postulacion postulacion";
+    }
+
+    /*Codigo del Navbar*/
+
+    .navbar {
+        background-color: #ac001a;
+        color: #fff;
+        display: flex;
+        justify-content: flex-start;
+        align-items: normal;
+        height: 30px;
+    }
+
+    .navbar li a:hover {
+        background-color: #d00422;
+    }
+
+    /*El search es la barra de busqueda todavia no anda*/
+    .navbar .search-container {
+        position: relative;
+        float: right;
+        max-width: 400px;
+        margin: 0 auto;
+        margin-left: 20px;
+    }
+
+    .navbar input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    /*Este es el boton para la busqueda con una imagen de lupa*/
+    .navbar .barcode-btn {
+        position: absolute;
+        right: 0;
+        top: 0;
+        float: right;
+        background: #f0f0f0;
+        border: none;
+        padding: 10px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        cursor: pointer;
+    }
+
+    .navbar .barcode-btn img {
+        width: 14px;
+        height: 14px;
+    }
+
+    /*El dropdown es el menu desplazable, con imagen*/
+    .navbar .dropdown {
+        float: right;
+        position: relative;
+        padding-bottom: 1px;
+        margin-right: 20px;
+    }
+
+    .navbar .dropbtn {
+        border: none;
+        background-color: #ac001a;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .navbar .dropdown-content {
+        display: none;
+        position: absolute;
+        list-style: none;
+        background-color: #ac001a;
+        width: 200px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    .navbar .dropdown-content a {
+        color: white;
+        padding: 15px 15px 15px 20px;
+        text-decoration: none;
+        display: block;
+        padding-bottom: 10px;
+    }
+
+    .navbar .dropdown-content a:hover {
+        background-color: #d00422;
+        border-radius: 10%;
+    }
+
+    .navbar .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .navbar .dropdown:hover .dropbtn {
+        background-color: #d00422;
+        border-radius: 10%;
+    }
+
+    /*Esta parte es del boton del usuario*/
+    .navbar .userbtn {
+        float: right;
+        position: relative;
+        margin-right: 20px auto;
+        right: 0;
+        top: 0;
+        border: none;
+        background-color: #ac001a;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .navbar .userbtn img {
+        margin-top: 5px;
+        border-radius: 5%;
+        width: 34px;
+        height: 30px;
+    }
+
+    .navbar .userbtn:hover {
+        background-color: #d00422;
+    }
+
+    /* Estilos adicionales para la barra de navegación en index.html */
+    .header {
+        background-color: #ac001a;
+        grid-area: header;
+        text-align: center;
+    }
+
+    /* Los estilos adicionales para el usuario, chats, notificaciones y postulaciones */
+    .usuario {
+        border: 2px solid rgba(0, 0, 0, .4);
+        background: rgba(0, 0, 0, .4);
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, .4);
+        box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+        border-radius: 5%;
+        grid-area: usuario;
+        padding: 15px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+        /* Asegura que el padding y el borde estén incluidos en el tamaño total del elemento */
+    }
+
+    .usuario h2 {
+        width: calc(100% + 30px);
+        margin: -15px -15px 15px -15px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+
+    /* Los estilos adicionales para las etiquetas */
+    .eti {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        /* Usar flexbox */
+        justify-content: center;
+        /* Centrar horizontalmente */
+        flex-wrap: wrap;
+        /* Permitir que los elementos se envuelvan si hay muchos */
+    }
+
+    .eti li {
+        background-color: #d9d9d9;
+        margin: 2px;
+        border-radius: 25%;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    .eti li a {
+        display: block;
+        color: #000000;
+        text-align: center;
+        padding: 10px 10px;
+        text-decoration: none;
+    }
+
+    /*Esta seccion es la modificacion del chat*/
+    .chat {
+        border: 2px solid rgba(0, 0, 0, .4);
+        background: rgba(0, 0, 0, .4);
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, .4);
+        box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+        border-radius: 5%;
+        grid-area: chats;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .chat h2 {
+        width: calc(100% + 30px);
+        margin: -15px -15px 15px -15px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+
+    .chat-item {
+        border-radius: 10px;
+        background-color: #f2f2f2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* Alinea horizontalmente al centro */
+        margin-bottom: 5px;
+        
+        cursor: pointer;
+        /* Añadir cursor de mano para indicar interactividad */
+    }
+
+    .chat-item img {
+        margin-right: 10px;
+        float: left;
+    }
+
+    .chat-item p {
+        margin: 0;
+    }
+
+    .chat-item h3 {
+        cursor: pointer;
+        margin: 0;
+        padding-bottom: 5px;
+    }
+
+    x.chat-item .info {
+        display: none;
+    }
+
+    .chat-item.active .info {
+        display: block;
+    }
+
+    .chat-item.active h3::after {
+        content: "-";
+    }
+
+    .chat-item h3::after {
+        content: "+";
+        float: right;
+        margin-right: 5px;
+    }
+
+    .chat-item:hover {
+        background-color: #d9d9d9;
+        border: 2px solid #c2bfbf;
+    }
+
+    /*La postulacion es la parte de las postulaciones de las empresas*/
+    .postulacion {
+        border: 2px solid rgba(0, 0, 0, .4);
+        background: rgba(0, 0, 0, .4);
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, .4);
+        box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+        border-radius: 10px;
+        grid-area: postulacion;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .postulacion h2 {
+        width: calc(100% + 30px);
+        margin: -15px -15px 15px -15px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+
+    .item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* Alinea horizontalmente al centro */
+        margin-bottom: 5px;
+        border-bottom: 2px solid #c2bfbf;
+        cursor: pointer;
+        /* Añadir cursor de mano para indicar interactividad */
+    }
+
+    .item h3 {
+        margin: 0;
+        /* Asegura que no haya margen adicional */
+        margin-right: 4px;
+    }
+
+    .post {
+        text-align: center;
+        /* Alinea el contenido al centro */
+        padding-bottom: 10px;
+    }
+
+    .info {
+        display: none;
+        /* Ocultar inicialmente */
+    }
+
+    .bot1,
+    .bot2 {
+        border: 2px solid #cf0000;
+        display: inline-block;
+        /* No ocupar todo el ancho */
+        background-color: #ba0924;
+        margin: 2px;
+        color: #fff;
+        border-radius: 10px;
+        padding: 5px 10px;
+        /* Añadir algo de padding para hacer los botones más grandes */
+        cursor: pointer;
+        /* Añadir cursor de mano para indicar interactividad */
+    }
+
+    .bot1:hover,
+    .bot2:hover {
+        background-color: #da0000;
+        border: 2px solid #ba0924;
+    }
+}@font-face {
+    font-family: 'inmediato';
+    src: url('xFonts\Prompt') format('truetype');
+    /* Asegúrate de que la ruta sea correcta */
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background: url("../imgs/3.jpg") no-repeat center center fixed;/* Centra y fija la imagen de fondo */
+    background-size: cover;/* Hace que la imagen de fondo cubra todo el contenedor */
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.blur-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(3px);
+    z-index: 1; /* Asegurarse de que esté detrás del contenido */
+}
+
+.contenedor {
+    display: grid;
+    grid-template-rows: repeat(4, auto);
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    grid-template-areas:
+        "header header header header"
+        "usuario postulacion postulacion postulacion"
+        "usuario postulacion postulacion postulacion"
+        "chats postulacion postulacion postulacion";
+}
+
+/*Codigo del Navbar*/
+.navbar {
+    background-color: #ac001a;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: normal;
+}
+
+.navbar li a:hover {
+    background-color: #d00422;
+}
+
+/*El search es la barra de busqueda todavia no anda*/
+.navbar .search-container {
+    position: relatabive;
+    float: right;
+    max-width: 400px;
+    margin: 0 auto;
+    margin-left: 20px;
+}
+
+.navbar input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/*Este es el boton para la busqueda con una imagen de lupa*/
+.navbar .barcode-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    float: right;
+    border: none;
+    padding: 10px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+}
+
+.navbar .barcode-btn img {
+    width: 14px;
+    height: 14px;
+}
+
+/*El dropdown es el menu desplazable, con imagen*/
+.navbar .dropdown {
+    float: right;
+    position: relative;
+    padding-bottom: 1px;
+    margin-right: 20px;
+}
+
+.navbar .dropbtn {
+    position: left;
+    right: 0;
+    top: 0;
+    border: none;
+    background-color: #ac001a;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.navbar .dropbtn img {
+    width: 20px;
+    height: 20px;
+}
+
+.navbar .dropdown-content {
+    display: none;
+    position: absolute;
+    list-style: none;
+    background-color: #ac001a;
+    width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.navbar .dropdown-content a {
+    color: white;
+    padding: 15px 15px 15px 20px;
+    text-decoration: none;
+    display: block;
+    padding-bottom: 10px;
+}
+
+.navbar .dropdown-content a:hover {
+    background-color: #d00422;
+    border-radius: 10%;
+}
+
+.navbar .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.navbar .dropdown:hover .dropbtn {
+    background-color: #d00422;
+    border-radius: 10%;
+}
+
+/*Esta parte es del boton del usuario*/
+.navbar .userbtn {
+    float: right;
+    position: relative;
+    margin-right: 20px auto;
+    right: 0;
+    top: 0;
+    border: none;
+    background-color: #ac001a;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.navbar .userbtn img {
+    margin-top: 5px;
+    border-radius: 5%;
+    width: 34px;
+    height: 30px;
+}
+
+.navbar .userbtn:hover {
+    background-color: #d00422;
+}
+
+.image{
+    margin: 0 auto;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 1px solid gray;
+    display: inline-block;
+    padding: 3px;
+    border: 3px solid #d2d6de;
+    margin-top: 20px;
+    margin-right: 57px;
+    margin-left: 57px;  
+}
+
+/* Estilos adicionales para la barra de navegación en index.html */
+.header {
+    background-color: #ac001a;
+    grid-area: header;
+    text-align: center;
+}
+
+/* Los estilos adicionales para el usuario, chats, notificaciones y postulaciones */
+.usuario {
+    border: 2px solid rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .4);
+    background-color: rgba(0, 0, 0, .4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    grid-area: usuario;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    /* Asegura que el padding y el borde estén incluidos en el tamaño total del elemento */
+}
+
+.usuario h2 {
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: hidden ;
+}
+
+/* Los estilos adicionales para las etiquetas */
+.eti {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    /* Usar flexbox */
+    justify-content: center;
+    /* Centrar horizontalmente */
+    flex-wrap: wrap;
+    /* Permitir que los elementos se envuelvan si hay muchos */
+}
+
+.eti li {
+
+    margin: 2px;
+    border-radius: 25%;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.eti li a {
+    display: block;
+    color: #000000;
+    text-align: center;
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+/*Esta seccion es la modificacion del chat*/
+.chat {
+    border: 2px solid rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .4);
+    background-color: rgba(0, 0, 0, .4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    grid-area: chats;
+    padding: 15px;
+    text-align: center;
+}
+
+.chat h2 {
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: hidden ;
+}
+
+.chat-item {
+    border-radius: 10px;
+    background-color: #f2f2f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Alinea horizontalmente al centro */
+    margin-bottom: 5px;
+    
+    cursor: pointer;
+    /* Añadir cursor de mano para indicar interactividad */
+}
+
+
+.chat-item img {
+    margin-right: 10px;
+    float: right;
+}
+
+.chat-item p {
+    margin: 0;
+}
+
+.chat-item h3 {
+    cursor: pointer;
+    margin: 0;
+    padding-bottom: 5px;
+}
+
+x.chat-item .info {
+    display: none;
+}
+
+.chat-item.active .info {
+    display: block;
+}
+
+.chat-item.active h3::after {
+    content: "-";
+}
+
+.chat-item h3::after {
+    content: "+";
+    float: right;
+    margin-right: 5px;
+}
+
+/*La postulacion es la parte de las postulaciones de las empresas*/
+.postulacion {
+    border: 2px solid rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .4);
+    background-color: rgba(0, 0, 0, .4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    grid-area: postulacion;
+    padding: 15px;
+    text-align: center;
+}
+
+.postulacion h2 {
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+}
+/* Estilos para los elementos input de tipo texto y textarea dentro de .form-group */
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-family: 'Prompt', sans-serif;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+    border-color: #ac001a;
+    box-shadow: 0 0 5px rgba(172, 0, 26, 0.5);
+    outline: none;
+    background-color: #fff;
+}
+
+/* Estilo para los botones de los formularios */
+input[type="submit"],
+input[type="reset"],
+button {
+    background-color: #ac001a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Prompt', sans-serif;
+    transition: all 0.3s ease;
+}
+
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+button:hover {
+    background-color: #d00422;
+}
+
+/* Estilo para las etiquetas de los inputs */
+.form-group label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    color: #333;
+    font-family: 'Prompt', sans-serif;
+}
+
+/* Estilo para los mensajes de error */
+.form-group .error-message {
+    color: #d9534f;
+    font-size: 14px;
+    margin-top: 5px;
+    font-family: 'Prompt', sans-serif;
+}
+
+/* Estilo para los campos de texto deshabilitados */
+.form-group input[type="text"]:disabled,
+.form-group textarea:disabled {
+    background-color: #e9ecef;
+    border-color: #ced4da;
+    cursor: not-allowed;
+    color: #6c757d;
+}
+
+/* Estilo para los campos de texto con error */
+.form-group input[type="text"].error,
+.form-group textarea.error {
+    border-color: #d9534f;
+    box-shadow: 0 0 5px rgba(217, 83, 79, 0.5);
+}
+
+/* Estilo para los contenedores de los inputs */
+.form-group {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.item {
+    border-bottom: 2px solid #c2bfbf;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Alinea horizontalmente al centro */
+    margin-bottom: 5px;
+    
+    cursor: pointer;
+    /* Añadir cursor de mano para indicar interactividad */
+}
+
+.item h3 {
+    margin: 0;
+    /* Asegura que no haya margen adicional */
+    margin-right: 4px;
+}
+
+.post {
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #f2f2f2;
+    text-align: center;
+    /* Alinea el contenido al centro */
+    padding-bottom: 10px;
+
+}
+
+.info {
+    padding: 10px;
+    display: none;
+    /* Ocultar inicialmente */
+}
+
+.info ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    /* Usar flexbox */
+    justify-content: center;
+    /* Centrar horizontalmente */
+    flex-wrap: wrap;
+    /* Permitir que los elementos se envuelvan si hay muchos */
+}
+
+.info ul li {
+    background-color: #d9d9d9;
+    margin: 2px;
+    border-radius: 25%;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.info ul li a {
+    display: block;
+    color: #000000;
+    text-align: center;
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+.bot1,
+.bot2 {
+    border: 2px solid #cf0000;
+    display: inline-block;
+    /* No ocupar todo el ancho */
+    background-color: #ba0924;
+    margin: 2px;
+    color: #fff;
+    border-radius: 10px;
+    text-decoration: none;
+    padding: 5px 10px;
+    /* Añadir algo de padding para hacer los botones más grandes */
+    cursor: pointer;
+    /* Añadir cursor de mano para indicar interactividad */
+}
+
+.bot1:hover,
+.bot2:hover {
+    background-color: #bd0000;
+    border: 2px solid #ba0924;
+}
+
+/*Acá es la parte responsive*/
+@media screen and (max-width: 768px) {
+    @font-face {
+        font-family: 'inmediato';
+        src: url('xFonts\Prompt') format('truetype');
+        /* Asegúrate de que la ruta sea correcta */
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    .fondo {
+        font-family: 'inmediato', sans-serif;
+        /* Usa la fuente en el cuerpo del documento */
+        margin: 0 0 0 0;
+        padding: 0;
+    }
+
+    .contenedor {
+        display: grid;
+        grid-template-rows: repeat(4, auto);
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 10px;
+        font-family: 'inmediato', sans-serif;
+        /* Usa la fuente en el cuerpo del documento */
+        grid-template-areas:
+            "header header header"
+            "usuario usuario chats"
+            "usuario usuario chats"
+            "postulacion postulacion postulacion"
+            "postulacion postulacion postulacion"
+            "postulacion postulacion postulacion";
+    }
+
+    /*Codigo del Navbar*/
+
+    .navbar {
+        background-color: #ac001a;
+        color: #fff;
+        display: flex;
+        justify-content: flex-start;
+        align-items: normal;
+        height: 30px;
+    }
+
+    .navbar li a:hover {
+        background-color: #d00422;
+    }
+
+    /*El search es la barra de busqueda todavia no anda*/
+    .navbar .search-container {
+        position: relative;
+        float: right;
+        max-width: 400px;
+        margin: 0 auto;
+        margin-left: 20px;
+    }
+
+    .navbar input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    /*Este es el boton para la busqueda con una imagen de lupa*/
+    .navbar .barcode-btn {
+        position: absolute;
+        right: 0;
+        top: 0;
+        float: right;
+        background: #f0f0f0;
+        border: none;
+        padding: 10px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        cursor: pointer;
+    }
+
+    .navbar .barcode-btn img {
+        width: 14px;
+        height: 14px;
+    }
+
+    /*El dropdown es el menu desplazable, con imagen*/
+    .navbar .dropdown {
+        float: right;
+        position: relative;
+        padding-bottom: 1px;
+        margin-right: 20px;
+    }
+
+    .navbar .dropbtn {
+        border: none;
+        background-color: #ac001a;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .navbar .dropdown-content {
+        display: none;
+        position: absolute;
+        list-style: none;
+        background-color: #ac001a;
+        width: 200px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    .navbar .dropdown-content a {
+        color: white;
+        padding: 15px 15px 15px 20px;
+        text-decoration: none;
+        display: block;
+        padding-bottom: 10px;
+    }
+
+    .navbar .dropdown-content a:hover {
+        background-color: #d00422;
+        border-radius: 10%;
+    }
+
+    .navbar .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .navbar .dropdown:hover .dropbtn {
+        background-color: #d00422;
+        border-radius: 10%;
+    }
+
+    /*Esta parte es del boton del usuario*/
+    .navbar .userbtn {
+        float: right;
+        position: relative;
+        margin-right: 20px auto;
+        right: 0;
+        top: 0;
+        border: none;
+        background-color: #ac001a;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .navbar .userbtn img {
+        margin-top: 5px;
+        border-radius: 5%;
+        width: 34px;
+        height: 30px;
+    }
+
+    .navbar .userbtn:hover {
+        background-color: #d00422;
+    }
+
+    /* Estilos adicionales para la barra de navegación en index.html */
+    .header {
+        background-color: #ac001a;
+        grid-area: header;
+        text-align: center;
+    }
+
+    /* Los estilos adicionales para el usuario, chats, notificaciones y postulaciones */
+    .usuario {
+        border: 2px solid rgba(0, 0, 0, .4);
+        background: rgba(0, 0, 0, .4);
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, .4);
+        box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+        border-radius: 5%;
+        grid-area: usuario;
+        padding: 15px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+        /* Asegura que el padding y el borde estén incluidos en el tamaño total del elemento */
+    }
+
+    .usuario h2 {
+        width: calc(100% + 30px);
+        margin: -15px -15px 15px -15px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+
+    /* Los estilos adicionales para las etiquetas */
+    .eti {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        /* Usar flexbox */
+        justify-content: center;
+        /* Centrar horizontalmente */
+        flex-wrap: wrap;
+        /* Permitir que los elementos se envuelvan si hay muchos */
+    }
+
+    .eti li {
+        background-color: #d9d9d9;
+        margin: 2px;
+        border-radius: 25%;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    .eti li a {
+        display: block;
+        color: #000000;
+        text-align: center;
+        padding: 10px 10px;
+        text-decoration: none;
+    }
+
+    /*Esta seccion es la modificacion del chat*/
+    .chat {
+        border: 2px solid rgba(0, 0, 0, .4);
+        background: rgba(0, 0, 0, .4);
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, .4);
+        box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+        border-radius: 5%;
+        grid-area: chats;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .chat h2 {
+        width: calc(100% + 30px);
+        margin: -15px -15px 15px -15px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+
+    .chat-item {
+        border-radius: 10px;
+        background-color: #f2f2f2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* Alinea horizontalmente al centro */
+        margin-bottom: 5px;
+        
+        cursor: pointer;
+        /* Añadir cursor de mano para indicar interactividad */
+    }
+
+    .chat-item img {
+        margin-right: 10px;
+        float: left;
+    }
+
+    .chat-item p {
+        margin: 0;
+    }
+
+    .chat-item h3 {
+        cursor: pointer;
+        margin: 0;
+        padding-bottom: 5px;
+    }
+
+    x.chat-item .info {
+        display: none;
+    }
+
+    .chat-item.active .info {
+        display: block;
+    }
+
+    .chat-item.active h3::after {
+        content: "-";
+    }
+
+    .chat-item h3::after {
+        content: "+";
+        float: right;
+        margin-right: 5px;
+    }
+
+    .chat-item:hover {
+        background-color: #d9d9d9;
+        border: 2px solid #c2bfbf;
+    }
+
+    /*La postulacion es la parte de las postulaciones de las empresas*/
+    .postulacion {
+        border: 2px solid rgba(0, 0, 0, .4);
+        background: rgba(0, 0, 0, .4);
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, .4);
+        box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+        border-radius: 10px;
+        grid-area: postulacion;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .postulacion h2 {
+        width: calc(100% + 30px);
+        margin: -15px -15px 15px -15px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+
+    .item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* Alinea horizontalmente al centro */
+        margin-bottom: 5px;
+        border-bottom: 2px solid #c2bfbf;
+        cursor: pointer;
+        /* Añadir cursor de mano para indicar interactividad */
+    }
+
+    .item h3 {
+        margin: 0;
+        /* Asegura que no haya margen adicional */
+        margin-right: 4px;
+    }
+
+    .post {
+        text-align: center;
+        /* Alinea el contenido al centro */
+        padding-bottom: 10px;
+    }
+
+    .info {
+        display: none;
+        /* Ocultar inicialmente */
+    }
+
+    .bot1,
+    .bot2 {
+        border: 2px solid #cf0000;
+        display: inline-block;
+        /* No ocupar todo el ancho */
+        background-color: #ba0924;
+        margin: 2px;
+        color: #fff;
+        border-radius: 10px;
+        padding: 5px 10px;
+        /* Añadir algo de padding para hacer los botones más grandes */
+        cursor: pointer;
+        /* Añadir cursor de mano para indicar interactividad */
+    }
+
+    .bot1:hover,
+    .bot2:hover {
+        background-color: #da0000;
+        border: 2px solid #ba0924;
+    }
+}

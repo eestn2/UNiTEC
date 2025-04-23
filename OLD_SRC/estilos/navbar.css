@@ -1,0 +1,122 @@
+/*Codigo del Navbar*/
+.navbar {
+    background-color: #ac001a;
+    padding: 10px;
+    color: #fff;
+    display: flex;
+    justify-content: flex-start;
+    align-items:normal;
+}
+.navbar li a:hover {
+    background-color: #d00422;
+}
+    /*El search es la barra de busqueda todavia no anda*/
+    .navbar .search-container {
+        position: relative;
+        float: right;
+        max-width: 400px;
+        margin: 0 auto;
+        margin-left: 20px;
+    }
+    .navbar input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    } 
+    /*Este es el boton para la busqueda con una imagen de lupa*/
+    .navbar .barcode-btn {
+        position: absolute;
+        right: 0;
+        top: 0;
+        float: right;
+        background: #f0f0f0;
+        border: none;
+        padding: 10px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        cursor: pointer;
+    }
+    .navbar .barcode-btn img {
+        width: 14px;
+        height: 14px;
+    }
+/*El dropdown es el menu desplazable, con imagen*/
+    .navbar .dropdown {
+        float: right;
+        position:relative;
+        padding-bottom: 1px;
+        margin-right: 20px;
+    }
+    .navbar .dropbtn {
+        position: left;
+        right: 0;
+        top: 0;
+        border: none;
+        background-color: #ac001a;
+        padding: 10px;
+        cursor: pointer;
+    }
+    .navbar .dropbtn img {
+        width: 20px;
+        height: 20px;
+    }
+    .navbar .dropdown-content {
+        display: none;
+        position: absolute;
+        list-style: none;
+        background-color: #ac001a;
+        width: 200px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+    .navbar .dropdown-content a {
+        color: white;
+        padding: 15px 15px 15px 20px;
+        text-decoration: none;
+        display: block;
+        padding-bottom: 10px;
+    }  
+    .navbar .dropdown-content a:hover {
+        background-color: #d00422;
+        border-radius: 10%;
+    }  
+    .navbar .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    .navbar .dropdown:hover .dropbtn {
+        background-color: #d00422;
+        border-radius: 10%;
+    }
+/*Esta parte es del boton del usuario*/
+    .navbar .userbtn {
+        float: right;
+        position:relative;
+        margin-right: 20px auto;
+        right: 0;
+        top: 0;
+        border: none;
+        background-color: #ac001a;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    .navbar .userbtn img {
+        margin-top: 5px;
+        border-radius: 5%;
+        width: 34px;
+        height: 30px;
+    }
+    .navbar .userbtn:hover{
+        background-color: #d00422;
+    }
+
+/* Estilos adicionales para la barra de navegación en index.html */
+.header {
+    background-color: #ac001a;
+    grid-area: header;
+    text-align: center;
+    position: relative;
+    top: -8px;
+    left: -8px;
+}

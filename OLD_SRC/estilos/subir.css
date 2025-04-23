@@ -1,0 +1,713 @@
+@font-face {
+    font-family: 'inmediato';
+    src: url('xFonts\Prompt') format('truetype'); /* Asegúrate de que la ruta sea correcta */
+    font-weight: normal;
+    font-style: normal;
+}
+body{
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+    font-family: 'inmediato', sans-serif; /* Usa la fuente en el cuerpo del documento */
+    /*overflow-x: scroll; /* Barra de desplazamiento horizontal */
+    /*overflow-y: hidden; /* Ocultar la barra de desplazamiento vertical */
+}
+.contenedor {
+    background-color: #ffffff;
+    display: grid;
+    grid-template-rows: repeat(4, auto);
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    font-family: 'inmediato', sans-serif; /* Usa la fuente en el cuerpo del documento */
+    grid-template-areas:
+            "header header header header"
+            "usuario postulacion postulacion postulacion"
+            "usuario postulacion postulacion postulacion"
+            "chats postulacion postulacion postulacion";
+}
+/*Codigo del Navbar*/
+.navbar {
+    background-color: #ac001a;
+    padding: 10px;
+    color: #fff;
+    display: flex;
+    justify-content: flex-start;
+    align-items:normal;
+}
+.navbar li a:hover {
+    background-color: #d00422;
+}
+    /*El search es la barra de busqueda todavia no anda*/
+    .navbar .search-container {
+        position: relative;
+        float: right;
+        max-width: 400px;
+        margin: 0 auto;
+        margin-left: 20px;
+    }
+    .navbar input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    } 
+    /*Este es el boton para la busqueda con una imagen de lupa*/
+    .navbar .barcode-btn {
+        position: absolute;
+        right: 0;
+        top: 0;
+        float: right;
+        background: #f0f0f0;
+        border: none;
+        padding: 10px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        cursor: pointer;
+    }
+    .navbar .barcode-btn img {
+        width: 14px;
+        height: 14px;
+    }
+/*El dropdown es el menu desplazable, con imagen*/
+    .navbar .dropdown {
+        float: right;
+        position:relative;
+        padding-bottom: 1px;
+        margin-right: 20px;
+    }
+    .navbar .dropbtn {
+        position: left;
+        right: 0;
+        top: 0;
+        border: none;
+        background-color: #ac001a;
+        padding: 10px;
+        cursor: pointer;
+    }
+    .navbar .dropbtn img {
+        width: 20px;
+        height: 20px;
+    }
+    .navbar .dropdown-content {
+        display: none;
+        position: absolute;
+        list-style: none;
+        background-color: #ac001a;
+        width: 200px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+    .navbar .dropdown-content a {
+        color: white;
+        padding: 15px 15px 15px 20px;
+        text-decoration: none;
+        display: block;
+        padding-bottom: 10px;
+    }  
+    .navbar .dropdown-content a:hover {
+        background-color: #d00422;
+        border-radius: 10%;
+    }  
+    .navbar .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    .navbar .dropdown:hover .dropbtn {
+        background-color: #d00422;
+        border-radius: 10%;
+    }
+/*Esta parte es del boton del usuario*/
+    .navbar .userbtn {
+        float: right;
+        position:relative;
+        margin-right: 20px auto;
+        right: 0;
+        top: 0;
+        border: none;
+        background-color: #ac001a;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    .navbar .userbtn img {
+        margin-top: 5px;
+        border-radius: 5%;
+        width: 34px;
+        height: 30px;
+    }
+    .navbar .userbtn:hover{
+        background-color: #d00422;
+    }
+
+/* Estilos adicionales para la barra de navegación en index.html */
+.header {
+    background-color: #ac001a;
+    grid-area: header;
+    text-align: center;
+}
+/* Los estilos adicionales para el usuario, chats, notificaciones y postulaciones */
+.usuario {
+    background-color: #f2f2f2;
+    border-radius: 5%;
+    grid-area: usuario;
+    padding: 15px;
+    text-align: center;
+    border: 2px solid #c2bfbf;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box; /* Asegura que el padding y el borde estén incluidos en el tamaño total del elemento */
+}
+.usuario h2 {
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-bottom: 2px solid #c2bfbf;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+}
+/* Los estilos adicionales para las etiquetas */
+.eti {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex; /* Usar flexbox */
+    justify-content: center; /* Centrar horizontalmente */
+    flex-wrap: wrap; /* Permitir que los elementos se envuelvan si hay muchos */
+}
+.eti li {
+    background-color: #d9d9d9;
+    margin: 2px;
+    border-radius: 25%;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+.eti li a {
+    display: block;
+    color: #000000;
+    text-align: center;
+    padding: 10px 10px;
+    text-decoration: none;
+}
+/*Esta seccion es la modificacion del chat*/
+.chat {
+    background-color: #f2f2f2;
+    border-radius: 5%;
+    border: 2px solid #c2bfbf;
+    grid-area: chats;
+    padding: 15px;
+    text-align: center;
+}
+.chat h2{
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-bottom: 2px solid #c2bfbf;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+}
+.chat-item {
+    border: 2px solid #c2bfbf;
+    display: block;
+    align-items: center;
+    justify-content: start;
+    margin-bottom: 10px;
+}
+.chat-item img {
+    margin-right: 10px;
+    float:left;
+}
+.chat-item p {
+    margin: 0;
+}
+.chat-item h3 {
+    cursor: pointer;
+    margin: 0;
+    padding-bottom: 5px;
+}
+x.chat-item .info {
+    display: none;
+}
+.chat-item.active .info {
+    display: block;
+}
+.chat-item.active h3::after {
+    content: "-";
+}
+.chat-item h3::after {
+    content: "+";
+    float: right;
+    margin-right: 5px;
+}
+.chat-item:hover {
+    background-color: #d9d9d9;
+    border: 2px solid #c2bfbf;
+}
+/*La postulacion es la parte de las postulaciones de las empresas*/
+.postulacion {
+    background-color: #f2f2f2;
+    border-radius: 5%;
+    border: 2px solid #c2bfbf;
+    padding: 15px;
+    text-align: center;
+    grid-area: postulacion; /* Agrega esta línea para que ocupe todo el área designada */
+}
+.postulacion h2 {
+    width: 100%; /* Cambiado a 100% para que ocupe todo el ancho del contenedor */
+    margin: 0; /* Eliminado el margen para que se ajuste correctamente */
+    border-bottom: 2px solid #c2bfbf;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+}
+.post {
+    border: 2px solid #c2bfbf;
+    text-align: center;
+    padding-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+.item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+    border: 2px solid #c2bfbf;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+}
+.item img {
+    margin-right: 10px;
+}
+.item h3 {
+    margin: 0;
+    margin-right: 4px;
+}
+.info {
+    display: none;
+    text-align: left;
+    padding: 10px;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover, .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+form label {
+    display: block;
+    margin-bottom: 5px;
+}
+form input, form select, form textarea {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+.horizontal-selects {
+    display: flex;
+    justify-content: space-between;
+}
+.horizontal-selects div {
+    flex: 1;
+    margin-right: 10px;
+}
+.horizontal-selects div:last-child {
+    margin-right: 0;
+}
+/*Acá es la parte responsive*/
+@media screen and (max-width: 768px) {
+    @font-face {
+        font-family: 'inmediato';
+        src: url('xFonts\Prompt') format('truetype'); /* Asegúrate de que la ruta sea correcta */
+        font-weight: normal;
+        font-style: normal;
+    }
+    .fondo{
+        background-color: #ffffff;
+        font-family: 'inmediato', sans-serif; /* Usa la fuente en el cuerpo del documento */
+        margin: 0 0 0 0;
+        padding: 0;
+    }
+    .contenedor {
+        background-color: #ffffff;
+        display: grid;
+        grid-template-rows: repeat(4, auto);
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 10px;
+        font-family: 'inmediato', sans-serif; /* Usa la fuente en el cuerpo del documento */
+        grid-template-areas:
+            "header header header"
+            "usuario usuario chats"
+            "usuario usuario chats"
+            "postulacion postulacion postulacion"
+            "postulacion postulacion postulacion"
+            "postulacion postulacion postulacion";
+    }
+    /*Codigo del Navbar*/
+
+    .navbar {
+    background-color: #ac001a;
+    padding: 10px;
+    color: #fff;
+    display: flex;
+    justify-content: flex-start;
+    align-items:normal;
+    }
+    .navbar li a:hover {
+    background-color: #d00422;
+    }
+    /*El search es la barra de busqueda todavia no anda*/
+    .navbar .search-container {
+        position: relative;
+        float: right;
+        max-width: 400px;
+        margin: 0 auto;
+        margin-left: 20px;
+    }
+    .navbar input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    } 
+    /*Este es el boton para la busqueda con una imagen de lupa*/
+    .navbar .barcode-btn {
+        position: absolute;
+        right: 0;
+        top: 0;
+        float: right;
+        background: #f0f0f0;
+        border: none;
+        padding: 10px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        cursor: pointer;
+    }
+    .navbar .barcode-btn img {
+        width: 14px;
+        height: 14px;
+    }
+    /*El dropdown es el menu desplazable, con imagen*/
+    .navbar .dropdown {
+        float: right;
+        position:relative;
+        padding-bottom: 1px;
+        margin-right: 20px;
+    }
+    .navbar .dropbtn {
+        position: left;
+        right: 0;
+        top: 0;
+        border: none;
+        background-color: #ac001a;
+        padding: 10px;
+        cursor: pointer;
+    }
+    .navbar .dropbtn img {
+        width: 20px;
+        height: 20px;
+    }
+    .navbar .dropdown-content {
+        display: none;
+        position: absolute;
+        list-style: none;
+        background-color: #ac001a;
+        width: 200px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+    .navbar .dropdown-content a {
+        color: white;
+        padding: 15px 15px 15px 20px;
+        text-decoration: none;
+        display: block;
+        padding-bottom: 10px;
+    }  
+    .navbar .dropdown-content a:hover {
+        background-color: #d00422;
+        border-radius: 10%;
+    }  
+    .navbar .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    .navbar .dropdown:hover .dropbtn {
+        background-color: #d00422;
+        border-radius: 10%;
+    }
+    /*Esta parte es del boton del usuario*/
+    .navbar .userbtn {
+        float: right;
+        position:relative;
+        margin-right: 20px auto;
+        right: 0;
+        top: 0;
+        border: none;
+        background-color: #ac001a;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    .navbar .userbtn img {
+        margin-top: 5px;
+        border-radius: 5%;
+        width: 34px;
+        height: 30px;
+    }
+    .navbar .userbtn:hover{
+        background-color: #d00422;
+    }
+    /* Estilos adicionales para la barra de navegación en index.html */
+    .header {
+        background-color: #ac001a;
+        grid-area: header;
+        text-align: center;
+    }
+    /* Los estilos adicionales para el usuario, chats, notificaciones y postulaciones */
+    .usuario {
+        background-color: #f2f2f2;
+        border-radius: 5%;
+        grid-area: usuario;
+        padding: 15px;
+        text-align: center;
+        border: 2px solid #c2bfbf;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box; /* Asegura que el padding y el borde estén incluidos en el tamaño total del elemento */
+    }
+    .usuario h2 {
+        width: calc(100% + 30px);
+        margin: -15px -15px 15px -15px;
+        border: 2px solid #c2bfbf;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+    /* Los estilos adicionales para las etiquetas */
+    .eti {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex; /* Usar flexbox */
+        justify-content: center; /* Centrar horizontalmente */
+        flex-wrap: wrap; /* Permitir que los elementos se envuelvan si hay muchos */
+    }
+    .eti li {
+        background-color: #d9d9d9;
+        margin: 2px;
+        border-radius: 25%;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+    .eti li a {
+        display: block;
+        color: #000000;
+        text-align: center;
+        padding: 10px 10px;
+        text-decoration: none;
+    }
+    /*Esta seccion es la modificacion del chat*/
+    .chat {
+        background-color: #f2f2f2;
+        border-radius: 5%;
+        border: 2px solid #c2bfbf;
+        grid-area: chats;
+        padding: 15px;
+        text-align: center;
+    }
+    .chat h2{
+        width: calc(100% + 30px);
+        margin: -15px -15px 15px -15px;
+        border: 2px solid #c2bfbf;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+    .chat-item {
+        border: 2px solid #c2bfbf;
+        display: block;
+        align-items: center;
+        justify-content: start;
+        margin-bottom: 10px;
+    }
+    .chat-item img {
+        margin-right: 10px;
+        float:left;
+    }
+    .chat-item p {
+        margin: 0;
+    }
+    .chat-item h3 {
+        cursor: pointer;
+        margin: 0;
+        padding-bottom: 5px;
+    }
+    x.chat-item .info {
+        display: none;
+    }
+    .chat-item.active .info {
+        display: block;
+    }
+    .chat-item.active h3::after {
+        content: "-";
+    }
+    .chat-item h3::after {
+        content: "+";
+        float: right;
+        margin-right: 5px;
+    }
+    .chat-item:hover {
+        background-color: #d9d9d9;
+        border: 2px solid #c2bfbf;
+    }
+    /*La postulacion es la parte de las postulaciones de las empresas*/
+    .postulacion {
+        background-color: #f2f2f2;
+        border-radius: 5%;
+        border: 2px solid #c2bfbf;
+        padding: 15px;
+        text-align: center;
+        grid-area: postulacion; /* Agrega esta línea para que ocupe todo el área designada */
+    }    
+    .postulacion h2 {
+        width: 100%; /* Cambiado a 100% para que ocupe todo el ancho del contenedor */
+        margin: 0; /* Eliminado el margen para que se ajuste correctamente */
+        border-bottom: 2px solid #c2bfbf;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #f2f2f2;
+        text-align: center;
+    }    
+    .post {
+        border: 2px solid #c2bfbf;
+        text-align: center;
+        padding-bottom: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+    }
+    .item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 5px;
+        border: 2px solid #c2bfbf;
+        cursor: pointer;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .item img {
+        margin-right: 10px;
+    }
+    .item h3 {
+        margin: 0;
+        margin-right: 4px;
+    }
+    .info {
+        display: none;
+        text-align: left;
+        padding: 10px;
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+        padding-top: 60px;
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+        border-radius: 10px;
+    }
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .close:hover, .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    form label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    form input, form select, form textarea {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+    .horizontal-selects {
+        display: flex;
+        justify-content: space-between;
+    }
+    .horizontal-selects div {
+        flex: 1;
+        margin-right: 10px;
+    }
+    .horizontal-selects div:last-child {
+        margin-right: 0;
+    }
+}

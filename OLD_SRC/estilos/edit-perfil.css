@@ -1,0 +1,334 @@
+@font-face {
+    font-family: 'inmediato';
+    src: url('xFonts/Prompt') format('truetype');
+    /* Asegúrate de que la ruta sea correcta */
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background: url("../imgs/3.jpg") no-repeat center center fixed;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    
+}
+
+/*Codigo del Navbar*/
+.navbar {
+    width: 100%;
+    background-color: #ac001a;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: normal;
+}
+
+.navbar li a:hover {
+    background-color: #d00422;
+}
+
+/*El search es la barra de busqueda todavia no anda*/
+.navbar .search-container {
+    position: relatabive;
+    float: right;
+    max-width: 400px;
+    margin: 0 auto;
+    margin-left: 20px;
+}
+
+.navbar input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/*Este es el boton para la busqueda con una imagen de lupa*/
+.navbar .barcode-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    float: right;
+    border: none;
+    padding: 10px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+}
+
+.navbar .barcode-btn img {
+    width: 14px;
+    height: 14px;
+}
+
+/*El dropdown es el menu desplazable, con imagen*/
+.navbar .dropdown {
+    float: right;
+    position: relative;
+    padding-bottom: 1px;
+    margin-right: 20px;
+}
+
+.navbar .dropbtn {
+    position: left;
+    right: 0;
+    top: 0;
+    border: none;
+    background-color: #ac001a;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.navbar .dropbtn img {
+    width: 20px;
+    height: 20px;
+}
+
+.navbar .dropdown-content {
+    display: none;
+    position: absolute;
+    list-style: none;
+    background-color: #ac001a;
+    width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.navbar .dropdown-content a {
+    color: white;
+    padding: 15px 15px 15px 20px;
+    text-decoration: none;
+    display: block;
+    padding-bottom: 10px;
+}
+
+.navbar .dropdown-content a:hover {
+    background-color: #d00422;
+    border-radius: 10%;
+}
+
+.navbar .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.navbar .dropdown:hover .dropbtn {
+    background-color: #d00422;
+    border-radius: 10%;
+}
+
+/*Esta parte es del boton del usuario*/
+.navbar .userbtn {
+    float: right;
+    position: relative;
+    margin-right: 20px auto;
+    right: 0;
+    top: 0;
+    border: none;
+    background-color: #ac001a;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.navbar .userbtn img {
+    margin-top: 5px;
+    border-radius: 5%;
+    width: 34px;
+    height: 30px;
+}
+
+.navbar .userbtn:hover {
+    background-color: #d00422;
+}
+
+.image{
+    margin: 0 auto;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 1px solid gray;
+    display: inline-block;
+    padding: 3px;
+    border: 3px solid #d2d6de;
+    margin-top: 20px;
+    margin-right: 57px;
+    margin-left: 57px;  
+}
+
+/* Estilos adicionales para la barra de navegación en index.html */
+.header {
+    background-color: #ac001a;
+    grid-area: header;
+    text-align: center;
+}
+
+.blur-overlay {
+
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(3px);
+    z-index: 1; /* Asegurarse de que esté detrás del contenido */
+    align-items: center;
+}
+
+.container {
+    grid-gap: 10px;
+    display: flex;
+    width: 100%;
+}
+
+.left,
+.right {
+    margin-top: 1% ;
+    width: 100%; /* Cambiar a 100% para pantallas pequeñas */
+}
+
+@media (min-width: 768px) {
+    .left,
+    .right {
+        width: 45%; /* Ajustar el ancho para pantallas medianas */
+    }
+}
+
+@media (min-width: 1024px) {
+    .left,
+    .right {
+        width: 50%; /* Ajustar el ancho para pantallas grandes */
+    }
+}
+
+.form-horizontal,
+.cuadrado,
+.lol {
+    border: 2px solid rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.fa {
+    display: inline-block;
+}
+
+.image {
+    margin: 0 auto;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid #d2d6de;
+    margin-top: 20px;
+}
+
+.form-control {
+    padding: 8px 20px;
+    border: 1px solid #AAA;
+    width: 100%;
+    color: #555;
+    background-color: #fff;
+    height: 50px;
+}
+
+.btn {
+    margin: 0 auto;
+    padding: 6px 12px;
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    text-align: center;
+    cursor: pointer;
+}
+
+a {
+    color: #a70019;
+    text-decoration: none;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #a70019;
+    display: block;
+}
+
+h3 {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.control-label {
+    float: left;
+}
+
+.form-horizontal .form-group {
+    display: flex;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.btn-submit {
+    background-color: #dd4b39;
+    border-color: red;
+}
+
+.btn {
+    border-radius: 3px;
+    box-shadow: none;
+    border: 1px solid transparent;
+}
+
+.has-feedback {
+    position: absolute;
+}
+
+form > div {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+form input {
+    padding: 8px 20px;
+    border: 1px solid #AAA;
+    border-radius: 3px;
+}
+
+button {
+    padding: 8px 20px;
+    border: 1px solid #a70019;
+    background: #a70019;
+    color: white;
+    border-radius: 3px;
+}
+
+form label {
+    color: #fff;
+    position: relative;
+}
+
+form h2 {
+    width: calc(100% + 30px);
+    margin: -15px -15px 15px -15px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+@media screen and (max-width: 400px) {
+    .container {
+        flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
+    }
+
+}

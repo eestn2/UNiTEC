@@ -1,0 +1,119 @@
+body.logueo {
+    background: url("../imgs/3.jpg") no-repeat center center fixed;
+    /* Centra y fija la imagen de fondo */
+    background-size: cover;
+    /* Hace que la imagen de fondo cubra todo el contenedor */
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.blur-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(3px);
+    z-index: 1;
+    /* Asegurarse de que esté detrás del contenido */
+}
+
+.container-form{
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+div.log{
+    color: white;
+    width: 380px;
+    border-radius: 5px;
+    border: 2px solid rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .4);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+}
+.container-inputs{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+img{
+    height: 125px;
+    width: 125px;
+    margin: 30px 130px;
+
+    
+}
+
+
+.cont{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 35px;
+    width: 235px;
+    padding-left: 5px;
+    border-radius: 15px;
+    border-color: rgb(160, 161, 161);
+    border-width: 1px;
+    
+}
+.reg{
+    margin: 10px 0 0 0;
+    text-decoration: none;
+    color: #a50a21
+}
+.reg:hover{
+    color: #ff042a;
+    transition: .2s;
+}
+.reg:focus{
+    color: #ff042a;
+}
+.boton{
+    cursor: pointer;
+    margin: 20px 0 5px 0;
+    height: 40px;
+    width: 120px;
+    border-radius: 15px;
+    border: 1px solid #ba0b24;
+    background-color: #ba0b24;
+    color: white;
+
+}
+.boton:hover{
+    opacity: .9;
+    border: 2px solid #e0092a;
+    transition: .3s;
+}
+.boton:focus{
+    background-color: #85081a;
+}
+
+.register-links{
+    margin: 5px 0 0 0;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+
+}
+.msg{
+    text-align: center;
+    height: 20px;
+    margin: 0;
+}
+@media screen and (max-width: 500px){
+    .log{
+        scale: .9;
+    }
+    
+}

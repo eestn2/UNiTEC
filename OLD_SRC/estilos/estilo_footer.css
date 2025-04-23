@@ -1,0 +1,126 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh; /* Asegura que el cuerpo ocupe al menos toda la altura del viewport */
+}
+
+footer {
+    background-color: #ac001a;
+    color: white;
+    text-align: center;
+    padding: 0;
+    margin-top: auto; /* Empuja el footer al final del cuerpo */
+}
+
+.footerContainer {
+    padding: 30px 30px 2px; /* Ajusta el padding según sea necesario */
+    width: 100%;
+}
+
+.socialIcons {
+    display: flex;
+    justify-content: center;
+}
+
+.socialIcons a {
+    text-decoration: none;
+    padding: 10px;
+    background-color: #ffffff;
+    margin: 0px 10px;
+    border-radius: 50%;
+}
+
+.socialIcons a i {
+    font-size: 2em;
+    color: #ba0b24;
+}
+
+.socialIcons a:hover {
+    background-color: #90091d;
+    transition: background-color 0.5s;
+}
+
+.socialIcons a:hover i {
+    color: white;
+}
+
+.footerNav {
+    margin: 30px 0;
+}
+
+.footerNav ul {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+}
+
+.elemento {
+    position: relative;
+    color: white;
+    display: inline-block;
+    margin: 10px;
+    text-decoration: none;
+    font-size: 1.3em;
+    opacity: 0.7;
+    transition: opacity 0.5s;
+}
+
+.elemento:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.footerBottom {
+    background-color: #820014;
+    padding: 20px;
+    text-align: center;
+}
+
+.footerBottom p {
+    color: white;
+}
+
+.elemento .descripcion {
+    visibility: hidden;
+    width: 120px;
+    background-color: #6e2323;
+    font-size: 0.7em;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 7px 20px 10px;
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.elemento:hover .descripcion {
+    visibility: visible;
+    opacity: 1;
+}
+
+@media (max-width: 700px) {
+    .footerNav ul {
+        flex-direction: column;
+    }
+    
+    .footerNav ul li {
+        text-align: center;
+        margin: 5px;
+    }
+    
+    .socialIcons a {
+        padding: 8px;
+        margin: 4px;
+    }
+}

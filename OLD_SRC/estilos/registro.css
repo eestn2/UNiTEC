@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;1,500&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "poppins";
+    color: #000;
+}
+
+#btn-reg{
+    margin: 10px 0 10px 0;
+}
+
+body  {
+    background: url("../imgs/3.jpg") no-repeat;
+    backdrop-filter: blur(3px);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container {
+    height: 99vh;
+    padding: 0px 15px;
+    margin: 0;
+    border: 2px solid rgba(255, 255, 255, .4);
+    background: rgba(0, 0, 0, .2);
+    backdrop-filter: blur(4px);
+    background-color: rgba(255, 255, 255, 0.602);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2), 0 0 15px rgba(0, 0, 0, .2), 0 0 30px rgba(0, 0, 0, .2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.form-box {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-box input{
+    padding: 2px;
+}
+
+.form-box .RegisterUsuario {
+    position: absolute;
+    transform: translateX(0px) rotate(0deg);
+    transition: .5s ease;
+    transition-delay: .4s;
+}
+.form-box .RegisterUsuario.active {
+    transform: translateX(-500px) rotate(-45deg);
+    transition-delay: .2s;
+}
+.form-box .RegisterEmpresa {
+    transform: translateX(500px) rotate(45deg);
+    transition: .5s ease;
+    transition-delay: .2s;
+}
+.form-box .RegisterEmpresa.active {
+    transform: translateX(0px) rotate(0deg);
+    transition-delay: .4s;
+}
+.container .form-box h2 {
+    text-align: center;
+    font-size: 38px;
+    font: 600;
+}
+.form-box .input-box {
+    background: transparent;
+    border: none;
+    outline: none;
+    border-bottom: 2px solid rgba(0, 0, 0, .4);
+    position: relative;
+}
+
+.input-box::placeholder{
+    color: #000;
+}
+
+textarea{
+    padding: 2px;
+    resize: none;
+}
+
+.form-box .input-box label {
+    font-weight: 400;
+    letter-spacing: .5px;
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: .5s ease;
+}
+.input-box input:focus ~ label,
+.input-box input:valid ~ label {
+    top: -5px;
+}
+.input-box i {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+}
+.forget-section {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    margin: -15px 0 15px;
+}
+.forget-section p {
+    display: flex;
+    align-items: center;
+}
+.forget-section p input {
+    accent-color: #11595d;
+    margin: 0 3px;
+}
+.forget-section a {
+    text-decoration: none;
+}
+.btn {
+    height: 45px;
+    width: 100%;
+    border-radius: 50px;
+    color: #fff;
+    background: #d00422;
+    border: 2px solid #a70019;
+    outline: none;
+    font-size: 16px;
+    cursor: pointer;
+    letter-spacing: 1px;
+}
+.account-creation {
+    text-align: center;
+    margin: 25px 0 10px;
+    font-weight: 400;
+    font-size: 14px;
+}
+.account-creation samp a {
+    text-decoration: none;
+}
+.account-creation a:hover {
+    text-decoration: underline;
+}
+/* RESPONSIVE */
+@media(max-width:768px){
+    .container .form-box h2 {
+        font-size: 32px;
+    }
+    .forget-section {
+        font-size: 13px;
+    }
+    .btn {
+        height: 40px;
+        width: 100%;
+        font-size: 14px;
+    }
+    .account-creation {
+        font-size: 13px;
+    }
+}
+@media(max-width:480px){
+    .container .form-box h2 {
+        font-size: 26px;
+    }
+    .forget-section p input {
+        font-size: 11px;
+    }
+    .forget-section {
+        font-size: 11px;
+    }
+    .btn {
+        height: 35px;
+        width: 100%;
+        font-size: 12px;
+    }
+    .account-creation {
+        font-size: 11px;
+    }
+}
+@media(max-width:365px){
+    .container .form-box h2 {
+        font-size: 24px;
+    }
+    .forget-section p input {
+        font-size: 8px;
+    }
+    .forget-section {
+        font-size: 10px;
+    }
+    .btn {
+        height: 30px;
+        width: 100%;
+        font-size: 11px;
+    }
+    .account-creation {
+        font-size: 10px;
+    }
+}

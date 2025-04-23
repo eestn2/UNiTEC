@@ -1,0 +1,85 @@
+body{
+  margin: 0;
+  padding: 0;
+  background: #ddd;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+main{ 
+  border-radius: 10px;
+  display: flex;
+  width: 60%;
+  height: 50%;
+  margin: 14%;
+  padding: 5%;
+  background: white;
+  box-shadow:  0 0 20px #ff8787;
+}
+form > div{
+  margin: 5%;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+form input{
+  padding: 8px 20px;
+  border: 1px solid #AAA;
+  border-radius: 3px;
+}
+
+form button{
+  padding: 8px 20px;
+  border: 1px solid #a70019;
+  width: 50%;
+  background: #a70019;
+  color: white;
+  border-radius: 3px;
+}
+.contenido{
+  margin: 1%;
+  width: 40%;
+  height: 100%;
+}body{
+  margin: 0;
+  padding: 0;
+  background: #ddd;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+main{ 
+  border-radius: 10px;
+  display: flex;
+  width: 60%;
+  height: 50%;
+  margin: 14%;
+  padding: 5%;
+  background: white;
+  box-shadow:  0 0 20px #ff8787;
+}
+form > div{
+  margin: 5%;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+form input{
+  padding: 8px 20px;
+  border: 1px solid #AAA;
+  border-radius: 3px;
+}
+
+form button{
+  padding: 8px 20px;
+  border: 1px solid #a70019;
+  width: 50%;
+  background: #a70019;
+  color: white;
+  border-radius: 3px;
+}
+.contenido{
+  margin: 1%;
+  width: 40%;
+  height: 100%;
+}
