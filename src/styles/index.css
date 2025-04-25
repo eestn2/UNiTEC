@@ -30,3 +30,12 @@
 .input-field::placeholder{
   color: var(--input);
 }
+/* AppWindow styles */
+.app-window {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--window-outer);
+  border-radius: 20px;
+  color: var(--app-text-color);
+  font-family: var(--app-font-family);
+}
