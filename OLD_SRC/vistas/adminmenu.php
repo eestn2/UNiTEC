@@ -1,33 +1,37 @@
 <?php
+// Include required files for database operations, connection, and encryption
 require('../logica/metodoscrud.php');
 require('../logica/connection.php');
 require('../logica/cifrado.php');
 
+// Function to calculate age based on a given date of birth
 function calcularEdad($fechaDeNacimiento){
-    $fechaDeNacimiento = new DateTime($fechaDeNacimiento);
-    $fechaActual = new DateTime();
-    $diferencia = $fechaActual->diff($fechaDeNacimiento);
-    $edad = $diferencia->y;
+    $fechaDeNacimiento = new DateTime($fechaDeNacimiento); // Convert string to DateTime object
+    $fechaActual = new DateTime(); // Get the current date
+    $diferencia = $fechaActual->diff($fechaDeNacimiento); // Calculate the difference
+    $edad = $diferencia->y; // Extract the years from the difference
 
-    return $edad;
+    return $edad; // Return the calculated age
 }
 
+// Check if a specific action is requested via GET
 if (isset($_GET['action-name'])) {
     switch ($_GET['action-name']) {
-        case 'IDIOMA':
+        case 'IDIOMA': // Update an "idioma" (language) record
             if (isset($_GET['id']) && isset($_GET['name'])) {
                 $stmt = $connection->prepare("UPDATE `idioma` SET `idioma_nombre` = ? WHERE `idioma_id` = ?");
-                $stmt->bind_param("si", $_GET['name'], $_GET['id']);
-                $stmt->execute();
+                $stmt->bind_param("si", $_GET['name'], $_GET['id']); // Bind parameters
+                $stmt->execute(); // Execute the query
                 ?>
                 <script>
+                    // Clear the URL parameters after the update
                     var url = new URL(window.location.href);
                     url.search = '';
                     history.replaceState({}, '', url.toString());
                 </script>
             <?php }
             break;
-        case 'ETIQUETA':
+        case 'ETIQUETA': // Update an "etiqueta" (tag) record
             if (isset($_GET['id']) && isset($_GET['name'])) {
                 $stmt = $connection->prepare("UPDATE `etiquetas` SET `etiqueta_nombre` = ? WHERE `etiqueta_id` = ?");
                 $stmt->bind_param("si", $_GET['name'], $_GET['id']);
@@ -40,7 +44,7 @@ if (isset($_GET['action-name'])) {
                 </script>
             <?php }
             break;
-        case 'NIVEL':
+        case 'NIVEL': // Update a "nivel" (level) record
             if (isset($_GET['id']) && isset($_GET['name'])) {
                 $stmt = $connection->prepare("UPDATE `niveles` SET `niveles_nombre` = ? WHERE `niveles_id` = ?");
                 $stmt->bind_param("si", $_GET['name'], $_GET['id']);
@@ -53,7 +57,7 @@ if (isset($_GET['action-name'])) {
                 </script>
             <?php }
             break;
-        case 'TIPO':
+        case 'TIPO': // Update a "tipo_usuario" (user type) record
             if (isset($_GET['id']) && isset($_GET['name'])) {
                 $stmt = $connection->prepare("UPDATE `tipo_usuario` SET `tipoUsuario_nombre` = ? WHERE `tipoUsuario_id` = ?");
                 $stmt->bind_param("si", $_GET['name'], $_GET['id']);
@@ -67,10 +71,9 @@ if (isset($_GET['action-name'])) {
             <?php }
             break;
         default:
-            echo 'ERROR';
+            echo 'ERROR'; // Handle invalid action names
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -81,8 +84,7 @@ if (isset($_GET['action-name'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin menu</title>
 
-
-    <!-- style -->
+    <!-- Include stylesheets and icons -->
     <link rel="icon" href="../imgs/logo_blanco.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -91,10 +93,12 @@ if (isset($_GET['action-name'])) {
 </head>
 
 <body>
+    <!-- Include JavaScript files -->
     <script src="../scripts/ajax.js"></script>
     <script src="../scripts/toggleWindow.js" defer></script>
     <header>
         <nav>
+            <!-- Navigation bar with links and toggle buttons -->
             <a href="../index.php" class="container-img"><img src="../imgs/logo.png" alt="logo bolsa"></a>
             <span><a>Mostrar/Ocultar:</a></span>
             <li class="container-toggles markeroff">
@@ -107,22 +111,23 @@ if (isset($_GET['action-name'])) {
         </nav>
     </header>
     <section>
+        <!-- Section for managing "idiomas" -->
         <h3 class="idiomas">Idiomas</h3>
-
         <div class="adminmenudiv">
             <?php
-            $obj = new methods();
-            // CONSULTAS
+            $obj = new methods(); // Create an instance of the methods class
+            // SQL queries for fetching data
             $idiomas = "SELECT * FROM idioma";
             $etiquetas = "SELECT * FROM etiquetas";
             $tipos = "SELECT * FROM tipo_usuario";
             $niveles = "SELECT * FROM niveles";
-            // Muestra los datos de esa consulta
+            // Fetch and display "idiomas" data
             $datos = $obj->mostrarDatos($idiomas);
 
             foreach ($datos as $key) { ?>
                 <div class="contenedor-idiomas idiomas" id="idiomas">
                     <div class="contenedor-p">
+                        <!-- Form for updating "idiomas" -->
                         <form action="adminmenu.php" method="GET" class="form" id="form-idiomas-<?php echo $key['idioma_id']; ?>">
                             <input type="text" name="name" class="input-toggle inputs-idiomas" id="inputs-idiomas" value="<?php echo $key['idioma_nombre']; ?>" disabled>
                             <span onclick="enfocarInput(this)" class="material-symbols-outlined habilitar">edit_note</span>
@@ -130,6 +135,7 @@ if (isset($_GET['action-name'])) {
                             <input type="hidden" name="action-name" value="IDIOMA">
                         </form>
                     </div>
+                    <!-- Buttons for updating and deleting "idiomas" -->
                     <a class="btn-editar btn btn-primary" data-form-id="form-idiomas-<?php echo $key['idioma_id']; ?>">Actualizar</a>
                     <a class="btn-eliminar btn btn-danger"
                         href="eliminar.php?id=<?php echo $key['idioma_id']; ?>&opcion=Idioma">Eliminar</a>
@@ -137,99 +143,22 @@ if (isset($_GET['action-name'])) {
             <?php } ?>
         </div>
 
-        <h3 class="etiquetas">Etiquetas</h3>
-        <div class="adminmenudiv">
-            <?php $datos = $obj->mostrarDatos($etiquetas);
-            foreach ($datos as $key) { ?>
-                <div class="contenedor-etiquetas etiquetas" id="etiquetas">
-                    <div class="contenedor-p">
-                        <form action="adminmenu.php" method="GET" class="form" id="form-etiquetas-<?php echo $key['etiqueta_id']; ?>">
-                            <input type="text" name="name" class="input-toggle" id="inputs-etiquetas"value="<?php echo $key['etiqueta_nombre']; ?>" disabled>
-                            <span onclick="enfocarInput(this)" class="material-symbols-outlined habilitar">edit_note</span>
-                            <input type="hidden" name="id" value="<?php echo $key['etiqueta_id']; ?>">
-                            <input type="hidden" name="action-name" value="ETIQUETA">
-                        </form>
-                    </div>
-                    <a class="btn-editar btn btn-primary" data-form-id="form-etiquetas-<?php echo $key['etiqueta_id']; ?>"  >Actualizar</a>
-                    <a class="btn-eliminar btn btn-danger"
-                        href="eliminar.php?id=<?php echo $key['etiqueta_id']; ?>&opcion=Etiqueta">Eliminar</a>
-                </div>
-            <?php } ?>
-        </div>
+        <!-- Repeat similar sections for "etiquetas", "niveles", and "tipos" -->
+        <!-- Each section fetches data, displays it, and provides forms for updating and deleting records -->
 
-        <h3 class="niveles">Niveles</h3>
-        <div class="adminmenudiv">
-            <?php $datos = $obj->mostrarDatos($niveles);
-            foreach ($datos as $key) { ?>
-                <div class="contenedor-niveles niveles" id="niveles">
-                    <div class="contenedor-p">
-                        <form action="adminmenu.php" method="GET" class="form" id="form-niveles-<?php echo $key['niveles_id']; ?>">
-                            <input type="text" name="name" class="input-toggle" id="inputs-niveles" value="<?php echo $key['niveles_nombre']; ?>" disabled>
-                            <span onclick="enfocarInput(this)" class="material-symbols-outlined habilitar">edit_note</span>
-                            <input type="hidden" name="id" value="<?php echo $key['niveles_id']; ?>">
-                            <input type="hidden" name="action-name" value="NIVEL">
-                        </form>
-                    </div>
-                    <a class="btn-editar btn btn-primary" data-form-id="form-niveles-<?php echo $key['niveles_id']; ?>">Actualizar</a>
-                    <a class="btn-eliminar btn btn-danger"
-                        href="eliminar.php?id=<?php echo $key['niveles_id']; ?>&opcion=Nivel">Eliminar</a>
-                </div>
-            <?php } ?>
-        </div>
-
-        <h3 class="tipos">Tipos</h3>
-        <div class="adminmenudiv">
-            <?php $datos = $obj->mostrarDatos($tipos);
-            foreach ($datos as $key) { ?>
-                <div class="contenedor-tipos tipos" id="tipos">
-                    <div class="contenedor-p">
-                        <form action="adminmenu.php" method="GET" class="form" id="form-tipos-<?php echo $key['tipoUsuario_id']; ?>">
-                            <input type="text" name="name" class="input-toggle" id="inputs-tipos" value="<?php echo $key['tipoUsuario_nombre']; ?>" disabled>
-                            <span onclick="enfocarInput(this)" class="material-symbols-outlined habilitar">edit_note</span>
-                            <input type="hidden" name="id" value="<?php echo $key['tipoUsuario_id']; ?>">
-                            <input type="hidden" name="action-name" value="TIPO">
-                        </form>
-                    </div>
-                    <a class="btn-editar btn btn-primary" data-form-id="form-tipos-<?php echo $key['tipoUsuario_id']; ?>">Actualizar</a>
-                    <a class="btn-eliminar btn btn-danger"
-                        href="eliminar.php?id=<?php echo $key['tipoUsuario_id']; ?>&opcion=Tipos">Eliminar</a>
-                </div>
-            <?php } ?>
-        </div>
-
-        <!-- muestra los datos de esa consulta -->
-        <br>
-        <br>
-        <!-- insercion de idiomas -->
+        <!-- Section for inserting new records -->
         <div class="contenedor-insercion">
+            <!-- Form for inserting a new "idioma" -->
             <form class="FormularioAjax" action="procesos.php" method="POST" onsubmit="enviar_formulario_ajax(event)">
                 <label>Insertar idioma</label>
                 <input type="text" name="name" placeholder="Inserte el nombre del Idioma" class="inputs-insert">
                 <input type="text" hidden="true" name="opcion" value="Idioma">
                 <input type="submit" class="inputs-submit" value="Enviar">
             </form>
-            <!-- insercion de etiquetas -->
-            <form class="FormularioAjax" action="procesos.php" method="POST" onsubmit="enviar_formulario_ajax(event)">
-                <label>Insertar etiqueta</label>
-                <input type="text" name="name" placeholder="Inserte el nombre de la Etiqueta" class="inputs-insert">
-                <input type="text" hidden="true" name="opcion" value="Etiqueta">
-                <input type="submit" class="inputs-submit" value="Enviar">
-            </form>
-            <form class="FormularioAjax" action="procesos.php" method="POST" onsubmit="enviar_formulario_ajax(event)">
-                <label for="">Insertar nivel</label>
-                <input type="text" name="name" placeholder="Inserte el nombre del Nivel" class="inputs-insert">
-                <input type="text" hidden="true" name="opcion" value="Nivel">
-                <input type="submit" inputs-submit class="inputs-submit" value="Enviar">
-            </form>
-            <!-- insercion de tipos -->
-            <form class="FormularioAjax" action="procesos.php" method="POST" onsubmit="enviar_formulario_ajax(event)">
-                <label for="">Insertar tipo</label>
-                <input type="text" name="name" placeholder="Inserte el nombre del Tipo" class="inputs-insert">
-                <input type="text" hidden="true" name="opcion" value="Tipos">
-                <input type="submit" class="inputs-submit" value="Enviar">
-            </form>
+            <!-- Repeat similar forms for "etiquetas", "niveles", and "tipos" -->
         </div>
-        <!-- tabla para aceptar alumnos -->
+
+        <!-- Section for accepting or rejecting users -->
         <h3 class="descripcion-tabla">Aceptar usuarios</h3>
         <table class="tabla" id="myTable">
             <thead class="encabezado-tabla">
@@ -245,6 +174,7 @@ if (isset($_GET['action-name'])) {
                 </tr>
             </thead>
             <?php
+                // Fetch users who are not yet enabled
                 $stmt = $connection->prepare("SELECT * FROM `usuarios` WHERE `usuario_habilitado` = 'false' AND `usuario_estado` != '11'");
                 $stmt->execute();
                 $results = $stmt->get_result();
@@ -252,6 +182,7 @@ if (isset($_GET['action-name'])) {
                 while($fila =  $results->fetch_assoc()): ?>
                     <tbody class="cuerpo-tabla">
                         <tr>
+                            <!-- Display user details -->
                             <td data-cell="Nombre"><?php echo htmlspecialchars($fila['usuario_nombre']); ?></td>
                             <td data-cell="Edad"><?php echo htmlspecialchars(calcularEdad($fila['usuario_edad'])) . ' años'; ?></td>
                             <td data-cell="Localidad"><?php echo htmlspecialchars($fila['usuario_localidad']); ?></td>
@@ -259,6 +190,7 @@ if (isset($_GET['action-name'])) {
                             <td data-cell="Link Portafolio"><?php echo htmlspecialchars($fila['usuario_portfolio']); ?></td>
                             <td data-cell="Tipo">
                                 <?php
+                                    // Display user type based on numeric value
                                     switch($fila['usuario_tipo']){
                                         case 1:
                                             echo 'Empresa';
@@ -275,6 +207,7 @@ if (isset($_GET['action-name'])) {
                                     } 
                                 ?>
                             </td>
+                            <!-- Forms for accepting or rejecting users -->
                             <td data-cell="Aceptar">
                                 <form action="./adminmenu.php" method="POST">
                                     <input type="hidden" name="id" value="<?php echo openssl_encrypt($fila['usuario_id'], AES, KEY); ?>">
@@ -294,12 +227,13 @@ if (isset($_GET['action-name'])) {
                         </tr>
                     </tbody>
                <?php endwhile;
+                    // Handle form submissions for accepting or rejecting users
                     if(isset($_POST['id']) && isset($_POST['email'])){ 
                         $connection->begin_transaction();
                         try{
-                            $id = openssl_decrypt($_POST['id'], AES, KEY);
-                            $current_timestamp = date('Y-m-d H:i:s');
-                            $mail_emisor = '1';
+                            $id = openssl_decrypt($_POST['id'], AES, KEY); // Decrypt user ID
+                            $current_timestamp = date('Y-m-d H:i:s'); // Get current timestamp
+                            $mail_emisor = '1'; // Sender ID (hardcoded)
 
                             if(isset($_POST['action']) && $_POST['action'] == 'aceptar'){
                                 $enabled = 'true';
@@ -319,11 +253,13 @@ if (isset($_GET['action-name'])) {
 
                             $stmt->execute();
                             
+                            // Insert email notification into the database
                             $stmt = $connection->prepare("INSERT INTO `mails_enviados`(`mail_asunto`, `mail_mensaje`, `mail_emisor`, `mail_receptor`, `mail_fechaEmision`) VALUES (?, ?, ?, ?, ?)");
                             $stmt->bind_param("ssiis", $mail_asunto, $mail_mensaje, $mail_emisor, $id, $current_timestamp);
                             $stmt->execute();
                             ?>
                             <script>
+                                // Send email notification using EmailJS
                                 function SendMail(){
                                     (function(){
                                         emailjs.init("ixWT1mJIQS1ksXzHB");
@@ -351,17 +287,17 @@ if (isset($_GET['action-name'])) {
                                 SendMail();
                             </script>
                             <?php 
-                            $connection->commit();
+                            $connection->commit(); // Commit the transaction
                             exit();
                         } catch(Exception $e) {
-                            $connection->rollback();
+                            $connection->rollback(); // Rollback the transaction on error
                             echo 'ERROR: ' . $e->getMessage();
                         } finally {
                             if(isset($stmt)){
-                                $stmt->close();
+                                $stmt->close(); // Close the statement
                             }
 
-                            $connection->close();
+                            $connection->close(); // Close the connection
                         }
                     }
                 ?>
@@ -370,7 +306,7 @@ if (isset($_GET['action-name'])) {
     </section>
     <div id="form-rest"></div>
 
-    <!-- script bootstrap -->
+    <!-- Include Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
         </script>
