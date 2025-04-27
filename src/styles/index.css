@@ -11,3 +11,25 @@
   color: var(--app-text-color);
   font-family: var(--app-font-family);
 }
+
+/* ActionButton styles */
+.action-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
+  background-color: var(--action-button);
+  color: var(--app-text-color);
+  font-size: 16px;
+  cursor: pointer;
+
+  padding: 0 10px; /* Add padding for spacing around the content */
+  width: auto; /* Allow the width to adjust based on content */
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+.button-text {
+  font-size: 15px; /* Adjust font size as needed */
+  font-weight: bold; /* Make the text bold */
+  color: var(--app-text-color); /* Set text color */
+  margin-inline: 10px;
+}
