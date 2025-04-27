@@ -1,11 +1,39 @@
+/*Archivo narrow*/
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&display=swap');
+.test-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  width: 40vw;
+  height: 60vh;
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.input-field{
+  background-color: #dee0eb;
+  border: none;
+  border-radius: 10px;
+  text-align: left;
+  align-items: center;
+  color: var(--input);
+  font-family: "Archivo Narrow", Helvetica;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0;
+  padding-left: 18px;
+  line-height: normal;
+}
+.input-field::placeholder{
+  color: var(--input);
+}
 /* AppWindow styles */
 .app-window {
   display: flex;
   flex-direction: column;
-  /*
-  width: calc((350/1280)*100vw);
-  height: calc((640/720)*100vh);
-  */
   background-color: var(--window-outer);
   border-radius: 20px;
   color: var(--app-text-color);
