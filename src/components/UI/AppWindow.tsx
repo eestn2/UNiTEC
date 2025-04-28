@@ -7,9 +7,9 @@ interface AppWindowProps{
     height: number;
 }
 
-const AppWindow: React.FC<AppWindowProps> = ({ height }) => {
+const AppWindow: React.FC<AppWindowProps> = ({ height , width}) => {
     return (
-        <div className="app-window" style={{height: `${(window.innerHeight / 720) * height}px`}}>
+        <div className="app-window" style={{height: `${(window.innerHeight / 720) * height}px`, width: `${(window.innerWidth / 1280) * width}px`}}>
         </div>
     );
 };

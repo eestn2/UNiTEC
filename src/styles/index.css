@@ -1,5 +1,14 @@
 /*Archivo narrow*/
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&display=swap');
+
+:root{
+  --nav-width: calc((1240 / 1280) * 100vw);
+  --nav-height: calc((60 / 720) * 100vh);
+}
+
+body{
+  margin-top: calc((100 / 720) * 100vh);;
+}
 .test-container{
   display: flex;
   justify-content: center;
@@ -40,6 +49,60 @@
   font-family: var(--app-font-family);
 }
 
+/*NavBar styles*/
+.nav-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: calc(var(--nav-height ) - calc((10 / 720) * 100vh));
+  width: calc(var(--nav-width) - calc((10 / 1280) * 100vw));
+  margin-top: 20px;
+  padding-top: calc((5 / 720) * 100vh);
+  padding-bottom: calc((5 / 720) * 100vh);
+  padding-left: calc((5 / 1280) * 100vw);
+  padding-right: calc((5 / 1280) * 100vw);
+
+  margin-bottom: 20px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  border-radius: 30px;
+}
+.icons-section{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.icons-section img{
+  width: calc(((35 / 1240) * var(--nav-width)));
+  height: calc((37 / 60) * var(--nav-height));
+  fill: var(--icons-nav-bar); 
+}
+.icons-section .profile-pic{
+  width: calc(((40 / 1240) * var(--nav-width)));
+  height: calc(((40 / 1240) * var(--nav-width)));
+  border-radius: 50%;
+  background-image: url(../assets/user/profile.jpg);
+  background-size: cover;
+  background-position: center;
+}
+.nav-bar .logo-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: fit-content;
+}
+.unitec-text{
+  width: calc(((130 / 1240) * var(--nav-width)));
+  height: calc((35 / 60) * var(--nav-height));
+}
+
+
+
 /* ActionButton styles */
 .action-button {
   display: inline-flex;
@@ -60,4 +123,15 @@
   font-weight: bold; /* Make the text bold */
   color: var(--app-text-color); /* Set text color */
   margin-inline: 10px;
+}
+
+/* FEEDBOX SECTION STYLES */
+.feedbox-section {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }

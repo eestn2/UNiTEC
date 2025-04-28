@@ -19,9 +19,9 @@
     --regular: rgba(170, 164, 211, 1);
     --footer-delimiter: rgba(255, 243, 212, 1);
     --window-inner: rgba(202, 196, 241, 1);
-    --window-outer: rgba(226, 223, 245, 1);
+    --window-outer: rgb(255, 255, 255);
     --action-button: rgba(240, 61, 61, 1);
-    
+    --icons-nav-bar: rgba(170, 186, 201, 1);
   }
 /* Resets */
 @media (prefers-color-scheme: dark) {
