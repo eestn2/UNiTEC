@@ -24,15 +24,15 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050"
      inkscape:document-units="mm"
-     inkscape:zoom="1.0800781"
-     inkscape:cx="251.83363"
-     inkscape:cy="34.719711"
+     inkscape:zoom="0.54003905"
+     inkscape:cx="241.64919"
+     inkscape:cy="100.91863"
      inkscape:window-width="1366"
      inkscape:window-height="705"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="g13"
      showguides="true" />
   <defs
      id="defs1">
@@ -421,11 +421,11 @@
        id="linearGradient33"
        inkscape:collect="always">
       <stop
-         style="stop-color:#123490;stop-opacity:1;"
+         style="stop-color:#831616;stop-opacity:1;"
          offset="0"
          id="stop33" />
       <stop
-         style="stop-color:#018fd8;stop-opacity:1;"
+         style="stop-color:#ac0b0b;stop-opacity:1;"
          offset="1"
          id="stop34" />
     </linearGradient>
