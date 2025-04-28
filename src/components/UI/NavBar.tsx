@@ -1,9 +1,9 @@
 import React from "react";
 import "../../styles/index.css";
-import notification_icon from "../../assets/navBar/bxs-bell-ring.svg";
-import about_us_icon from "../../assets/navBar/bxs-info-circle.svg";
-import phone_icon from "../../assets/navBar/bxs-phone.svg";
-import unitec_text from "../../assets/navBar/unitec_Texto_Color_SVG 2.svg";
+import notification_icon from "../../assets/navbar/bxs-bell-ring.svg";
+import about_us_icon from "../../assets/navbar/bxs-info-circle.svg";
+import phone_icon from "../../assets/navbar/bxs-phone.svg";
+import unitec_text from "../../assets/navbar/unitec_Texto_Color_SVG 2.svg";
 
 const NavBar: React.FC = () => {
     return (

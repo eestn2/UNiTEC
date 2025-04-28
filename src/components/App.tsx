@@ -5,19 +5,12 @@ import NavBar from './UI/NavBar'
 
 import AppWindow from './UI/AppWindow'
 import ActionButton from './UI/ActionButton'
+import Login from "./session/Login";
 
 function App() {
  return (
     <div className="App">
-      <NavBar/>
-      <div className="feedbox-section">
-        <AppWindow width={880} height={600}/>
-        <AppWindow width={340} height={600}/>
-      </div>
-      
-      
-      <TestingPlayground/>
-      <ActionButton height={60} text="Iniciar Sesión"/>
+      <Login></Login>
     </div>
 
  )
