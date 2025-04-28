@@ -15,8 +15,9 @@ function App() {
         <AppWindow width={340} height={600}/>
       </div>
       
-      <ActionButton height={60} text="Iniciar Sesión"/>
+      
       <TestingPlayground/>
+      <ActionButton height={60} text="Iniciar Sesión"/>
     </div>
 
  )

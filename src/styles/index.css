@@ -8,6 +8,7 @@
 
 body{
   margin-top: calc((100 / 720) * 100vh);;
+  background-color: var(--BG)
 }
 .test-container{
   display: flex;
@@ -47,6 +48,7 @@ body{
   border-radius: 20px;
   color: var(--app-text-color);
   font-family: var(--app-font-family);
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 
 /*NavBar styles*/
@@ -70,6 +72,7 @@ body{
   transform: translateX(-50%);
   background-color: white;
   border-radius: 30px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 .icons-section{
   display: flex;
