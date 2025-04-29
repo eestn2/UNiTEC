@@ -1,6 +1,7 @@
 import React from "react";
 import "../../styles/index.css";
 import ResponsiveComponentProps from "./ResponsiveComponent";
+import TranslateFigmaCoords from "../../global/function/translateFigmaCoords";
 interface InputFieldProps extends ResponsiveComponentProps{
     type: string,
     name: string,
@@ -10,7 +11,7 @@ interface InputFieldProps extends ResponsiveComponentProps{
 const InputField: React.FC<InputFieldProps> = ({width, height, type, name, placeholder = "Input field" }) => {
 
     return (
-        <input style={{ width: `${(window.innerWidth / 1280) * width}px`, height: `${(window.innerHeight / 720) * height}px` }}
+        <input style={{ width: `${TranslateFigmaCoords.translateFigmaX(width)}px`, height: `${TranslateFigmaCoords.translateFigmaY(height)}px` }}
             name={name}
             type={type}
             placeholder={placeholder}
