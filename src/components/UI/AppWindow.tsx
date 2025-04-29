@@ -7,6 +7,7 @@
  */
 import React from "react";
 import "../../styles/index.css";
+import TranslateFigmaCoords from "../../global/function/translateFigmaCoords";
 
 /**
  * Props for the AppWindow component.
@@ -40,8 +41,8 @@ interface AppWindowProps {
 */
 const AppWindow: React.FC<AppWindowProps> = ({ height, width, children, style, className }) => {
     // Check if is a square shaped window, if so, make calculated height the same as calculated width
-    height = height == width ? (window.innerWidth / 1280) * width : (window.innerHeight / 720) * height;
-    width = (window.innerWidth / 1280) * width;  // Convert Figma sizes to the same ratio as the screen size
+    height = height == width ? TranslateFigmaCoords.translateFigmaX(width) : TranslateFigmaCoords.translateFigmaY(height);
+    width = TranslateFigmaCoords.translateFigmaX(width);  // Convert Figma sizes to the same ratio as the screen size
     return (
         <div
             className={`app-window ${className || ""}`}
