@@ -1,17 +1,33 @@
+/**
+ * @file AppWindow.tsx
+ * @description A reusable React component for creating responsive windows in the app.
+ * Converts width and height from pixels to responsive units based on screen size.
+ * @author Haziel Magallanes
+ * @date April 29, 2025
+ */
 import React from "react";
 import "../../styles/index.css";
 
+/**
+ * Props for the AppWindow component.
+ */
 interface AppWindowProps {
-    width: number; // Later converted to responsive pixels
-    height: number; // Later converted to responsive pixels
-    children?: React.ReactNode; // Insert childrens into the window
-    style?: React.CSSProperties; // Allow inline styles
-    className?: string; // Allow custom CSS classes
+    /*** The width of the window in pixels (converted to responsive units).*/
+    width: number;
+    /*** The height of the window in pixels (converted to responsive units).*/
+    height: number;
+    /*** The children elements to render inside the window.*/
+    children?: React.ReactNode;
+    /*** Inline styles to apply to the window.*/
+    style?: React.CSSProperties;
+    /*** Custom CSS classes to apply to the window.*/
+    className?: string;
 }
-/* 
-    Component used to create a window in the app Style with responsive size.
-    It takes the width and height in pixels as props and converts them to responsive pixels based on the screen size.
-    It also allows to pass children, inline styles and custom CSS classes.
+
+/**
+ *  Component used to create a window in the app Style with responsive size.
+ *  It takes the width and height in pixels as props and converts them to responsive pixels based on the screen size.
+ *  It also allows to pass children, inline styles and custom CSS classes.
 
     @param {number} width - The width of the window in pixels.
     @param {number} height - The height of the window in pixels.
@@ -33,8 +49,7 @@ const AppWindow: React.FC<AppWindowProps> = ({ height, width, children, style, c
                 height: `${height}px`,
                 width: `${width}px`,
                 ...style,
-            }}
-        >
+            }}>
             {children}
         </div>
     );
