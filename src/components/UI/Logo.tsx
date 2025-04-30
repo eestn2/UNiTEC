@@ -10,10 +10,10 @@ interface LogoProps extends ResponsiveComponent {
     logo_size?: number,
     logo_text_size?: number
 }
-const Logo: React.FC<LogoProps> = ({width = 210, height = 210, logo_size = 140, logo_text_size = 38}) => {
+const Logo: React.FC<LogoProps> = ({width = 210, height = 210, logo_size = 140, logo_text_size = 38, style, className}) => {
     return (
-        <AppWindow width={width} height={height} style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 0, boxShadow: "none"}}>
-            <div className="unitec-logo-container" style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+        <AppWindow width={width} height={height} style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 0, boxShadow: "none", ...style}} className = {className || ''}>
+            <div className="unitec-logo-container" style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
                 <img src={logo} alt="Unitec Logo" width={TranslateFigmaCoords.translateFigmaX(logo_size)} height={TranslateFigmaCoords.translateFigmaX(logo_size)}/>
                 <img src={logo_text} alt="Unitec Text" width={TranslateFigmaCoords.translateFigmaX(logo_size)} height={TranslateFigmaCoords.translateFigmaX(logo_text_size)}/>
             </div>

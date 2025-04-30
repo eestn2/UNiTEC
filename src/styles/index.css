@@ -23,19 +23,7 @@ a{
   color: var(--important-text);
   cursor: pointer;
 }
-.test-container{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
-  width: 40vw;
-  height: 60vh;
-  margin: auto;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+
 .input-field {
   background-color: #dee0eb;
   border: none;
@@ -143,10 +131,26 @@ a{
   display: flex;
   flex-direction: row;
   gap: 20px;
-
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.title{
+  color: #943041;
+  font-weight: 550;
+  font-size: 30px;
+}
+.black-text{
+  color: black;
+  font-size: 20px;
+  font-weight: 550;
+}
+
+.watermark{
+  position: absolute;
+  left: 0;
+  top: calc((50 / 720) * 100vh);
 }
 
 /* REGISTER USER STYLES*/
