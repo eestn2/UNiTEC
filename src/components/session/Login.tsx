@@ -41,7 +41,7 @@ const Login: React.FC = () => {
                 textAlign: "left",
                 marginTop: -TranslateFigmaCoords.translateFigmaY(12),
                 textIndent: TranslateFigmaCoords.translateFigmaX(27),
-                color: "#7B000A"}}>
+                color: "#00317B"}}>
                 <span>¿No tienes una cuenta?</span>
                 <span>Registrate como <a style={{color: "rgb(255, 193, 35)"}}>Empresa</a> / <a style={{color: "rgb(255, 193, 35)"}}>Estudiante</a></span>
             </div>

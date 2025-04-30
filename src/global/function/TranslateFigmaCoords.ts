@@ -10,7 +10,7 @@
  * @returns Translated value in pixels.
  */
 function translateFigmaX(x: number): number{
-    return (x / 1280) * window.innerWidth;
+    return window.innerWidth > window.innerHeight ? (x / 1280) * window.innerWidth : (x / 1280) * window.innerHeight;
 }
 /**
  * Utility function that converts Figma coordinates and sizes to current window size.
@@ -18,7 +18,7 @@ function translateFigmaX(x: number): number{
  * @returns Translated value in pixels.
  */
 function translateFigmaY(y: number): number{
-    return (y / 720) * window.innerHeight;
+    return window.innerWidth > window.innerHeight ? (y / 720) * window.innerHeight : (y / 720) * window.innerWidth;
 }
 
 /**
