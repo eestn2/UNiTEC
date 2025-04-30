@@ -10,7 +10,7 @@ interface ActionButtonProps {
 const ActionButton: React.FC<ActionButtonProps> = ({ height, text }) => {
     return (
         <div className="action-button" style={{height: `${(window.innerHeight / 720) * height}px`}}>
-            <p className="button-text ">{text}</p>
+            <p>{text}</p>
         </div>
     );
 };

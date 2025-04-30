@@ -15,6 +15,7 @@
     --BG-2: rgba(188, 46, 48, 1);
     --delimiters: rgba(255, 193, 35, 1);
     --bold: rgba(104, 94, 167, 1);
+    --important-text: #7B000A;
     --input: rgba(0, 49, 123, 0.5);
     --regular: rgba(170, 164, 211, 1);
     --footer-delimiter: rgba(255, 243, 212, 1);
@@ -22,6 +23,7 @@
     --window-outer: rgb(255, 255, 255);
     --action-button: rgba(240, 61, 61, 1);
     --icons-nav-bar: rgba(170, 186, 201, 1);
+    
   }
 /* Resets */
 @media (prefers-color-scheme: dark) {

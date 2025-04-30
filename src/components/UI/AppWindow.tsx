@@ -7,7 +7,7 @@
  */
 import React from "react";
 import "../../styles/index.css";
-import TranslateFigmaCoords from "../../global/function/translateFigmaCoords";
+import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 
 /**
  * Props for the AppWindow component.

@@ -4,11 +4,24 @@
 :root{
   --nav-width: calc((1240 / 1280) * 100vw);
   --nav-height: calc((60 / 720) * 100vh);
+  --app-font-family: "Archivo Narrow", Helvetica;
 }
 
 body{
-  margin-top: calc((100 / 720) * 100vh);;
-  background-color: var(--BG)
+  font-family: var(--app-font-family);
+  margin-top: calc((100 / 720) * 100vh);
+  background-color: var(--BG);
+  background-image: url(../assets/unitec/BG_Repeat_Icons.svg);
+  background-repeat: repeat;
+  background-size: contain;
+}
+a{
+  color: var(--important-text);
+  text-decoration: underline;
+  font-weight: 500;
+}a:hover{
+  color: var(--important-text);
+  cursor: pointer;
 }
 .test-container{
   display: flex;
@@ -23,31 +36,35 @@ body{
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.input-field{
+.input-field {
   background-color: #dee0eb;
   border: none;
   border-radius: 10px;
   text-align: left;
   align-items: center;
   color: var(--input);
-  font-family: "Archivo Narrow", Helvetica;
+  font-family: var(--app-font-family);
   font-size: 20px;
   font-weight: 600;
   letter-spacing: 0;
-  padding-left: 18px;
   line-height: normal;
 }
-.input-field::placeholder{
+.input-field::placeholder {
   color: var(--input);
+  font-family: var(--app-font-family);
+  font-weight: 600;
 }
+.input-field:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 /* AppWindow styles */
 .app-window {
   display: flex;
   flex-direction: column;
   background-color: var(--window-outer);
   border-radius: 20px;
-  color: var(--app-text-color);
-  font-family: var(--app-font-family);
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 
@@ -113,19 +130,12 @@ body{
   align-items: center;
   border-radius: 30px;
   background-color: var(--action-button);
-  color: var(--app-text-color);
-  font-size: 16px;
+  font-size: 20px;
   cursor: pointer;
-
-  padding: 0 10px; /* Add padding for spacing around the content */
-  width: auto; /* Allow the width to adjust based on content */
-  white-space: nowrap; /* Prevent text from wrapping */
-}
-.button-text {
-  font-size: 15px; /* Adjust font size as needed */
-  font-weight: bold; /* Make the text bold */
-  color: var(--app-text-color); /* Set text color */
-  margin-inline: 10px;
+  padding: 0 20px;
+  width: auto; 
+  white-space: nowrap;
+  font-weight: 400;
 }
 
 /* FEEDBOX SECTION STYLES */
