@@ -2,13 +2,13 @@
 session_start();
 
 if(!isset($_SESSION['email'])) {
-    header('Location:../logica/cerrarsesion.php');
+    header('Location:../Logic_Backend/logout.php');
     exit();
 }
 
 if (isset($_POST['pas'])){
     $pas=password_hash($_POST['pas'], PASSWORD_DEFAULT);
-    header("Location:../logica/restaurar.php?x=$pas");
+    header("Location:../Logic_Backend/restore_password.php?x=$pas");
 }
 
 $email=$_SESSION['email'];
@@ -35,7 +35,7 @@ $email=$_SESSION['email'];
             <h1>Cambiar contraseña</h1>
             <h3>Debe remplazar su antigua contraseña por una nueva</h3>
         </div>
-        <form class="contenido" method="POST" action="../logica/restaurar.php" enctype="multipart/form-data">
+        <form class="contenido" method="POST" action="../Logic_Backend/restore_password.php" enctype="multipart/form-data">
             <div>
                 <label for="pas1"> Nueva contraseña</label>
                 <input type="password" id="pas1" name="pas1" autocomplete="off" />

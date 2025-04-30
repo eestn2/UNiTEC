@@ -9,7 +9,7 @@
 </head>
 <body class="logueo">
     <section class="container-form">
-        <form action="../logica/user.php" method="POST" class="log">
+        <form action="../Logic_Backend/UserServiceManager.php" method="POST" class="log">
             <div class="log">
                 <div class="container-inputs">
                 <img src="../imgs/escudo-removebg-preview.png" alt="logo de la escuela">

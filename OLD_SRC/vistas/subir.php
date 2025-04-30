@@ -1,8 +1,8 @@
 <?php
 session_start();
-require_once("../logica/connection.php");
-require_once("../logica/Postulaciones.php");
-require_once("../logica/main.php");
+require_once("../Logic_Backend/connect_to_database.php");
+require_once("../Logic_Backend/applications.php");
+require_once("../Logic_Backend/main.php");
 
 $puede_postular = true;
 
@@ -171,7 +171,7 @@ $postulaciones = $tiene_postulaciones ? $_SESSION['postulaciones'] : array();
                     <!-- Mostrar el mensaje de éxito -->
                     <?php echo $mensaje; ?>
                     <?php if ($puede_postular): ?>
-                        <form method="POST" action="Postulaciones.php">
+                        <form method="POST" action="applications.php">
                             <div class="form-group">
                                 <label for="postulacion_creador">Nombre de la Empresa:</label>
                                 <input type="text" id="postulacion_creador" name="postulacion_creador" required>

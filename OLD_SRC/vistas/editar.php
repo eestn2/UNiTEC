@@ -1,5 +1,5 @@
 <?php
-    require "../logica/connection.php";
+    require "../Logic_Backend/connect_to_database.php";
     
     $obj= new conecction();
     $conexion= $obj->conectar();
@@ -41,7 +41,7 @@
     <title>Editar</title>
 </head>
 <body>
-    <form action="../logica/actualizar.php" method="POST">
+    <form action="../Logic_Backend/update_user_data" method="POST">
         <input type="text" name="name" value="<?php echo $ver[1]; ?>">
         <input type="text" hidden="" name="id" value="<?php echo $id; ?>">
         <input type="text" hidden="" name="opcion" value="<?php echo $opcion; ?>">

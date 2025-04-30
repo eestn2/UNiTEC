@@ -1,5 +1,5 @@
 <?php
-require "../logica/connection.php";
+require "../Logic_Backend/connect_to_database.php";
 // id del usuario de la card
 $idrecep=2;//$_GET['id'];
 //Id de la sesion

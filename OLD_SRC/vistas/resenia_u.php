@@ -1,5 +1,5 @@
 <?php
-require "./index.php";
+require "./user_dashboard.php";
 
 ?>
 <!DOCTYPE html>
@@ -11,7 +11,7 @@ require "./index.php";
 </head>
 <body>
     <script src="./ajax.js"></script>
-    <form class="FormularioAjax" action="../logica/procesos.php" method="POST" onsubmit="enviar_formulario_ajax(event)">
+    <form class="FormularioAjax" action="../Logic_Backend/insert_data_controller.php" method="POST" onsubmit="enviar_formulario_ajax(event)">
             <input type="text" name="name" placeholder="Inserte texto">
             <input type="text" hidden="true" name="opcion" value="Resenia">
             <input type="text" hidden="true" name="id" value="<?php echo $persona->getId(); ?>">

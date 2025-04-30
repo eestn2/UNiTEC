@@ -1,25 +1,19 @@
 <?php
 
-require('../logica/connection.php');
-require('../logica/cifrado.php');
+require('../Logic_Backend/connect_to_database.php');
+require('../Logic_Backend/encryption_keys.php');
 
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 
-$show_languages = "SELECT * FROM `idioma`";
-$show_labels = "SELECT * FROM `etiquetas`";
-$show_users = "SELECT * FROM `tipo_usuario`";
-$show_state = "SELECT * FROM `estados`";
-
-$show_school = "SELECT * FROM `escuelas`";
-$show_location = "SELECT * FROM `localidades`";
+$show_languages = "SELECT * FROM `languages`";
+$show_labels = "SELECT * FROM `tags`";
+$show_users = "SELECT * FROM `user_types`";
+$show_state = "SELECT * FROM `statuses`";
 
 $query_languages = $connection->query($show_languages);
 $query_labels = $connection->query($show_labels);
 $query_users = $connection->query($show_users);
 $query_state = $connection->query($show_state);
-
-$query_school = $connection->query($show_school);
-$query_location = $connection->query($show_location);
 
 ?>
 <!DOCTYPE html>
@@ -36,52 +30,35 @@ $query_location = $connection->query($show_location);
 <body class="reg">
     <div class="logo"></div>
     <section class="container">
-        <form action="../logica/user.php" method="POST" onSubmit="SendArrays();" class="form-box">
+        <form action="../Logic_Backend/UserServiceManager.php" method="POST" onSubmit="SendArrays();" class="form-box">
             <h1>Registro del usuario</h1>
-            <input type="text" class="input-box" placeholder="Nombre y apellido" name="nombre" required>
-            <input type="email" class="input-box" placeholder="Correo electrónico" name="correo" required>
-            <input type="password" class="input-box" placeholder="Contraseña" name="contrasenia" required> 
+            <input type="text" class="input-box" placeholder="Nombre y apellido" name="user_name" required>
+            <input type="email" class="input-box" placeholder="Correo electrónico" name="user_email" required>
+            <input type="password" class="input-box" placeholder="Contraseña" name="user_password" required> 
             <span>
-                <label for="edad">Fecha de nacimiento: </label>
-                <input type="date" class="input-box" name="edad" required>
+                <label for="user_age">Fecha de nacimiento: </label>
+                <input type="date" class="input-box" name="user_age" required>
             </span>
-            
-            
-            <select name="escuela" class="form-box" required>
-                <option value="">Escuela...</option>
-                <?php
-                    while($array = mysqli_fetch_assoc($query_school)){ ?>
-                            <option value="<?php echo $array['Escuela_id']; ?>"><?php echo $array['Escuela_nombre']; ?></option>    
-                <?php } ?>
-            </select>
-            
-            <select  name="localidad"  required>
-                <option value="">Localidad</option>
-                <?php
-                    while($array = mysqli_fetch_assoc($query_location)){ ?>
-                            <option value="<?php echo $array['Localidad_id']; ?>"><?php echo $array['Localidad_nombre']; ?></option>    
-                <?php } ?>
-            </select>
-            
-            <input type="text" class="input-box" id="portfolio" placeholder="Ingrese el link de su portfolio (Opcional)" name="portfolio">
-            <textarea name="descripcion" class="input-box" cols="30" rows="3" placeholder="Ingrese una descripcion suya" required></textarea>
+            <input type="text" class="input-box" placeholder="Localidad" name="user_location" required>
+            <input type="text" class="input-box" id="portfolio" placeholder="Link de su portfolio (Opcional)" name="user_portfolio">
+            <textarea name="user_description" class="input-box" cols="30" rows="3" placeholder="Descripción suya" required></textarea>
 
-            <input type="hidden" name="url" value="../vistas/register_u.php">
-            <input type="hidden" name="fecha" value="<?php echo date('Y-m-d'); ?>">
-            <input type="hidden" name="habilitado" value="true">
+            <input type="hidden" name="redirect_url" value="../vistas/register_u.php">
+            <input type="hidden" name="user_date" value="<?php echo date('Y-m-d'); ?>">
+            <input type="hidden" name="user_is_enabled" value="false">
             <input type="hidden" name="action" value="1">
             <input type="hidden" name="arrayPHPLanguages" id="arrayPHPLanguages" value="a">
             <input type="hidden" name="arrayPHPLabels" id="arrayPHPLabels" value="a">
             <input type="hidden" name="arrayPHPLevelsLanguages" id="arrayPHPLevelsLanguages" value="a"> 
             <input type="hidden" name="arrayPHPLevelsLabels" id="arrayPHPLevelsLabels" value="a"> 
-        <center>
+            <center>
         <div class="checkboxes">
             <div class="checkbox-group">
             <select id="idiomas" class="input-box" required>
                 <option value="">Idiomas</option>
                 <?php
                     while($array = mysqli_fetch_assoc($query_languages)){ ?>
-                            <option value="<?php echo $array['idioma_id']; ?>"><?php echo $array['idioma_nombre']; ?></option>    
+                            <option value="<?php echo $array['id']; ?>"><?php echo $array['name']; ?></option>    
                 <?php } ?>
             </select>
             <div class="checkbox-group">
@@ -96,7 +73,7 @@ $query_location = $connection->query($show_location);
                 <option value="">Etiquetas</option>
                 <?php
                     while($array = mysqli_fetch_assoc($query_labels)){ ?>
-                            <option value="<?php echo $array['etiqueta_id']; ?>"><?php echo $array['etiqueta_nombre']; ?></option>
+                            <option value="<?php echo $array['id']; ?>"><?php echo $array['name']; ?></option>
                 <?php } ?>
             </select>
             <div class="checkbox-group">
@@ -107,26 +84,26 @@ $query_location = $connection->query($show_location);
     </div>
     </center>
     <div class="checkboxes">
-            <select id="tipo_de_usuario" name="tipo_de_usuario" class="input-box" required>
+            <select id="user_type" name="user_type" class="input-box" required>
                 <option value="">Tipos de usuario</option>
                 <?php
                     while($array = mysqli_fetch_assoc($query_users)){ 
-                        if($array['tipoUsuario_nombre'] != "Empresa" && $array['tipoUsuario_nombre'] != "Administrador") {?>
-                            <option value="<?php echo $array['tipoUsuario_id']; ?>"><?php echo $array['tipoUsuario_nombre']; ?></option>
+                        if($array['name'] != "Empresa" && $array['name'] != "Administrador") {?>
+                            <option value="<?php echo $array['id']; ?>"><?php echo $array['name']; ?></option>
                 <?php } }?>
             </select>
-            <select id="estado" name="estado" class="input-box" required>
+            <select id="user_status" name="user_status" class="input-box" required>
                 <option value="">Estados</option>
                 <?php
                     while($array = mysqli_fetch_assoc($query_state)){ ?>
-                            <option value="<?php echo $array['estado_id']; ?>"><?php echo $array['estado_nombre']; ?></option>
+                            <option value="<?php echo $array['id']; ?>"><?php echo $array['name']; ?></option>
                 <?php } ?>
             </select>
         </div>
             <center>
                 <input type="submit" class="btn" id="btn-reg" value="Registrarse" disabled>
                 <p><a href="../vistas/register_e.php" class="UsuaerioLink">Registrarse como empresa</a></p>
-                <p>¿Ya tienes una cuenta? <a href="login.php">Iniciar sesión</a></p>
+                <p>¿Ya tienes una cuenta? <a href="login.php">Inicia sesión</a></p>
                 <button onclick="limpiarEtiquetas();">
                     Limpiar etiquetas
                 </button>
@@ -139,7 +116,7 @@ $query_location = $connection->query($show_location);
             <div id="div-idiomas"></div>
             <div id="div-etiquetas"></div>
         </form>
-    </section>
+    </section>          
 
     <script>
         let cboxesE = [...document.querySelectorAll('.cboxE')];
@@ -155,16 +132,13 @@ $query_location = $connection->query($show_location);
         let languages = document.getElementById('idiomas');
         let labels = document.getElementById('etiquetas');
         let states = document.getElementById('estado');
-        let type_user = document.getElementById('tipo_de_usuario');
+        let type_user = document.getElementById('user_types');
 
         let array_languages = [];
         let text_languages = [];
 
         let array_labels = [];
         let text_labels = [];
-        
-        let array_levels_school = [];
-        let array_levels_location = [];
 
         let array_levels_e = [];
         let text_levels_e = [];
@@ -205,7 +179,7 @@ $query_location = $connection->query($show_location);
 
                         switch(e.value){
                             case "1":
-                                text_levels_e.push("B#aacute;sico");
+                                text_levels_e.push("Básico");
                                 break;
                             case "2":
                                 text_levels_e.push("Intermedio");
@@ -262,7 +236,7 @@ $query_location = $connection->query($show_location);
 
                         switch(e.value){
                             case "1":
-                                text_levels_i.push("B#aacute;sico");
+                                text_levels_i.push("Básico");
                                 break;
                             case "2":
                                 text_levels_i.push("Intermedio");
@@ -338,7 +312,7 @@ $query_location = $connection->query($show_location);
             document.getElementById('arrayPHPLevelsLabels').value = array_levels_e.toString();
 
             inputs.forEach(e => {
-                e.value = e.value.trim();
+                e = e.value.trim();
             })
         }
 

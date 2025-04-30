@@ -9,7 +9,7 @@ if(isset($_POST['em'])&&isset($_POST['dir'])) {
 
 if (isset($_GET['email'])) {
     $email = $_GET['email'];
-    $direccion = "../index.php";
+    $direccion = "../user_dashboard.php";
 } elseif (isset($_POST['email'])) {
     $email = $_POST['email'];
     $direccion = "./olvide-contrasenia.php";
@@ -30,7 +30,8 @@ $emailJSON = json_encode($email);
 <body class="logueo">
     <script type="module">
         import { verificacion } from "../scripts/verificacion.js";
-        verificacion(<?php echo $direccionJSON; ?>, <?php echo $emailJSON; ?>);
+        //Acá cambié "echo" por "echo json_encode".
+        verificacion(<?php echo json_encode($direccionJSON); ?>, <?php echo json_encode($emailJSON); ?>);
     </script>
 
     <form method="post" action="./verificar.php">

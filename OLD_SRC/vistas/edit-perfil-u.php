@@ -1,102 +1,47 @@
-
 <?php
-/**
-                         * This PHP file is part of a user profile editing page that allows users to manage their languages, 
-                         * skill levels, and change their password. Below is a detailed explanation of the code:
-                         * 
-                         * - The HTML structure includes a form for managing languages and skill levels, and another form for changing passwords.
-                         * - The PHP code dynamically generates JavaScript arrays (`text_languages`, `text_languages_l`, `array_languages`, `array_languages_l`) 
-                         *   based on the user's current language and skill level data retrieved from the database.
-                         * - JavaScript is used to handle dynamic interactions, such as enabling/disabling buttons, updating arrays, and ensuring data consistency.
-                         * 
-                         * Key Sections:
-                         * 
-                         * 1. **Language and Skill Level Management**:
-                         *    - A set of checkboxes (`cboxI`) allows users to select their skill level for a language (Basic, Intermediate, Advanced).
-                         *    - A button is provided to delete a selected language.
-                         *    - PHP loops through database results (`$exe_language_in` and `$exe_level`) to populate JavaScript arrays with the user's current languages and skill levels.
-                         *    - JavaScript dynamically updates these arrays and ensures only one checkbox is selected at a time for each language.
-                         * 
-                         * 2. **Password Change Form**:
-                         *    - A form is provided for users to change their password.
-                         *    - Hidden inputs include encrypted user ID (`usuario_id`), an action identifier (`action`), and a redirect URL (`url`).
-                         *    - JavaScript ensures the "Change Password" button is only enabled when the new password and its confirmation match, and both are at least 8 characters long.
-                         * 
-                         * 3. **JavaScript Logic**:
-                         *    - `setInterval` checks every second if the password inputs meet the criteria to enable the "Change Password" button.
-                         *    - Event listeners on checkboxes (`cboxE` and `cboxI`) handle user interactions for selecting skill levels and updating the corresponding arrays.
-                         *    - Functions like `showLabels()` and `showLanguages()` (not included in the provided code) are likely used to update the UI with the current state of the arrays.
-                         * 
-                         * Variables and Elements:
-                         * 
-                         * - `div_labels`, `div_languages`: DOM elements for displaying labels and languages.
-                         * - `cboxE`, `cboxI`: Arrays of checkboxes for labels and languages, respectively.
-                         * - `s_labels`, `s_languages`: Select elements for choosing labels and languages.
-                         * - `i_pass`, `i_pass_r`: Input fields for the new password and its confirmation.
-                         * - `text_labels`, `text_labels_l`, `array_labels`, `array_labels_l`: Arrays for managing label names and levels.
-                         * - `text_languages`, `text_languages_l`, `array_languages`, `array_languages_l`: Arrays for managing language names and levels.
-                         * 
-                         * Notes:
-                         * - The code uses `mysqli_data_seek` to reset the pointer of the `$exe_level` result set, allowing it to be reused in nested loops.
-                         * - The `openssl_encrypt` function is used to encrypt the user ID for security purposes.
-                         * - The JavaScript logic assumes that the `showLabels()` and `showLanguages()` functions are defined elsewhere to update the UI.
-                         * - The code could benefit from refactoring to improve readability and maintainability, such as separating concerns and reducing redundancy.
-                         */
-// Include the database connection and encryption logic
-require('../logica/connection.php');
-require('../logica/cifrado.php');
 
-// Set the default timezone
+require('../Logic_Backend/connect_to_database.php');
+require('../Logic_Backend/encryption_keys.php');
+
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 
-// Start the session to access session variables
 session_start();
 
-// Retrieve the email of the logged-in user from the session
 $email = $_SESSION['email'];
 
-// Query to fetch user details based on the email
 $con_user = "SELECT * FROM `usuarios` WHERE `usuario_email` = '$email'";
 $exe_user = $connection->query($con_user);
-$array_user = mysqli_fetch_assoc($exe_user); // Fetch user data as an associative array
-$id_user = $array_user['usuario_id']; // Extract the user ID
+$array_user = mysqli_fetch_assoc($exe_user);
+$id_user = $array_user['usuario_id'];
 
-// Query to fetch the user's associated labels
 $con_label_in = "SELECT * FROM `usu_etiquetas` WHERE `usuario_id` = '$id_user'";
 $exe_label_in = $connection->query($con_label_in); 
 
-// Query to fetch the user's associated languages
 $con_language_in = "SELECT * FROM `usu_idiomas` WHERE `usuario_id` = '$id_user'";
 $exe_language_in = $connection->query($con_language_in); 
 
-// Query to fetch all user types
 $con_type = "SELECT * FROM `tipo_usuario`";
 $exe_type = $connection->query($con_type);
 
-// Query to fetch all states
 $con_state = "SELECT * FROM `estados`";
 $exe_state = $connection->query($con_state);
 
-// Query to fetch all available languages
 $con_language = "SELECT * FROM `idioma`";
 $exe_language = $connection->query($con_language);
 
-// Query to fetch all available labels
 $con_label = "SELECT * FROM `etiquetas`";
 $exe_label = $connection->query($con_label);
 
-// Query to fetch all levels (e.g., Basic, Intermediate, Advanced)
 $con_level = "SELECT * FROM `niveles`";
 $exe_level = $connection->query($con_level);
 
-// Function to calculate the age of the user based on their date of birth
 function calcularEdad($fechaDeNacimiento){
-    $fechaDeNacimiento = new DateTime($fechaDeNacimiento); // Convert the date string to a DateTime object
-    $fechaActual = new DateTime(); // Get the current date
-    $diferencia = $fechaActual->diff($fechaDeNacimiento); // Calculate the difference
-    $edad = $diferencia->y; // Extract the year difference as the age
+    $fechaDeNacimiento = new DateTime($fechaDeNacimiento);
+    $fechaActual = new DateTime();
+    $diferencia = $fechaActual->diff($fechaDeNacimiento);
+    $edad = $diferencia->y;
 
-    return $edad; // Return the calculated age
+    return $edad;
 }
 
 ?>
@@ -105,10 +50,10 @@ function calcularEdad($fechaDeNacimiento){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../estilos/edit-perfil.css"> <!-- Link to the CSS for profile editing -->
-    <link rel="stylesheet" href="../estilos/navbar.css"> <!-- Link to the CSS for the navigation bar -->
-    <title>Editar Perfil</title> <!-- Page title -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert2 for alerts -->
+    <link rel="stylesheet" href="../estilos/edit-perfil.css">
+    <link rel="stylesheet" href="../estilos/navbar.css">
+    <title>Editar Perfil</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <header class="header">
@@ -117,22 +62,20 @@ function calcularEdad($fechaDeNacimiento){
           <label for="toggle" class="label">
             <span>
                 <div class="dropdown">
-                    <!-- Dropdown for user options -->
                     <button class="dropbtn"><img style="width:27px; height:27px;"
                             src="../imgs/user_icon.png" alt="user Icon"></button>
                     <div class="dropdown-content">
-                        <a href="./edit-perfil-u.php">Editar Perfil</a> <!-- Link to edit profile -->
-                        <a href="../logica/cerrarsesion.php">Cerrar Sesion</a> <!-- Link to log out -->
+                        <a href="./edit-perfil-u.php">Editar Perfil</a>
+                        <a href="../Logic_Backend/logout.php">Cerrar Sesion</a>
                     </div>
                 </div>
             </span>
             <span>
                 <div class="dropdown">
-                    <!-- Dropdown for navigation options -->
                     <button class="dropbtn"><img style="width:24px; height:24px;"
                             src="../imgs/54206.png" alt="menu Icon"></button>
                     <div class="dropdown-content">
-                        <a href="../index.php">Inicio</a> <!-- Link to the home page -->
+                        <a href="../user_dashboard.php">Inicio</a>
                     </div>
                 </div>
             </span>
@@ -144,58 +87,53 @@ function calcularEdad($fechaDeNacimiento){
     <main>
         <div class="container">
             <div class="left box-primary">
-                <!-- Display user profile picture -->
                 <center><img class="image" id="img" src="<img class="image" src=""/></center>
-                <!-- Display user name -->
                 <center><h3 class="username text-center"><?php echo $array_user['usuario_nombre']; ?></h3></center>
-                <!-- Display user age -->
                 <center><h3 class="username text-center"><?php echo calcularEdad($array_user['usuario_edad']) . " años"?></h3></center>
-                <!-- Form to upload a new profile picture -->
-                <form action="../logica/user.php" method="post" enctype="multipart/form-data">
+                <form action="../Logic_Backend/UserServiceManager.php" method="post" enctype="multipart/form-data">
                     <input type="file" name="image" class="btn btn-primary btn-block" required>
                     <input type="hidden" name="id" value="<?php echo openssl_encrypt($array_user['usuario_id'], AES, KEY); ?>">
-                    <input type="hidden" name="action" value="8"> <!-- Action for updating the profile picture -->
+                    <input type="hidden" name="action" value="8">
                     <input type="hidden" name="url" value="../vistas/edit-perfil-u.php">
                     <button class="btn btn-primary btn-block" type="submit">Editar foto</button>
                 </form>
-                <!-- Form to deactivate the account -->
-                <form action="../logica/user.php" method="POST">
+                <form action="../Logic_Backend/UserServiceManager.php" method="POST">
                     <input type="hidden" name="id" value="<?php echo openssl_encrypt($array_user['usuario_id'], AES, KEY); ?>">
                     <input type="hidden" name="url" value="../vistas/edit-perfil-u.php">
-                    <input type="hidden" name="action" value="7"> <!-- Action for deactivating the account -->
+                    <input type="hidden" name="action" value="7">
                     <button class="btn btn-primary btn-block">Desactivar cuenta</button>
                 </form>
                 <br>
             </div>
             <script>
-                // Arrays to store IDs and text for labels and languages
-                let array_labels = []; // IDs of labels
-                let array_languages = []; // IDs of languages
+                //Arrays que guardan los ids de las etiquetas e idiomas
+                let array_labels = [];
+                let array_languages = [];
 
-                let array_labels_l = []; // IDs of label levels
-                let array_languages_l = []; // IDs of language levels
+                //Arrays que guardan los ids de los niveles de las etiquetas e idiomas
+                let array_labels_l = [];
+                let array_languages_l = [];
 
-                let text_labels = []; // Text of labels
-                let text_languages = []; // Text of languages
+                //Arrays que guardan los textos de los idiomas y etiquetas
+                let text_labels = [];
+                let text_languages = [];
 
-                let text_labels_l = []; // Text of label levels
-                let text_languages_l = []; // Text of language levels
+                //Arrays que guardan los textos de los niveles de los idiomas y etiquetas
+                let text_labels_l = [];
+                let text_languages_l = [];
             </script>
             <div class="right tab-content">
-                <!-- Form for editing user details -->
-                <form class="form-horizontal" method="POST" action="../logica/user.php" onSubmit="SendArrays();">
-                    <!-- Hidden inputs to send arrays to the server -->
+                <form class="form-horizontal" method="POST" action="../Logic_Backend/UserServiceManager.php" onSubmit="SendArrays();">
                     <input type="hidden" name="arrayPHPLabels" id="arrayPHPLabels">
                     <input type="hidden" name="arrayPHPLevelsLabels" id="arrayPHPLevelsLabels"> 
                     <input type="hidden" name="arrayPHPLanguages" id="arrayPHPLanguages">
                     <input type="hidden" name="arrayPHPLevelsLanguages" id="arrayPHPLevelsLanguages"> 
                     <input type="hidden" name="id" value="<?php echo openssl_encrypt($array_user['usuario_id'], AES, KEY); ?>">
                     <input type="hidden" name="url" value="../vistas/edit-perfil-u.php">
-                    <input type="hidden" name="action" value="4"> <!-- Action for saving changes -->
-                    <input type="hidden" name="fecha" value="<?php echo date('Y-m-d'); ?>"> <!-- Current date -->
+                    <input type="hidden" name="action" value="4">
+                    <input type="hidden" name="fecha" value="<?php echo date('Y-m-d'); ?>">
 
                     <div>
-                        <!-- Input fields for user details -->
                         <label for="nombre">Nombre y Apellido</label>
                         <input type="text" name="nombre" value="<?php echo $array_user['usuario_nombre']; ?>" autocomplete="off">
                     </div>
@@ -216,7 +154,6 @@ function calcularEdad($fechaDeNacimiento){
                         <input type="text" name="descripcion" value="<?php echo $array_user['usuario_descripcion']; ?>" autocomplete="off">
                     </div>
                     <div>
-                        <!-- Dropdown for user type -->
                         <label for="text">Tipo de usuario</label>
                         <select name="tipo_de_usuario" class="form-control">
                             <?php
@@ -234,7 +171,6 @@ function calcularEdad($fechaDeNacimiento){
                         </select>
                     </div>
                     <div>
-                        <!-- Dropdown for user state -->
                         <label for="text">Estado</label>
                         <select name="estado" id="estado" class="form-control">
                             <?php
@@ -247,7 +183,6 @@ function calcularEdad($fechaDeNacimiento){
                         </select>
                     </div>
                     <div>
-                        <!-- Dropdown for job-related labels -->
                         <label for="text">Etiquetas laborales</label>
                         <select name="etiquetas" id="etiquetas" class="form-control">
                             <?php
@@ -257,6 +192,37 @@ function calcularEdad($fechaDeNacimiento){
                                     $labels[] = $array_label; 
                             } ?>
                         </select>
+                        <center>
+                            <input type="checkbox" class="cboxE" value="1">
+                            <label for="">Básico</label>
+                            <input type="checkbox" class="cboxE" value="2">
+                            <label for="">Intermedio</label>
+                            <input type="checkbox" class="cboxE" value="3">
+                            <label for="">Avanzado</label>
+
+                            <button type="submit" onclick="deleteLabel();">
+                                Eliminar etiqueta seleccionada
+                            </button>
+                        </center>
+                        <p>Tus etiquetas</p>
+                        <div class="etiquetas" id="div-etiquetas">
+                            <?php
+                                mysqli_data_seek($exe_level, 0);
+                                while($array_label_in = mysqli_fetch_array($exe_label_in)){
+                                    foreach($labels as $label){
+                                        if($array_label_in['in_etiqueta'] == $label['etiqueta_id']){ 
+                                            while($array_level = mysqli_fetch_array($exe_level)){ 
+                                                if($array_label_in['nivel'] == $array_level['niveles_id']){?>
+                                                    <script>
+                                                        text_labels.push('<?php echo $label['etiqueta_nombre']; ?>');
+                                                        text_labels_l.push('<?php echo $array_level['niveles_nombre']; ?>');
+                                                        array_labels.push('<?php echo $array_label_in['in_etiqueta']; ?>');
+                                                        array_labels_l.push('<?php echo $array_label_in['nivel']; ?>');
+                                                    </script>
+                            <?php } } mysqli_data_seek($exe_level, 0); } } } ?>
+                        </div>
+                    </div>
+                    <div>
                         <label for="text">Idiomas</label>
                         <select name="idiomas" id="idiomas" class="form-control">
                             <?php
@@ -301,7 +267,7 @@ function calcularEdad($fechaDeNacimiento){
                     </div>
                 </form>
                 <br><br>
-                <form action="../logica/user.php" method="POST" class="cuadrado">
+                <form action="../Logic_Backend/UserServiceManager.php" method="POST" class="cuadrado">
                     <p>Cambio de contraseña</p>
                     <input type="hidden" name="id" value="<?php echo openssl_encrypt($array_user['usuario_id'], AES, KEY); ?>">
                     <input type="hidden" name="action" value="6">

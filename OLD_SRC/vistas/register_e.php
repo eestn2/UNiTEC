@@ -1,14 +1,12 @@
 <?php
 
-require('../logica/connection.php');
+require('../Logic_Backend/connect_to_database.php');
 
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 
-$show_users = "SELECT * FROM `tipo_usuario`";
-$show_location = "SELECT * FROM `localidades`";
+$show_users = "SELECT * FROM `user_types`";
 
 $query_users = $connection->query($show_users);
-$query_location = $connection->query($show_location);
 
 ?>
 
@@ -25,45 +23,38 @@ $query_location = $connection->query($show_location);
 </head>
 <body style="overflow: hidden;">
     <section class="container">
-        <form action="../logica/user.php" method="POST" onSubmit="inputsEmpty();">
+        <form action="../Logic_Backend/UserServiceManager.php" method="POST" onSubmit="inputsEmpty();">
             <h1>Registro de la empresa</h1>
             <br>
             <div class="form-box">
-            <input type="text" class="input-box" placeholder="Nombre de la empresa" name="nombre" required>
-            <input type="email" class="input-box" placeholder="Correo electr&oacute;nico" name="correo" required>
-            <input type="password" class="input-box" placeholder="Contrase&ntilde;a" name="contrasenia" required> 
-            <select name="localidad" required>
-                <option value="">Localidad</option>
-                <?php
-                    while($array = mysqli_fetch_assoc($query_location)){ ?>
-                            <option value="<?php echo $array['Localidad_id']; ?>"><?php echo $array['Localidad_nombre']; ?></option>    
-                <?php } ?>
-            </select>
-
-            <input type="text" class="input-box" placeholder="Ingrese el link de su página web (Opcional)" name="portfolio">
-            <textarea name="descripcion" class="input-box" cols="30" rows="3" placeholder="Ingrese una descripcion de su empresa" required></textarea>
+            <input type="text" class="input-box" placeholder="Nombre de su empresa" name="user_name" required>
+            <input type="email" class="input-box" placeholder="Correo electrónico" name="user_email" required>
+            <input type="password" class="input-box" placeholder="Contraseña" name="user_password" required> 
+            <input type="text" class="input-box" placeholder="Localidad" name="user_location" required>
+            <input type="text" class="input-box" placeholder="Link de su página web (Opcional)" name="user_portfolio">
+            <textarea name="user_description" class="input-box" cols="30" rows="3" placeholder="Descripción de su empresa..." required></textarea>
             </div>
 
             <input type="text" name="rango" value="2" hidden>
-            <input type="text" name="estado" value="1" hidden>
-            <input type="hidden" name="edad" value="<?php echo date('Y-m-d') ?>" hidden>
-            <input type="hidden" name="url" value="../vistas/register_e.php">
-            <input type="hidden" name="fecha" value="<?php echo date('Y-m-d'); ?>">
-            <input type="hidden" name="habilitado" value="false">
+            <input type="text" name="user_status" value="10" hidden>
+            <input type="hidden" name="user_age" value="<?php echo date('Y-m-d') ?>" hidden>
+            <input type="hidden" name="redirect_url" value="../vistas/register_e.php">
+            <input type="hidden" name="user_date" value="<?php echo date('Y-m-d'); ?>">
+            <input type="hidden" name="user_is_enabled" value="false">
             <input type="hidden" name="action" value="2">
 
-            <select name="tipo_de_usuario" required hidden>
+            <select name="user_type" required hidden>
                 <?php
                     while($array = mysqli_fetch_assoc($query_users)){ 
-                        if($array['tipoUsuario_nombre'] == "Empresa") {?>
-                            <option value="<?php echo $array['tipoUsuario_id']; ?>"><?php echo $array['tipoUsuario_nombre']; ?></option>
+                        if($array['name'] == "Empresa") {?>
+                            <option value="<?php echo $array['id']; ?>"><?php echo $array['name']; ?></option>
                 <?php } }?>
             </select>
             <div class="container-submit">
             <center>
                 <input type="submit" id="btn-reg" class="btn" value="Registrarse" disabled>
                 <p><a href="../vistas/register_u.php">Registrarse como usuario</a></p>
-                <p>¿Ya tienes una cuenta? <a href="./login.php">Iniciar sesi&oacute;n</a></p>
+                <p>¿Ya tienes una cuenta? <a href="./login.php">Iniciar sesión</a></p>
             </center>
             </div>
             </div>
@@ -71,7 +62,7 @@ $query_location = $connection->query($show_location);
     </section>
 
     <script>
-        let inputs = document.querySelectorAll('input:not([type="hidden"]):required');
+        let inputs = document.querySelectorAll('input');
 
         let btn_reg = document.getElementById('btn-reg');
 
