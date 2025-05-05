@@ -3,18 +3,37 @@ import "../../styles/index.css";
 import notification_icon from "../../assets/navbar/bxs-bell-ring.svg";
 import about_us_icon from "../../assets/navbar/bxs-info-circle.svg";
 import phone_icon from "../../assets/navbar/bxs-phone.svg";
+import chart_icon from "../../assets/navbar/bxs-bar-chart-alt-2.svg";
+import add_offer_icon from "../../assets/navbar/bxs-edit.svg";
 import unitec_text from "../../assets/navbar/unitec_Texto_Color_SVG 2.svg";
 
 const NavBar: React.FC = () => {
+    // Conditional Variables to NavBar changes
+    const user_type = "admin"; // This can be "user" or "admin"
+    const buttons: React.ReactElement[] | undefined[] = [
+        <img src={about_us_icon} alt="About Us"/>,
+        <img src={phone_icon} alt="Phone"/>,
+        <img src={notification_icon} alt="Notification" style={{display: "none"}}/>
+    ];
+    if (user_type === "enterprise") {
+        buttons.unshift(
+            <img src={chart_icon} alt="Chart"/>,
+            <img src={add_offer_icon} alt="Add Offer"/>,
+        )
+    } else if (user_type === "admin") {
+        let amount: number = buttons.length;
+        for (let i = 0; i < amount; i++) {
+            buttons.shift();
+        }
+    }
     return (
         <div className="nav-bar">
             <div className="logo-section">
                 <img src={unitec_text} alt="Unitec Text" className="unitec-text"/>
             </div>
             <div className="icons-section">
-                <img src={about_us_icon} alt="About Us" className="about-us-icon"/>
-                <img src={phone_icon} alt="Notification" className="phone-icon" />
-                <img src={notification_icon} alt="Notification" className="notification-icon" style={{display: "none"}}/>
+                {buttons}
+                
                 <div className="profile-pic"></div>
             </div>
         </div>

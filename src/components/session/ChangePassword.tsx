@@ -22,7 +22,7 @@ const ChangePassword: React.FC = () => {
                 <span className="title">Cambiar contraseña</span>
                 <form name="change-password" style={{display: "flex", flexDirection:"column", alignItems: "center", rowGap: TranslateFigmaCoords.translateFigmaY(18)}} method="post">
                     <InputField name="password" type="password" placeholder="Ingrese la nueva contraseña" width={320} height={50}/>
-                    <InputField name="password" type="password" placeholder="Confirme la contraseña" width={320} height={50}/>
+                    <InputField name="confirm_password" type="password" placeholder="Confirme la contraseña" width={320} height={50}/>
                 </form>
                 <ActionButton height={60} text={"Confirmar"} width={100}/>
             </AppWindow>
