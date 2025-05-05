@@ -242,7 +242,7 @@ class CreateUserWithAdminService{
                             subject: "Registro en espera.",
                             $message = "¡Hola!, tu registro se ha cargado con éxito, debe esperar a que un administrador acepte su solicitud para poder utilizar nuestro software. Ten paciencia."
                             $message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
-                            echo json_encode($message);
+                            echo $message;
                         };
 
                         let serviceID = "service_ifcpjwj";
@@ -328,7 +328,7 @@ class CreateUserWithAdminService{
                             subject: "Registro en espera.",
                             $message = "¡Hola!, tu registro se ha cargado con éxito, debe esperar a que un administrador acepte su solicitud y ya pueda utilizar nuestro software. Ten paciencia."
                             $message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
-                            echo json_encode($message);
+                            echo $message;
                         };
 
                         let serviceID = "service_ifcpjwj";
