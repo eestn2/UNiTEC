@@ -2,15 +2,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&display=swap');
 
 :root{
+  --font-multiplier: 100vh;
   --nav-width: calc((1240 / 1280) * 100vw);
   --nav-height: calc((60 / 720) * 100vh);
   --app-font-family: "Archivo Narrow", Helvetica;
 }
-
+@media (orientation: portrait){
+  :root{
+    --font-multiplier: 100vw;
+  }
+}
 body{
   font-family: var(--app-font-family);
   margin-top: calc((100 / 720) * 100vh);
-  font-size: 10px;
+  font-size: calc((18 / 720) * var(--font-multiplier));
   background-color: var(--BG);
   background-image: url(../assets/unitec/BG_Repeat_Icons.svg);
   background-repeat: repeat;
@@ -33,7 +38,7 @@ a{
   align-items: center;
   color: var(--input);
   font-family: var(--app-font-family);
-  font-size: 10px;
+  font-size: calc((20 / 720) * var(--font-multiplier));
   font-weight: 600;
   letter-spacing: 0;
   line-height: normal;
@@ -119,9 +124,9 @@ a{
   align-items: center;
   border-radius: 30px;
   background-color: var(--action-button);
-  font-size: 10px;
+  font-size: calc((20 / 720) * var(--font-multiplier));
   cursor: pointer;
-  padding: 0 20px;
+  padding: 0 calc((20 / 720) * var(--font-multiplier));;
   width: auto; 
   white-space: nowrap;
   font-weight: 400;
@@ -140,11 +145,11 @@ a{
 .title{
   color: #305894;
   font-weight: 550;
-  font-size: 30px;
+  font-size: calc((40 / 720) * var(--font-multiplier));
 }
 .black-text{
   color: black;
-  font-size: 20px;
+  font-size: calc((20 / 720) * var(--font-multiplier));
   font-weight: 550;
 }
 .watermark{
@@ -187,4 +192,10 @@ a{
   display: flex;
   position: absolute;
   background-color: var(--delimiters);
+}
+
+@media (orientation: portrait){
+  .watermark {
+    display: none;
+  }
 }

@@ -11,7 +11,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ height = 10, width, text, s
     var calculatedWidth: string = 'auto';
     if(width) calculatedWidth = `${TranslateFigmaCoords.translateFigmaX(width)}px`
     return (
-        <div className={`action-button ${className || ''}`} style={{height: `${(window.innerHeight / 720) * height}px`, width: `${calculatedWidth}`, ...style}}>
+        <div className={`action-button ${className || ''}`} style={{height: `${TranslateFigmaCoords.translateFigmaY(height)}px`, width: `${calculatedWidth}`, ...style}}>
             <p>{text}</p>
         </div>
     );
