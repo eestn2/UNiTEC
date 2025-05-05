@@ -5,11 +5,11 @@ import about_us_icon from "../../assets/navbar/bxs-info-circle.svg";
 import phone_icon from "../../assets/navbar/bxs-phone.svg";
 import chart_icon from "../../assets/navbar/bxs-bar-chart-alt-2.svg";
 import add_offer_icon from "../../assets/navbar/bxs-edit.svg";
-import unitec_text from "../../assets/navbar/unitec_Texto_Color_SVG 2.svg";
+import unitec_text from "../../assets/unitec/unitec_Texto_Color_SVG.svg";
 
 const NavBar: React.FC = () => {
     // Conditional Variables to NavBar changes
-    const user_type = "admin"; // This can be "user" or "admin"
+    const user_type = "user"; // This can be "user" or "admin"
     const buttons: React.ReactElement[] | undefined[] = [
         <img src={about_us_icon} alt="About Us"/>,
         <img src={phone_icon} alt="Phone"/>,
@@ -33,7 +33,6 @@ const NavBar: React.FC = () => {
             </div>
             <div className="icons-section">
                 {buttons}
-                
                 <div className="profile-pic"></div>
             </div>
         </div>

@@ -96,14 +96,19 @@ a{
   height: calc((37 / 60) * var(--nav-height));
   fill: var(--icons-nav-bar); 
 }
-.icons-section .profile-pic{
-  width: calc(((40 / 1240) * var(--nav-width)));
-  height: calc(((40 / 1240) * var(--nav-width)));
+.profile-pic{
+  width: calc(((35 / 1240) * var(--nav-width)));
+  height: calc(((35 / 1240) * var(--nav-width)));
   border-radius: 50%;
   background-image: url(../assets/user/profile.jpg);
   background-size: cover;
   background-position: center;
 }
+.icons-section .profile-pic{
+  width: calc(((40 / 1240) * var(--nav-width)));
+  height: calc(((40 / 1240) * var(--nav-width)));
+}
+
 .nav-bar .logo-section {
   display: flex;
   justify-content: center;
@@ -156,6 +161,18 @@ a{
   position: absolute;
   left: 0;
   top: calc((50 / 720) * 100vh);
+}
+
+/* Job offer styling */
+.job-offer{
+  border: solid var(--job-title) 3px;
+  border-radius: 20px;
+  overflow-x: hidden;
+}
+.job-offer .title{
+  background-color: var(--job-title);
+  color: white;
+  font-size: calc((34 / 720) * var(--font-multiplier));
 }
 
 /* REGISTER USER STYLES*/
