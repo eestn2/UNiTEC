@@ -4,6 +4,7 @@ import NavBar from '../UI/NavBar'
 import AppWindow from '../UI/AppWindow'
 import JobOffer from "../UI/JobOffer";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
+import Notification from "../UI/Notification";
 
 function FeedBox(){
  return (
@@ -47,6 +48,9 @@ function FeedBox(){
             marginTop: `${TranslateFigmaCoords.translateFigmaY(32)}px`,
             marginBottom: `${TranslateFigmaCoords.translateFigmaY(32)}px`
           }}>Notificaciones</div>
+          <Notification width={300} height={60}>
+            La empresa XEmpress.CO te ha enviado un correo! <a>Ver más.</a>
+          </Notification>
         </AppWindow>
     </div>
  )

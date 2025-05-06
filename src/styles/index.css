@@ -201,6 +201,23 @@ a{
   position: absolute;
   background-image: linear-gradient(0deg,rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
 }
+
+.notification{
+  color: #000000;
+  border: solid var(--job-title) 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: calc((20 / 720) * var(--font-multiplier));
+  font-weight: 600;
+}
+.notification a{
+  color: black;
+  font-weight: 600;
+}
+.notification .state{
+  
+}
+
 /* REGISTER USER STYLES*/
 .register-user {
   display: flex;
