@@ -43,6 +43,11 @@ a{
   letter-spacing: 0;
   line-height: normal;
 }
+
+/* Ensure the styles also apply to textarea */
+textarea.input-field {
+  resize: none; /* Optional: Prevent resizing if needed */
+}
 .input-field::placeholder {
   color: var(--input);
   font-family: var(--app-font-family);
@@ -202,41 +207,28 @@ a{
   background-image: linear-gradient(0deg,rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
 }
 /* REGISTER USER STYLES*/
-.register-user {
+.top-section{
   display: flex;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  justify-content: center;
+  align-items: center;
+  border-bottom: solid var(--delimiters) 3px;
 }
-.side-sections{
-  width: calc((330 / 1280) * 100vw);
-  background-color: blue;
-}
-.name-section{
-  width: 100%;
-  height: 12%;
-}
-.name-section h1{
-  margin: 0;
-  color: var(--input);
-}
-.horizontal-section{
+.horizontal-display{
   display: flex;
   flex-direction: row;
   width: 100%;
   height: 100%;
 }
-.data-section{
-  width: 50%;
-  height: 100%;
+.left-section{
+  border-right: solid var(--delimiters) 3px;
 }
-.line{
+.right-section{
+}
+.half-component-top{
   display: flex;
-  position: absolute;
-  background-color: var(--delimiters);
+  justify-content: center;
+  align-items: center;
 }
-
 @media (orientation: portrait){
   .watermark {
     display: none;
