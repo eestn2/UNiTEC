@@ -15,6 +15,7 @@
     --BG-2: rgba(188, 46, 48, 1);
     --delimiters: rgba(255, 193, 35, 1);
     --bold: rgba(104, 94, 167, 1);
+    --job-title: #5386FF;
     --important-text: #00317B;
     --input: rgba(0, 49, 123, 0.5);
     --regular: rgba(170, 164, 211, 1);
@@ -23,7 +24,8 @@
     --window-outer: rgb(255, 255, 255);
     --action-button: #3D8AF0;
     --icons-nav-bar: rgba(170, 186, 201, 1);
-    
+    --feed-title: #113893;
+    --feed-title-BG: #D1E7FC;
   }
 /* Resets */
 @media (prefers-color-scheme: dark) {

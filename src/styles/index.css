@@ -55,8 +55,6 @@ a{
 
 /* AppWindow styles */
 .app-window {
-  display: flex;
-  flex-direction: column;
   background-color: var(--window-outer);
   border-radius: 20px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
@@ -96,14 +94,19 @@ a{
   height: calc((37 / 60) * var(--nav-height));
   fill: var(--icons-nav-bar); 
 }
-.icons-section .profile-pic{
-  width: calc(((40 / 1240) * var(--nav-width)));
-  height: calc(((40 / 1240) * var(--nav-width)));
+.profile-pic{
+  width: calc(((37 / 1240) * var(--nav-width)));
+  height: calc(((37 / 1240) * var(--nav-width)));
   border-radius: 50%;
   background-image: url(../assets/user/profile.jpg);
   background-size: cover;
   background-position: center;
 }
+.icons-section .profile-pic{
+  width: calc(((40 / 1240) * var(--nav-width)));
+  height: calc(((40 / 1240) * var(--nav-width)));
+}
+
 .nav-bar .logo-section {
   display: flex;
   justify-content: center;
@@ -132,16 +135,6 @@ a{
   font-weight: 400;
 }
 
-/* FEEDBOX SECTION STYLES */
-.feedbox-section {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
 .title{
   color: #305894;
   font-weight: 550;
@@ -158,6 +151,56 @@ a{
   top: calc((50 / 720) * 100vh);
 }
 
+/* Job offer styling */
+.feedbox::-webkit-scrollbar {
+  width: 6px;
+}
+
+.feedbox::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background-color: var(--action-button);
+  border: 1px solid #cacaca;
+}
+
+.feedbox::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: var(--icons-nav-bar);
+}
+.feed-title{
+  color: var(--feed-title);
+  background-color: var(--feed-title-BG);
+  border-radius: 20px;
+  align-content: center;
+  text-align: center;
+  font-size: calc((32 / 720) * var(--font-multiplier));
+  font-weight: 600;
+}
+
+.job-offer{
+  border: solid var(--job-title) 3px;
+  border-radius: 20px;
+  background-color: var(--job-title);
+  overflow: hidden;
+}
+.job-offer .title{
+  background-color: var(--job-title);
+  color: white;
+  border-radius: 0;
+  font-size: calc((34 / 720) * var(--font-multiplier));
+}
+.job-offer .app-window{
+  color: black;
+  overflow: hidden;
+}
+.job-offer .text{
+  width: 96%;
+  margin-left: 2%;
+  margin-top: 2%;
+}
+.job-offer .fade-white{
+  position: absolute;
+  background-image: linear-gradient(0deg,rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+}
 /* REGISTER USER STYLES*/
 .register-user {
   display: flex;
