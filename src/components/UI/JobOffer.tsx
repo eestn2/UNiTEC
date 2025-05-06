@@ -9,7 +9,6 @@ import "../../styles/index.css";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import ResponsiveComponent from "./ResponsiveComponent";
 import AppWindow from "./AppWindow";
-import placeholder from "../../assets/user/profile.jpg"
 import ActionButton from "./ActionButton";
 
 interface JobOfferProps extends ResponsiveComponent{
@@ -58,7 +57,11 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, username, 
             }}><div style={{marginLeft: `${TranslateFigmaCoords.translateFigmaX(10)}px`, display: 'flex', flexDirection: 'row', columnGap: `${TranslateFigmaCoords.translateFigmaX(10)}px`, alignItems: 'center'}}>
                     <div className="profile-pic"></div>{username}</div>
                 </div>
-            <AppWindow width={width} height={height - titleHeight} style={{position: "relative"}}>
+            <AppWindow width={width} height={height - titleHeight} style={{
+                position: "relative",
+                borderTopRightRadius: 0,
+                borderTopLeftRadius: 0
+                }}>
                 <div className="text">{children}</div>
                 <div className="fade-white" style={{
                     bottom: 0,

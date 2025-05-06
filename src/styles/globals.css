@@ -24,7 +24,8 @@
     --window-outer: rgb(255, 255, 255);
     --action-button: #3D8AF0;
     --icons-nav-bar: rgba(170, 186, 201, 1);
-    
+    --feed-title: #113893;
+    --feed-title-BG: #D1E7FC;
   }
 /* Resets */
 @media (prefers-color-scheme: dark) {

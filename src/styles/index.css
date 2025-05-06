@@ -166,14 +166,26 @@ a{
   border-radius: 8px;
   background-color: var(--icons-nav-bar);
 }
+.feed-title{
+  color: var(--feed-title);
+  background-color: var(--feed-title-BG);
+  border-radius: 20px;
+  align-content: center;
+  text-align: center;
+  font-size: calc((32 / 720) * var(--font-multiplier));
+  font-weight: 600;
+}
+
 .job-offer{
   border: solid var(--job-title) 3px;
   border-radius: 20px;
+  background-color: var(--job-title);
   overflow: hidden;
 }
 .job-offer .title{
   background-color: var(--job-title);
   color: white;
+  border-radius: 0;
   font-size: calc((34 / 720) * var(--font-multiplier));
 }
 .job-offer .app-window{
