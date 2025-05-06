@@ -10,6 +10,7 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import ResponsiveComponent from "./ResponsiveComponent";
 import AppWindow from "./AppWindow";
 import placeholder from "../../assets/user/profile.jpg"
+import ActionButton from "./ActionButton";
 
 interface JobOfferProps extends ResponsiveComponent{
     username: string
@@ -29,7 +30,7 @@ interface JobOfferProps extends ResponsiveComponent{
 
     @Author: Haziel Magallanes
 */
-const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, username, style, className }) => {
+const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, username, style, className, children }) => {
     // Check if is a square shaped window, if so, make calculated height the same as calculated width
     const translatedHeight = height == width ? TranslateFigmaCoords.translateFigmaX(width) : TranslateFigmaCoords.translateFigmaY(height);
     const titleHeight: number = height / 8;
@@ -42,6 +43,10 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, username, 
                 width: `${translatedWidth}px`,
                 display: 'flex',
                 flexDirection: 'column',
+                position: "relative",
+                left: "50%",
+                transform: "translateX(-50%)",
+                marginBottom: `${TranslateFigmaCoords.translateFigmaY(32)}px`,
                 ...style,
             }}>
             <div className= "title" style={{
@@ -53,8 +58,23 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, username, 
             }}><div style={{marginLeft: `${TranslateFigmaCoords.translateFigmaX(10)}px`, display: 'flex', flexDirection: 'row', columnGap: `${TranslateFigmaCoords.translateFigmaX(10)}px`, alignItems: 'center'}}>
                     <div className="profile-pic"></div>{username}</div>
                 </div>
-            <AppWindow width={width} height={height - titleHeight}>
-
+            <AppWindow width={width} height={height - titleHeight} style={{position: "relative"}}>
+                <div className="text">{children}</div>
+                <div className="fade-white" style={{
+                    bottom: 0,
+                    height: TranslateFigmaCoords.translateFigmaY((height - titleHeight) / 4),
+                    width: TranslateFigmaCoords.translateFigmaX( width - 20),
+                    marginLeft: TranslateFigmaCoords.translateFigmaX(10),
+                    borderRadius: 10
+                    }}>
+                </div>
+                <ActionButton text="Ver más" height={40} style={{
+                    position: "absolute", 
+                    top: "80%",
+                    color: "white",
+                    left: "50%",
+                    transform: "translateX(-50%)"
+                    }}></ActionButton>
             </AppWindow>
             
         </div>
