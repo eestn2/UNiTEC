@@ -3,19 +3,19 @@ import "../../styles/index.css";
 import notification_icon from "../../assets/navbar/bxs-bell-ring.svg";
 import about_us_icon from "../../assets/navbar/bxs-info-circle.svg";
 import phone_icon from "../../assets/navbar/bxs-phone.svg";
-import chart_icon from "../../assets/navbar/bxs-bar-chart-alt-2.svg";
-import add_offer_icon from "../../assets/navbar/bxs-edit.svg";
+/* import chart_icon from "../../assets/navbar/bxs-bar-chart-alt-2.svg";
+import add_offer_icon from "../../assets/navbar/bxs-edit.svg"; */
 import unitec_text from "../../assets/unitec/unitec_Texto_Color_SVG.svg";
 
 const NavBar: React.FC = () => {
     // Conditional Variables to NavBar changes
-    const user_type = "user"; // This can be "user" or "admin"
+    /* const user_type = "user"; // This can be "user" or "admin" */
     const buttons: React.ReactElement[] | undefined[] = [
         <img src={about_us_icon} alt="About Us"/>,
         <img src={phone_icon} alt="Phone"/>,
         <img src={notification_icon} alt="Notification" style={{display: "none"}}/>
     ];
-    if (user_type === "enterprise") {
+/*     if (user_type === "enterprise") {
         buttons.unshift(
             <img src={chart_icon} alt="Chart"/>,
             <img src={add_offer_icon} alt="Add Offer"/>,
@@ -25,7 +25,7 @@ const NavBar: React.FC = () => {
         for (let i = 0; i < amount; i++) {
             buttons.shift();
         }
-    }
+    } */
     return (
         <div className="nav-bar">
             <div className="logo-section">
