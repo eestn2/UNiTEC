@@ -44,6 +44,8 @@ a{
   line-height: normal;
 }
 
+
+
 /* Ensure the styles also apply to textarea */
 textarea.input-field {
   resize: none; /* Optional: Prevent resizing if needed */
@@ -156,6 +158,19 @@ textarea.input-field {
   top: calc((50 / 720) * 100vh);
 }
 
+.form-text{
+  color: var(--forms-text);
+  font-size: calc((20 / 720) * var(--font-multiplier));
+  font-weight: bold;
+}
+
+.golden-link{
+  color: var(--delimiters);
+  font-size: calc((20 / 720) * var(--font-multiplier));
+  font-weight: bold;
+  text-decoration: underline;
+}
+
 /* Job offer styling */
 .feedbox::-webkit-scrollbar {
   width: 6px;
@@ -223,7 +238,7 @@ textarea.input-field {
   
 }
 
-/* REGISTER USER STYLES*/
+/* REGISTER ENTERPRISE STYLES*/
 .top-section{
   display: flex;
   justify-content: center;
@@ -236,16 +251,43 @@ textarea.input-field {
   width: 100%;
   height: 100%;
 }
+
+.vertical-sections{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 50%;
+  row-gap: 15px;
+}
 .left-section{
   border-right: solid var(--delimiters) 3px;
 }
-.right-section{
+/* Custom scrollbar for the TextBox */
+textarea.input-field::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
 }
-.half-component-top{
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+textarea.input-field::-webkit-scrollbar-track {
+  background-color: #dee0eb; /* Match the background color of the input field */
+  border-radius: 10px; /* Rounded corners for the track */
 }
+
+textarea.input-field::-webkit-scrollbar-thumb {
+  background-color: #305894; /* Match the title color */
+  border-radius: 10px; /* Rounded corners for the thumb */
+  border: 2px solid #dee0eb; /* Add a border to match the input field background */
+}
+
+textarea.input-field::-webkit-scrollbar-thumb:hover {
+  background-color: #1e3a6d; /* Darker shade for hover effect */
+}
+
+.delimiter{
+  background-color: var(--delimiters);
+  width: 100%;
+  height: 3px;
+}
+
 @media (orientation: portrait){
   .watermark {
     display: none;
