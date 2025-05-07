@@ -4,15 +4,13 @@
  * @author Haziel Magallanes
  * @date May 6, 2025
  */
-import React from "react";
+import React, { useState } from "react";
 import "../../styles/index.css";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import ResponsiveComponent from "./ResponsiveComponent";
 
 /**
- *  Component used to create a window in the app Style with responsive size.
- *  It takes the width and height in pixels as props and converts them to responsive pixels based on the screen size.
- *  It also allows to pass children, inline styles and custom CSS classes.
+ * Notification box component.
 
     @param {number} width - The width of the window in pixels.
     @param {number} height - The height of the window in pixels.
@@ -23,9 +21,9 @@ import ResponsiveComponent from "./ResponsiveComponent";
 
     @Author: Haziel Magallanes
 */
-const Notification: React.FC<ResponsiveComponent> = ({ height = 10, width = 10, children, style, className }) => {
+const Notification: React.FC<ResponsiveComponent> = ({ width = 10, children, style, className }) => {
+    const [read, changeState] = useState(false);
     // Check if is a square shaped window, if so, make calculated height the same as calculated width
-    height = height == width ? TranslateFigmaCoords.translateFigmaX(width) : TranslateFigmaCoords.translateFigmaY(height);
     width = TranslateFigmaCoords.translateFigmaX(width);  // Convert Figma sizes to the same ratio as the screen size
     return (
         <div
@@ -35,13 +33,20 @@ const Notification: React.FC<ResponsiveComponent> = ({ height = 10, width = 10, 
                 width: `${width}px`,
                 position: 'relative',
                 ...style,
-            }}>
-            <div className="state read" style={{
+            }}
+            onMouseEnter={() => {changeState(true)}}>
+            <div className="state" style={{
                 width: `${TranslateFigmaCoords.translateFigmaX(16)}px`,
                 height: `${TranslateFigmaCoords.translateFigmaX(16)}px`,
-            }}></div>
+            }}><div style={{
+                width: `${TranslateFigmaCoords.translateFigmaX(12)}px`,
+                height: `${TranslateFigmaCoords.translateFigmaX(12)}px`,
+                backgroundColor: read ? '#748595' : '#FF3C3C'
+            }}></div></div>
             <p style={{
-                margin: `${TranslateFigmaCoords.translateFigmaX(10)}px`
+                margin: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
+                marginTop: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
+                marginBottom: `${TranslateFigmaCoords.translateFigmaX(5)}px`
             }}>{children}</p>
         </div>
     );
