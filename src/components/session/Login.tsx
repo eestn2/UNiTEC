@@ -5,6 +5,7 @@ import AppWindow from "../UI/AppWindow";
 import Logo from "../UI/Logo";
 import ActionButton from "../UI/ActionButton";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
+import { Link } from "react-router-dom";
 
 const Login: React.FC = () => {
     return (
@@ -31,7 +32,7 @@ const Login: React.FC = () => {
                 height: TranslateFigmaCoords.translateFigmaY(71),
                 display: "flex",
                 alignItems: "center"}}>
-                <a style={{marginLeft: TranslateFigmaCoords.translateFigmaX(27)}}>Restablecer contraseña</a>
+                <Link to={'/password-reset'} className="link" style={{marginLeft: TranslateFigmaCoords.translateFigmaX(27)}}>Restablecer contraseña</Link>
             </div>
             <div style={{
                 display: "flex",
@@ -43,7 +44,7 @@ const Login: React.FC = () => {
                 textIndent: TranslateFigmaCoords.translateFigmaX(27),
                 color: "#00317B"}}>
                 <span>¿No tienes una cuenta?</span>
-                <span>Registrate como <a style={{color: "rgb(255, 193, 35)"}}>Empresa</a> / <a style={{color: "rgb(255, 193, 35)"}}>Estudiante</a></span>
+                <span>Registrate como <Link className="link" style={{color: "rgb(255, 193, 35)"}} to={'/register-enterprise'}>Empresa</Link> / <Link to={'register-user'} className="link" style={{color: "rgb(255, 193, 35)"}}>Estudiante</Link></span>
             </div>
         </AppWindow>
     );

@@ -6,6 +6,7 @@ import Logo from "../UI/Logo";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import InputField from "../UI/InputField";
 import TextBox from "../UI/TextBox";
+import { Link } from "react-router-dom";
 
 function RegisterUser() {
  return (
@@ -56,7 +57,7 @@ function RegisterUser() {
               <span className="form-text">Si has rellenado todos los campos necesarios solo queda:</span>
               <ActionButton height={60} text={"Registrarse"} width={100}/>
               <div className="delimiter"></div>
-              <span className="form-text">Registrarse como <a href="" className="golden-link">Usuario</a><br />¿Ya tienes cuenta? <a className="golden-link">Iniciar Sesión</a></span>
+              <span className="form-text">Registrarse como <Link to={'/register-enterprise'} className="golden-link">Empresa</Link><br />¿Ya tienes cuenta? <Link to={'/'} className="golden-link">Iniciar Sesión</Link></span>
             </div>
         </div>
     </AppWindow>

@@ -5,6 +5,7 @@ import AppWindow from '../UI/AppWindow'
 import JobOffer from "../UI/JobOffer";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import Notification from "../UI/Notification";
+import { Link } from "react-router-dom";
 
 function FeedBox(){
  return (
@@ -49,7 +50,7 @@ function FeedBox(){
             marginBottom: `${TranslateFigmaCoords.translateFigmaY(32)}px`
           }}>Notificaciones</div>
           <Notification width={300} height={60}>
-            La empresa XEmpress.CO te ha enviado un correo! <a>Ver más.</a>
+            La empresa XEmpress.CO te ha enviado un correo! <Link to={'/'} className="link">Ver más.</Link>
           </Notification>
         </AppWindow>
     </div>

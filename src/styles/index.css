@@ -21,11 +21,11 @@ body{
   background-repeat: repeat;
   background-size: contain;
 }
-a{
+.link{
   color: var(--important-text);
   text-decoration: underline;
   font-weight: 500;
-}a:hover{
+}.link:hover{
   color: var(--important-text);
   cursor: pointer;
 }
@@ -231,7 +231,7 @@ textarea.input-field {
   font-size: calc((20 / 720) * var(--font-multiplier));
   font-weight: 600;
 }
-.notification a{
+.notification .link{
   color: black;
   font-weight: 600;
 }
