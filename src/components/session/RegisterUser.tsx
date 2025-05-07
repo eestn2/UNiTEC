@@ -29,7 +29,7 @@ function RegisterUser() {
           height: TranslateFigmaCoords.translateFigmaY(80),
           width: "100%",
           paddingBottom: TranslateFigmaCoords.translateFigmaY(10),
-        }}> Registro de la Empresa</span>
+        }}> Registro del Estudiante</span>
 
         <div className="horizontal-display">
             <div className="vertical-sections" style={{paddingRight: TranslateFigmaCoords.translateFigmaY(20),}}>
