@@ -93,7 +93,7 @@ $query_state = $connection->query($show_state);
                 <?php } }?>
             </select>
             <select id="user_status" name="user_status" class="input-box" required>
-                <option value="">Estados</option>
+                <option value="">user_statuss</option>
                 <?php
                     while($array = mysqli_fetch_assoc($query_state)){ ?>
                             <option value="<?php echo $array['id']; ?>"><?php echo $array['name']; ?></option>
@@ -131,8 +131,8 @@ $query_state = $connection->query($show_state);
 
         let languages = document.getElementById('idiomas');
         let labels = document.getElementById('etiquetas');
-        let states = document.getElementById('estado');
-        let type_user = document.getElementById('user_types');
+        let states = document.getElementById('user_status');
+        let type_user = document.getElementById('user_type');
 
         let array_languages = [];
         let text_languages = [];
@@ -298,7 +298,7 @@ $query_state = $connection->query($show_state);
 
             });
 
-            if(array_languages.length != 0 && array_labels.length != 0 && empty == false && states.options[states.selectedIndex].text != 'Estados' && type_user.options[type_user.selectedIndex].text != 'Tipos de usuario'){
+            if(array_languages.length != 0 && array_labels.length != 0 && empty == false && states.options[states.selectedIndex].text != 'user_statuss' && type_user.options[type_user.selectedIndex].text != 'Tipos de usuario'){
                 btn_reg.disabled = false;
             } else {
                 btn_reg.disabled = true;

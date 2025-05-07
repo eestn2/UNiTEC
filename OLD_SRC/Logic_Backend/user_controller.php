@@ -152,4 +152,5 @@ if(isset($_POST['action']) && $_POST['action'] == '1'){
     $obj_user->Update_company_data($received_id, $name, $location, $mail, $description, $date, $briefcase, $received_url);
 
 }
+
 ?>

@@ -8,7 +8,7 @@ $dotenv->load();
 $host = $_ENV['DB_HOST'];
 $user = $_ENV['DB_USER'];
 $password = $_ENV['DB_PASS'];
-$db   = $_ENV['DB_NAME'];
+$db = $_ENV['DB_NAME'];
 
 $connection = new mysqli($host, $user, $password, $db);
 
