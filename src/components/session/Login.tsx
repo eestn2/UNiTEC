@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import "../../styles/index.css";
 import InputField from "../UI/InputField";
 import AppWindow from "../UI/AppWindow";
@@ -11,34 +11,41 @@ import axios from "axios";
 const Login: React.FC = () => {
     const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
-    const handleLogin = async (event: SubmitEvent) => {
+    const handleLogin = async (event: FormEvent) => {
         event.preventDefault();
-        const response = await axios.post('', {
+        const response = await axios.post('http://localhost:80/UNITEC/src/php/requests/session/login.php', {
             user,
             password
         });
         console.log(response);
-    }
+    };
+    
     return (
-        <AppWindow width={370} height={650} style={
-            {display: "flex", 
+        <AppWindow width={370} height={650} style={{
+            display: "flex", 
             flexDirection: "column", 
             rowGap: TranslateFigmaCoords.translateFigmaY(26),
             alignItems: "center", 
             position: "absolute", 
             top: "50%", left: "50%", translate: "-50% -50%"
-            }}>
+        }}>
             <Logo width={180} height={180} logo_size={140} logo_text_size={34}/>
-            <form name="login" 
-            style={{display: "flex", flexDirection:"column", alignItems: "center", rowGap: TranslateFigmaCoords.translateFigmaY(18)}} 
-            method="post"
-            onSubmit={handleLogin}>
+            <form 
+                name="login"
+                id="login"
+                onSubmit={(event) => {handleLogin(event)}}
+                style={{display: "flex", flexDirection:"column", alignItems: "center", rowGap: TranslateFigmaCoords.translateFigmaY(18)}}
+            >
                 <InputField name="user" type="text" placeholder="Ingrese su usuario" width={320} height={50}
-                onChange={(event: ChangeEvent<HTMLInputElement>) => {setUser(event.target.value)}}/>
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => {setUser(event.target.value)}}/>
                 <InputField name="password" type="password" placeholder="Ingrese su contraseña" width={320} height={50}
-                onChange={(event: ChangeEvent<HTMLInputElement>) => {setPassword(event.target.value)}}/>
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => {setPassword(event.target.value)}}/>
+                <ActionButton height={50} text={"Iniciar Sesión"} action={(event) => {
+                    event.preventDefault();
+                    const form = document.getElementById("login") as HTMLFormElement;
+                    if (form) form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+                }}/>
             </form>
-            <ActionButton height={50} text={"Iniciar Sesión"}/>
             <div style={{
                 backgroundColor: "#D8DDF5",
                 borderColor: "#FFD64F",
@@ -47,7 +54,8 @@ const Login: React.FC = () => {
                 width: "100%",
                 height: TranslateFigmaCoords.translateFigmaY(71),
                 display: "flex",
-                alignItems: "center"}}>
+                alignItems: "center"
+            }}>
                 <Link to={'/password-reset'} className="link" style={{marginLeft: TranslateFigmaCoords.translateFigmaX(27)}}>Restablecer contraseña</Link>
             </div>
             <div style={{
@@ -58,7 +66,8 @@ const Login: React.FC = () => {
                 textAlign: "left",
                 marginTop: -TranslateFigmaCoords.translateFigmaY(12),
                 textIndent: TranslateFigmaCoords.translateFigmaX(27),
-                color: "#00317B"}}>
+                color: "#00317B"
+            }}>
                 <span>¿No tienes una cuenta?</span>
                 <span>Registrate como <Link className="link" style={{color: "rgb(255, 193, 35)"}} to={'/register-enterprise'}>Empresa</Link> / <Link to={'register-user'} className="link" style={{color: "rgb(255, 193, 35)"}}>Estudiante</Link></span>
             </div>

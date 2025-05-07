@@ -21,6 +21,7 @@ interface InputFieldProps extends ResponsiveComponent {
 const InputField: React.FC<InputFieldProps> = ({
     width = 50,
     height = 10,
+    onChange,
     type,
     name,
     placeholder = "Input field",
@@ -41,6 +42,7 @@ const InputField: React.FC<InputFieldProps> = ({
             type={type}
             placeholder={placeholder}
             className={`input-field ${className || ""}`}
+            onChange={onChange}
             max={type === "date" ? max : undefined} // Apply max only for date inputs
             min={type === "date" ? min : undefined} // Apply min only for date inputs
         />
