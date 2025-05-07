@@ -225,6 +225,7 @@ textarea.input-field {
 .notification{
   color: #000000;
   border: solid var(--job-title) 3px;
+  border-radius: 15px;
   left: 50%;
   transform: translateX(-50%);
   font-size: calc((20 / 720) * var(--font-multiplier));
@@ -235,7 +236,21 @@ textarea.input-field {
   font-weight: 600;
 }
 .notification .state{
-  
+  background-color: white;
+  border: solid var(--job-title) 3px;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+}
+.notification .state div{
+  border-radius: 50%;
+  position: absolute;
+  transition: background-color 0.5s ease-in-out;
+  top: 50%;
+  left: 50%;
+  transform: translate(-55%, -55%);
 }
 
 /* REGISTER ENTERPRISE STYLES*/
