@@ -1,14 +1,12 @@
 <?php 
+include_once(__DIR__ . '/../DotEnv.php'); // Use __DIR__ for an absolute path
 
-require_once __DIR__ . '/../vendor/autoload.php';
+(new DotEnv(__DIR__ . '/../../../.env'))->load();
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
-$host = $_ENV['DB_HOST'];
-$user = $_ENV['DB_USER'];
-$password = $_ENV['DB_PASS'];
-$db = $_ENV['DB_NAME'];
+$host = getenv('DB_HOST');
+$user = getenv('DB_USER');
+$password = getenv('DB_PASS');
+$db = getenv('DB_NAME');
 
 $connection = new mysqli($host, $user, $password, $db);
 
