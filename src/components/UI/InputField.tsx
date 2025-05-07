@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEventHandler } from "react";
 import "../../styles/index.css";
 import ResponsiveComponent from "./ResponsiveComponent";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
@@ -7,6 +7,7 @@ interface InputFieldProps extends ResponsiveComponent {
     type: string;
     name: string;
     placeholder: string;
+    onChange?: ChangeEventHandler;
     /*** Inline styles to apply to the Input Field. */
     style?: React.CSSProperties;
     /*** Custom CSS classes to apply to the Input Field. */

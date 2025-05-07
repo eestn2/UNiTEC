@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 import "../../styles/index.css";
 import InputField from "../UI/InputField";
 import AppWindow from "../UI/AppWindow";
@@ -6,8 +6,19 @@ import Logo from "../UI/Logo";
 import ActionButton from "../UI/ActionButton";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Login: React.FC = () => {
+    const [user, setUser] = useState('');
+    const [password, setPassword] = useState('');
+    const handleLogin = async (event: SubmitEvent) => {
+        event.preventDefault();
+        const response = await axios.post('', {
+            user,
+            password
+        });
+        console.log(response);
+    }
     return (
         <AppWindow width={370} height={650} style={
             {display: "flex", 
@@ -18,9 +29,14 @@ const Login: React.FC = () => {
             top: "50%", left: "50%", translate: "-50% -50%"
             }}>
             <Logo width={180} height={180} logo_size={140} logo_text_size={34}/>
-            <form name="login" style={{display: "flex", flexDirection:"column", alignItems: "center", rowGap: TranslateFigmaCoords.translateFigmaY(18)}} method="post">
-                <InputField name="user" type="text" placeholder="Ingrese su usuario" width={320} height={50}/>
-                <InputField name="password" type="password" placeholder="Ingrese su contraseña" width={320} height={50}/>
+            <form name="login" 
+            style={{display: "flex", flexDirection:"column", alignItems: "center", rowGap: TranslateFigmaCoords.translateFigmaY(18)}} 
+            method="post"
+            onSubmit={handleLogin}>
+                <InputField name="user" type="text" placeholder="Ingrese su usuario" width={320} height={50}
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {setUser(event.target.value)}}/>
+                <InputField name="password" type="password" placeholder="Ingrese su contraseña" width={320} height={50}
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {setPassword(event.target.value)}}/>
             </form>
             <ActionButton height={50} text={"Iniciar Sesión"}/>
             <div style={{
