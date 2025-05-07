@@ -32,6 +32,7 @@ const RegisterEnterprise: React.FC = () => {
 
     return (
       <>
+      <Logo className="watermark"></Logo>
       <AppWindow width={655} height={580} style={{
             display: "flex",
             alignItems: "center",

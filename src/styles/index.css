@@ -44,6 +44,31 @@ body{
   line-height: normal;
 }
 
+.selection-field {
+  background-color: #dee0eb;
+  border: none;
+  border-radius: 10px;
+  text-align: left;
+  align-items: center;
+  color: var(--input);
+  font-family: var(--app-font-family);
+  font-size: calc((20 / 720) * var(--font-multiplier));
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: normal;
+  appearance: none; /* Remove default arrow */
+  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: calc(100% - 15px) center; /* Position arrow with margin */
+  background-size: 16px;
+  padding-right: 30px; /* Add padding to prevent text overlap with arrow */
+}
+
+.selection-field:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 
 
 /* Ensure the styles also apply to textarea */
