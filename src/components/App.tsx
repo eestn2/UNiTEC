@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import FeedBox from './feed/FeedBox';
-import { useState } from 'react';
+/* import { useState } from 'react'; */
 import Login from './session/Login';
 import RegisterEnterprise from './session/RegisterEnterprise';
 import ForgotPassword from './session/ForgotPassword';
@@ -14,12 +14,13 @@ function App() {
     return config;
   });
 
-  const [session, setSessionToken] = useState(null);
+/*   const [session, setSessionToken] = useState(null);
+   */
   // Browser routings
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/UNITEC">
       <Routes>
-        <Route path='/' element={session? <FeedBox /> : <Login />}/>
+        <Route path='/' element={<Login />}/>
         <Route path='/test' element={<FeedBox />}/>
         <Route path='/register-enterprise' element={<RegisterEnterprise/>}/>
         <Route path='/register-user' element={<RegisterUser/>}/>
