@@ -1,19 +1,14 @@
-import React from "react";
-import "../styles/index.css";
-import TestingPlayground from "../TestingPlayground";
-import NavBar from './UI/NavBar'
-
-import AppWindow from './UI/AppWindow'
-import ActionButton from './UI/ActionButton'
-import Login from "./session/Login";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import FeedBox from './feed/FeedBox';
 
 function App() {
- return (
-    <div className="App">
-      <Login></Login>
-    </div>
-    
- )
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<FeedBox />}/>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
