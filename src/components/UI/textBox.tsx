@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEventHandler } from "react";
 import "../../styles/index.css";
 import ResponsiveComponent from "./ResponsiveComponent";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
@@ -10,9 +10,11 @@ interface TextBoxProps extends ResponsiveComponent {
     style?: React.CSSProperties;
     /*** Custom CSS classes to apply to the TextArea. */
     className?: string;
+    /*** Change event handler for the TextArea. */
+    onChange?: ChangeEventHandler<HTMLTextAreaElement>;
 }
 
-const TextBox: React.FC<TextBoxProps> = ({ width = 50, height = 10, name, placeholder = "Text Box", style, className }) => {
+const TextBox: React.FC<TextBoxProps> = ({ width = 50, height = 10, name, placeholder = "Text Box", style, className, onChange }) => {
     return (
         <textarea
             style={{
@@ -25,6 +27,7 @@ const TextBox: React.FC<TextBoxProps> = ({ width = 50, height = 10, name, placeh
             name={name}
             placeholder={placeholder}
             className={`input-field ${className || ""}`} // Reuse the same class as InputField
+            onChange={onChange} // Pass the onChange handler to the textarea
         />
     );
 };
