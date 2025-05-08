@@ -17,7 +17,7 @@ class ApplicationManager{
     //Nombre anterior del metodo: PostulacionExiste
     public function doesApplicationExist($dbConnection, $con, $company, $title) {
         // Consulta para contar las postulaciones que coinciden con los parámetros dados
-        $sql = "SELECT COUNT(*) as count FROM applications WHERE id = ? AND creator_id = ? AND title = ?";
+        $sql = "SELECT COUNT(*) as count FROM applications WHERE user_id = ? AND creator_id = ? AND title = ?";
         $stmt = mysqli_prepare($con, $sql);
 
         if ($stmt) {
@@ -72,13 +72,13 @@ class ApplicationManager{
 
     // Método para eliminar una postulación de la base de datos
     //Nombre anterior: EliminarPostulacion
-    public function removeApplication($dbConnection, $con, $application_id) {
+    public function removeApplication($dbConnection, $con, $id) {
         $sql = "DELETE FROM applications WHERE id = ?";
         $stmt = mysqli_prepare($con, $sql);
 
         if ($stmt) {
             // Se enlazan los parámetros a la consulta y se ejecuta
-            mysqli_stmt_bind_param($stmt, "i", $application_id);
+            mysqli_stmt_bind_param($stmt, "i", $id);
             if (mysqli_stmt_execute($stmt)) {
                 echo "Postulación eliminada correctamente." ; // Mensaje de éxito si se elimina correctamente
             } else {
@@ -92,14 +92,14 @@ class ApplicationManager{
 
     // Método para actualizar una postulación en la base de datos
     //Nombre anterior del metodo: ActualizarPropuesta
-    public function updateProposal($con, $application_id, $id, $company, $title, $description, $status) {
+    public function updateProposal($con, $id, $user_id, $company, $title, $description, $status) {
         // Consulta para actualizar una postulación por su ID
-        $sql = "UPDATE applications SET id = ?, creator_id = ?, title = ?, description = ?, status = ? WHERE id = ?";
+        $sql = "UPDATE applications SET user_id = ?, creator_id = ?, title = ?, description = ?, status = ? WHERE id = ?";
         $stmt = mysqli_prepare($con, $sql);
 
         if ($stmt) {
             // Se enlazan los parámetros a la consulta y se ejecuta
-            mysqli_stmt_bind_param($stmt, "issssi", $id, $company, $title, $description, $status, $application_id);
+            mysqli_stmt_bind_param($stmt, "issssi", $user_id, $company, $title, $description, $status, $id);
             if (mysqli_stmt_execute($stmt)) {
                 echo "Postulación actualizada correctamente." ; // Mensaje de éxito si se actualiza correctamente
             } else {
@@ -126,7 +126,7 @@ class ApplicationManager{
     //Nombre anterior: ActualizarSesionPostulaciones
     private function refreshApplicationsSession($dbConnection, $con, $id) {
         // Consultar y actualizar la sesión con las nuevas postulaciones
-        $sql = "SELECT * FROM applications WHERE id = ?";
+        $sql = "SELECT * FROM applications WHERE user_id = ?";
         $stmt = mysqli_prepare($con, $sql);
         mysqli_stmt_bind_param($stmt, "i", $id);
         mysqli_stmt_execute($stmt);
@@ -228,6 +228,7 @@ if (isset($_POST['action'])) {
                     $post->updateProposal(
                         $connection,
                         $_POST['id'],
+                        $_POST['user_id'],
                         $_POST['creator_id'],
                         $_POST['title'],
                         $_POST['description'],
@@ -256,7 +257,7 @@ if ($result) {
     // Recorrer los resultados y almacenarlos en un array asociativo
     while ($row = mysqli_fetch_assoc($result)) {
         $postulacion = array(
-            'application_id' => $row['application_id'],
+            'id' => $row['id'],
             'title' => $row['title'],
             'description' => $row['description'],
             // Agrega más fields según sea necesario
