@@ -2,20 +2,23 @@
 require_once "../cors-policy.php";
 require_once "../../connect_to_database.php";
 
-if ($_SERVER["REQUEST_METHOD"] ==="POST"){
+if ($_SERVER["REQUEST_METHOD"] === "POST"){
     $data = json_decode(file_get_contents("php://input"));
     if (!isset($data->user) || !isset($data->password)){
         echo json_encode(["status" => "Failed", "message" => "Faltan datos"]);
         exit;
     }
 
-    $username = $data->user;
+    $username = $connection->real_escape_string($data->user);
     $password = $data->password;
 
-    //Busca el usuario por email 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->execute([$username]);
-    $user=$stmt->fetch(PDO::FETCH_ASSOC);
+    // Busca el usuario por email usando MySQLi
+    $stmt = $connection->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
 
     if ($user){
         if (password_verify($password, $user["password"])){
