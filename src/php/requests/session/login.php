@@ -1,6 +1,6 @@
 <?php
 require_once "../cors-policy.php";
-require_once "../../connect_to_database.php";
+require_once __DIR__ . '/../../logic/connect_to_database.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST"){
     $data = json_decode(file_get_contents("php://input"));
@@ -45,6 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         echo json_encode(["status" => "Failed", "message" => "Usuario no encontrado"]);
     }
 } else {
-    echo json_encode(["status" => "Failed", "message" => "Método no permitido"]);
+    echo json_encode(["status" => "Failed", "message" => "Metodo no permitido"]);
 }
 ?>
