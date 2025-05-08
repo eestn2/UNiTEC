@@ -4,12 +4,12 @@ require_once __DIR__ . '/../../logic/connect_to_database.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST"){
     $data = json_decode(file_get_contents("php://input"));
-    if (!isset($data->user) || !isset($data->password)){
+    if (!isset($data->email) || !isset($data->password)){
         echo json_encode(["status" => "Failed", "message" => "Faltan datos"]);
         exit;
     }
 
-    $username = $connection->real_escape_string($data->user);
+    $username = $connection->real_escape_string($data->email);
     $password = $data->password;
 
     // Busca el usuario por email usando MySQLi

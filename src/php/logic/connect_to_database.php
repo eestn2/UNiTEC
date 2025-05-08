@@ -23,7 +23,6 @@ $connection = new mysqli($host, $user, $password, $db, $port);
 if ($connection->connect_error) {
     die("Error de conexión: " . $connection->connect_error);
 }else{
-    echo "Conexión exitosa a la base de datos.";
     mysqli_set_charset($connection, "utf8mb4"); // Establecer el conjunto de caracteres a utf8mb4
 }
 
