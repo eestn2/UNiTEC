@@ -37,12 +37,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
             $_SESSION["user_is_enabled"] = $user["enabled"];
             $_SESSION["user_type_id"] = $user["user_type_id"];
             $_SESSION["user_status"] = $user["status_id"];
-            echo json_encode(["status" => "Success", "message" => "Inicio de sesión exitoso", "data" => ["id" => $user["id"], "name" => $user["name"], "user_age" => $user["birth_date"], "user_location" => $user["location"], "user_email" => $user["email"], "user_password" => $user["password"], "user_description" => $user["description"], "last_active_date" => $user["last_active_date"], "profile_picture" => $user["profile_picture"], "user_portfolio" => $user["portfolio"], "user_is_enabled" => $user["enabled"], "user_type_id" => $user["user_type_id"], "user_status" => $user["status_id"]]]);
+            echo json_encode(["status" => "Success", "message" => "Inicio de sesión exitoso", $obj_user => [
+                "user_id" => $user["id"],
+                "user_name" => $user["name"],
+                "user_age" => $user["birth_date"],
+                "user_location" => $user["location"],
+                "user_email" => $user["email"],
+                "user_password" => $user["password"],
+                "user_description" => $user["description"],
+                "last_active_date" => $user["last_active_date"],
+                "profile_picture" => $user["profile_picture"],
+                "user_portfolio" => $user["portfolio"],
+                "user_is_enabled" => $user["enabled"],
+                "user_type_id" => $user["user_type_id"],
+                "user_status" => $user["status_id"]
+            ]]);
         } else {
-            echo json_encode(["status" => "Failed", "message" => "Contraseña incorrecta"]);
+            echo json_encode(["status" => "Failed", "message" => "Contraseña incorrecta."]);
         } 
     } else {
-        echo json_encode(["status" => "Failed", "message" => "Usuario no encontrado"]);
+        echo json_encode(["status" => "Failed", "message" => "Nombre de usuario no existente."]);
     }
 } else {
     echo json_encode(["status" => "Failed", "message" => "Metodo no permitido"]);
