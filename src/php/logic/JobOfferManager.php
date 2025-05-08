@@ -140,12 +140,12 @@ class ApplicationManager{
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 // Clase para manejar la validación de los fields del formulario
-//Nombre anterior de la clase: CamposAValidar
+//Nombre anterior de la clase: CamposAvalidate
 class ValidationFields{
     public $fields;
 
     public function __construct() {
-        // Definición de los fields a validar con sus expresiones regulares y mensajes de error
+        // Definición de los fields a validate con sus expresiones regulares y mensajes de error
         $this->fields = array(
             'creator_id' => array(
                 'value' => $_POST['creator_id'] ?? '',
@@ -166,11 +166,11 @@ class ValidationFields{
     }
 }
 
-// Clase para validar los fields del formulario
-//Nombre anterior de la clase: Validar
+// Clase para validate los fields del formulario
+//Nombre anterior de la clase: validate
 class InputValidator {
-    // Método para validar los fields basándose en la configuración de CamposAValidar
-    //Nombre anterior: ValidarCampos
+    // Método para validate los fields basándose en la configuración de CamposAvalidate
+    //Nombre anterior: validateCampos
     public function validateInputFields($fields) {
         foreach ($fields as $campo => $configuracion) {
             $value = $configuracion['value'];
@@ -218,12 +218,13 @@ if (isset($_POST['action'])) {
             // Se verifican los fields necesarios para actualizar una postulación
             if (isset($_POST['id'], $_POST['creator_id'], $_POST['title'], $_POST['description'], $_POST['status'])) {
                 // Se validan los fields del formulario
-                $camposValidar = new ValidationFields();
-                $validar = new InputValidator();
-                $resultadoValidacion = $validar->validateInputFields($camposValidar->fields);
+                $fieldsToValidate = new ValidationFields();
+                $validate = new InputValidator();
+                $validationResult = $validate->validateInputFields($fieldsToValidate->fields);
 
                 // Si la validación es correcta, se actualiza la postulación
-                if ($resultadoValidacion === true) {
+                //Visual tira error porque pide 7 argumentos, pero solo se le pasan 6, ya que son los únicos que hay
+                if ($validationResult === true) {
                     $post->updateProposal(
                         $connection,
                         $_POST['id'],
@@ -233,7 +234,7 @@ if (isset($_POST['action'])) {
                         $_POST['status']
                     );
                 } else {
-                    echo $resultadoValidacion ;
+                    echo $validationResult ;
                 }
             } else {
                 echo "Error: Uno o más fields no están definidos en el formulario.";
@@ -241,6 +242,7 @@ if (isset($_POST['action'])) {
             // Redirigir de vuelta a index.php con un mensaje de éxito
             header("Location: ../company_dashboard.php");
             exit();
+            break;
     }
 }
 
