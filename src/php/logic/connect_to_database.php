@@ -3,12 +3,22 @@ include_once(__DIR__ . '/../DotEnv.php'); // Use __DIR__ for an absolute path
 
 (new DotEnv(__DIR__ . '/../../../.env'))->load();
 
-$host = getenv('DB_HOST');
-$user = getenv('DB_USER');
-$password = getenv('DB_PASS');
-$db = getenv('DB_NAME');
+$env = getenv('ENVIRONMENT');
+if ($env == 'production') {
+    $host = getenv('DB_HOST_PROD');
+    $user = getenv('DB_USER_PROD');
+    $password = getenv('DB_PASS_PROD');
+    $db = getenv('DB_NAME_PROD');
+    $port = getenv('DB_PORT_PROD');
+} else {
+    $host = getenv('DB_HOST_DEV');
+    $user = getenv('DB_USER_DEV');
+    $password = getenv('DB_PASS_DEV');
+    $db = getenv('DB_NAME_DEV');
+    $port = getenv('DB_PORT_DEV');
+}
 
-$connection = new mysqli($host, $user, $password, $db);
+$connection = new mysqli($host, $user, $password, $db, $port);
 
 if ($connection->connect_error) {
     die("Error de conexión: " . $connection->connect_error);
