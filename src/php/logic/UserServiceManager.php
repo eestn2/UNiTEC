@@ -188,7 +188,7 @@ class CreateUserWithAdminService{
 
         $connection->begin_transaction();
 
-        $stmt = $connection->prepare("SELECT user_email FROM `users` WHERE `user_email` = ?");
+        $stmt = $connection->prepare("SELECT email FROM `users` WHERE `email` = ?");
         $stmt->bind_param("s", $user_email);
         $stmt->execute();
 
@@ -203,11 +203,11 @@ class CreateUserWithAdminService{
 
         try{
             if($array === null){
-                $stmt = $connection->prepare("INSERT INTO `users`(`name`, `birth_date`, `location`, `user_email`, `password`, `description`, `last_active_date`, `profile_picture`, `user_portfolio`, `enabled`, `user_type_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt = $connection->prepare("INSERT INTO `users`(`name`, `birth_date`, `location`, `email`, `password`, `description`, `last_active_date`, `profile_picture`, `portfolio`, `enabled`, `user_type_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 $stmt->bind_param("ssssssssssii", $user_name, $user_age, $user_location, $user_email, $user_password, $user_description, $user_last_update_date, $user_profile_picture, $user_portfolio, $user_is_enabled, $user_rol, $user_status);
                 $stmt->execute();
 
-                $id_consult = $connection->query("SELECT MAX(user_id) AS user_id FROM users");
+                $id_consult = $connection->query("SELECT MAX(id) AS id FROM users");
     
                 if($row = mysqli_fetch_row($id_consult)) {
                     $user_id = $row[0];
@@ -240,9 +240,8 @@ class CreateUserWithAdminService{
                             sendername: "Bolsa de Trabajo - Unitec",
                             to: "<?php echo json_encode($user_email) ; ?>",
                             subject: "Registro en espera.",
-                            $message = "¡Hola!, tu registro se ha cargado con éxito, debe esperar a que un administrador acepte su solicitud para poder utilizar nuestro software. Ten paciencia."
-                            $message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
-                            echo $message;
+                            $message: "¡Hola!, tu registro se ha cargado con éxito, debe esperar a que un administrador acepte su solicitud para poder utilizar nuestro software. Ten paciencia.",
+                            $message: "<?php echo htmlspecialchars('¡Hola!, tu registro se ha cargado con éxito, debe esperar a que un administrador acepte su solicitud para poder utilizar nuestro software. Ten paciencia.', ENT_QUOTES, 'UTF-8'); ?>"
                         };
 
                         let serviceID = "service_ifcpjwj";
@@ -288,7 +287,7 @@ class CreateUserWithAdminService{
 
         $connection->begin_transaction();
 
-        $stmt = $connection->prepare("SELECT user_email FROM `users` WHERE `user_email` = ?");
+        $stmt = $connection->prepare("SELECT email FROM `users` WHERE `email` = ?");
         $stmt->bind_param("s", $user_email);
         $stmt->execute();
 
@@ -303,11 +302,11 @@ class CreateUserWithAdminService{
 
         try{
             if($array === null){
-                $stmt = $connection->prepare("INSERT INTO `users`(`name`, `birth_date`, `location`, `user_email`, `password`, `description`, `last_active_date`, `profile_picture`, `user_portfolio`, `enabled`, `user_type_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt = $connection->prepare("INSERT INTO `users`(`name`, `birth_date`, `location`, `email`, `password`, `description`, `last_active_date`, `profile_picture`, `portfolio`, `enabled`, `user_type_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 $stmt->bind_param("ssssssssssii", $user_name, $user_age, $user_location, $user_email, $user_password, $user_description, $user_last_update_date, $user_profile_picture, $user_portfolio, $user_is_enabled, $user_rol, $user_status);
                 $stmt->execute();
 
-                $id_consult = $connection->query("SELECT MAX(user_id) AS user_id FROM users");
+                $id_consult = $connection->query("SELECT MAX(id) AS id FROM users");
     
                 if($row = mysqli_fetch_row($id_consult)) {
                     $user_id = $row[0];
@@ -324,11 +323,10 @@ class CreateUserWithAdminService{
                     function SendMail(){
                         let params = {
                             sendername: "Bolsa de Trabajo - Unitec",
-                            to: "<?php echo $user_email ; ?>",
+                            to: "<?php echo json_encode($user_email) ; ?>",
                             subject: "Registro en espera.",
-                            $message = "¡Hola!, tu registro se ha cargado con éxito, debe esperar a que un administrador acepte su solicitud y ya pueda utilizar nuestro software. Ten paciencia."
-                            $message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
-                            echo $message;
+                            $message: "¡Hola!, tu registro se ha cargado con éxito, debe esperar a que un administrador acepte su solicitud para poder utilizar nuestro software. Ten paciencia.",
+                            $message: "<?php echo htmlspecialchars('¡Hola!, tu registro se ha cargado con éxito, debe esperar a que un administrador acepte su solicitud para poder utilizar nuestro software. Ten paciencia.', ENT_QUOTES, 'UTF-8'); ?>"
                         };
 
                         let serviceID = "service_ifcpjwj";
@@ -376,7 +374,7 @@ class CreateUserWithAdminService{
         try{
             $user_is_enabled = 'false';
 
-            $stmt = $connection->prepare("UPDATE `users` SET `enabled` = ? WHERE `user_id` = ?");
+            $stmt = $connection->prepare("UPDATE `users` SET `enabled` = ? WHERE `id` = ?");
        
             $stmt->bind_param("si", $user_is_enabled, $user_id);
     
@@ -402,7 +400,7 @@ class CreateUserWithAdminService{
         $connection->begin_transaction();
 
         try{
-            $stmt = $connection->prepare("UPDATE `users` SET `name` = ? ,`location` = ? ,`user_email` = ? ,`description` = ? ,`last_active_date`= ? ,`user_portfolio` = ? ,`enabled` = ? ,`status_id` = ? WHERE `user_id` = ?");
+            $stmt = $connection->prepare("UPDATE `users` SET `name` = ? ,`location` = ? ,`email` = ? ,`description` = ? ,`last_active_date`= ? ,`portfolio` = ? ,`enabled` = ? ,`status_id` = ? WHERE `id` = ?");
             $stmt->bind_param("ssssssiii", $user_name, $user_location, $user_email, $user_description, $user_last_update_date, $user_portfolio, $user_rol, $user_status, $user_id);
             $stmt->execute();
 
@@ -450,7 +448,7 @@ class CreateUserWithAdminService{
         $connection->begin_transaction();
 
         try{
-            $stmt = $connection->prepare("UPDATE `users` SET `name` = ? ,`location` = ? ,`user_email` = ? ,`description` = ? ,`last_active_date`= ? ,`user_portfolio` = ? WHERE `user_id` = ?");
+            $stmt = $connection->prepare("UPDATE `users` SET `name` = ? ,`location` = ? ,`email` = ? ,`description` = ? ,`last_active_date`= ? ,`portfolio` = ? WHERE `id` = ?");
             $stmt->bind_param("ssssssi", $user_name, $user_location, $user_email, $user_description, $user_last_update_date, $user_portfolio, $user_id);
             $stmt->execute();
 
@@ -475,7 +473,7 @@ class CreateUserWithAdminService{
         require_once('connect_to_database.php');
 
         try{
-            $stmt = $connection->prepare("SELECT `user_email`, `password`, `enabled` FROM `users` WHERE `user_email` = ? AND `enabled` = 'true'");
+            $stmt = $connection->prepare("SELECT `email`, `password`, `enabled` FROM `users` WHERE `email` = ? AND `enabled` = 'true'");
 
             $stmt->bind_param("s", $user_email);
     
@@ -486,7 +484,7 @@ class CreateUserWithAdminService{
             $array = $result->fetch_assoc();
     
             if($array !== null){
-                if(password_verify($user_password, $array['usuario_clave'])) {
+                if(password_verify($user_password, $array['password'])) {
                     header('Location: ../vistas/verificar.php?user_email=' . $user_email);
                     exit;
                 } else {
@@ -512,7 +510,7 @@ class CreateUserWithAdminService{
         require_once('connect_to_database.php');
 
         try{
-            $stmt = $connection->prepare("SELECT password FROM `users` WHERE `user_id` = ?");
+            $stmt = $connection->prepare("SELECT password FROM `users` WHERE `id` = ?");
 
             $stmt->bind_param("i", $user_id);
     
@@ -522,11 +520,11 @@ class CreateUserWithAdminService{
     
             $array = $result->fetch_assoc();
     
-            if(password_verify($claveActual, $array['usuario_clave'])){
+            if(password_verify($claveActual, $array['password'])){
     
                 $claveNuevaHasheada = password_hash($claveNueva, PASSWORD_DEFAULT);
     
-                $stmt = $connection->prepare("UPDATE `users` SET `password` = ? WHERE `user_id` = ?");
+                $stmt = $connection->prepare("UPDATE `users` SET `password` = ? WHERE `id` = ?");
                 $stmt->bind_param("si", $claveNuevaHasheada, $user_id);
                 $stmt->execute();
                 $stmt->close();
@@ -574,7 +572,7 @@ class CreateUserWithAdminService{
                 if (in_array(strtolower($fileType), $allowedTypes)) {
                     // Mueve el archivo subido a la carpeta destino con el nuevo user_name
                     if (move_uploaded_file($image['tmp_name'], $targetFilePath)) {
-                        $stmt = $connection->prepare("UPDATE `users` SET `profile_picture` = ? WHERE `user_id` = ?");
+                        $stmt = $connection->prepare("UPDATE `users` SET `profile_picture` = ? WHERE `id` = ?");
                         $stmt->bind_param("si", $targetFilePath, $user_id);
                         $stmt->execute();
 
