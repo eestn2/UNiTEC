@@ -1,7 +1,9 @@
 <?php
-//Nombre anterior: cifrado.php
+include_once(__DIR__ . '/../DotEnv.php'); // Use __DIR__ for an absolute path
 
-define("KEY", "BOLSA_DE_TRABAJO_31415");
-define("AES", "AES-256-ECB");
+(new DotEnv(__DIR__ . '/../../../.env'))->load();
+
+define("KEY", getenv('ENCRYPTION_KEY'));
+define("AES", getenv('AES'));
 
 ?>
