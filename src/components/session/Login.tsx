@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import "../../styles/index.css";
 import InputField from "../UI/InputField";
 import AppWindow from "../UI/AppWindow";
@@ -10,6 +10,19 @@ import axios from "axios";
 import User from "./User";
 
 const Login: React.FC = () => {
+    // Re-Render on window resize for responsive design
+    const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+    console.log("Current window size: ", windowSize);
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setError] = useState('')
@@ -51,9 +64,9 @@ const Login: React.FC = () => {
                 onSubmit={(event) => {handleLogin(event)}}
                 style={{display: "flex", flexDirection:"column", alignItems: "center", rowGap: TranslateFigmaCoords.translateFigmaY(18)}}
             >
-                <InputField name="user" type="text" placeholder="Ingrese su dirección de correo electronico" width={320} height={50}
+                <InputField name="user" type="text" placeholder="Dirección de correo electronico" width={320} height={50}
                     onChange={(event: ChangeEvent<HTMLInputElement>) => {setEmail(event.target.value)}}/>
-                <InputField name="password" type="password" placeholder="Ingrese su contraseña" width={320} height={50}
+                <InputField name="password" type="password" placeholder="Contraseña" width={320} height={50}
                     onChange={(event: ChangeEvent<HTMLInputElement>) => {setPassword(event.target.value)}}/>
                 <span style={{color: "#d40202"}}>{errors}</span>
                 <ActionButton height={50} text={"Iniciar Sesión"} action={(event) => {

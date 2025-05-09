@@ -7,8 +7,23 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import InputField from "../UI/InputField";
 import TextBox from "../UI/TextBox";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function RegisterUser() {
+  // Re-Render on window resize for responsive design
+  const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+  console.log("Current window size: ", windowSize);
+  useEffect(() => {
+      const handleResize = () => {
+          setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+      };
+
+      window.addEventListener("resize", handleResize);
+      return () => {
+          window.removeEventListener("resize", handleResize);
+      };
+  }, []);
+      
   return (
     <>
       <Logo className="watermark"></Logo>

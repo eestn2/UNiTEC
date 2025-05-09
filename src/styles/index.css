@@ -237,6 +237,9 @@ textarea.input-field {
   color: black;
   overflow: hidden;
 }
+.offer-title{
+  font-size: calc((26 / 720) * var(--font-multiplier));
+}
 .job-offer .text{
   width: 96%;
   margin-left: 2%;

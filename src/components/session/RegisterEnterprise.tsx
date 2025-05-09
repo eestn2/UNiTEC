@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import ActionButton from "../UI/ActionButton";
 import "../../styles/index.css";
 import AppWindow from "../UI/AppWindow";
@@ -10,6 +10,20 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const RegisterEnterprise: React.FC = () => {
+    // Re-Render on window resize for responsive design
+    const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+    console.log("Current window size: ", windowSize);
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+    
     const [enterpriseName, setEnterpriseName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

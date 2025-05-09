@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/index.css";
 import InputField from "../UI/InputField";
 import AppWindow from "../UI/AppWindow";
@@ -7,6 +7,20 @@ import ActionButton from "../UI/ActionButton";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 
 const ChangePassword: React.FC = () => {
+    // Re-Render on window resize for responsive design
+    const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+    console.log("Current window size: ", windowSize);
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
     return (
         <div>
             <Logo className="watermark"/>
