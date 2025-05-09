@@ -12,8 +12,9 @@ import AppWindow from "./AppWindow";
 import ActionButton from "./ActionButton";
 
 interface JobOfferProps extends ResponsiveComponent{
-    username: string
-    profile_picture: string
+    author: string;
+    title: string;
+    description: string;
 }
 
 /**
@@ -29,7 +30,7 @@ interface JobOfferProps extends ResponsiveComponent{
 
     @Author: Haziel Magallanes
 */
-const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, username, style, className, children }) => {
+const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, author, title, description, style, className, children }) => {
     // Check if is a square shaped window, if so, make calculated height the same as calculated width
     const translatedHeight = height == width ? TranslateFigmaCoords.translateFigmaX(width) : TranslateFigmaCoords.translateFigmaY(height);
     const titleHeight: number = height / 8;
