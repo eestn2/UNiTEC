@@ -1,17 +1,13 @@
 <?php
 require_once "../cors-policy.php";
 require_once __DIR__ . '/../../logic/connect_to_database.php';
+require_once __DIR__ . '/../function/return_response.php';
 require_once __DIR__ . '/../../config/session-config.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST"){
-    echo json_encode(["status" => "Failed", "message" => "Metodo no permitido"]);
-    exit;
-}
+if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
+
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($data->email) || !isset($data->password)){
-    echo json_encode(["status" => "Failed", "message" => "Faltan datos"]);
-    exit;
-}
+if (!isset($data->email) || !isset($data->password)) return_response("failed", "Faltan datos.", null);
 
 $username = $connection->real_escape_string($data->email);
 $password = $data->password;
@@ -24,14 +20,9 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
-if (!$user){
-    echo json_encode(["status" => "Failed", "message" => "Dirección de correo electronico no registrada."]);
-    exit;
-}
-if (!password_verify($password, $user["password"])){
-    echo json_encode(["status" => "Failed", "message" => "Contraseña incorrecta."]);
-    exit;
-}
+if (!$user) return_response("failed", "Dirección de correo electronico no registrada.", null);
+
+if (!password_verify($password, $user["password"])) return_response("failed", "Contraseña incorrecta.", null);
 // Si la contraseña es correcta, se crea una sesión y se devuelve el usuario
 session_start();
 $_SESSION[SESSION_USER_ID] = $user["id"];
@@ -46,7 +37,7 @@ $_SESSION[SESSION_USER_PORTFOLIO] = $user["portfolio"];
 $_SESSION[SESSION_USER_IS_ENABLED] = $user["enabled"];
 $_SESSION[SESSION_USER_TYPE_ID] = $user["user_type_id"];
 $_SESSION[SESSION_USER_STATUS] = $user["status_id"];
-echo json_encode(["status" => "Success", "message" => "Inicio de sesión exitoso", "user" => [
+return_response("success", "Inicio de sesión exitoso.", ["user" => [
     "id" => $user["id"],
     "name" => $user["name"],
     "age" => $user["birth_date"],

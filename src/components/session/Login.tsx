@@ -20,7 +20,7 @@ const Login: React.FC = () => {
                 email,
                 password
             });
-            if (response.status === 200 && response.data.status === "Success") {
+            if (response.status === 200 && response.data.status === "success") {
                 const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
                 document.cookie = `session=${JSON.stringify(response.data.user)}; path=/; expires=${expires};`;
                 User.set(await response.data.user);
