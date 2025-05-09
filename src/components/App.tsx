@@ -13,7 +13,6 @@ function App() {
     console.log("Sending request to PHP Server.");
     return config;
   });
-
   let session: string | undefined = document.cookie
     .split('; ')
     .find(row => row.startsWith('session='))
@@ -32,6 +31,7 @@ function App() {
     console.log("Session not found, sending to login.")
     session = undefined;
   }
+
   // Browser routings
   return (
     <BrowserRouter basename="/UNITEC">

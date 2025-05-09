@@ -6,9 +6,11 @@ import JobOffer from "../UI/JobOffer";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import Notification from "../UI/Notification";
 import { Link } from "react-router-dom";
+import User from "../session/User";
 
 function FeedBox(){
- return (
+  console.log("Logged in as: ", User.data.name)
+  return (
     <div>
       <NavBar />
       <AppWindow height={600} width={880} className="feedbox" style={{
@@ -54,7 +56,7 @@ function FeedBox(){
           </Notification>
         </AppWindow>
     </div>
- )
+  )
 }
 
 export default FeedBox;

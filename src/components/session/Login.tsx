@@ -24,6 +24,7 @@ const Login: React.FC = () => {
                 const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
                 document.cookie = `session=${JSON.stringify(response.data.user)}; path=/; expires=${expires};`;
                 User.set(await response.data.user);
+                location.reload();
             } else {
                 console.error("Login failed:", await response.data.message);
                 setError(response.data.message);
