@@ -43,6 +43,45 @@ body{
   letter-spacing: 0;
   line-height: normal;
 }
+input[type="checkbox"] {
+  appearance: none; /* Remove the default checkbox */
+  -webkit-appearance: none; /* For Safari */
+  width: calc((18 / 1280) * 100vw); /* Match the SVG size */
+  height: calc((18 / 1280) * 100vw); /* Match the SVG size */
+  background-image: url("../assets/icons/bx-checkbox.svg"); /* Default unchecked SVG */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  cursor: pointer;
+  border: none; /* Remove any default border */
+  display: inline-flex;
+  justify-content: center;
+  align-items: center; /* Center elements vertically */
+  vertical-align: middle; /* Align with text */
+  margin: 0px;
+}
+
+input[type="checkbox"]:checked {
+  background-image: url("../assets/icons/bx-checkbox-checked.svg"); /* Checked SVG */
+}
+
+label {
+  display: flex;
+  align-items: center; /* Center the checkbox and text vertically */
+  gap: 10px; /* Add spacing between checkbox and text */
+}
+
+.column{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.row-layout{
+  display: flex;
+  flex-direction: row;
+}
 
 .selection-field {
   background-color: #dee0eb;
@@ -62,6 +101,15 @@ body{
   background-position: calc(100% - 15px) center; /* Position arrow with margin */
   background-size: 16px;
   padding-right: 30px; /* Add padding to prevent text overlap with arrow */
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+  width: 15px;
+  padding: 0px;
+  margin: 0px;
+  margin-top: 10px;
 }
 
 .selection-field:focus {
@@ -237,9 +285,6 @@ textarea.input-field {
   color: black;
   overflow: hidden;
 }
-.offer-title{
-  font-size: calc((26 / 720) * var(--font-multiplier));
-}
 .job-offer .text{
   width: 96%;
   margin-left: 2%;
@@ -329,6 +374,27 @@ textarea.input-field::-webkit-scrollbar-thumb:hover {
   background-color: var(--delimiters);
   width: 100%;
   height: 3px;
+}
+
+.selection-input {
+  appearance: none; /* Elimina el estilo predeterminado del navegador */
+  -webkit-appearance: none; /* Compatibilidad con Safari */
+  background-color: transparent;
+  border: none;
+  color: #00317B;
+  outline: none;
+  text-decoration: underline;
+  width: 100%;
+  height: 100%;
+  padding-right: 30px; /* Espacio para la flecha */
+  background-image: url("../assets/icons/arrow.svg");
+  background-repeat: no-repeat;
+  background-position: calc(100% - 10px) center; /* Ajusta la posición de la flecha */
+  background-size: calc((10 / 1280) * 100vw); /* Tamaño de la flecha */
+}
+.selection-input:focus {
+  outline: none;
+  border: none;
 }
 
 @media (orientation: portrait){
