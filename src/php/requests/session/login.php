@@ -2,7 +2,9 @@
 require_once "../cors-policy.php";
 require_once __DIR__ . '/../../logic/connect_to_database.php';
 
-if ($_SERVER["REQUEST_METHOD"] === "POST"){
+if ($_SERVER["REQUEST_METHOD"] !== "POST"){
+    echo json_encode(["status" => "Failed", "message" => "Metodo no permitido"]);
+}else{
     $data = json_decode(file_get_contents("php://input"));
     if (!isset($data->email) || !isset($data->password)){
         echo json_encode(["status" => "Failed", "message" => "Faltan datos"]);
@@ -12,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     $username = $connection->real_escape_string($data->email);
     $password = $data->password;
 
-    // Busca el usuario por email usando MySQLi
+    // Search for user email in database.
     $stmt = $connection->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -20,45 +22,41 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
 
-    if ($user){
-        if (password_verify($password, $user["password"])){
-            // Si la contraseña es correcta, se crea una sesión y se devuelve el ID de usuario
-            session_start();
-            $_SESSION["user_id"] = $user["id"];
-            $_SESSION["user_name"] = $user["name"];
-            $_SESSION["user_age"] = $user["birth_date"];
-            $_SESSION["user_location"] = $user["location"];
-            $_SESSION["user_email"] = $user["email"];
-            $_SESSION["user_password"] = $user["password"];
-            $_SESSION["user_description"] = $user["description"];
-            $_SESSION["last_active_date"] = $user["last_active_date"];
-            $_SESSION["profile_picture"] = $user["profile_picture"];
-            $_SESSION["user_portfolio"] = $user["portfolio"];
-            $_SESSION["user_is_enabled"] = $user["enabled"];
-            $_SESSION["user_type_id"] = $user["user_type_id"];
-            $_SESSION["user_status"] = $user["status_id"];
-            echo json_encode(["status" => "Success", "message" => "Inicio de sesión exitoso", "user" => [
-                "id" => $user["id"],
-                "name" => $user["name"],
-                "age" => $user["birth_date"],
-                "location" => $user["location"],
-                "email" => $user["email"],
-                "password" => $user["password"],
-                "description" => $user["description"],
-                "last_active_date" => $user["last_active_date"],
-                "profile_picture" => $user["profile_picture"],
-                "portfolio" => $user["portfolio"],
-                "is_enabled" => $user["enabled"],
-                "type_id" => $user["user_type_id"],
-                "status" => $user["status_id"]
-            ]]);
-        } else {
-            echo json_encode(["status" => "Failed", "message" => "Contraseña incorrecta."]);
-        } 
+    if (!$user){
+        echo json_encode(["status" => "Failed", "message" => "Dirección de correo electronico no registrada."]);
+    } else if (!password_verify($password, $user["password"])){
+        echo json_encode(["status" => "Failed", "message" => "Contraseña incorrecta."]);
     } else {
-        echo json_encode(["status" => "Failed", "message" => "Nombre de usuario no existente."]);
+        // Si la contraseña es correcta, se crea una sesión y se devuelve el usuario
+        session_start();
+        $_SESSION["user_id"] = $user["id"];
+        $_SESSION["user_name"] = $user["name"];
+        $_SESSION["user_age"] = $user["birth_date"];
+        $_SESSION["user_location"] = $user["location"];
+        $_SESSION["user_email"] = $user["email"];
+        $_SESSION["user_password"] = $user["password"];
+        $_SESSION["user_description"] = $user["description"];
+        $_SESSION["last_active_date"] = $user["last_active_date"];
+        $_SESSION["profile_picture"] = $user["profile_picture"];
+        $_SESSION["user_portfolio"] = $user["portfolio"];
+        $_SESSION["user_is_enabled"] = $user["enabled"];
+        $_SESSION["user_type_id"] = $user["user_type_id"];
+        $_SESSION["user_status"] = $user["status_id"];
+        echo json_encode(["status" => "Success", "message" => "Inicio de sesión exitoso", "user" => [
+            "id" => $user["id"],
+            "name" => $user["name"],
+            "age" => $user["birth_date"],
+            "location" => $user["location"],
+            "email" => $user["email"],
+            "password" => $user["password"],
+            "description" => $user["description"],
+            "last_active_date" => $user["last_active_date"],
+            "profile_picture" => $user["profile_picture"],
+            "portfolio" => $user["portfolio"],
+            "is_enabled" => $user["enabled"],
+            "type_id" => $user["user_type_id"],
+            "status" => $user["status_id"]
+        ]]);
     }
-} else {
-    echo json_encode(["status" => "Failed", "message" => "Metodo no permitido"]);
 }
 ?>
