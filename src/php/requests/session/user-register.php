@@ -3,7 +3,7 @@ require_once "../cors-policy.php";
 require_once __DIR__ . '/../../logic/connect_to_database.php';
 require_once __DIR__ . '/../function/return_response.php';
 require_once __DIR__ . '/../../config/session-config.php';
-require_once('security_functions.php');
+require_once(__DIR__ . '/../../logic/security_functions.php');
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
 
@@ -13,6 +13,12 @@ $stmt = $connection->prepare("SELECT email FROM `users` WHERE `email` = ?");
 $stmt->bind_param("s", $user_email);
 $stmt->execute();
 if ($user_email) return_response("failed", "El correo ya existe.", null);
+$data = json_decode(file_get_contents("php://input"));
+if (!isset($data->email) || !isset($data->password)) return_response("failed", "Faltan datos.", null);
+
+$email = $connection->real_escape_string($data->email);
+$password = $data->password;
+
 
 try{
     $stmt = $connection->prepare("INSERT INTO `users`(`name`, `birth_date`, `location`, `email`, `password`, `description`, `last_active_date`, `profile_picture`, `portfolio`, `enabled`, `user_type_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");

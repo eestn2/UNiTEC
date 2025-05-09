@@ -9,12 +9,12 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no 
 $data = json_decode(file_get_contents("php://input"));
 if (!isset($data->email) || !isset($data->password)) return_response("failed", "Faltan datos.", null);
 
-$username = $connection->real_escape_string($data->email);
+$email = $connection->real_escape_string($data->email);
 $password = $data->password;
 
 // Search for user email in database.
 $stmt = $connection->prepare("SELECT * FROM users WHERE email = ?");
-$stmt->bind_param("s", $username);
+$stmt->bind_param("s", $email);
 $stmt->execute();
 
 $result = $stmt->get_result();
