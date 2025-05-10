@@ -7,23 +7,11 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import InputField from "../UI/InputField";
 import TextBox from "../UI/TextBox";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import LabelsSelection from "../UI/LabelsSelection";
+import LabelsContainer from "../UI/labelsContainer";
+import Label from "../UI/Label";
 
 function RegisterUser() {
-  // Re-Render on window resize for responsive design
-  const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
-  console.log("Current window size: ", windowSize);
-  useEffect(() => {
-      const handleResize = () => {
-          setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-      };
-
-      window.addEventListener("resize", handleResize);
-      return () => {
-          window.removeEventListener("resize", handleResize);
-      };
-  }, []);
-      
   return (
     <>
       <Logo className="watermark"></Logo>
@@ -36,7 +24,7 @@ function RegisterUser() {
           alignItems: "center",
           justifyContent: "center",
           rowGap: TranslateFigmaCoords.translateFigmaY(20),
-          padding: `${TranslateFigmaCoords.translateFigmaY(20)}px`, // Apply padding on all sides
+          padding: `${TranslateFigmaCoords.translateFigmaY(20)}px`,
           flexDirection: "column",
           position: "absolute",
           top: "50%",
@@ -65,50 +53,58 @@ function RegisterUser() {
               name="name-user"
               type="text"
               placeholder="Nombre y Apellido"
-              width={305}
+              width={325}
+              height={55}
+            />
+            <InputField
+              name="birthday-user"
+              type="date"
+              min="1925-01-01"
+              max={new Date().toISOString().split("T")[0]}
+              placeholder="Fecha de nacimiento:"
+              width={325}
               height={55}
             />
             <InputField
               name="mail-user"
               type="text"
               placeholder="Correo Electrónico"
-              width={305}
+              width={325}
               height={55}
             />
             <InputField
               name="password-user"
-              type="text"
+              type="password"
               placeholder="Contraseña"
-              width={305}
+              width={325}
               height={55}
             />
             <InputField
-              name="password-confirm-user"
-              type="date"
-              min="1925-01-01"
-              max={new Date().toISOString().split("T")[0]}
-              placeholder="Coso"
-              width={305}
-              height={55}
-            />
-
-            {/* Inserted SelectionField Component */}
-            <SelectionField
-              name="user-type"
-              options={[
-              { value: "student", label: "Estudiante" },
-              { value: "graduate", label: "Egresado" },
-              ]}
+              name="confirm-password-user"
+              type="password"
+              placeholder="Confirmar Contraseña"
               width={325}
               height={55}
-              className="input-field" // Reuse the same class for consistent styling
             />
-
-            <TextBox
-              name="website-enterprise"
-              placeholder="Descripción"
-              width={305}
-              height={110}
+            
+            <SelectionField
+              name="user-location"
+              options={[
+                { value: "admin", label: "Administrator" },
+                { value: "editor", label: "Editor" },
+                { value: "viewer", label: "Viewer" },
+              ]}
+              placeholder="Localidad" // Non-selectable default value
+              width={325}
+              height={55}
+              className="input-field"
+            />
+            <InputField
+              name="user-portfolio"
+              type="text"
+              placeholder="Enlace a su Portfolio (Opcional)"
+              width={325}
+              height={55}
             />
             </div>
 
@@ -119,46 +115,38 @@ function RegisterUser() {
               borderLeft: "3px solid rgba(255, 193, 35, 1)",
             }}
           >
-            <InputField
-              name="name-enterprise"
-              type="text"
-              placeholder="Nombre de la Empresa"
-              width={305}
-              height={55}
-            />
-            <InputField
-              name="mail-enterprise"
-              type="text"
-              placeholder="Correo Electrónico"
-              width={305}
-              height={55}
-            />
-            <InputField
-              name="password-enterprise"
-              type="text"
-              placeholder="Contraseña"
-              width={305}
-              height={55}
-            />
-            <InputField
-              name="password-confirm-enterprise"
-              type="text"
-              placeholder="Confirmar Contraseña"
-              width={305}
-              height={55}
-            />
-            <InputField
-              name="website-enterprise"
-              type="text"
-              placeholder="Enlace a su Página Web (Opcional)"
-              width={305}
-              height={55}
-            />
             <TextBox
-              name="website-enterprise"
+              name="user-description"
               placeholder="Descripción"
-              width={305}
-              height={110}
+              width={325}
+              height={115}
+            />
+
+            <LabelsSelection width={325} height={200} />
+
+            <SelectionField
+              name="user-type"
+              options={[
+                { value: "student", label: "Estudiante" },
+                { value: "graduated", label: "Egresado" },
+              ]}
+              placeholder="Tipo de Usuario" // Non-selectable default value
+              width={325}
+              height={55}
+              className="input-field"
+            />
+
+            <SelectionField
+              name="user-state"
+              options={[
+                { value: "admin", label: "Administrator" },
+                { value: "editor", label: "Editor" },
+                { value: "viewer", label: "Viewer" },
+              ]}
+              placeholder="Estado" // Non-selectable default value
+              width={325}
+              height={55}
+              className="input-field"
             />
           </div>
 
@@ -185,6 +173,35 @@ function RegisterUser() {
                 Iniciar Sesión
               </Link>
             </span>
+            <div className="delimiter"></div>
+            <SelectionField
+              name="user-state"
+              options={[
+                { value: "admin", label: "Administrator" },
+                { value: "editor", label: "Editor" },
+                { value: "viewer", label: "Viewer" },
+              ]}
+              placeholder="Estado" // Non-selectable default value
+              width={100}
+              height={35}
+              className="input-field"
+            />
+            <LabelsContainer width={230} height={160}>
+            <Label text="English" width={90} height={20} />
+            <Label text="Spanish" width={90} height={20} />
+            <Label text="French" width={90} height={20} />
+            <Label text="German" width={90} height={20} />
+            <Label text="Italian" width={90} height={20} />
+            <Label text="Portuguese" width={90} height={20} />
+            <Label text="Russian" width={90} height={20} />
+            <Label text="Chinese" width={90} height={20} />
+            <Label text="Japanese" width={90} height={20} />
+            <Label text="Korean" width={90} height={20} />
+            <Label text="Arabic" width={90} height={20} />
+            <Label text="Hindi" width={90} height={20} />
+            <Label text="Bengali" width={90} height={20} />
+            <Label text="Turkish" width={90} height={20} />
+            </LabelsContainer>
           </div>
         </div>
       </AppWindow>
