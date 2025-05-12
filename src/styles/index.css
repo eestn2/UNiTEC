@@ -1,18 +1,35 @@
-/*Archivo narrow*/
+/**
+ * @file index.css
+ * @description Main stylesheet for the UNITEC application. Provides responsive, accessible, and visually consistent styles for all UI components.
+ * Includes global variables, typography, layout, form elements, navigation, job offers, notifications, and utility classes.
+ * @author Haziel Magallanes, Daviel Díaz Gonzáles
+ * @date May 11, 2025
+ */
+
+/* =========================
+   Font & Root Variables
+   ========================= */
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&display=swap');
 
-:root{
+:root {
   --font-multiplier: 100vh;
   --nav-width: calc((1240 / 1280) * 100vw);
   --nav-height: calc((60 / 720) * 100vh);
   --app-font-family: "Archivo Narrow", Helvetica;
+  /* Color variables (should be defined elsewhere or here) */
+  /* --BG, --important-text, --input, --window-outer, --job-title, --action-button, --feed-title, --feed-title-BG, --forms-text, --delimiters, --icons-nav-bar */
 }
-@media (orientation: portrait){
-  :root{
+
+@media (orientation: portrait) {
+  :root {
     --font-multiplier: 100vw;
   }
 }
-body{
+
+/* =========================
+   Global Styles
+   ========================= */
+body {
   font-family: var(--app-font-family);
   margin-top: calc((100 / 720) * 100vh);
   font-size: calc((18 / 720) * var(--font-multiplier));
@@ -21,68 +38,59 @@ body{
   background-repeat: repeat;
   background-size: contain;
 }
-.link{
+
+/* =========================
+   Links
+   ========================= */
+.link {
   color: var(--important-text);
   text-decoration: underline;
   font-weight: 500;
-}.link:hover{
+}
+.link:hover {
   color: var(--important-text);
   cursor: pointer;
 }
-
-.input-field {
-  background-color: #dee0eb;
-  border: none;
-  border-radius: 10px;
-  text-align: left;
-  align-items: center;
-  color: var(--input);
-  font-family: var(--app-font-family);
+.golden-link {
+  color: var(--delimiters);
   font-size: calc((20 / 720) * var(--font-multiplier));
-  font-weight: 600;
-  letter-spacing: 0;
-  line-height: normal;
-}
-input[type="checkbox"] {
-  appearance: none; /* Remove the default checkbox */
-  -webkit-appearance: none; /* For Safari */
-  width: calc((18 / 1280) * 100vw); /* Match the SVG size */
-  height: calc((18 / 1280) * 100vw); /* Match the SVG size */
-  background-image: url("../assets/icons/bx-checkbox.svg"); /* Default unchecked SVG */
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  cursor: pointer;
-  border: none; /* Remove any default border */
-  display: inline-flex;
-  justify-content: center;
-  align-items: center; /* Center elements vertically */
-  vertical-align: middle; /* Align with text */
-  margin: 0px;
+  font-weight: bold;
+  text-decoration: underline;
 }
 
-input[type="checkbox"]:checked {
-  background-image: url("../assets/icons/bx-checkbox-checked.svg"); /* Checked SVG */
+/* =========================
+   Typography & Utility
+   ========================= */
+.title {
+  color: #305894;
+  font-weight: 550;
+  font-size: calc((40 / 720) * var(--font-multiplier));
+}
+.black-text {
+  color: black;
+  font-size: calc((20 / 720) * var(--font-multiplier));
+  font-weight: 550;
+}
+.form-text {
+  color: var(--forms-text);
+  font-size: calc((20 / 720) * var(--font-multiplier));
+  font-weight: bold;
+}
+.watermark {
+  position: absolute;
+  left: 0;
+  top: calc((50 / 720) * 100vh);
+}
+@media (orientation: portrait) {
+  .watermark {
+    display: none;
+  }
 }
 
-label {
-  display: flex;
-  align-items: center; /* Center the checkbox and text vertically */
-  gap: 10px; /* Add spacing between checkbox and text */
-}
-
-.column{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.row-layout{
-  display: flex;
-  flex-direction: row;
-}
-
+/* =========================
+   Input Fields & Forms
+   ========================= */
+.input-field,
 .selection-field {
   background-color: #dee0eb;
   border: none;
@@ -95,14 +103,98 @@ label {
   font-weight: 600;
   letter-spacing: 0;
   line-height: normal;
-  appearance: none; /* Remove default arrow */
-  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray"><path d="M7 10l5 5 5-5z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: calc(100% - 15px) center; /* Position arrow with margin */
-  background-size: 16px;
-  padding-right: 30px; /* Add padding to prevent text overlap with arrow */
+}
+.input-field::placeholder {
+  color: var(--input);
+  font-family: var(--app-font-family);
+  font-weight: 600;
+}
+.input-field:focus,
+.selection-field:focus {
+  outline: none;
+  box-shadow: none;
+}
+textarea.input-field {
+  resize: none;
+}
+textarea.input-field::-webkit-scrollbar {
+  width: 8px;
+}
+textarea.input-field::-webkit-scrollbar-track {
+  background-color: #dee0eb;
+  border-radius: 10px;
+}
+textarea.input-field::-webkit-scrollbar-thumb {
+  background-color: #305894;
+  border-radius: 10px;
+  border: 2px solid #dee0eb;
+}
+textarea.input-field::-webkit-scrollbar-thumb:hover {
+  background-color: #1e3a6d;
 }
 
+/* =========================
+   Custom Checkbox Styles
+   ========================= */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: calc((18 / 1280) * 100vw);
+  height: calc((18 / 1280) * 100vw);
+  background-image: url("../assets/icons/bx-checkbox.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0px;
+}
+input[type="checkbox"]:checked {
+  background-image: url("../assets/icons/bx-checkbox-checked.svg");
+}
+label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* =========================
+   Selection Field Styles
+   ========================= */
+.selection-field {
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: calc(100% - 15px) center;
+  background-size: 16px;
+  padding-right: 30px;
+}
+.selection-input {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: none;
+  color: #00317B;
+  outline: none;
+  text-decoration: underline;
+  width: 100%;
+  height: 100%;
+  padding-right: 30px;
+  background-image: url("../assets/icons/arrow.svg");
+  background-repeat: no-repeat;
+  background-position: calc(100% - 10px) center;
+  background-size: calc((10 / 1280) * 100vw);
+}
+.selection-input:focus {
+  outline: none;
+  border: none;
+}
+
+/* Hide date picker icon */
 input[type="date"]::-webkit-calendar-picker-indicator {
   display: none;
   -webkit-appearance: none;
@@ -112,35 +204,59 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   margin-top: 10px;
 }
 
-.selection-field:focus {
-  outline: none;
-  box-shadow: none;
+/* =========================
+   Layout Helpers
+   ========================= */
+.column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.row-layout {
+  display: flex;
+  flex-direction: row;
+}
+.horizontal-display {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+.vertical-sections {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 50%;
+  row-gap: 15px;
+}
+.left-section {
+  border-right: solid var(--delimiters) 3px;
+}
+.top-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: solid var(--delimiters) 3px;
+}
+.delimiter {
+  background-color: var(--delimiters);
+  width: 100%;
+  height: 3px;
 }
 
-
-
-/* Ensure the styles also apply to textarea */
-textarea.input-field {
-  resize: none; /* Optional: Prevent resizing if needed */
-}
-.input-field::placeholder {
-  color: var(--input);
-  font-family: var(--app-font-family);
-  font-weight: 600;
-}
-.input-field:focus {
-  outline: none;
-  box-shadow: none;
-}
-
-/* AppWindow styles */
+/* =========================
+   AppWindow Styles
+   ========================= */
 .app-window {
   background-color: var(--window-outer);
   border-radius: 20px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 
-/*NavBar styles*/
+/* =========================
+   NavBar Styles
+   ========================= */
 .nav-bar {
   display: flex;
   flex-direction: row;
@@ -153,7 +269,6 @@ textarea.input-field {
   padding-bottom: calc((5 / 720) * 100vh);
   padding-left: calc((5 / 1280) * 100vw);
   padding-right: calc((5 / 1280) * 100vw);
-
   margin-bottom: 20px;
   position: absolute;
   top: 0;
@@ -163,18 +278,18 @@ textarea.input-field {
   border-radius: 30px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
-.icons-section{
+.icons-section {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 20px;
 }
-.icons-section img{
+.icons-section img {
   width: calc(((35 / 1240) * var(--nav-width)));
   height: calc((37 / 60) * var(--nav-height));
-  fill: var(--icons-nav-bar); 
+  fill: var(--icons-nav-bar);
 }
-.profile-pic{
+.profile-pic {
   width: calc(((37 / 1240) * var(--nav-width)));
   height: calc(((37 / 1240) * var(--nav-width)));
   border-radius: 50%;
@@ -182,25 +297,24 @@ textarea.input-field {
   background-size: cover;
   background-position: center;
 }
-.icons-section .profile-pic{
+.icons-section .profile-pic {
   width: calc(((40 / 1240) * var(--nav-width)));
   height: calc(((40 / 1240) * var(--nav-width)));
 }
-
 .nav-bar .logo-section {
   display: flex;
   justify-content: center;
   align-items: center;
   height: fit-content;
 }
-.unitec-text{
+.unitec-text {
   width: calc(((130 / 1240) * var(--nav-width)));
   height: calc((35 / 60) * var(--nav-height));
 }
 
-
-
-/* ActionButton styles */
+/* =========================
+   ActionButton Styles
+   ========================= */
 .action-button {
   display: inline-flex;
   justify-content: center;
@@ -209,57 +323,28 @@ textarea.input-field {
   background-color: var(--action-button);
   font-size: calc((20 / 720) * var(--font-multiplier));
   cursor: pointer;
-  padding: 0 calc((20 / 720) * var(--font-multiplier));;
-  width: auto; 
+  padding: 0 calc((20 / 720) * var(--font-multiplier));
+  width: auto;
   white-space: nowrap;
   font-weight: 400;
 }
 
-.title{
-  color: #305894;
-  font-weight: 550;
-  font-size: calc((40 / 720) * var(--font-multiplier));
-}
-.black-text{
-  color: black;
-  font-size: calc((20 / 720) * var(--font-multiplier));
-  font-weight: 550;
-}
-.watermark{
-  position: absolute;
-  left: 0;
-  top: calc((50 / 720) * 100vh);
-}
-
-.form-text{
-  color: var(--forms-text);
-  font-size: calc((20 / 720) * var(--font-multiplier));
-  font-weight: bold;
-}
-
-.golden-link{
-  color: var(--delimiters);
-  font-size: calc((20 / 720) * var(--font-multiplier));
-  font-weight: bold;
-  text-decoration: underline;
-}
-
-/* Job offer styling */
+/* =========================
+   FeedBox & Job Offer Styles
+   ========================= */
 .feedbox::-webkit-scrollbar {
   width: 6px;
 }
-
 .feedbox::-webkit-scrollbar-track {
   border-radius: 8px;
   background-color: var(--action-button);
   border: 1px solid #cacaca;
 }
-
 .feedbox::-webkit-scrollbar-thumb {
   border-radius: 8px;
   background-color: var(--icons-nav-bar);
 }
-.feed-title{
+.feed-title {
   color: var(--feed-title);
   background-color: var(--feed-title-BG);
   border-radius: 20px;
@@ -268,37 +353,40 @@ textarea.input-field {
   font-size: calc((32 / 720) * var(--font-multiplier));
   font-weight: 600;
 }
-.offer-title{
+.offer-title {
   font-size: calc((32 / 720) * var(--font-multiplier));
   font-weight: 600;
 }
-.job-offer{
+.job-offer {
   border: solid var(--job-title) 3px;
   border-radius: 20px;
   background-color: var(--job-title);
   overflow: hidden;
 }
-.job-offer .title{
+.job-offer .title {
   background-color: var(--job-title);
   color: white;
   border-radius: 0;
   font-size: calc((34 / 720) * var(--font-multiplier));
 }
-.job-offer .app-window{
+.job-offer .app-window {
   color: black;
   overflow: hidden;
 }
-.job-offer .text{
+.job-offer .text {
   width: 96%;
   margin-left: 2%;
   margin-top: 2%;
 }
-.job-offer .fade-white{
+.job-offer .fade-white {
   position: absolute;
   background-image: linear-gradient(0deg,rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
 }
 
-.notification{
+/* =========================
+   Notification Styles
+   ========================= */
+.notification {
   color: #000000;
   border: solid var(--job-title) 3px;
   border-radius: 15px;
@@ -307,11 +395,11 @@ textarea.input-field {
   font-size: calc((20 / 720) * var(--font-multiplier));
   font-weight: 600;
 }
-.notification .link{
+.notification .link {
   color: black;
   font-weight: 600;
 }
-.notification .state{
+.notification .state {
   background-color: white;
   border: solid var(--job-title) 3px;
   border-radius: 50%;
@@ -320,88 +408,11 @@ textarea.input-field {
   left: 0;
   transform: translate(-50%, -50%);
 }
-.notification .state div{
+.notification .state div {
   border-radius: 50%;
   position: absolute;
   transition: background-color 0.5s ease-in-out;
   top: 50%;
   left: 50%;
   transform: translate(-55%, -55%);
-}
-
-/* REGISTER ENTERPRISE STYLES*/
-.top-section{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-bottom: solid var(--delimiters) 3px;
-}
-.horizontal-display{
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 100%;
-}
-
-.vertical-sections{
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 50%;
-  row-gap: 15px;
-}
-.left-section{
-  border-right: solid var(--delimiters) 3px;
-}
-/* Custom scrollbar for the TextBox */
-textarea.input-field::-webkit-scrollbar {
-  width: 8px; /* Width of the scrollbar */
-}
-
-textarea.input-field::-webkit-scrollbar-track {
-  background-color: #dee0eb; /* Match the background color of the input field */
-  border-radius: 10px; /* Rounded corners for the track */
-}
-
-textarea.input-field::-webkit-scrollbar-thumb {
-  background-color: #305894; /* Match the title color */
-  border-radius: 10px; /* Rounded corners for the thumb */
-  border: 2px solid #dee0eb; /* Add a border to match the input field background */
-}
-
-textarea.input-field::-webkit-scrollbar-thumb:hover {
-  background-color: #1e3a6d; /* Darker shade for hover effect */
-}
-
-.delimiter{
-  background-color: var(--delimiters);
-  width: 100%;
-  height: 3px;
-}
-
-.selection-input {
-  appearance: none; /* Elimina el estilo predeterminado del navegador */
-  -webkit-appearance: none; /* Compatibilidad con Safari */
-  background-color: transparent;
-  border: none;
-  color: #00317B;
-  outline: none;
-  text-decoration: underline;
-  width: 100%;
-  height: 100%;
-  padding-right: 30px; /* Espacio para la flecha */
-  background-image: url("../assets/icons/arrow.svg");
-  background-repeat: no-repeat;
-  background-position: calc(100% - 10px) center; /* Ajusta la posición de la flecha */
-  background-size: calc((10 / 1280) * 100vw); /* Tamaño de la flecha */
-}
-.selection-input:focus {
-  outline: none;
-  border: none;
-}
-
-@media (orientation: portrait){
-  .watermark {
-    display: none;
-  }
 }
