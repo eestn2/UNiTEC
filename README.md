@@ -125,7 +125,7 @@ src/
 
 - **Haziel Magallanes** — Frontend, Arquitectura, API Endpoints, UX, Documentación.
 - **Daviel Díaz Gonzáles** — Frontend, UI/UX.
-- **Federico Nicolas Martinez** — Backend, API Endpoints, Seguridad, Integraciones, Mantenimiento y reforma de old codebase.
+- **Federico Nicolas Martinez** — Backend, API Endpoints, Seguridad, Mantenimiento y reforma de old codebase.
 - **Daniel Alejandro Rivas** — Mantenimiento y reforma de old codebase.
 - **Francesco Sidotti** — Mantenimiento y reestructurado de antigua Database.
 
