@@ -1,6 +1,7 @@
 /**
  * @file JobOffer.tsx
  * @description Window with enterprise user and profile picture as sort of a title.
+ *              Expands AppWindow height to 'auto' when "Ver más" is clicked.
  * @author Haziel Magallanes
  * @date May 5, 2025
  */
@@ -40,6 +41,7 @@ interface JobOfferProps extends ResponsiveComponent {
 /**
  * A React functional component that renders a job offer window with the enterprise user and profile picture as a title.
  * Fetches author details, displays the job offer title and description, and shows a "Ver más" button if the content overflows.
+ * When "Ver más" is clicked, the AppWindow height expands to fit all content.
  *
  * @component
  * @param {JobOfferProps} props - The properties for the JobOffer component.
@@ -63,11 +65,13 @@ interface JobOfferProps extends ResponsiveComponent {
  *   height={200}
  * />
  * ```
+ * When the description overflows, a "Ver más" button appears. Clicking it expands the AppWindow to show all content.
  * @author Haziel Magallanes
  */
 const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, title, description, style, className }) => {
     const [author, setAuthor] = useState<{ name: string; profile_picture: string }>({ name: "Unknown", profile_picture: "" });
     const [overflowing, setOverflowing] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
     const appWindowRef: Ref<HTMLDivElement> = useRef<HTMLDivElement>(null);
     // Fetch author details and save them in state
     useEffect(() => {
@@ -105,7 +109,7 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
         <div
             className={`job-offer ${className || ""}`}
             style={{
-                height: `${translatedHeight}px`,
+                height: isExpanded ? 'auto' : `${translatedHeight}px`,
                 width: `${translatedWidth}px`,
                 display: 'flex',
                 flexDirection: 'column',
@@ -146,6 +150,7 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
                     position: "relative",
                     borderTopRightRadius: 0,
                     borderTopLeftRadius: 0,
+                    height: isExpanded ? 'auto' : `${TranslateFigmaCoords.translateFigmaY(height)}px`,
                 }}
                 ref={appWindowRef as React.RefObject<HTMLDivElement>}
             >
@@ -156,7 +161,7 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
                     {description}
                 </div>
 
-                {overflowing ? (
+                {overflowing && !isExpanded ? (
                     <>
                     <div
                         className="fade-white"
@@ -178,6 +183,7 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
                             left: "50%",
                             transform: "translateX(-50%)",
                         }}
+                        action={() => setIsExpanded(true)}
                     />
                     </>
                 ) : null}
