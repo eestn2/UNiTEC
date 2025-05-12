@@ -3,7 +3,7 @@
  * @file login.php
  * @description API endpoint for user login. Validates credentials, starts a session, and returns user data on success.
  * Handles POST requests, checks email and password, manages session variables, and returns a standardized JSON response.
- * @author Haziel Magallanes, Federico Nicolas Martinez.
+ * @author Haziel Magallanes, Federico Nicolás Martínez.
  * @date May 11, 2025
  *
  * Usage:
