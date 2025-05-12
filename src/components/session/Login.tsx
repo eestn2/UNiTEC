@@ -1,3 +1,11 @@
+/**
+ * @file Login.tsx
+ * @description Login page component for the application. It includes a form for user login, input fields for email and password, and a button to submit the form.
+ * It also includes links for password reset and user registration. The component is styled to be responsive and centered on the screen.
+ * @author Haziel Magallanes
+ * @date May 11, 2025
+ */
+
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import "../../styles/index.css";
 import InputField from "../UI/InputField";
@@ -9,6 +17,19 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import User from "./User";
 
+/**
+ * A React functional component that renders the login form inside a responsive window.
+ * Handles window resize for responsive design, manages form state, and provides links for password reset and registration.
+ *
+ * @component
+ * @returns {JSX.Element} A styled window containing the login form and navigation links.
+ *
+ * @example
+ * ```tsx
+ * <Login />
+ * ```
+ * @author Haziel Magallanes
+ */
 const Login: React.FC = () => {
     // Re-Render on window resize for responsive design
     const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });

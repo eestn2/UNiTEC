@@ -1,36 +1,85 @@
+/**
+ * @file LabelsContainer.tsx
+ * @description A reusable React component for displaying a styled label with optional delete functionality.
+ * Converts width and height from Figma units to responsive pixels based on screen size.
+ * @author Daviel Díaz Gonzáles
+ * @date May 11, 2025
+ */
+
 import React from "react";
 import "../../styles/index.css";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 
+/**
+ * Props for the `Label` component.
+ *
+ * @property {string} [text] - The text to display inside the label. Optional if using children.
+ * @property {number} [width=50] - The width of the label in Figma coordinates.
+ * @property {number} [height=20] - The height of the label in Figma coordinates.
+ * @property {React.CSSProperties} [style] - Additional inline styles for the label container.
+ * @property {string} [className] - Additional CSS class names for the label container.
+ * @property {() => void} [onDelete] - Optional callback function triggered when the delete button is clicked.
+ * @property {React.ReactNode} [children] - Optional children to render inside the label.
+ * 
+ * @author Daviel Díaz Gonzáles
+ */
 interface LabelProps {
-    text?: string; // Texto que se mostrará dentro del div (opcional si se usa children)
-    width?: number; // Ancho en unidades de Figma
-    height?: number; // Alto en unidades de Figma
-    style?: React.CSSProperties; // Estilos opcionales para el div
-    className?: string; // Clases CSS opcionales
-    onDelete?: () => void; // Función para manejar la acción de eliminar
-    children?: React.ReactNode; // Elementos hijos que se renderizarán dentro del div
+    /** The text to display inside the label. Optional if using children. */
+    text?: string;
+    /** The width of the label in Figma coordinates. */
+    width?: number;
+    /** The height of the label in Figma coordinates. */
+    height?: number;
+    /** Additional inline styles for the label container. */
+    style?: React.CSSProperties;
+    /** Additional CSS class names for the label container. */
+    className?: string;
+    /** Callback function triggered when the delete button is clicked. */
+    onDelete?: () => void;
+    /** Optional children to render inside the label. */
+    children?: React.ReactNode;
 }
 
+/**
+ * A React functional component that renders a styled label container with optional text, children, and a delete button.
+ *
+ * @component
+ * @param {LabelProps} props - The properties for the Label component.
+ * @param {string} [props.text] - The text to display inside the label.
+ * @param {number} [props.width=50] - The width of the label in Figma coordinates.
+ * @param {number} [props.height=20] - The height of the label in Figma coordinates.
+ * @param {React.CSSProperties} [props.style] - Additional inline styles for the label container.
+ * @param {string} [props.className] - Additional CSS class names for the label container.
+ * @param {() => void} [props.onDelete] - Callback function triggered when the delete button is clicked.
+ * @param {React.ReactNode} [props.children] - Optional children to render inside the label.
+ *
+ * @returns {JSX.Element} A styled label container with optional text, children, and a delete button.
+ *
+ * @example
+ * ```tsx
+ * <Label text="Etiqueta" width={80} height={30} onDelete={() => alert("Deleted!")} />
+ * ```
+ * @author Daviel Díaz Gonzáles
+ */
 const Label: React.FC<LabelProps> = ({ text, width = 50, height = 20, style, className, onDelete, children }) => {
     return (
         <div
             className={`label-container ${className || ""}`}
             style={{
-                width: `${TranslateFigmaCoords.translateFigmaX(width)}px`, // Calcula el ancho
-                height: `${TranslateFigmaCoords.translateFigmaY(height)}px`, // Calcula el alto
-                padding: "10px", // Espaciado interno
-                borderRadius: "20px", // Bordes redondeados
-                backgroundColor: "#000000", // Color de fondo
-                color: "#333", // Color del texto
-                fontSize: "14px", // Tamaño de fuente
-                fontWeight: "bold", // Peso de la fuente
-                display: "grid", // Cambia a grid
-                gridTemplateColumns: "1fr auto", // Define dos columnas
-                alignItems: "center", // Centra verticalmente
-                gap: "10px", // Espaciado entre columnas
-                overflowX: "hidden", // Oculta y bloquea el scroll horizontal
-                ...style, // Permite sobrescribir estilos
+                width: `${TranslateFigmaCoords.translateFigmaX(width)}px`,
+                height: `${TranslateFigmaCoords.translateFigmaY(height)}px`,
+                padding: "10px",
+                borderRadius: "20px",
+                backgroundColor: "#000000",
+                color: "#333",
+                fontSize: "14px",
+                fontWeight: "bold",
+                display: "grid",
+                gridTemplateColumns: "1fr auto",
+                alignItems: "center",
+                gap: "10px",
+                overflowX: "hidden",
+                ...style,
             }}
         >
             {text && <span>{text}</span>}

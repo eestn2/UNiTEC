@@ -1,3 +1,11 @@
+/**
+ * @file FeedBox.tsx
+ * @description Main feed component that displays job offers and notifications in a responsive layout.
+ * Fetches job offers from the server and renders them alongside notifications and navigation.
+ * @author Haziel Magallanes
+ * @date May 11, 2025
+ */
+
 import "../../styles/index.css";
 import NavBar from '../UI/NavBar';
 import AppWindow from '../UI/AppWindow';
@@ -8,6 +16,19 @@ import { Link } from "react-router-dom";
 import { ReactElement, useEffect, useState } from "react";
 import axios from "axios";
 
+/**
+ * A React functional component that renders the main feed with job offers and notifications.
+ * Handles window resize for responsive design, fetches job offers from the server, and displays them in styled windows.
+ *
+ * @component
+ * @returns {JSX.Element} A responsive feed layout with job offers, notifications, and navigation bar.
+ *
+ * @example
+ * ```tsx
+ * <FeedBox />
+ * ```
+ * @author Haziel Magallanes
+ */
 function FeedBox() {
   // Re-Render on window resize for responsive design
   const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });

@@ -1,35 +1,81 @@
+/**
+ * @file Label.tsx
+ * @description A reusable React component for displaying a styled label with optional delete functionality.
+ * Converts width and height from Figma units to responsive pixels based on screen size.
+ * @author Daviel Díaz Gonzáles
+ * @date May 11, 2025
+ */
+
 import React from "react";
 import "../../styles/index.css";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 
+/**
+ * Props for the `Label` component.
+ *
+ * @property {string} text - The text to display inside the label.
+ * @property {number} [width=50] - The width of the label in Figma coordinates.
+ * @property {number} [height=20] - The height of the label in Figma coordinates.
+ * @property {React.CSSProperties} [style] - Additional inline styles for the label container.
+ * @property {string} [className] - Additional CSS class names for the label container.
+ * @property {() => void} [onDelete] - Optional callback function triggered when the delete button is clicked.
+ * 
+ * @author Daviel Díaz Gonzáles
+ */
 interface LabelProps {
-    text: string; // Texto que se mostrará dentro del div
-    width?: number; // Ancho en unidades de Figma
-    height?: number; // Alto en unidades de Figma
-    style?: React.CSSProperties; // Estilos opcionales para el div
-    className?: string; // Clases CSS opcionales
-    onDelete?: () => void; // Función para manejar la acción de eliminar
+    /** The text to display inside the label. */
+    text: string;
+    /** The width of the label in Figma coordinates. */
+    width?: number;
+    /** The height of the label in Figma coordinates. */
+    height?: number;
+    /** Additional inline styles for the label container. */
+    style?: React.CSSProperties;
+    /** Additional CSS class names for the label container. */
+    className?: string;
+    /** Callback function triggered when the delete button is clicked. */
+    onDelete?: () => void;
 }
 
+/**
+ * A React functional component that renders a styled label container with text and an optional delete button.
+ *
+ * @component
+ * @param {LabelProps} props - The properties for the Label component.
+ * @param {string} props.text - The text to display inside the label.
+ * @param {number} [props.width=50] - The width of the label in Figma coordinates.
+ * @param {number} [props.height=20] - The height of the label in Figma coordinates.
+ * @param {React.CSSProperties} [props.style] - Additional inline styles for the label container.
+ * @param {string} [props.className] - Additional CSS class names for the label container.
+ * @param {() => void} [props.onDelete] - Callback function triggered when the delete button is clicked.
+ *
+ * @returns {JSX.Element} A styled label container with text and an optional delete button.
+ *
+ * @example
+ * ```tsx
+ * <Label text="Etiqueta" width={80} height={30} onDelete={() => alert("Deleted!")} />
+ * ```
+ * @author Daviel Díaz Gonzáles
+ */
 const Label: React.FC<LabelProps> = ({ text, width = 50, height = 20, style, className, onDelete }) => {
     return (
         <div
             className={`label-container ${className || ""}`}
             style={{
-                width: `${TranslateFigmaCoords.translateFigmaX(width)}px`, // Calcula el ancho
-                height: `${TranslateFigmaCoords.translateFigmaY(height)}px`, // Calcula el alto
-                padding: "10px", // Espaciado interno
-                borderRadius: "20px", // Bordes redondeados
-                backgroundColor: "#ffffff", // Color de fondo
-                color: "#333", // Color del texto
-                fontSize: "14px", // Tamaño de fuente
-                fontWeight: "bold", // Peso de la fuente
-                textAlign: "center", // Alineación del texto
-                display: "flex", // Asegura que el texto esté centrado
-                alignItems: "center", // Centra verticalmente
-                justifyContent: "space-between", // Espaciado entre texto y botón
-                overflowX: "hidden", // Oculta y bloquea el scroll horizontal
-                ...style, // Permite sobrescribir estilos
+                width: `${TranslateFigmaCoords.translateFigmaX(width)}px`,
+                height: `${TranslateFigmaCoords.translateFigmaY(height)}px`,
+                padding: "10px",
+                borderRadius: "20px",
+                backgroundColor: "#ffffff",
+                color: "#333",
+                fontSize: "14px",
+                fontWeight: "bold",
+                textAlign: "center",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                overflowX: "hidden",
+                ...style,
             }}
         >
             <span>{text}</span>

@@ -1,3 +1,11 @@
+/**
+ * @file RegisterEnterprise.tsx
+ * @description A reusable React component for rendering a responsive enterprise registration form.
+ * Converts width and height from pixels to responsive units based on screen size.
+ * @author Daviel Díaz Gonzáles
+ * @date May 11, 2025
+ */
+
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import ActionButton from "../UI/ActionButton";
 import "../../styles/index.css";
@@ -9,6 +17,19 @@ import TextBox from "../UI/TextBox";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
+/**
+ * A React functional component that renders a registration form for enterprises inside a responsive window.
+ * Handles form state, input validation, and submission to the backend. Includes fields for enterprise name, email, password, website, and description.
+ *
+ * @component
+ * @returns {JSX.Element} A styled window containing the enterprise registration form.
+ *
+ * @example
+ * ```tsx
+ * <RegisterEnterprise />
+ * ```
+ * @author Daviel Díaz Gonzáles
+ */
 const RegisterEnterprise: React.FC = () => {
     const [enterpriseName, setEnterpriseName] = useState('');
     const [email, setEmail] = useState('');

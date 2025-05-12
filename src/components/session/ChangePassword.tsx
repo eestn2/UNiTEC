@@ -1,3 +1,11 @@
+/**
+ * @file ChangePassword.tsx
+ * @description A reusable React component for rendering a responsive password change form with validation.
+ * Converts width and height from pixels to responsive units based on screen size.
+ * @author Haziel Magallanes
+ * @date May 11, 2025
+ */
+
 import React, { useState, useEffect } from "react";
 import "../../styles/index.css";
 import InputField from "../UI/InputField";
@@ -6,6 +14,19 @@ import Logo from "../UI/Logo";
 import ActionButton from "../UI/ActionButton";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 
+/**
+ * A React functional component that renders a password change form inside a responsive window.
+ * Handles window resize for responsive design and displays input fields for new password and confirmation.
+ *
+ * @component
+ * @returns {JSX.Element} A styled window containing the password change form.
+ *
+ * @example
+ * ```tsx
+ * <ChangePassword />
+ * ```
+ * @author Haziel Magallanes
+ */
 const ChangePassword: React.FC = () => {
     // Re-Render on window resize for responsive design
     const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });

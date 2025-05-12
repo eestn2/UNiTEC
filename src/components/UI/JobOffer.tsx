@@ -4,6 +4,7 @@
  * @author Haziel Magallanes
  * @date May 5, 2025
  */
+
 import React, { Ref, useEffect, useRef, useState } from "react";
 import "../../styles/index.css";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
@@ -12,12 +13,58 @@ import AppWindow from "./AppWindow";
 import ActionButton from "./ActionButton";
 import axios from "axios";
 
+/**
+ * Props for the `JobOffer` component.
+ *
+ * @extends ResponsiveComponent
+ *
+ * @property {number} authorId - The ID of the author (enterprise user) whose details are displayed.
+ * @property {string} title - The title of the job offer.
+ * @property {string} description - The description of the job offer.
+ * @property {number} [width=10] - The width of the job offer window in Figma coordinates.
+ * @property {number} [height=10] - The height of the job offer window in Figma coordinates.
+ * @property {React.CSSProperties} [style] - Additional inline styles for the window.
+ * @property {string} [className] - Additional CSS class names for the window.
+ * 
+ * @author Haziel Magallanes
+ */
 interface JobOfferProps extends ResponsiveComponent {
+    /** The ID of the author (enterprise user) whose details are displayed. */
     authorId: number;
+    /** The title of the job offer. */
     title: string;
+    /** The description of the job offer. */
     description: string;
 }
 
+/**
+ * A React functional component that renders a job offer window with the enterprise user and profile picture as a title.
+ * Fetches author details, displays the job offer title and description, and shows a "Ver más" button if the content overflows.
+ *
+ * @component
+ * @param {JobOfferProps} props - The properties for the JobOffer component.
+ * @param {number} props.authorId - The ID of the author (enterprise user).
+ * @param {string} props.title - The title of the job offer.
+ * @param {string} props.description - The description of the job offer.
+ * @param {number} [props.width=10] - The width of the job offer window in Figma coordinates.
+ * @param {number} [props.height=10] - The height of the job offer window in Figma coordinates.
+ * @param {React.CSSProperties} [props.style] - Additional inline styles for the window.
+ * @param {string} [props.className] - Additional CSS class names for the window.
+ *
+ * @returns {JSX.Element} A styled window displaying the job offer with author info and overflow handling.
+ *
+ * @example
+ * ```tsx
+ * <JobOffer
+ *   authorId={1}
+ *   title="Frontend Developer"
+ *   description="Join our team to build amazing web apps!"
+ *   width={300}
+ *   height={200}
+ * />
+ * ```
+ * @author Haziel Magallanes
+ */
 const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, title, description, style, className }) => {
     const [author, setAuthor] = useState<{ name: string; profile_picture: string }>({ name: "Unknown", profile_picture: "" });
     const [overflowing, setOverflowing] = useState(false);

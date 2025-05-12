@@ -1,3 +1,11 @@
+/**
+ * @file RegisterUser.tsx
+ * @description A reusable React component for rendering a responsive student registration form.
+ * Converts width and height from pixels to responsive units based on screen size.
+ * @author Daviel Díaz Gonzáles
+ * @date May 11, 2025
+ */
+
 import ActionButton from "../UI/ActionButton";
 import "../../styles/index.css";
 import SelectionField from "../UI/SelectionField";
@@ -8,9 +16,22 @@ import InputField from "../UI/InputField";
 import TextBox from "../UI/TextBox";
 import { Link } from "react-router-dom";
 import LabelsSelection from "../UI/LabelsSelection";
-import LabelsContainer from "../UI/labelsContainer";
+import LabelsContainer from "../UI/LabelsContainer";
 import Label from "../UI/Label";
 
+/**
+ * A React functional component that renders a registration form for students inside a responsive window.
+ * Handles form state, input validation, and submission to the backend. Includes fields for name, birthday, email, password, location, description, labels, user type, and state.
+ *
+ * @component
+ * @returns {JSX.Element} A styled window containing the student registration form.
+ *
+ * @example
+ * ```tsx
+ * <RegisterUser />
+ * ```
+ * @author Daviel Díaz Gonzáles
+ */
 function RegisterUser() {
   return (
     <>
