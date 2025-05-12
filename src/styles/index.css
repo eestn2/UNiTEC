@@ -268,7 +268,10 @@ textarea.input-field {
   font-size: calc((32 / 720) * var(--font-multiplier));
   font-weight: 600;
 }
-
+.offer-title{
+  font-size: calc((32 / 720) * var(--font-multiplier));
+  font-weight: 600;
+}
 .job-offer{
   border: solid var(--job-title) 3px;
   border-radius: 20px;

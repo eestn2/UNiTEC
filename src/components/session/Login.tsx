@@ -64,7 +64,7 @@ const Login: React.FC = () => {
                 onSubmit={(event) => {handleLogin(event)}}
                 style={{display: "flex", flexDirection:"column", alignItems: "center", rowGap: TranslateFigmaCoords.translateFigmaY(18)}}
             >
-                <InputField name="user" type="text" placeholder="Dirección de correo electronico" width={320} height={50}
+                <InputField name="user" type="text" placeholder="Dirección de correo electrónico" width={320} height={50}
                     onChange={(event: ChangeEvent<HTMLInputElement>) => {setEmail(event.target.value)}}/>
                 <InputField name="password" type="password" placeholder="Contraseña" width={320} height={50}
                     onChange={(event: ChangeEvent<HTMLInputElement>) => {setPassword(event.target.value)}}/>
@@ -98,7 +98,7 @@ const Login: React.FC = () => {
                 color: "#00317B"
             }}>
                 <span>¿No tienes una cuenta?</span>
-                <span style={{paddingBottom: `${TranslateFigmaCoords.translateFigmaY(5)}px`}}>Registrate como <Link className="link" style={{color: "rgb(255, 193, 35)"}} to={'/register-enterprise'}>Empresa</Link> / <Link to={'register-user'} className="link" style={{color: "rgb(255, 193, 35)"}}>Estudiante</Link></span>
+                <span style={{paddingBottom: `${TranslateFigmaCoords.translateFigmaY(10)}px`}}>Registrate como <Link className="link" style={{color: "rgb(255, 193, 35)"}} to={'/register-enterprise'}>Empresa</Link> / <Link to={'register-user'} className="link" style={{color: "rgb(255, 193, 35)"}}>Estudiante</Link></span>
             </div>
         </AppWindow>
     );

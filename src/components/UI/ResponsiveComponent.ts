@@ -11,4 +11,6 @@ export default interface ResponsiveComponent {
     style?: React.CSSProperties;
     /*** Custom CSS classes to apply to the component.*/
     className?: string;
+    /*** A ref to the component for direct DOM manipulation.*/
+    ref? : React.RefObject<HTMLDivElement>;
 };

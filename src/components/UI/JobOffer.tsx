@@ -4,7 +4,7 @@
  * @author Haziel Magallanes
  * @date May 5, 2025
  */
-import React, { useEffect, useState } from "react";
+import React, { Ref, useEffect, useRef, useState } from "react";
 import "../../styles/index.css";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import ResponsiveComponent from "./ResponsiveComponent";
@@ -21,6 +21,7 @@ interface JobOfferProps extends ResponsiveComponent {
 const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, title, description, style, className }) => {
     const [author, setAuthor] = useState<{ name: string; profile_picture: string }>({ name: "Unknown", profile_picture: "" });
     const [overflowing, setOverflowing] = useState(false);
+    const appWindowRef: Ref<HTMLDivElement> = useRef<HTMLDivElement>(null);
     // Fetch author details and save them in state
     useEffect(() => {
         const fetchAuthorDetails = async () => {
@@ -40,6 +41,13 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
 
         fetchAuthorDetails();
     }, [authorId]);
+    // Check for overflow when the component mounts or updates
+    useEffect(() => {
+        if (appWindowRef.current) {
+            const isOverflowing = appWindowRef.current.scrollHeight > appWindowRef.current.clientHeight;
+            setOverflowing(isOverflowing);
+        }
+    }, [height, width, description]);
 
     // Calculate dimensions
     const translatedHeight = height === width ? TranslateFigmaCoords.translateFigmaX(width) : TranslateFigmaCoords.translateFigmaY(height);
@@ -92,18 +100,10 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
                     borderTopRightRadius: 0,
                     borderTopLeftRadius: 0,
                 }}
+                ref={appWindowRef as React.RefObject<HTMLDivElement>}
             >
                 <div
                     className="text"
-                    style={{ overflow: "hidden", position: "relative" }}
-                    ref={(el) => {
-                        if (el) {
-                            const isOverflowing = el.scrollHeight > el.clientHeight || el.scrollWidth > el.clientWidth;
-                            if (isOverflowing) {
-                                setOverflowing(true);
-                            }
-                        }
-                    }}
                 >
                     <span className="offer-title">{title}</span><br />
                     {description}

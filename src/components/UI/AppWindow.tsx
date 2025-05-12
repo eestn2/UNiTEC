@@ -19,12 +19,13 @@ import ResponsiveComponent from "./ResponsiveComponent";
     @param {number} height - The height of the window in pixels.
     @param {React.ReactNode} children - The children to be rendered inside the window.
     @param {React.CSSProperties} style - The inline styles to be applied to the window.
+    @param {React.RefObject<HTMLDivElement>} ref - A ref to the window for direct DOM manipulation.
     @param {string} className - The custom CSS classes to be applied to the window.
     @returns {JSX.Element} - The AppWindow component.
 
     @Author: Haziel Magallanes
 */
-const AppWindow: React.FC<ResponsiveComponent> = ({ height = 10, width = 10, children, style, className }) => {
+const AppWindow: React.FC<ResponsiveComponent> = ({ height = 10, width = 10, ref, children, style, className }) => {
     // Check if is a square shaped window, if so, make calculated height the same as calculated width
     height = height == width ? TranslateFigmaCoords.translateFigmaX(width) : TranslateFigmaCoords.translateFigmaY(height);
     width = TranslateFigmaCoords.translateFigmaX(width);  // Convert Figma sizes to the same ratio as the screen size
@@ -35,7 +36,10 @@ const AppWindow: React.FC<ResponsiveComponent> = ({ height = 10, width = 10, chi
                 height: `${height}px`,
                 width: `${width}px`,
                 ...style,
-            }}>
+            }}
+            ref={ref}
+        >
+            
             {children}
         </div>
     );
