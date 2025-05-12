@@ -149,7 +149,7 @@ const RegisterEnterprise: React.FC = () => {
                     <div className="delimiter"></div>
                     <span className="form-text">
                         Registrarse como <Link to={'/register-user'} className="golden-link">Estudiante</Link><br />
-                        ¿Ya tienes cuenta? <Link to={'/'} className="golden-link">Iniciar Sesión</Link>
+                        ¿Ya tienes cuenta? <Link to={'//'} className="golden-link">Iniciar Sesión</Link>
                     </span>
                 </div>
             </form>

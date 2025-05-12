@@ -59,7 +59,7 @@ function App() {
 
   // Browser routings
   return (
-    <BrowserRouter basename="/UNITEC">
+    <BrowserRouter basename="/UNiTEC">
       <Routes>
         <Route path='/' element={!session ? <Login /> : <FeedBox />} />
         <Route path='/test' element={<FeedBox />} />

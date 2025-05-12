@@ -190,7 +190,7 @@ function RegisterUser() {
               </Link>
               <br />
               ¿Ya tienes cuenta?{" "}
-              <Link to={"/"} className="golden-link">
+              <Link to={"//"} className="golden-link">
                 Iniciar Sesión
               </Link>
             </span>
