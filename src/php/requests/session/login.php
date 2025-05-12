@@ -1,4 +1,20 @@
 <?php
+/**
+ * @file login.php
+ * @description API endpoint for user login. Validates credentials, starts a session, and returns user data on success.
+ * Handles POST requests, checks email and password, manages session variables, and returns a standardized JSON response.
+ * @author Haziel Magallanes, Federico Nicolas Martinez.
+ * @date May 11, 2025
+ *
+ * Usage:
+ *   Send a POST request with JSON body containing 'email' and 'password' to authenticate a user.
+ *
+ * Example:
+ *   POST /src/php/requests/session/login.php
+ *   Body: { "email": "user@example.com", "password": "password123" }
+ *   Response: { "status": "success", "message": "...", "user": { ...user fields... } }
+ */
+
 require_once "../cors-policy.php";
 require_once __DIR__ . '/../../logic/connect_to_database.php';
 require_once __DIR__ . '/../function/return_response.php';
@@ -23,6 +39,7 @@ $user = $result->fetch_assoc();
 if (!$user) return_response("failed", "Dirección de correo electronico no registrada.", null);
 
 if (!password_verify($password, $user["password"])) return_response("failed", "Contraseña incorrecta.", null);
+
 // Si la contraseña es correcta, se crea una sesión y se devuelve el usuario
 session_start();
 $_SESSION[SESSION_USER_ID] = $user["id"];
@@ -37,6 +54,7 @@ $_SESSION[SESSION_USER_PORTFOLIO] = $user["portfolio"];
 $_SESSION[SESSION_USER_IS_ENABLED] = $user["enabled"];
 $_SESSION[SESSION_USER_TYPE_ID] = $user["user_type_id"];
 $_SESSION[SESSION_USER_STATUS] = $user["status_id"];
+
 return_response("success", "Inicio de sesión exitoso.", ["user" => [
     "id" => $user["id"],
     "name" => $user["name"],

@@ -1,5 +1,19 @@
 <?php
-// A partir de la ID de usuario, devolver nombre y foto de perfil
+/**
+ * @file user-info.php
+ * @description API endpoint to retrieve a user's name and profile picture by user ID.
+ * Handles GET requests, validates input, queries the database, and returns a JSON response.
+ * @author Haziel Magallanes, Federico Nicolas Martinez.
+ * @date May 11, 2025
+ *
+ * Usage:
+ *   Send a GET request with the 'id' query parameter to receive user information.
+ *
+ * Example:
+ *   GET /src/php/requests/user/user-info.php?id=1
+ *   Response: { "status": "success", "message": "...", "data": { "user": { "name": "...", "profile_picture": "..." } } }
+ */
+
 require_once "../cors-policy.php";
 require_once __DIR__ . '/../../logic/connect_to_database.php';
 require_once __DIR__ . '/../function/return_response.php';

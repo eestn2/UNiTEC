@@ -1,4 +1,20 @@
 <?php
+/**
+ * @file user-register.php
+ * @description API endpoint for registering a new user (student). Handles POST requests, validates input, checks for duplicate emails, inserts user data and related languages/tags, sends a confirmation email, and logs the registration.
+ * Uses transactions for data integrity and returns standardized JSON responses.
+ * @author Federico Nicolas Martinez
+ * @date May 11, 2025
+ *
+ * Usage:
+ *   Send a POST request with JSON body containing user registration data.
+ *
+ * Example:
+ *   POST /src/php/requests/session/user-register.php
+ *   Body: { "email": "user@example.com", "password": "password123", ... }
+ *   Response: { "status": "success", "message": "...", ... }
+ */
+
 require_once "../cors-policy.php";
 require_once __DIR__ . '/../../logic/connect_to_database.php';
 require_once __DIR__ . '/../function/return_response.php';
@@ -9,34 +25,38 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no 
 
 $connection->begin_transaction();
 
+// Check for duplicate email
 $stmt = $connection->prepare("SELECT email FROM `users` WHERE `email` = ?");
 $stmt->bind_param("s", $user_email);
 $stmt->execute();
 if ($user_email) return_response("failed", "El correo ya existe.", null);
+
 $data = json_decode(file_get_contents("php://input"));
 if (!isset($data->email) || !isset($data->password)) return_response("failed", "Faltan datos.", null);
 
 $email = $connection->real_escape_string($data->email);
 $password = $data->password;
 
-
-try{
+try {
+    // Insert user data
     $stmt = $connection->prepare("INSERT INTO `users`(`name`, `birth_date`, `location`, `email`, `password`, `description`, `last_active_date`, `profile_picture`, `portfolio`, `enabled`, `user_type_id`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssssssssssii", $user_name, $user_age, $user_location, $user_email, $user_password, $user_description, $user_last_update_date, $user_profile_picture, $user_portfolio, $user_is_enabled, $user_rol, $user_status);
     $stmt->execute();
 
+    // Get new user ID
     $id_consult = $connection->query("SELECT MAX(id) AS id FROM users");
-
     if($row = mysqli_fetch_row($id_consult)) {
         $user_id = $row[0];
     }
-    
+
+    // Insert user languages
     $stmt = $connection->prepare("INSERT INTO `user_languages`(`user_id`, `language_id`, `level_id`) VALUES (?, ?, ?)");
     for($i = 0; $i < count($user_languages); $i++){
         $stmt->bind_param("iii", $user_id, $user_languages[$i], $knownLanguagesWithLevels[$i]);
         $stmt->execute();
     }
 
+    // Insert user tags
     $stmt = $connection->prepare("INSERT INTO `user_tags`(`user_id`, `tag_id`, `level_id`) VALUES (?, ?, ?)");
     for($i = 0; $i < count($user_tags); $i++){
         $stmt->bind_param("iii", $user_id, $user_tags[$i], $tags_levels[$i]);
@@ -46,6 +66,7 @@ try{
     $connection->commit();
     ?>
 
+    <!-- Send confirmation email using EmailJS -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/user_email.min.js"></script>
     <script>
         emailjs.init("ixWT1mJIQS1ksXzHB");
@@ -73,6 +94,7 @@ try{
 
     <?php
 
+    // Log the sent email in the database
     $currentDatetime = date('Y-m-d H:i:s');
     $stmt = $connection->prepare("INSERT INTO `sent_emails`(`subject`, `message`, `sender_id`, `receiver_id`, `sent_date`) VALUES (?, ?, ?, ?, ?)");
     $email_subject = 'Registro en espera';
@@ -80,11 +102,11 @@ try{
     $email_receiver = '1';
     $stmt->bind_param("ssiis", $email_subject, $email_message, $email_receiver, $user_id, $currentDatetime);
     $stmt->execute();
-    } catch (Exception $e) {
-        $connection->rollback();
-        header('Location: ' . $redirect_url  . '?msg=Ocurrio%20un%20error' . ' ' . $e->getMessage());
-    } finally {
-        if(isset($stmt)) $stmt->close();
-        $connection->close();
-    }
+} catch (Exception $e) {
+    $connection->rollback();
+    header('Location: ' . $redirect_url  . '?msg=Ocurrio%20un%20error' . ' ' . $e->getMessage());
+} finally {
+    if(isset($stmt)) $stmt->close();
+    $connection->close();
+}
 ?>
