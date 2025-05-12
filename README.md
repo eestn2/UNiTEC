@@ -19,9 +19,8 @@ Bienvenido a **UNITEC**, una plataforma web moderna y responsiva que conecta egr
 ## 🖥️ Arquitectura Técnica
 
 ### Frontend (React + TypeScript)
-
 - **Framework:** [React.js](https://react.dev/) + TypeScript
-- **Estilos:** CSS modularizado (`/styles/globals.css`, `/styles/index.css`) con variables CSS y diseño responsivo basado en coordenadas de Figma.
+- **Estilos:** CSS modularizado (`/styles/globals.css`, `/styles/index.css`) con variables CSS y diseño responsivo.
 - **Componentes Reutilizables:**  
   - `AppWindow`, `ActionButton`, `InputField`, `SelectionField`, `LabelsSelection`, `LabelsContainer`, `Label`, `Notification`, `NavBar`, `Logo`, etc.
 - **Gestión de Estado:** Hooks de React (`useState`, `useEffect`) para formularios, autenticación y manejo de ventanas responsivas.
@@ -30,10 +29,9 @@ Bienvenido a **UNITEC**, una plataforma web moderna y responsiva que conecta egr
 - **Validaciones:** Validación de formularios y manejo de errores en tiempo real.
 
 ### Backend (PHP + MySQL)
-
-- **API RESTful:** Endpoints PHP en `/src/php/requests/` para autenticación, registro, recuperación de datos, gestión de ofertas, etc.
+- **API RESTful:** Endpoints PHP en `/src/php/requests/` y lógica en `/src/php/logic/` para autenticación, registro, recuperación de datos, gestión de ofertas, etc.
 - **Control de Acceso:**  
-  - Middleware de CORS (`cors-policy.php`) configurable por entorno.
+  - Middleware de CORS (`cors-policy.php`).
   - Gestión de sesiones PHP y cookies seguras.
 - **Base de Datos:**  
   - MySQL/MariaDB, acceso mediante `mysqli` y prepared statements.
@@ -42,7 +40,7 @@ Bienvenido a **UNITEC**, una plataforma web moderna y responsiva que conecta egr
   - Funciones de respuesta estándar (`return_response.php`).
   - Controladores y servicios (`UserServiceManager.php`, `JobOfferManager.php`, etc.).
   - Seguridad: hashing de contraseñas, validación de datos, protección contra SQL Injection.
-- **Email:** Integración con EmailJS para notificaciones y confirmaciones de registro.
+- **Email:** Integración con PHPMailer para notificaciones y confirmaciones de registro.
 
 ---
 
@@ -52,22 +50,31 @@ Bienvenido a **UNITEC**, una plataforma web moderna y responsiva que conecta egr
 src/
 │
 ├── assets/           # Imágenes, íconos y recursos gráficos
+│   ├── react.svg
+│   ├── icons/
+│   ├── navbar/
+│   ├── unitec/
+│   └── user/
 ├── components/       # Componentes React (UI, sesión, feed, etc.)
 │   ├── UI/
 │   ├── session/
 │   └── feed/
 ├── global/           # Funciones utilitarias globales
-├── php/              # Backend PHP (requests, lógica, config)
+│   └── function/
+├── php/              # Backend PHP (requests, lógica, config, PHPMailer)
 │   ├── requests/
 │   ├── logic/
-│   └── config/
+│   ├── config/
+│   ├── PHPMailer/
+│   └── DotEnv.php
 ├── styles/           # Hojas de estilo globales y variables CSS
 │   ├── globals.css
 │   └── index.css
-└── main.tsx          # Entry point de React
+├── main.tsx          # Entry point de React
+└── vite-env.d.ts     # Tipos globales para Vite/TypeScript
 ```
 
----
+- **Nota:** La lógica de backend y los controladores principales están en `/src/php/logic/`. PHPMailer se usa para notificaciones por correo y recuperación de contraseña.
 
 ## ⚙️ Instalación y Ejecución Local
 
@@ -76,7 +83,7 @@ src/
 - Node.js y npm
 - XAMPP/WAMP/LAMP (PHP 8+, MySQL/MariaDB)
 - Composer (opcional, para dependencias PHP)
-- [EmailJS](https://www.emailjs.com/) (para notificaciones por correo)
+- [PHPMailer](https://github.com/PHPMailer/PHPMailer) (para notificaciones por correo)
 
 ### Pasos
 
@@ -125,7 +132,7 @@ src/
 
 - **Haziel Magallanes** — Frontend, Arquitectura, API Endpoints, UX, Documentación.
 - **Daviel Díaz Gonzáles** — Frontend, UI/UX.
-- **Federico Nicolas Martinez** — Backend, API Endpoints, Seguridad, Mantenimiento y reforma de old codebase.
+- **Federico Nicolás Martínez** — Backend, API Endpoints, Seguridad, Mantenimiento y reforma de old codebase.
 - **Daniel Alejandro Rivas** — Mantenimiento y reforma de old codebase.
 - **Francesco Sidotti** — Mantenimiento y reestructurado de antigua Database.
 

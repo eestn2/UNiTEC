@@ -92,10 +92,7 @@ try {
     $email_message .= '<br><br>Gracias por registrarte en UNITEC.';
     $send_result = send_email($user_email, $email_subject, $email_message);
 
-    if (!$send_result) {
-        // Optionally log the failure, but do not rollback registration
-        error_log("Failed to send registration email to $user_email");
-    }
+    if (!$send_result) error_log("Failed to send registration email to $user_email");
 
     // Log the sent email in the database
     $currentDatetime = date('Y-m-d H:i:s');
