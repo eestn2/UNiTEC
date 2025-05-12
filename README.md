@@ -1,6 +1,6 @@
-# 🌟 UNITEC - Plataforma Integral de Egresados Técnicos
+# 🌟 UNiTEC - Plataforma Integral de Egresados Técnicos
 
-Bienvenido a **UNITEC**, una plataforma web moderna y responsiva que conecta egresados de escuelas técnicas con empresas y oportunidades laborales. UNITEC está diseñada para facilitar la inserción laboral, la gestión de perfiles profesionales y la interacción directa entre estudiantes, egresados y empresas.
+Bienvenido a **UNiTEC**, una plataforma web moderna y responsiva que conecta egresados de escuelas técnicas con empresas y oportunidades laborales. UNITEC está diseñada para facilitar la inserción laboral, la gestión de perfiles profesionales y la interacción directa entre estudiantes, egresados y empresas.
 
 ---
 
@@ -146,5 +146,5 @@ Consulta el archivo [LICENSE](./LICENSE) para más detalles.
 
 ---
 
-¡Gracias por usar **UNITEC**!  
+¡Gracias por usar **UNiTEC**!  
 ¿Tienes dudas o sugerencias? Abre un issue o contáctanos.
