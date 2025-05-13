@@ -1,6 +1,6 @@
 /**
  * @file index.css
- * @description Main stylesheet for the UNITEC application. Provides responsive, accessible, and visually consistent styles for all UI components.
+ * @description Main stylesheet for the UNiTEC application. Provides responsive, accessible, and visually consistent styles for all UI components.
  * Includes global variables, typography, layout, form elements, navigation, job offers, notifications, and utility classes.
  * @author Haziel Magallanes, Daviel Díaz Gonzáles
  * @date May 11, 2025
@@ -404,6 +404,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border: solid var(--job-title) 3px;
   border-radius: 50%;
   position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   top: 0;
   left: 0;
   transform: translate(-50%, -50%);
@@ -412,7 +415,4 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: 50%;
   position: absolute;
   transition: background-color 0.5s ease-in-out;
-  top: 50%;
-  left: 50%;
-  transform: translate(-55%, -55%);
 }
