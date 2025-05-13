@@ -88,6 +88,7 @@ function FeedBox() {
         style={{
           position: "absolute",
           left: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
+          top: `${TranslateFigmaCoords.translateFigmaY(100)}px`,
           overflowY: "scroll",
           borderTopRightRadius: 5,
           borderBottomRightRadius: 5,
@@ -115,7 +116,13 @@ function FeedBox() {
         style={{
           position: "absolute",
           right: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
+          top: `${TranslateFigmaCoords.translateFigmaY(100)}px`,
+          overflowY: "scroll",
+          display: "flex", 
+          flexDirection: "column", 
+          rowGap: TranslateFigmaCoords.translateFigmaY(20), 
         }}
+        className="notification-box"
       >
         <div
           className="feed-title"
@@ -123,8 +130,8 @@ function FeedBox() {
             width: `${TranslateFigmaCoords.translateFigmaX(250)}px`,
             height: `${TranslateFigmaCoords.translateFigmaY(53)}px`,
             position: "relative",
-            left: "50%",
-            transform: "translateX(-50%)",
+            right: "50%",
+            transform: "translateX(50%)",
             marginTop: `${TranslateFigmaCoords.translateFigmaY(32)}px`,
             marginBottom: `${TranslateFigmaCoords.translateFigmaY(32)}px`,
           }}

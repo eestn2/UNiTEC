@@ -16,6 +16,7 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import User from "./User";
+import Footer from "../UI/Footer";
 
 /**
  * A React functional component that renders the login form inside a responsive window.

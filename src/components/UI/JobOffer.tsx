@@ -156,6 +156,7 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
             >
                 <div
                     className="text"
+                    style={{marginBottom: `${TranslateFigmaCoords.translateFigmaY(5)}px`}}
                 >
                     <span className="offer-title">{title}</span><br />
                     {description}

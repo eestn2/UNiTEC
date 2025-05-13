@@ -15,6 +15,7 @@ import ForgotPassword from './session/ForgotPassword';
 import RegisterUser from './session/RegisterUser';
 import axios from 'axios';
 import User from './session/User';
+import Footer from './UI/Footer';
 
 /**
  * The main application component that handles routing and session management.
@@ -59,15 +60,20 @@ function App() {
 
   // Browser routings
   return (
-    <BrowserRouter basename="/UNiTEC">
-      <Routes>
-        <Route path='/' element={!session ? <Login /> : <FeedBox />} />
-        <Route path='/test' element={<FeedBox />} />
-        <Route path='/register-enterprise' element={<RegisterEnterprise />} />
-        <Route path='/register-user' element={<RegisterUser />} />
-        <Route path='/password-reset' element={<ForgotPassword />} />
-      </Routes>
-    </BrowserRouter>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <div className="app-content">
+        <BrowserRouter basename="/UNiTEC">
+          <Routes>
+            <Route path='/' element={!session ? <Login /> : <FeedBox />} />
+            <Route path='/test' element={<FeedBox />} />
+            <Route path='/register-enterprise' element={<RegisterEnterprise />} />
+            <Route path='/register-user' element={<RegisterUser />} />
+            <Route path='/password-reset' element={<ForgotPassword />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+      <Footer />
+    </div>
   );
 }
 
