@@ -37,7 +37,9 @@ body {
   font-size: calc((18 / 720) * var(--y-multiplier));
   overflow-y: scroll;
 }
-
+html {
+  scroll-behavior: smooth;
+}
 html::-webkit-scrollbar {
   width: calc((12 / 1280) * var(--x-multiplier));
 }

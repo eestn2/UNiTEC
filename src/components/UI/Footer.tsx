@@ -28,6 +28,7 @@ const Footer: React.FC<ResponsiveComponent> = ({ style, className }) => {
                 width: '100%',
                 ...style,
             }}
+            id="footer"
         >
             <div className="footer-content">
                 <div className="logo">
