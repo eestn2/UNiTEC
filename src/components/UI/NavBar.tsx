@@ -12,7 +12,7 @@ import about_us_icon from "../../assets/navbar/bxs-info-circle.svg";
 import phone_icon from "../../assets/navbar/bxs-phone.svg";
 /* import chart_icon from "../../assets/navbar/bxs-bar-chart-alt-2.svg";
 import add_offer_icon from "../../assets/navbar/bxs-edit.svg"; */
-import unitec_text from "../../assets/unitec/unitec_Texto_Color_SVG.svg";
+import unitec_text from "../../assets/unitec/unitec-text.svg";
 
 /**
  * A React functional component that renders the navigation bar with logo and icon buttons.
