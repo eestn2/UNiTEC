@@ -37,7 +37,9 @@ body {
   font-size: calc((18 / 720) * var(--y-multiplier));
   overflow-y: scroll;
 }
-
+html {
+  scroll-behavior: smooth;
+}
 html::-webkit-scrollbar {
   width: calc((12 / 1280) * var(--x-multiplier));
 }
@@ -472,8 +474,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* =========================
   Footer Styles
   ========================= */
-
-footer {
+footer{
   background-color: var(--footer);
   width: 100%;
   height: calc((260 / 720) * var(--y-multiplier));
@@ -511,7 +512,7 @@ footer {
 .vertical-divider {
   width: calc((3 / 1280) * var(--x-multiplier));
   background: #fff;
-  height: 90%;
+  height: calc((240 / 720) * var(--y-multiplier));
   margin-top: calc((16 / 720) * var(--y-multiplier));
 }
 
@@ -532,6 +533,9 @@ footer {
 
 /* --- Responsive Footer --- */
 @media (max-width: 700px), (orientation: portrait) {
+  footer{
+    height: fit-content;
+  }
   .footer-content > * {
     margin-top: calc((12 / 720) * var(--y-multiplier));
     margin-left: calc((66 / 1280) * var(--x-multiplier));
@@ -540,10 +544,11 @@ footer {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: calc((5 / 720) * var(--x-multiplier)); 
+    height: min-content;
+    gap: 0;
   }
-  .footer-content .logo .eest2{
-    margin-top: calc((-32 / 720) * var(--y-multiplier));
+  .footer-content .logo > *{
+    margin-top: 0;
   }
   .footer-content .links{
     margin-left: 0;

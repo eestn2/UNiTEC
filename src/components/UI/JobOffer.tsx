@@ -84,6 +84,7 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
     }, []);
 
     // State for author details and overflow handling
+    const rootRef = useRef<HTMLDivElement>(null);    
     const [author, setAuthor] = useState<{ name: string; profile_picture: string }>({ name: "Unknown", profile_picture: "" });
     const [overflowing, setOverflowing] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
@@ -114,7 +115,18 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
             setOverflowing(isOverflowing);
         }
     }, [height, width, description]);
-
+    // Collapse window when clicking outside
+    useEffect(() => {
+        if (!isExpanded) return;
+        function handleClickOutside(event: MouseEvent) {
+            if (rootRef.current && !rootRef.current.contains(event.target as Node)) setIsExpanded(false);
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isExpanded]);
+    
     // Calculate dimensions
     const translatedHeight = height === width ? TranslateFigmaCoords.translateFigmaX(width) : TranslateFigmaCoords.translateFigmaY(height);
     const titleHeight: number = translatedHeight / 8;
@@ -134,6 +146,7 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
                 marginBottom: `${TranslateFigmaCoords.translateFigmaY(32)}px`,
                 ...style,
             }}
+            ref={rootRef}
         >
             <div
                 className="title"
