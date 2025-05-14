@@ -1,0 +1,514 @@
+/**
+ * @file index.css
+ * @description Main stylesheet for the UNiTEC application. Provides responsive, accessible, and visually consistent styles for all UI components.
+ * Includes global variables, typography, layout, form elements, navigation, job offers, notifications, and utility classes.
+ * @author Haziel Magallanes, Daviel Díaz Gonzáles
+ * @date May 11, 2025
+ */
+
+/* =========================
+  Font & Root Variables
+  ========================= */
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&display=swap');
+
+:root {
+  --x-multiplier: 100vw;
+  --y-multiplier: 100vh;
+  --nav-width: calc((1240 / 1280) * 100vw);
+  --nav-height: calc((60 / 720) * 100vh);
+  --app-font-family: "Archivo Narrow", Helvetica;
+  /* Color variables (should be defined elsewhere or here) */
+  /* --BG, --important-text, --input, --window-outer, --job-title, --action-button, --feed-title, --feed-title-BG, --forms-text, --delimiters, --icons-nav-bar */
+}
+
+@media (orientation: portrait) {
+  :root {
+   --x-multiplier: 100vw;
+   --y-multiplier: 100vw;
+  }
+}
+
+/* =========================
+  Global Styles
+  ========================= */
+body {
+  font-family: var(--app-font-family);
+  margin: 0;
+  font-size: calc((18 / 720) * var(--y-multiplier));
+  overflow-y: scroll;
+}
+
+html::-webkit-scrollbar {
+  width: calc((12 / 1280) * var(--x-multiplier));
+}
+html::-webkit-scrollbar-track {
+  border-radius: 0;
+  border: none;
+  background-color: var(--action-button);
+}
+html::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: var(--icons-nav-bar);
+}
+html::-webkit-scrollbar-thumb:hover {
+  background-color: var(--feed-title-BG);
+}
+
+.app-content{
+  background-color: var(--BG);
+  width: 100%;
+  height: calc((720 / 720) * var(--y-multiplier));
+  background-image: url(../assets/unitec/BG_Repeat_Icons.svg);
+  background-repeat: repeat;
+  background-size: calc((100 / 720) * var(--y-multiplier));
+}
+/* =========================
+  Links
+  ========================= */
+.link {
+  color: var(--important-text);
+  text-decoration: underline;
+  font-weight: 500;
+}
+.link:hover {
+  color: var(--important-text);
+  cursor: pointer;
+}
+.golden-link {
+  color: var(--delimiters);
+  font-size: calc((20 / 720) * var(--y-multiplier));
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* =========================
+  Typography & Utility
+  ========================= */
+.title {
+  color: #305894;
+  font-weight: 550;
+  font-size: calc((40 / 720) * var(--y-multiplier));
+}
+.black-text {
+  color: black;
+  font-size: calc((20 / 720) * var(--y-multiplier));
+  font-weight: 550;
+}
+.form-text {
+  color: var(--forms-text);
+  font-size: calc((20 / 720) * var(--y-multiplier));
+  font-weight: bold;
+}
+.watermark {
+  position: absolute;
+  left: 0;
+  top: calc((50 / 720) * var(--y-multiplier));
+}
+@media (orientation: portrait) {
+  .watermark {
+   display: none;
+  }
+}
+
+/* =========================
+  Input Fields & Forms
+  ========================= */
+.input-field,
+.selection-field {
+  background-color: #dee0eb;
+  border: none;
+  border-radius: 10px;
+  text-align: left;
+  align-items: center;
+  color: var(--input);
+  font-family: var(--app-font-family);
+  font-size: calc((20 / 720) * var(--y-multiplier));
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: normal;
+}
+.input-field::placeholder {
+  color: var(--input);
+  font-family: var(--app-font-family);
+  font-weight: 600;
+}
+.input-field:focus,
+.selection-field:focus {
+  outline: none;
+  box-shadow: none;
+}
+textarea.input-field {
+  resize: none;
+}
+textarea.input-field::-webkit-scrollbar {
+  width: calc((8 / 1280) * var(--x-multiplier));
+}
+textarea.input-field::-webkit-scrollbar-track {
+  background-color: #dee0eb;
+  border-radius: 10px;
+}
+textarea.input-field::-webkit-scrollbar-thumb {
+  background-color: #305894;
+  border-radius: 10px;
+  border: calc((2 / 1280) * var(--x-multiplier)) solid #dee0eb;
+}
+textarea.input-field::-webkit-scrollbar-thumb:hover {
+  background-color: #1e3a6d;
+}
+
+/* =========================
+  Custom Checkbox Styles
+  ========================= */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: calc((18 / 1280) * var(--x-multiplier));
+  height: calc((18 / 1280) * var(--x-multiplier));
+  background-image: url("../assets/icons/bx-checkbox.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0px;
+}
+input[type="checkbox"]:checked {
+  background-image: url("../assets/icons/bx-checkbox-checked.svg");
+}
+label {
+  display: flex;
+  align-items: center;
+  gap: calc((10 / 1280) * var(--x-multiplier));
+}
+
+/* =========================
+  Selection Field Styles
+  ========================= */
+.selection-field {
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: calc(100% - calc((15 / 1280) * var(--x-multiplier))) center;
+  background-size: calc((16 / 1280) * var(--x-multiplier));
+  padding-right: calc((30 / 1280) * var(--x-multiplier));
+}
+.selection-input {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: none;
+  color: #00317B;
+  outline: none;
+  text-decoration: underline;
+  width: 100%;
+  height: 100%;
+  padding-right: calc((30 / 1280) * var(--x-multiplier));
+  background-image: url("../assets/icons/arrow.svg");
+  background-repeat: no-repeat;
+  background-position: calc(100% - calc((10 / 1280) * var(--x-multiplier))) center;
+  background-size: calc((10 / 1280) * var(--x-multiplier));
+}
+.selection-input:focus {
+  outline: none;
+  border: none;
+}
+
+/* Hide date picker icon */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+  width: calc((15 / 1280) * var(--x-multiplier));
+  padding: 0px;
+  margin: 0px;
+  margin-top: calc((10 / 720) * var(--y-multiplier));
+}
+
+/* =========================
+  Layout Helpers
+  ========================= */
+.column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.row-layout {
+  display: flex;
+  flex-direction: row;
+}
+.horizontal-display {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+.vertical-sections {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: calc((640 / 1280) * var(--x-multiplier));
+  row-gap: calc((15 / 720) * var(--y-multiplier));
+}
+.left-section {
+  border-right: solid var(--delimiters) calc((3 / 1280) * var(--x-multiplier));
+}
+.top-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: solid var(--delimiters) calc((3 / 720) * var(--y-multiplier));
+}
+.delimiter {
+  background-color: var(--delimiters);
+  width: 100%;
+  height: calc((3 / 720) * var(--y-multiplier));
+}
+
+/* =========================
+  AppWindow Styles
+  ========================= */
+.app-window {
+  background-color: var(--window-outer);
+  border-radius: 20px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px calc((6 / 720) * var(--y-multiplier)) calc((12 / 720) * var(--y-multiplier)) calc((-2 / 720) * var(--y-multiplier)), rgba(0, 0, 0, 0.3) 0px calc((3 / 720) * var(--y-multiplier)) calc((7 / 720) * var(--y-multiplier)) calc((-3 / 720) * var(--y-multiplier));
+}
+
+/* =========================
+  NavBar Styles
+  ========================= */
+.nav-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: calc(var(--nav-height ) - calc((10 / 720) * var(--y-multiplier)));
+  width: calc(var(--nav-width) - calc((10 / 1280) * var(--x-multiplier)));
+  margin-top: calc((20 / 720) * var(--y-multiplier));
+  padding-top: calc((5 / 720) * var(--y-multiplier));
+  padding-bottom: calc((5 / 720) * var(--y-multiplier));
+  padding-left: calc((5 / 1280) * var(--x-multiplier));
+  padding-right: calc((5 / 1280) * var(--x-multiplier));
+  margin-bottom: calc((20 / 720) * var(--y-multiplier));
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  border-radius: 30px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px calc((6 / 720) * var(--y-multiplier)) calc((12 / 720) * var(--y-multiplier)) calc((-2 / 720) * var(--y-multiplier)), rgba(0, 0, 0, 0.3) 0px calc((3 / 720) * var(--y-multiplier)) calc((7 / 720) * var(--y-multiplier)) calc((-3 / 720) * var(--y-multiplier));
+}
+.icons-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: calc((20 / 1280) * var(--x-multiplier));
+}
+.icons-section img {
+  width: calc((35 / 1240) * var(--nav-width));
+  height: calc((37 / 60) * var(--nav-height));
+  fill: var(--icons-nav-bar);
+}
+.profile-pic {
+  width: calc((37 / 1240) * var(--nav-width));
+  height: calc((37 / 1240) * var(--nav-width));
+  border-radius: 50%;
+  background-image: url(../assets/user/profile.jpg);
+  background-size: cover;
+  background-position: center;
+}
+.icons-section .profile-pic {
+  width: calc((40 / 1240) * var(--nav-width));
+  height: calc((40 / 1240) * var(--nav-width));
+}
+.nav-bar .logo-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: fit-content;
+}
+.unitec-text {
+  width: calc((130 / 1240) * var(--nav-width));
+  height: calc((35 / 60) * var(--nav-height));
+}
+
+/* =========================
+  ActionButton Styles
+  ========================= */
+.action-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
+  background-color: var(--action-button);
+  font-size: calc((20 / 720) * var(--y-multiplier));
+  cursor: pointer;
+  padding: 0 calc((20 / 720) * var(--y-multiplier));
+  width: auto;
+  white-space: nowrap;
+  font-weight: 400;
+}
+
+/* =========================
+  FeedBox & Job Offer Styles
+  ========================= */
+.feedbox::-webkit-scrollbar {
+  width: calc((6 / 1280) * var(--x-multiplier));
+}
+.feedbox::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background-color: var(--action-button) !important;
+  border: calc((1 / 1280) * var(--x-multiplier)) solid #cacaca;
+}
+.feedbox::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: var(--icons-nav-bar);
+}
+.feedbox::-webkit-scrollbar-thumb:hover {
+  background-color: var(--feed-title-BG);
+}
+
+.feed-title {
+  color: var(--feed-title);
+  background-color: var(--feed-title-BG);
+  border-radius: 20px;
+  align-content: center;
+  text-align: center;
+  font-size: calc((32 / 720) * var(--y-multiplier));
+  font-weight: 600;
+}
+.offer-title {
+  font-size: calc((32 / 720) * var(--y-multiplier));
+  font-weight: 600;
+}
+.job-offer {
+  border: solid var(--job-title) calc((3 / 1280) * var(--x-multiplier));
+  border-radius: 20px;
+  background-color: var(--job-title);
+  overflow: hidden;
+}
+.job-offer .title {
+  background-color: var(--job-title);
+  color: white;
+  border-radius: 0;
+  font-size: calc((34 / 720) * var(--y-multiplier));
+}
+.job-offer .app-window {
+  color: black;
+  overflow: hidden;
+}
+.job-offer .text {
+  width: 96%;
+  margin-left: 2%;
+  margin-top: 2%;
+}
+.job-offer .fade-white {
+  position: absolute;
+  background-image: linear-gradient(0deg,rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+/* =========================
+  Notification Styles
+  ========================= */
+
+.notification-box {
+  direction: rtl;
+  overflow-y: scroll;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.notification-box::-webkit-scrollbar {
+  width: calc((6 / 1280) * var(--x-multiplier));
+  left: 0;
+}
+.notification-box::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background-color: var(--action-button);
+  border: calc((1 / 1280) * var(--x-multiplier)) solid #cacaca;
+}
+.notification-box::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: var(--icons-nav-bar);
+}
+.notification-box::-webkit-scrollbar-thumb:hover {
+  background-color: var(--feed-title-BG);
+}
+  
+.notification {
+  color: #000000;
+  border: solid var(--job-title) calc((3 / 1280) * var(--x-multiplier));
+  border-radius: 15px;
+  right: 50%;
+  transform: translateX(50%);
+  font-size: calc((20 / 720) * var(--y-multiplier));
+  font-weight: 600;
+  direction: ltr;
+}
+.notification .link {
+  color: black;
+  font-weight: 600;
+}
+.notification .state {
+  background-color: white;
+  border: solid var(--job-title) calc((3 / 1280) * var(--x-multiplier));
+  border-radius: 50%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+}
+.notification .state div {
+  border-radius: 50%;
+  position: absolute;
+  transition: background-color 0.5s ease-in-out;
+}
+
+/* =========================
+  Footer Styles
+  ========================= */
+
+footer{
+  background-color: var(--footer);
+  margin-top: auto;
+  position: relative;
+  left: unset;
+  top: unset;
+}
+.footer-content {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: left;
+  height: 100%;
+}
+.footer-content > * {
+  margin-top: calc((32 / 720) * var(--y-multiplier));
+  margin-left: calc((66 / 1280) * var(--x-multiplier));
+}
+
+.vertical-divider {
+  width: calc((3 / 1280) * var(--x-multiplier));
+  background: #fff;
+  height: 90%;
+  margin-top: calc((16 / 720) * var(--y-multiplier));
+}
+.contact, .links {
+  display: flex;
+  flex-direction: column;
+  gap: calc((8 / 720) * var(--y-multiplier));
+}
+.contact strong, .links strong {
+  margin-bottom: calc((8 / 720) * var(--y-multiplier));
+  font-size: calc((24 / 720) * var(--y-multiplier));
+}
+.contact a, .links a {
+  color: #fff;
+  text-decoration: underline;
+  font-size: calc((20 / 720) * var(--y-multiplier));
+}

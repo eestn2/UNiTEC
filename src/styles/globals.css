@@ -1,0 +1,65 @@
+/**
+ * @file globals.css
+ * @description Global stylesheet for UNITEC application. Defines CSS variables, resets, and base styles for consistent appearance across the app.
+ * Includes color palette, font settings, and link styles.
+ * @author Haziel Magallanes, Daviel Díaz Gonzáles
+ * @date May 11, 2025
+ */
+
+/* =========================
+   Root Variables & Color Palette
+   ========================= */
+:root {
+  /* Font & Typography */
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: normal;
+  font-weight: normal;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Color Scheme */
+  color-scheme: light dark;
+  color: rgba(255, 255, 255);
+
+  /* Application Colors */
+  --BG: #3D8AF0;
+  --BG-2: rgba(188, 46, 48, 1);
+  --delimiters: rgba(255, 193, 35, 1);
+  --bold: rgba(104, 94, 167, 1);
+  --job-title: #5386FF;
+  --important-text: #00317B;
+  --input: rgba(0, 49, 123, 0.5);
+  --regular: rgba(170, 164, 211, 1);
+  --footer-delimiter: rgba(255, 243, 212, 1);
+  --window-inner: rgba(202, 196, 241, 1);
+  --window-outer: rgb(255, 255, 255);
+  --action-button: #3D8AF0;
+  --forms-text: #335A95;
+  --icons-nav-bar: rgba(170, 186, 201, 1);
+  --feed-title: #113893;
+  --feed-title-BG: #D1E7FC;
+  --footer:  #123490;
+}
+
+/* =========================
+   Dark Mode Support
+   ========================= */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: rgba(255, 255, 255);
+  }
+}
+
+/* =========================
+   Link Styles
+   ========================= */
+a {
+  font-weight: normal;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
