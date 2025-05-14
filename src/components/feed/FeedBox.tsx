@@ -90,8 +90,8 @@ function FeedBox() {
           left: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
           top: `${TranslateFigmaCoords.translateFigmaY(100)}px`,
           overflowY: "scroll",
-          borderTopRightRadius: 5,
-          borderBottomRightRadius: 5,
+          borderTopRightRadius: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
+          borderBottomRightRadius: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
         }}
       >
         <div

@@ -69,6 +69,21 @@ interface JobOfferProps extends ResponsiveComponent {
  * @author Haziel Magallanes
  */
 const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, title, description, style, className }) => {
+    // Re-Render on window resize for responsive design
+    const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+    console.log("Current window size: ", windowSize);
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
+    // State for author details and overflow handling
     const [author, setAuthor] = useState<{ name: string; profile_picture: string }>({ name: "Unknown", profile_picture: "" });
     const [overflowing, setOverflowing] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
@@ -102,7 +117,7 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
 
     // Calculate dimensions
     const translatedHeight = height === width ? TranslateFigmaCoords.translateFigmaX(width) : TranslateFigmaCoords.translateFigmaY(height);
-    const titleHeight: number = height / 8;
+    const titleHeight: number = translatedHeight / 8;
     const translatedWidth = TranslateFigmaCoords.translateFigmaX(width);
 
     return (
@@ -171,7 +186,7 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
                             height: TranslateFigmaCoords.translateFigmaY((height - titleHeight) / 4),
                             width: TranslateFigmaCoords.translateFigmaX(width - 20),
                             marginLeft: TranslateFigmaCoords.translateFigmaX(10),
-                            borderRadius: 10,
+                            borderRadius: TranslateFigmaCoords.translateFigmaX(10),
                         }}
                     ></div>
                     <ActionButton
