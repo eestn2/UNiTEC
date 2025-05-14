@@ -20,12 +20,12 @@ if ($file['error'] !== UPLOAD_ERR_OK) {
     return_response("failed", "Error al cargar el archivo.", null);
 }
 // Validar extensión
-$allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+$allowed_extensions = ['jpg', 'jpeg', 'png', 'gif']; // This is Never checked
 $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 
 // Crear nombre único y mover imagen
 $filename = uniqid("profile_") . "." . $extension;
-$uploadDir = __DIR__ . '/../../uploads/profile_pictures/';
+$uploadDir = __DIR__ . '/../uploads/profile_pictures/';
 $uploadPath = $uploadDir . $filename;
 
 // Asegurar que el directorio exista
