@@ -494,15 +494,17 @@ footer{
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: calc((55 / 1280) * var(--x-multiplier));
 }
 .footer-content .logo .unitec{
-  width: calc((100 / 1280) * var(--x-multiplier));
-  height: calc((136 / 720) * var(--y-multiplier));
+  width: calc((140 / 1280) * var(--x-multiplier));
+  height: calc((176 / 720) * var(--y-multiplier));
 }
 .footer-content .logo .eest2{
-  width: calc((130 / 1280) * var(--x-multiplier));
-  height: calc((130 / 720) * var(--y-multiplier));
+  width: calc((176 / 1280) * var(--x-multiplier));
+  height: calc((176 / 720) * var(--y-multiplier));
+}
+.footer-content .logo .eest2.l{
+  display: none;
 }
 .footer-content > * {
   margin-top: calc((32 / 720) * var(--y-multiplier));
@@ -537,7 +539,7 @@ footer{
     height: fit-content;
   }
   .footer-content > * {
-    margin-top: calc((12 / 720) * var(--y-multiplier));
+    margin-top: calc((38 / 720) * var(--y-multiplier));
     margin-left: calc((66 / 1280) * var(--x-multiplier));
   }
   .footer-content .logo{
@@ -545,13 +547,19 @@ footer{
     align-items: center;
     justify-content: center;
     height: min-content;
+    margin-top: calc((12 / 720) * var(--y-multiplier));
     gap: 0;
   }
   .footer-content .logo > *{
     margin-top: 0;
   }
+  .footer-content .logo .eest2.r{
+    display: none;
+  }
+  .footer-content .logo .eest2.l{
+    display: flex;
+  }
   .footer-content .links{
     margin-left: 0;
   }
-
 }

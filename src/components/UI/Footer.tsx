@@ -33,9 +33,8 @@ const Footer: React.FC<ResponsiveComponent> = ({ style, className }) => {
             <div className="footer-content">
                 <div className="logo">
                     <img src={footer_logo} alt="UNiTEC Logo" className="unitec" />
-                    <img src={school_logo} alt="EEST2 Logo" className="eest2" />
+                    <img src={school_logo} alt="EEST2 Logo" className="eest2 l" />
                 </div>
-                <div className="vertical-divider" />
                 <div className="contact">
                     <strong>Contacto</strong>
                     <div>
@@ -68,6 +67,9 @@ const Footer: React.FC<ResponsiveComponent> = ({ style, className }) => {
                     <div>
                         <a href="#">Ver terminos y condiciones de servicio.</a>
                     </div>
+                </div>
+                <div className="logo">
+                    <img src={school_logo} alt="EEST2 Logo" className="eest2 r" />
                 </div>
             </div>
         </footer>
