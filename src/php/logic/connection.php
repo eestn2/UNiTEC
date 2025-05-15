@@ -47,7 +47,7 @@ if (!$host || !$user || !$db || !$port) {
 }
 
 // Build DSN string for PDO
-$dsn = "mysql:host=$host;dbname=$db;port=$port;charset=utf8mb4";
+$dsn = $env === "production" ? "mysql:host=$host;dbname=$db;charset=utf8mb4" : "mysql:host=$host;dbname=$db;port=$port;charset=utf8mb4";
 
 
 try {
