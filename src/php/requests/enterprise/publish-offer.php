@@ -12,7 +12,7 @@ $creator_id = intval($data->creator_id);
 $title = trim($data->title);
 $description = trim($data->description);
 $date = date('Y-m-d H:i:s');
-$status = 1; // Default status
+$status = 1; // Oferta de trabajo abierta
 
 try{
     $stmt = $connection->prepare("SELECT user_type_id FROM users WHERE id = :id");
