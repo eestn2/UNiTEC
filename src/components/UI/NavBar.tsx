@@ -35,12 +35,12 @@ const NavBar: React.FC = () => {
         <a href="#footer"><img src={phone_icon} alt="Phone" /></a>,
         <img src={notification_icon} alt="Notification" style={{ display: "none" }} />
     ];
-    if (user_type === 2) {
+    if (user_type === 1) {
         buttons.unshift(
             <img src={chart_icon} alt="Chart" />,
             <img src={add_offer_icon} alt="Add Offer" />,
         )
-    } else if (user_type === 3) {
+    } else if (user_type === 4) {
         const amount: number = buttons.length;
         for (let i = 0; i < amount; i++) {
             buttons.shift();

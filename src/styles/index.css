@@ -462,6 +462,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-size: calc((20 / 720) * var(--y-multiplier));
   color: black;
   font-weight: 600;
+  text-indent: -6px;
 }
 .notification .state {
   background-color: white;

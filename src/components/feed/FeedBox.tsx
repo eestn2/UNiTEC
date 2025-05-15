@@ -12,7 +12,6 @@ import AppWindow from '../UI/AppWindow';
 import JobOffer from "../UI/JobOffer";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import Notification from "../UI/Notification";
-import { Link } from "react-router-dom";
 import { ReactElement, useEffect, useState } from "react";
 import axios from "axios";
 import User from "../session/User";
@@ -161,9 +160,7 @@ function FeedBox() {
           Notificaciones
         </div>
         {notifications.length > 0 ? notifications : (
-          <Notification width={300} height={60}>
-            No tienes notificaciones.
-          </Notification>
+          <div>Pepito el placeholder</div>
         )}
       </AppWindow>
     </div>

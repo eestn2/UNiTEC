@@ -44,7 +44,7 @@ const Notification: React.FC<NotificationProps> = ({ notificationId, width = 10,
     width = TranslateFigmaCoords.translateFigmaX(width);
 
     function getAction(): JSX.Element | null {
-        if (typeof action === "string") return <Link to={action}>Ver más</Link>;
+        if (typeof action === "string") return <Link to={action} className="view-more">Ver más</Link>;
         if (typeof action === "function") return <button onClick={() => {action()}} className="view-more">Ver más</button>;
         return null;
     }
@@ -98,7 +98,7 @@ const Notification: React.FC<NotificationProps> = ({ notificationId, width = 10,
                 margin: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
                 marginTop: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
                 marginBottom: `${TranslateFigmaCoords.translateFigmaX(5)}px`
-            }}>{content} {getAction()}</p>
+            }}>{content}{getAction()}</p>
         </div>
     );
 };
