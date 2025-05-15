@@ -35,9 +35,10 @@ try {
     return_response("failed", "Error al iniciar la transacción: " . $e->getMessage(), null);
 }
 
-try{
-    $query = "INSERT INTO applications (creator_id, title, date, description, status) VALUES (:creator_id, :title, :date, :description, :status)";
+try {
+    $connection->beginTransaction();
 
+    $query = "INSERT INTO applications (creator_id, title, date, description, status) VALUES (:creator_id, :title, :date, :description, :status)";
     $stmt = $connection->prepare($query);
     $stmt->bindParam(':creator_id', $creator_id, PDO::PARAM_INT);
     $stmt->bindParam(':title', $title, PDO::PARAM_STR);
@@ -45,9 +46,13 @@ try{
     $stmt->bindParam(':description', $description, PDO::PARAM_STR);
     $stmt->bindParam(':status', $status, PDO::PARAM_INT);
     $stmt->execute();
-    return_response("success", "Oferta de trabajo publicada con exito.", null);
+
     $connection->commit();
-}catch (PDOException $e){
+    return_response("success", "Oferta de trabajo publicada con exito.", null);
+} catch (PDOException $e) {
+    if ($connection->inTransaction()) {
+        $connection->rollBack();
+    }
     return_response("failed", "Error al insertar la oferta de trabajo: " . $e->getMessage(), null);
 }
 ?>
