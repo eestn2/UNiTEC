@@ -11,7 +11,7 @@
  *   Response: { "status": "success", "notification": { ... } }
  */
 
-require_once "../cors-policy.php";
+require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/connection.php';
 require_once __DIR__ . '/return_response.php';
 

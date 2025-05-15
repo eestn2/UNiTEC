@@ -19,7 +19,12 @@ include_once(__DIR__ . '/../DotEnv.php');
 (new DotEnv(__DIR__ . '/../../../.env'))->load();
 
 // Set CORS headers
-header("Access-Control-Allow-Origin: " . getenv('ALLOWED_ORIGIN'));
+$allowedOrigins = explode(',', getenv('ALLOWED_ORIGINS'));
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+if (in_array($origin, $allowedOrigins)) {
+    header("Access-Control-Allow-Origin: $origin");
+}
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json; charset=UTF-8");
 ?>
