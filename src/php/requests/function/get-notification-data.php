@@ -15,9 +15,9 @@ require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/connection.php';
 require_once __DIR__ . '/return_response.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] !== "PUT") return_response("failed", "Metodo no permitido.", null);
 
-if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+if (!isset($_['id']) || !is_numeric($_GET['id'])) {
     return_response("failed", "Falta o es inválido el parámetro id.", null);
 }
 
