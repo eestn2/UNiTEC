@@ -54,7 +54,8 @@ const RegisterEnterprise: React.FC = () => {
 
     const handleRegister = async (event: FormEvent) => {
         event.preventDefault();
-        const response = await axios.post('http://localhost:80/UNITEC/src/php/requests/session/registerEnterprise.php', {
+        const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+        const response = await axios.post(`${apiUrl}/requests/session/registerEnterprise.php`, {
             enterpriseName,
             email,
             password,

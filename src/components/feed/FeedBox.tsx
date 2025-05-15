@@ -15,6 +15,7 @@ import Notification from "../UI/Notification";
 import { Link } from "react-router-dom";
 import { ReactElement, useEffect, useState } from "react";
 import axios from "axios";
+import User from "../session/User";
 
 /**
  * A React functional component that renders the main feed with job offers and notifications.
@@ -46,10 +47,12 @@ function FeedBox() {
     
 
   const [jobOffers, setJobOffers] = useState<ReactElement[]>([]);
+  const [notifications, setNotifications] = useState<ReactElement[]>([]);
   // Fetch job offers from the server
   const loadJobOffers = async () => {
     try {
-      const response = await axios.get('http://localhost:80/UNITEC/src/php/requests/feed/job-offers.php');
+      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+      const response = await axios.get(`${apiUrl}/requests/feed/job-offers.php`);
       if (response.status !== 200 && response.data.status !== "success") {
         console.error("Failed to load job offers:", response.data.message);
       } else {
@@ -72,10 +75,29 @@ function FeedBox() {
       console.error("An error occurred while loading job offers:", error);
     }
   };
+  // Fetch notifications from the server
+  const loadNotifications = async () => {
+    try {
+      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+      const userId = User.data.id;
+      const response = await axios.get(`${apiUrl}/requests/user/retrieve-notifications.php?user_id=${userId}`);
+      if (response.status !== 200 || response.data.status !== "success") {
+        console.error("Failed to load notifications:", response.data.message);
+      } else {
+        const notificationsList = response.data.notifications.map((notif: any) => (
+          <Notification key={notif.id} width={300} height={60} notificationId={notif.id} />
+        ));
+        setNotifications(notificationsList);
+      }
+    } catch (error) {
+      console.error("An error occurred while loading notifications:", error);
+    }
+  };
 
   // Load job offers on component mount
   useEffect(() => {
     loadJobOffers();
+    loadNotifications();
   }, []);
 
   return (
@@ -138,12 +160,11 @@ function FeedBox() {
         >
           Notificaciones
         </div>
-        <Notification width={300} height={60}>
-          La empresa XEmpress.CO te ha enviado un correo!{" "}
-          <Link to={"/"} className="link">
-            Ver más.
-          </Link>
-        </Notification>
+        {notifications.length > 0 ? notifications : (
+          <Notification width={300} height={60}>
+            No tienes notificaciones.
+          </Notification>
+        )}
       </AppWindow>
     </div>
   );

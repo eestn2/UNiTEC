@@ -93,7 +93,8 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
     useEffect(() => {
         const fetchAuthorDetails = async () => {
             try {
-                const response = await axios.get('http://localhost:80/UNITEC/src/php/requests/user/user-info.php', {
+                const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+                const response = await axios.get(`${apiUrl}/requests/user/user-info.php`, {
                     params: { id: authorId },
                 });
                 if (response.status === 200 && response.data.status === "success") {

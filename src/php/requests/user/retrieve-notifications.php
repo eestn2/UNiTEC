@@ -15,7 +15,7 @@
  */
 
 require_once "../cors-policy.php";
-require_once __DIR__ . '/../../logic/connect_to_database.php';
+require_once __DIR__ . '/../../logic/connection.php';
 require_once __DIR__ . '/../function/return_response.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no permitido.", null);
@@ -24,21 +24,14 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no p
 if (!isset($_GET['user_id'])) return_response("failed", "Falta el parámetro user_id.", null);
 
 $user_id = intval($_GET['user_id']);
-
-// Query notifications for the given user_id
-$stmt = $connection->prepare("SELECT id, type, message, sender_id, receiver_id FROM notifications WHERE receiver_id = ?");
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-
-$notifications = [];
-while ($row = $result->fetch_assoc()) {
-    $notifications[] = $row;
+// Query notifications for the given user_id in reverse order (latest first)
+try {
+    $stmt = $connection->prepare("SELECT id FROM notifications WHERE receiver_id = ? ORDER BY id DESC");
+    $stmt->execute([$user_id]);
+    $notifications = $stmt->fetchAll();
+    return_response("success", "Notificaciones recuperadas correctamente.", ["notifications" => $notifications]);
+} catch (PDOException $e) {
+    error_log("Error retrieving notifications: " . $e->getMessage());
+    return_response("failed", "Error al recuperar las notificaciones.", null);
 }
-
-return_response("success", "Notificaciones recuperadas correctamente.", ["notifications" => $notifications]);
-
-$stmt->close();
-$connection->close();
-
 ?>

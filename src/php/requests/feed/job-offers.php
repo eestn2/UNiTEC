@@ -21,8 +21,8 @@ require_once __DIR__ . '/../function/return_response.php';
 if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no permitido.", null);
 
 try {
-    // Query to fetch all job offers
-    $stmt = $connection->query("SELECT * FROM applications");
+    // Query to fetch all job offers, latest first
+    $stmt = $connection->query("SELECT * FROM applications ORDER BY id DESC");
     $jobOffers = $stmt->fetchAll();
     return_response("success", "Job offers retrieved successfully.", ["job_offers" => $jobOffers]);
 } catch (PDOException $e) {

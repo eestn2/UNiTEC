@@ -453,6 +453,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: black;
   font-weight: 600;
 }
+.notification .view-more {
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  font-family: var(--app-font-family);
+  font-size: calc((20 / 720) * var(--y-multiplier));
+  color: black;
+  font-weight: 600;
+}
 .notification .state {
   background-color: white;
   border: solid var(--job-title) calc((3 / 1280) * var(--x-multiplier));
