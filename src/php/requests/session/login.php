@@ -15,7 +15,7 @@
  *   Response: { "status": "success", "message": "...", "user": { ...user fields... } }
  */
 
-require_once "../cors-policy.php";
+require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/connection.php';
 require_once __DIR__ . '/../function/return_response.php';
 require_once __DIR__ . '/../../config/session-config.php';

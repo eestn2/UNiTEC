@@ -1,6 +1,6 @@
 <?php
 /**
- * @file connect_to_database.php
+ * @file connection.php
  * @description Establishes a secure PDO connection to the MySQL database using environment variables.
  * Loads configuration from .env, supports production and development environments, and sets recommended PDO options for security and performance.
  * Throws HTTP 500 errors and logs details on failure, without exposing sensitive information to the client.
@@ -12,7 +12,7 @@
  *   Provides a global `$connection` PDO instance.
  *
  * Example:
- *   require_once __DIR__ . '/../logic/connect_to_database.php';
+ *   require_once __DIR__ . '/../logic/connection.php';
  *   $stmt = $connection->prepare("SELECT * FROM users WHERE id = ?");
  *   $stmt->execute([$id]);
  *   $user = $stmt->fetch();
@@ -47,7 +47,7 @@ if (!$host || !$user || !$db || !$port) {
 }
 
 // Build DSN string for PDO
-$dsn = "mysql:host=$host;dbname=$db;port=$port;charset=utf8mb4";
+$dsn = $port === 0000 ? "mysql:host=$host;dbname=$db;charset=utf8mb4" : "mysql:host=$host;dbname=$db;port=$port;charset=utf8mb4";
 
 try {
     $connection = new PDO($dsn, $user, $password, [
