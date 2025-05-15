@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 import LabelsSelection from "../UI/LabelsSelection";
 import LabelsContainer from "../UI/LabelsContainer";
 import Label from "../UI/Label";
+import { useEffect, useState } from "react";
 
 /**
  * A React functional component that renders a registration form for students inside a responsive window.
@@ -33,6 +34,19 @@ import Label from "../UI/Label";
  * @author Daviel Díaz Gonzáles
  */
 function RegisterUser() {
+  // Re-Render on window resize for responsive design
+  const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+  console.log("Current window size: ", windowSize);
+  useEffect(() => {
+      const handleResize = () => {
+          setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+      };
+
+      window.addEventListener("resize", handleResize);
+      return () => {
+          window.removeEventListener("resize", handleResize);
+      };
+  }, []);
   return (
     <>
       <Logo className="watermark"></Logo>

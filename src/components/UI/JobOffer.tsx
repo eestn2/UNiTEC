@@ -69,6 +69,22 @@ interface JobOfferProps extends ResponsiveComponent {
  * @author Haziel Magallanes
  */
 const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, title, description, style, className }) => {
+    // Re-Render on window resize for responsive design
+    const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+    console.log("Current window size: ", windowSize);
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
+    // State for author details and overflow handling
+    const rootRef = useRef<HTMLDivElement>(null);    
     const [author, setAuthor] = useState<{ name: string; profile_picture: string }>({ name: "Unknown", profile_picture: "" });
     const [overflowing, setOverflowing] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
@@ -77,7 +93,8 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
     useEffect(() => {
         const fetchAuthorDetails = async () => {
             try {
-                const response = await axios.get('http://localhost:80/UNITEC/src/php/requests/user/user-info.php', {
+                const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+                const response = await axios.get(`${apiUrl}/requests/user/user-info.php`, {
                     params: { id: authorId },
                 });
                 if (response.status === 200 && response.data.status === "success") {
@@ -99,10 +116,21 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
             setOverflowing(isOverflowing);
         }
     }, [height, width, description]);
-
+    // Collapse window when clicking outside
+    useEffect(() => {
+        if (!isExpanded) return;
+        function handleClickOutside(event: MouseEvent) {
+            if (rootRef.current && !rootRef.current.contains(event.target as Node)) setIsExpanded(false);
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isExpanded]);
+    
     // Calculate dimensions
     const translatedHeight = height === width ? TranslateFigmaCoords.translateFigmaX(width) : TranslateFigmaCoords.translateFigmaY(height);
-    const titleHeight: number = height / 8;
+    const titleHeight: number = translatedHeight / 8;
     const translatedWidth = TranslateFigmaCoords.translateFigmaX(width);
 
     return (
@@ -119,6 +147,7 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
                 marginBottom: `${TranslateFigmaCoords.translateFigmaY(32)}px`,
                 ...style,
             }}
+            ref={rootRef}
         >
             <div
                 className="title"
@@ -171,7 +200,7 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
                             height: TranslateFigmaCoords.translateFigmaY((height - titleHeight) / 4),
                             width: TranslateFigmaCoords.translateFigmaX(width - 20),
                             marginLeft: TranslateFigmaCoords.translateFigmaX(10),
-                            borderRadius: 10,
+                            borderRadius: TranslateFigmaCoords.translateFigmaX(10),
                         }}
                     ></div>
                     <ActionButton

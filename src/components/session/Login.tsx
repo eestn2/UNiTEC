@@ -16,7 +16,6 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import User from "./User";
-import Footer from "../UI/Footer";
 
 /**
  * A React functional component that renders the login form inside a responsive window.
@@ -47,11 +46,12 @@ const Login: React.FC = () => {
     }, []);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errors, setError] = useState('')
+    const [errors, setError] = useState('');
     const handleLogin = async (event: FormEvent) => {
         event.preventDefault();
         try {
-            const response = await axios.post('http://localhost:80/UNITEC/src/php/requests/session/login.php', {
+            const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+            const response = await axios.post(`${apiUrl}/requests/session/login.php`, {
                 email,
                 password
             });

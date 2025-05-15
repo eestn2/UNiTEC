@@ -6,7 +6,7 @@
  * @date May 11, 2025
  */
 
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import ActionButton from "../UI/ActionButton";
 import "../../styles/index.css";
 import AppWindow from "../UI/AppWindow";
@@ -31,6 +31,20 @@ import axios from "axios";
  * @author Daviel Díaz Gonzáles
  */
 const RegisterEnterprise: React.FC = () => {
+    // Re-Render on window resize for responsive design
+    const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+    console.log("Current window size: ", windowSize);
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
     const [enterpriseName, setEnterpriseName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -40,7 +54,8 @@ const RegisterEnterprise: React.FC = () => {
 
     const handleRegister = async (event: FormEvent) => {
         event.preventDefault();
-        const response = await axios.post('http://localhost:80/UNITEC/src/php/requests/session/registerEnterprise.php', {
+        const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+        const response = await axios.post(`${apiUrl}/requests/session/registerEnterprise.php`, {
             enterpriseName,
             email,
             password,
