@@ -18,10 +18,11 @@ include_once(__DIR__ . '/../DotEnv.php');
 // Load environment variables from .env file
 (new DotEnv(__DIR__ . '/../../../.env'))->load();
 
-// Set CORS headers
 $allowedOrigins = explode(',', getenv('ALLOWED_ORIGINS'));
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+// Set CORS headers
 
+// Check if the origin is allowed
 if (in_array($origin, $allowedOrigins)) {
     header("Access-Control-Allow-Origin: $origin");
 }
