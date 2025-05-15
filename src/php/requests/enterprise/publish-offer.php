@@ -14,6 +14,21 @@ $description = trim($data->description);
 $date = date('Y-m-d H:i:s');
 $status = 1; // Default status
 
+try{
+    $stmt = $connection->prepare("SELECT user_type_id FROM users WHERE id = :id");
+    $stmt->bindParam(':id', $creator_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$user) {
+        return_response("failed", "Usuario no encontrado.", null);
+    }
+    if (intval($user['user_type_id']) !== 1){
+        return_response("failed", "Solo las empresas pueden publicar ofertas de trabajo.", null);
+    }
+}catch (PDOException $e) {
+    return_response("failed", "Error al verificar el tipo de usuario:" . $e->getMessage(), null);
+}
+
 try {
     $connection->beginTransaction();
 } catch (PDOException $e) {
