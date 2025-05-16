@@ -6,13 +6,12 @@
  * @date May 5, 2025
  */
 
-import React, { Ref, useEffect, useRef, useState } from "react";
+import React from "react";
 import "../../styles/index.css";
-import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import ResponsiveComponent from "./ResponsiveComponent";
 import AppWindow from "./AppWindow";
 import ActionButton from "./ActionButton";
-import axios from "axios";
+import { useJobOffer } from "../../hooks/useJobOffer";
 
 /**
  * Props for the `JobOffer` component.
@@ -68,83 +67,39 @@ interface JobOfferProps extends ResponsiveComponent {
  * When the description overflows, a "Ver más" button appears. Clicking it expands the AppWindow to show all content.
  * @author Haziel Magallanes
  */
-const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, title, description, style, className }) => {
-    // Re-Render on window resize for responsive design
-    const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
-    console.log("Current window size: ", windowSize);
-    useEffect(() => {
-        const handleResize = () => {
-            setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-        };
-
-        window.addEventListener("resize", handleResize);
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
-    }, []);
-
-    // State for author details and overflow handling
-    const rootRef = useRef<HTMLDivElement>(null);    
-    const [author, setAuthor] = useState<{ name: string; profile_picture: string }>({ name: "Unknown", profile_picture: "" });
-    const [overflowing, setOverflowing] = useState(false);
-    const [isExpanded, setIsExpanded] = useState(false);
-    const appWindowRef: Ref<HTMLDivElement> = useRef<HTMLDivElement>(null);
-    // Fetch author details and save them in state
-    useEffect(() => {
-        const fetchAuthorDetails = async () => {
-            try {
-                const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-                const response = await axios.get(`${apiUrl}/requests/user/user-info.php`, {
-                    params: { id: authorId },
-                });
-                if (response.status === 200 && response.data.status === "success") {
-                    setAuthor(response.data.user);
-                } else {
-                    console.error(`Failed to fetch author details for ID ${authorId}:`, response.data.message);
-                }
-            } catch (error) {
-                console.error(`An error occurred while fetching author details for ID ${authorId}:`, error);
-            }
-        };
-
-        fetchAuthorDetails();
-    }, [authorId]);
-    // Check for overflow when the component mounts or updates
-    useEffect(() => {
-        if (appWindowRef.current) {
-            const isOverflowing = appWindowRef.current.scrollHeight > appWindowRef.current.clientHeight;
-            setOverflowing(isOverflowing);
-        }
-    }, [height, width, description]);
-    // Collapse window when clicking outside
-    useEffect(() => {
-        if (!isExpanded) return;
-        function handleClickOutside(event: MouseEvent) {
-            if (rootRef.current && !rootRef.current.contains(event.target as Node)) setIsExpanded(false);
-        }
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [isExpanded]);
-    
-    // Calculate dimensions
-    const translatedHeight = height === width ? TranslateFigmaCoords.translateFigmaX(width) : TranslateFigmaCoords.translateFigmaY(height);
-    const titleHeight: number = translatedHeight / 8;
-    const translatedWidth = TranslateFigmaCoords.translateFigmaX(width);
+const JobOffer: React.FC<JobOfferProps> = ({    
+    height = 10,
+    width = 10,
+    authorId,
+    title,
+    description,
+    style,
+    className,
+}) => {
+    const {
+        rootRef,
+        author,
+        overflowing,
+        isExpanded,
+        setIsExpanded,
+        appWindowRef,
+        translatedHeight,
+        titleHeight,
+        translatedWidth,
+    } = useJobOffer({ height, width, authorId, description });
 
     return (
         <div
             className={`job-offer ${className || ""}`}
             style={{
-                height: isExpanded ? 'auto' : `${translatedHeight}px`,
+                height: isExpanded ? "auto" : `${translatedHeight}px`,
                 width: `${translatedWidth}px`,
-                display: 'flex',
-                flexDirection: 'column',
+                display: "flex",
+                flexDirection: "column",
                 position: "relative",
                 left: "50%",
                 transform: "translateX(-50%)",
-                marginBottom: `${TranslateFigmaCoords.translateFigmaY(32)}px`,
+                marginBottom: "32px",
                 ...style,
             }}
             ref={rootRef}
@@ -154,18 +109,18 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
                 style={{
                     width: `${translatedWidth}px`,
                     height: `${titleHeight}px`,
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
                 }}
             >
                 <div
                     style={{
-                        marginLeft: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
-                        display: 'flex',
-                        flexDirection: 'row',
-                        columnGap: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
-                        alignItems: 'center',
+                        marginLeft: "10px",
+                        display: "flex",
+                        flexDirection: "row",
+                        columnGap: "10px",
+                        alignItems: "center",
                     }}
                 >
                     <div className="profile-pic"></div>
@@ -179,42 +134,30 @@ const JobOffer: React.FC<JobOfferProps> = ({ height = 10, width = 10, authorId, 
                     position: "relative",
                     borderTopRightRadius: 0,
                     borderTopLeftRadius: 0,
-                    height: isExpanded ? 'auto' : `${TranslateFigmaCoords.translateFigmaY(height)}px`,
+                    height: isExpanded ? "auto" : `${translatedHeight}px`,
                 }}
                 ref={appWindowRef as React.RefObject<HTMLDivElement>}
             >
-                <div
-                    className="text"
-                    style={{marginBottom: `${TranslateFigmaCoords.translateFigmaY(5)}px`}}
-                >
-                    <span className="offer-title">{title}</span><br />
+                <div className="text" style={{ marginBottom: "5px" }}>
+                    <span className="offer-title">{title}</span>
+                    <br />
                     {description}
                 </div>
-
                 {overflowing && !isExpanded ? (
                     <>
-                    <div
-                        className="fade-white"
-                        style={{
-                            bottom: 0,
-                            height: TranslateFigmaCoords.translateFigmaY((height - titleHeight) / 4),
-                            width: TranslateFigmaCoords.translateFigmaX(width - 20),
-                            marginLeft: TranslateFigmaCoords.translateFigmaX(10),
-                            borderRadius: TranslateFigmaCoords.translateFigmaX(10),
-                        }}
-                    ></div>
-                    <ActionButton
-                        text="Ver más"
-                        height={40}
-                        style={{
-                            position: "absolute",
-                            top: "80%",
-                            color: "white",
-                            left: "50%",
-                            transform: "translateX(-50%)",
-                        }}
-                        action={() => setIsExpanded(true)}
-                    />
+                        <div className="fade-white" style={{ bottom: 0, height: "40px", width: "calc(100% - 20px)", marginLeft: "10px", borderRadius: "10px" }}></div>
+                        <ActionButton
+                            text="Ver más"
+                            height={40}
+                            style={{
+                                position: "absolute",
+                                top: "80%",
+                                color: "white",
+                                left: "50%",
+                                transform: "translateX(-50%)",
+                            }}
+                            action={() => setIsExpanded(true)}
+                        />
                     </>
                 ) : null}
             </AppWindow>

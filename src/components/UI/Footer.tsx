@@ -1,23 +1,13 @@
-import { useEffect, useState } from "react";
 import ResponsiveComponent from "./ResponsiveComponent";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import footer_logo from "../../assets/unitec/footer-logo.svg";
 import school_logo from "../../assets/eest2/eest2-white.svg";
+import { useWindowSize } from "../../hooks/useWindowSize";
 
 const Footer: React.FC<ResponsiveComponent> = ({ style, className }) => {
-    // Re-Render on window resize for responsive design
-    const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
-    console.log("Current window size: ", windowSize);
-    useEffect(() => {
-        const handleResize = () => {
-            setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-        };
-
-        window.addEventListener("resize", handleResize);
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
-    }, []);
+    // Re-Render on window resize
+    const windowSize = useWindowSize();
+    console.log("Window size:", windowSize);
     return (
         <footer
             className={`${className || ""} unitec-footer`}

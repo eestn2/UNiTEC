@@ -15,6 +15,7 @@ import Notification from "../UI/Notification";
 import { ReactElement, useEffect, useState } from "react";
 import axios from "axios";
 import User from "../session/User";
+import { useWindowSize } from "../../hooks/useWindowSize";
 
 /**
  * A React functional component that renders the main feed with job offers and notifications.
@@ -30,21 +31,10 @@ import User from "../session/User";
  * @author Haziel Magallanes
  */
 function FeedBox() {
-  // Re-Render on window resize for responsive design
-  const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
-  console.log("Current window size: ", windowSize);
-  useEffect(() => {
-      const handleResize = () => {
-          setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-      };
-
-      window.addEventListener("resize", handleResize);
-      return () => {
-          window.removeEventListener("resize", handleResize);
-      };
-  }, []);
-    
-
+  // Re-Render on window resize
+  const windowSize = useWindowSize();
+  console.log("Window size:", windowSize);
+  // State variables for job offers and notifications
   const [jobOffers, setJobOffers] = useState<ReactElement[]>([]);
   const [notifications, setNotifications] = useState<ReactElement[]>([]);
   // Fetch job offers from the server

@@ -12,6 +12,7 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import ResponsiveComponent from "./ResponsiveComponent";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useWindowSize } from "../../hooks/useWindowSize";
 
 /**
  * Props for the `Notification` component.
@@ -37,6 +38,10 @@ interface NotificationProps extends ResponsiveComponent {
  * @returns {JSX.Element} A styled notification box with a read/unread state indicator.
  */
 const Notification: React.FC<NotificationProps> = ({ notificationId, width = 10, style, className }) => {
+    // Re-Render on window resize
+    const windowSize = useWindowSize();
+    console.log("Window size:", windowSize);
+    // State variables for notification data
     const [read, changeState] = useState(false);
     const [content, setContent] = useState<string>("Cargando notificación...");
     const [action, setAction] = useState<string | CallableFunction | undefined>(undefined);
