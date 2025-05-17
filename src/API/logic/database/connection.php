@@ -18,10 +18,10 @@
  *   $user = $stmt->fetch();
  */
 
-include_once(__DIR__ . '/../DotEnv.php');
+include_once(__DIR__ . '/../../DotEnv.php');
 
 // Load environment variables from .env file
-(new DotEnv(__DIR__ . '/../../../.env'))->load();
+(new DotEnv(__DIR__ . '/../../../../.env'))->load();
 
 // Select configuration based on environment
 $env = getenv('ENVIRONMENT');
