@@ -3,7 +3,7 @@ require_once __DIR__ . '/../logic/connection.php';
 require_once __DIR__ . '/../api/function/return_response.php';
 
 try {
-    $limit_days = 30; // Días para considerar una oferta como "vieja"
+    $limit_days = 7; // Días para considerar una oferta como "vieja"
 
     // MySQL no permite parámetros en INTERVAL, así que interpolamos el valor de forma segura
     $limit_days = intval($limit_days);

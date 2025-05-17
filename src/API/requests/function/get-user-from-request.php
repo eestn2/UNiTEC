@@ -1,6 +1,7 @@
 <?php
 function get_user_from_request($data) {
     return [
+        'id' => isset($data->id) ? intval($data->id) : null,
         'name' => isset($data->name) && is_string($data->name) ? trim($data->name) : null,
         'birth_date' => isset($data->birth_date) && is_string($data->birth_date) ? trim($data->birth_date) : null,
         'location' => isset($data->location) && is_string($data->location) ? trim($data->location) : null,
