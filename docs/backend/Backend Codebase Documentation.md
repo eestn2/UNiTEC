@@ -315,6 +315,30 @@ src/
 
 ---
 
+### [`requests/function/get-languages.php`](../../src/API/requests/function/get-languages.php)
+
+```php
+/**
+ * @file get-languages.php
+ * @description API endpoint to retrieve all available languages from the database.
+ * Handles GET requests, queries the languages table, and returns a standardized JSON response with the list of languages or an error message.
+ * @author Francesco Sidotti
+ * @date May 17, 2025
+ *
+ * Usage:
+ *   Send a GET request to this endpoint to receive all languages.
+ *
+ * Example:
+ *   GET /src/API/requests/function/get-languages.php
+ *   Response: { "status": "success", "message": "languages retrieved successfully.", "data": { "languages": [ ... ] } }
+ */
+```
+
+- **Purpose:** Retrieves all available languages from the database.
+- **Usage:** GET request; returns a list of languages in the response.
+
+---
+
 ### [`requests/session/login.php`](../../src/API/requests/session/login.php)
 
 ```php
