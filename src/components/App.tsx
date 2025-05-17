@@ -16,6 +16,7 @@ import RegisterUser from './session/RegisterUser';
 import axios from 'axios';
 import User from './session/User';
 import Footer from './UI/Footer';
+import { JSX } from 'react';
 
 /**
  * The main application component that handles routing and session management.
@@ -31,7 +32,7 @@ import Footer from './UI/Footer';
  * 
  * @Author: Haziel Magallanes
  */
-function App() {
+function App(): JSX.Element {
   // Axios configs
   axios.defaults.baseURL = import.meta.env.DEV ? import.meta.env.VITE_API_URL_DEV : import.meta.env.VITE_API_URL_PROD;
   axios.defaults.headers.common['Content-Type'] = 'application/json';

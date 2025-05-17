@@ -1,0 +1,62 @@
+{
+  "extends": [],
+  "tagDefinitions": [
+    {
+      "tagName": "@file",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@description",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@date",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@author",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@Author",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@example",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@component",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@returns",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@property",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@template",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@extends",
+      "syntaxKind": "modifier"
+    }
+  ],
+  "supportForTags": {
+    "@file": true,
+    "@description": true,
+    "@date": true,
+    "@author": true,
+    "@Author": true,
+    "@example": true,
+    "@component": true,
+    "@returns": true,
+    "@property": true,
+    "@template": true,
+    "@extends": true
+  }
+}
