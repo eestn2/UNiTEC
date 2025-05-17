@@ -8,8 +8,9 @@
 
 import React, { ChangeEventHandler } from "react";
 import "../../styles/index.css";
-import ResponsiveComponent from "./ResponsiveComponent";
-import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
+import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
+import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
+
 
 /**
  * Props for the `SelectionField` component.
