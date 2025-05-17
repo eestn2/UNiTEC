@@ -10,9 +10,9 @@
 /**
  * Represents a generic API response structure.
  *
- * @property {string} status - The status of the response (e.g., "success", "error").
+ * @property {string} status - The status of the response (e.g., "success", "failed").
  * @property {string} message - A message describing the result of the API call.
- * @property {any} [data] - Optional data payload returned by the API.
+ * @property {unknown} [data] - Optional data payload returned by the API.
  */
 export type Response = {
     /*** The status of the response (e.g., "success", "error").*/
