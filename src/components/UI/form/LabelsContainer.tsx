@@ -8,7 +8,7 @@
 
 import React from "react";
 import "../../styles/index.css";
-import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
+import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 
 /**
  * Props for the `Label` component.

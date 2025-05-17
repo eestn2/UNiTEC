@@ -8,10 +8,10 @@
 
 import React from "react";
 import "../../styles/index.css";
-import ResponsiveComponent from "./ResponsiveComponent";
-import AppWindow from "./AppWindow";
-import ActionButton from "./ActionButton";
-import { useJobOffer } from "../../hooks/offer/useJobOffer";
+import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
+import AppWindow from "../AppWindow";
+import ActionButton from "../ActionButton";
+import { useJobOffer } from "../../../hooks/offer/useJobOffer";
 
 /**
  * Props for the `JobOffer` component.

@@ -8,7 +8,7 @@
 
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import "../../styles/index.css";
-import InputField from "../UI/InputField";
+import InputField from "../UI/form/InputField";
 import AppWindow from "../UI/AppWindow";
 import Logo from "../UI/Logo";
 import ActionButton from "../UI/ActionButton";

@@ -12,11 +12,11 @@ import SelectionField from "../UI/SelectionField";
 import AppWindow from "../UI/AppWindow";
 import Logo from "../UI/Logo";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import InputField from "../UI/InputField";
+import InputField from "../UI/form/InputField";
 import TextBox from "../UI/TextBox";
 import { Link } from "react-router-dom";
-import LabelsSelection from "../UI/LabelsSelection";
-import LabelsContainer from "../UI/LabelsContainer";
+import LabelsSelection from "../UI/form/LabelsSelection";
+import LabelsContainer from "../UI/form/LabelsContainer";
 import Label from "../UI/Label";
 import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 
