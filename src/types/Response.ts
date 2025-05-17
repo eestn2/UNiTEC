@@ -20,7 +20,7 @@ export type Response = {
     /*** A message describing the result of the API call.*/
     message: string;
     /*** Optional data payload returned by the API.*/
-    data?: any;
+    data?: unknown;
 }
 
 /**
