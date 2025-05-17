@@ -9,8 +9,8 @@
 
 import { useEffect, useRef, useState, Ref } from "react";
 import axios from "axios";
-import TranslateFigmaCoords from "../global/function/TranslateFigmaCoords";
-import { useWindowSize } from "./useWindowSize";
+import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
+import { useWindowSize } from "../responsive/useWindowSize";
 
 /**
  * Props for the `useJobOffer` hook.
@@ -79,12 +79,11 @@ export function useJobOffer({ height, width, authorId, description }: UseJobOffe
     useEffect(() => {
         const fetchAuthorDetails = async () => {
             try {
-                const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-                const response = await axios.get(`${apiUrl}/requests/user/user-info.php`, {
+                const response = await axios.get(`/user/user-info.php`, {
                     params: { id: authorId },
                 });
                 if (response.status === 200 && response.data.status === "success") {
-                    setAuthor(response.data.user);
+                    setAuthor(response.data.data.user);
                 }
             } catch (error) {
                 // handle error

@@ -16,7 +16,7 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import User from "./User";
-import { useWindowSize } from "../../hooks/useWindowSize";
+import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 
 /**
  * A React functional component that renders the login form inside a responsive window.
@@ -42,8 +42,7 @@ const Login: React.FC = () => {
     const handleLogin = async (event: FormEvent) => {
         event.preventDefault();
         try {
-            const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-            const response = await axios.post(`${apiUrl}/requests/session/login.php`, {
+            const response = await axios.post(`/session/login.php`, {
                 email,
                 password
             });

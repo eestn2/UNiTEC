@@ -15,7 +15,7 @@ import Notification from "../UI/Notification";
 import { ReactElement, useEffect, useState } from "react";
 import axios from "axios";
 import User from "../session/User";
-import { useWindowSize } from "../../hooks/useWindowSize";
+import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 
 /**
  * A React functional component that renders the main feed with job offers and notifications.
@@ -40,13 +40,12 @@ function FeedBox() {
   // Fetch job offers from the server
   const loadJobOffers = async () => {
     try {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.get(`${apiUrl}/requests/feed/job-offers.php`);
+      const response = await axios.get(`/feed/job-offers.php`);
       if (response.status !== 200 && response.data.status !== "success") {
         console.error("Failed to load job offers:", response.data.message);
       } else {
         const offers = await Promise.all(
-        response.data.job_offers.map(async (offer: any) => {
+        response.data.data.job_offers.map(async (offer: any) => {
           return (
             <JobOffer
               key={offer.id}
@@ -67,13 +66,12 @@ function FeedBox() {
   // Fetch notifications from the server
   const loadNotifications = async () => {
     try {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
       const userId = User.data.id;
-      const response = await axios.get(`${apiUrl}/requests/user/retrieve-notifications.php?user_id=${userId}`);
+      const response = await axios.get(`/user/retrieve-notifications.php?user_id=${userId}`);
       if (response.status !== 200 || response.data.status !== "success") {
         console.error("Failed to load notifications:", response.data.message);
       } else {
-        const notificationsList = response.data.notifications.map((notif: any) => (
+        const notificationsList = response.data.data.notifications.map((notif: any) => (
           <Notification key={notif.id} width={300} height={60} notificationId={notif.id} />
         ));
         setNotifications(notificationsList);

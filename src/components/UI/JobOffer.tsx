@@ -11,7 +11,7 @@ import "../../styles/index.css";
 import ResponsiveComponent from "./ResponsiveComponent";
 import AppWindow from "./AppWindow";
 import ActionButton from "./ActionButton";
-import { useJobOffer } from "../../hooks/useJobOffer";
+import { useJobOffer } from "../../hooks/offer/useJobOffer";
 
 /**
  * Props for the `JobOffer` component.

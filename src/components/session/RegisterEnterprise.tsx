@@ -16,7 +16,7 @@ import InputField from "../UI/InputField";
 import TextBox from "../UI/TextBox";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useWindowSize } from "../../hooks/useWindowSize";
+import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 
 /**
  * A React functional component that renders a registration form for enterprises inside a responsive window.

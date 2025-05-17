@@ -13,7 +13,7 @@ import AppWindow from "../UI/AppWindow";
 import Logo from "../UI/Logo";
 import ActionButton from "../UI/ActionButton";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import { useWindowSize } from "../../hooks/useWindowSize";
+import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 
 /**
  * A React functional component that renders a password change form inside a responsive window.

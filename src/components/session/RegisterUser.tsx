@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 import LabelsSelection from "../UI/LabelsSelection";
 import LabelsContainer from "../UI/LabelsContainer";
 import Label from "../UI/Label";
-import { useWindowSize } from "../../hooks/useWindowSize";
+import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 
 /**
  * A React functional component that renders a registration form for students inside a responsive window.

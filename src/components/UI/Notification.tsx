@@ -12,7 +12,9 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import ResponsiveComponent from "./ResponsiveComponent";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useWindowSize } from "../../hooks/useWindowSize";
+import { useWindowSize } from "../../hooks/responsive/useWindowSize";
+import type { TypedResponse } from "../../types/Response";
+import type { notification } from "../../types/notification";
 
 /**
  * Props for the `Notification` component.
@@ -59,14 +61,14 @@ const Notification: React.FC<NotificationProps> = ({ notificationId, width = 10,
     useEffect(() => {
         const fetchNotification = async () => {
             try {
-                const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
                 const response = await axios.get(
-                    `${apiUrl}/requests/function/get-notification-data.php?id=${notificationId}`
+                    `/function/get-notification-data.php?id=${notificationId}`
                 );
-                if (response.data.status === "success" && response.data.message) {
-                    setContent(response.data.message);
-                    if (response.data.action === "view_offer") {
-                        setAction(() => () => viewOffer(response.data.sender_id));
+                const notification = response.data as TypedResponse<notification>;
+                if (notification.status === "success" && notification.data) {
+                    setContent(notification.data.message);
+                    if (notification.data.action === "view_offer") {
+                        setAction(() => () => viewOffer(notification.data.sender_id));
                     }
                 } else {
                     setContent("No se pudo cargar la notificación.");

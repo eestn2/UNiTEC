@@ -33,6 +33,8 @@ import Footer from './UI/Footer';
  */
 function App() {
   // Axios configs
+  axios.defaults.baseURL = import.meta.env.DEV ? import.meta.env.VITE_API_URL_DEV : import.meta.env.VITE_API_URL_PROD;
+  axios.defaults.headers.common['Content-Type'] = 'application/json';
   axios.interceptors.request.use((config) => {
     console.log("Sending request to PHP Server.");
     return config;
