@@ -6,12 +6,11 @@
  * @date May 11, 2025
  */
 
-import "../../styles/index.css";
 import NavBar from '../UI/NavBar';
 import AppWindow from '../UI/AppWindow';
-import JobOffer from "../UI/JobOffer";
+import JobOffer from "../UI/feed/JobOffer";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import Notification from "../UI/Notification";
+import Notification from "../UI/feed/Notification";
 import { ReactElement, useEffect, useState } from "react";
 import axios from "axios";
 import User from "../session/User";

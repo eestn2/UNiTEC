@@ -14,6 +14,7 @@ This guide provides an overview of the main components, hooks, types, and styles
 - [Feed & Job Offers](#feed--job-offers)
 - [Hooks](#hooks)
 - [Types](#types)
+- [Responsive Utilities](#responsive-utilities)
 - [Styles](#styles)
 - [Conventions](#conventions)
 
@@ -23,6 +24,15 @@ This guide provides an overview of the main components, hooks, types, and styles
 
 ```
 src/
+  API/
+    DotEnv.php
+    config/
+    database/
+    logic/
+    PHPMailer/
+    requests/
+    tests/
+  assets/
   components/
     App.tsx
     feed/
@@ -30,10 +40,20 @@ src/
     session/
     UI/
   global/
+    function/
+    interface/
   hooks/
+    offer/
+    responsive/
   styles/
+    globals.css
+    index.css
   types/
-main.tsx
+    JobOffer.ts
+    notification.ts
+    Response.ts
+  main.tsx
+  vite-env.d.ts
 ```
 
 ---
@@ -62,7 +82,7 @@ main.tsx
 
 ## UI Components
 
-### [`UI/Label.tsx`](../../src/components/UI/Label.tsx)
+### [`UI/form/Label.tsx`](../../src/components/UI/form/Label.tsx)
 
 ```tsx
 /**
@@ -79,7 +99,7 @@ main.tsx
 
 ---
 
-### [`UI/LabelsContainer.tsx`](../../src/components/UI/LabelsContainer.tsx)
+### [`UI/form/LabelsContainer.tsx`](../../src/components/UI/form/LabelsContainer.tsx)
 
 ```tsx
 /**
@@ -95,7 +115,7 @@ main.tsx
 
 ---
 
-### [`UI/LabelsSelection.tsx`](../../src/components/UI/LabelsSelection.tsx)
+### [`UI/form/LabelsSelection.tsx`](../../src/components/UI/form/LabelsSelection.tsx)
 
 ```tsx
 /**
@@ -111,7 +131,59 @@ main.tsx
 
 ---
 
-### [`UI/Notification.tsx`](../../src/components/UI/Notification.tsx)
+### [`UI/form/InputField.tsx`](../../src/components/UI/form/InputField.tsx)
+
+```tsx
+/**
+ * @file InputField.tsx
+ * @description A reusable React component for creating responsive input fields in the app.
+ * Converts width and height from pixels to responsive units based on screen size.
+ * @author Haziel Magallanes, Daviel Díaz Gonzáles
+ * @date May 11, 2025
+ */
+```
+
+- **Purpose:** For single-line text, date, email, and other input types in forms.
+- **Props:** `type`, `name`, `placeholder`, `width`, `height`, `onChange`, `max`, `min`, `style`, `className`
+- **Usage:** For all standard input fields, including text, date, and email.
+
+---
+
+### [`UI/form/TextBox.tsx`](../../src/components/UI/form/TextBox.tsx)
+
+```tsx
+/**
+ * @file TextBox.tsx
+ * @description A reusable React component for creating responsive text areas in the app.
+ * Converts width and height from pixels to responsive units based on screen size.
+ * @author Daviel Díaz Gonzáles
+ * @date May 11, 2025
+ */
+```
+
+- **Purpose:** For multi-line text input in forms.
+- **Props:** `name`, `placeholder`, `width`, `height`, `onChange`, `style`, `className`
+- **Usage:** For text areas such as descriptions or comments.
+
+---
+
+### [`UI/form/SelectionField.tsx`](../../src/components/UI/form/SelectionField.tsx)
+
+```tsx
+/**
+ * @file SelectionField.tsx
+ * @description A reusable React component for creating responsive select dropdowns.
+ * Converts width and height from pixels to responsive units based on screen size.
+ * @author Daviel Díaz Gonzáles
+ * @date May 11, 2025
+ */
+```
+
+- **Purpose:** For dropdown selection in forms.
+
+---
+
+### [`UI/feed/Notification.tsx`](../../src/components/UI/feed/Notification.tsx)
 
 ```tsx
 /**
@@ -127,7 +199,7 @@ main.tsx
 
 ---
 
-### [`UI/JobOffer.tsx`](../../src/components/UI/JobOffer.tsx)
+### [`UI/feed/JobOffer.tsx`](../../src/components/UI/feed/JobOffer.tsx)
 
 ```tsx
 /**
@@ -142,36 +214,39 @@ main.tsx
 - **Purpose:** Shows job offer details, author info, and handles content overflow.
 
 ---
-
-### [`UI/TextBox.tsx`](../../src/components/UI/TextBox.tsx)
+### [`UI/unitec/Logo.tsx`](../../src/components/UI/unitec/Logo.tsx)
 
 ```tsx
 /**
- * @file TextBox.tsx
- * @description A reusable React component for creating responsive text areas in the app.
- * Converts width and height from pixels to responsive units based on screen size.
- * @author Daviel Díaz Gonzáles
+ * @file Logo.tsx
+ * @description A reusable React component that displays the Unitec logo and text in a responsive window.
+ * Converts width, height, and logo sizes from pixels to responsive units based on screen size.
+ * @author Haziel Magallanes
  * @date May 11, 2025
  */
 ```
 
-- **Purpose:** For multi-line text input in forms.
+- **Purpose:** Displays the Unitec logo and text in a styled, responsive window.
+- **Props:** `width`, `height`, `logo_size`, `logo_text_size`, `style`, `className`
+- **Usage:** For branding and header sections.
 
 ---
 
-### [`UI/SelectionField.tsx`](../../src/components/UI/SelectionField.tsx)
+### [`UI/unitec/Footer.tsx`](../../src/components/UI/unitec/Footer.tsx)
 
 ```tsx
 /**
- * @file SelectionField.tsx
- * @description A reusable React component for creating responsive select dropdowns.
- * Converts width and height from pixels to responsive units based on screen size.
- * @author Daviel Díaz Gonzáles
+ * @file Footer.tsx
+ * @description Responsive footer component with Unitec and EEST2 logos, contact info, and useful links.
+ * Uses Figma coordinate translation for spacing and layout.
+ * @author Haziel Magallanes
  * @date May 11, 2025
  */
 ```
 
-- **Purpose:** For dropdown selection in forms.
+- **Purpose:** Displays footer with logos, contact details, and institutional links.
+- **Props:** `style`, `className`
+- **Usage:** For consistent footer across the app.
 
 ---
 
@@ -247,6 +322,24 @@ main.tsx
 
 ---
 
+### [`hooks/offer/useJobOffer.tsx`](../../src/hooks/offer/useJobOffer.tsx)
+
+```tsx
+/**
+ * @file useJobOffer.tsx
+ * @description Custom React hook for managing the state and logic of a job offer window.
+ * Handles author fetching, overflow detection, expansion/collapse, and Figma coordinate translation.
+ * Intended for use in both preview and full-view job offer components.
+ * @author Haziel Magallanes
+ * @date May 16, 2025
+ */
+```
+
+- **Purpose:** Encapsulates logic for job offer windows, including author info, overflow, and expansion state.
+- **Usage:** Used by job offer components to manage UI and data fetching.
+
+---
+
 ## Types
 
 ### [`types/JobOffer.ts`](../../src/types/JobOffer.ts)
@@ -295,6 +388,45 @@ main.tsx
 ```
 
 - **Purpose:** Type definition for API responses.
+
+---
+
+## Responsive Utilities
+
+### [`global/function/TranslateFigmaCoords.ts`](../../src/global/function/TranslateFigmaCoords.ts)
+
+```ts
+/**
+ * @file TranslateFigmaCoords.ts
+ * @description Utility functions that convert Figma coordinates and sizes to current window size.
+ * Provides `translateFigmaX`, `translateFigmaY`, and `translateFigma` for responsive UI scaling.
+ * @author Haziel Magallanes
+ */
+```
+
+- **Purpose:** Converts Figma design coordinates (x, y, width, height) to responsive pixel values based on the current window size.
+- **Usage:** Used by most UI components to ensure consistent scaling across devices.
+- **Exports:** `translateFigmaX`, `translateFigmaY`, `translateFigma`
+
+---
+
+### [`global/interface/ResponsiveComponent.ts`](../../src/global/interface/ResponsiveComponent.ts)
+
+```ts
+/**
+ * @file ResponsiveComponent.ts
+ * @description Interface for creating responsive UI components with consistent props.
+ * @author Haziel Magallanes
+ */
+```
+
+- **Purpose:** Standardizes props for responsive UI components.
+- **Props:**  
+  - `width?`, `height?`: Responsive dimensions in pixels  
+  - `children?`: Nested React nodes  
+  - `style?`: Inline styles  
+  - `className?`: Custom CSS classes  
+  - `ref?`: React ref for DOM access
 
 ---
 

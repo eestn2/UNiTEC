@@ -6,9 +6,8 @@
  * @date April 29, 2025
  */
 import React from "react";
-import "../../styles/index.css";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import ResponsiveComponent from "./ResponsiveComponent";
+import ResponsiveComponent from "../../global/interface/ResponsiveComponent";
 
 /**
  * Renders a responsive application window component that adapts its size based on Figma design coordinates.

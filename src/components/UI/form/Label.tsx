@@ -1,5 +1,5 @@
 /**
- * @file LabelsContainer.tsx
+ * @file Label.tsx
  * @description A reusable React component for displaying a styled label with optional delete functionality.
  * Converts width and height from Figma units to responsive pixels based on screen size.
  * @author Daviel Díaz Gonzáles
@@ -7,25 +7,23 @@
  */
 
 import React from "react";
-import "../../styles/index.css";
-import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
+import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 
 /**
  * Props for the `Label` component.
  *
- * @property {string} [text] - The text to display inside the label. Optional if using children.
+ * @property {string} text - The text to display inside the label.
  * @property {number} [width=50] - The width of the label in Figma coordinates.
  * @property {number} [height=20] - The height of the label in Figma coordinates.
  * @property {React.CSSProperties} [style] - Additional inline styles for the label container.
  * @property {string} [className] - Additional CSS class names for the label container.
  * @property {() => void} [onDelete] - Optional callback function triggered when the delete button is clicked.
- * @property {React.ReactNode} [children] - Optional children to render inside the label.
  * 
  * @author Daviel Díaz Gonzáles
  */
 interface LabelProps {
-    /** The text to display inside the label. Optional if using children. */
-    text?: string;
+    /** The text to display inside the label. */
+    text: string;
     /** The width of the label in Figma coordinates. */
     width?: number;
     /** The height of the label in Figma coordinates. */
@@ -36,24 +34,21 @@ interface LabelProps {
     className?: string;
     /** Callback function triggered when the delete button is clicked. */
     onDelete?: () => void;
-    /** Optional children to render inside the label. */
-    children?: React.ReactNode;
 }
 
 /**
- * A React functional component that renders a styled label container with optional text, children, and a delete button.
+ * A React functional component that renders a styled label container with text and an optional delete button.
  *
  * @component
  * @param {LabelProps} props - The properties for the Label component.
- * @param {string} [props.text] - The text to display inside the label.
+ * @param {string} props.text - The text to display inside the label.
  * @param {number} [props.width=50] - The width of the label in Figma coordinates.
  * @param {number} [props.height=20] - The height of the label in Figma coordinates.
  * @param {React.CSSProperties} [props.style] - Additional inline styles for the label container.
  * @param {string} [props.className] - Additional CSS class names for the label container.
  * @param {() => void} [props.onDelete] - Callback function triggered when the delete button is clicked.
- * @param {React.ReactNode} [props.children] - Optional children to render inside the label.
  *
- * @returns {JSX.Element} A styled label container with optional text, children, and a delete button.
+ * @returns {JSX.Element} A styled label container with text and an optional delete button.
  *
  * @example
  * ```tsx
@@ -61,7 +56,7 @@ interface LabelProps {
  * ```
  * @author Daviel Díaz Gonzáles
  */
-const Label: React.FC<LabelProps> = ({ text, width = 50, height = 20, style, className, onDelete, children }) => {
+const Label: React.FC<LabelProps> = ({ text, width = 50, height = 20, style, className, onDelete }) => {
     return (
         <div
             className={`label-container ${className || ""}`}
@@ -70,20 +65,19 @@ const Label: React.FC<LabelProps> = ({ text, width = 50, height = 20, style, cla
                 height: `${TranslateFigmaCoords.translateFigmaY(height)}px`,
                 padding: "10px",
                 borderRadius: "20px",
-                backgroundColor: "#000000",
+                backgroundColor: "#ffffff",
                 color: "#333",
                 fontSize: "14px",
                 fontWeight: "bold",
-                display: "grid",
-                gridTemplateColumns: "1fr auto",
+                textAlign: "center",
+                display: "flex",
                 alignItems: "center",
-                gap: "10px",
+                justifyContent: "space-between",
                 overflowX: "hidden",
                 ...style,
             }}
         >
-            {text && <span>{text}</span>}
-            {children}
+            <span>{text}</span>
             <button
                 onClick={onDelete}
                 style={{

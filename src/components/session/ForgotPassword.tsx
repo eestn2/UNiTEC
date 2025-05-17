@@ -7,10 +7,9 @@
  */
 
 import React from "react";
-import "../../styles/index.css";
-import InputField from "../UI/InputField";
+import InputField from "../UI/form/InputField";
 import AppWindow from "../UI/AppWindow";
-import Logo from "../UI/Logo";
+import Logo from "../UI/unitec/Logo";
 import ActionButton from "../UI/ActionButton";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import { useWindowSize } from "../../hooks/responsive/useWindowSize";

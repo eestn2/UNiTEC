@@ -7,8 +7,7 @@
  */
 
 import React, { MouseEventHandler } from "react";
-import "../../styles/index.css";
-import ResponsiveComponent from "./ResponsiveComponent";
+import ResponsiveComponent from "../../global/interface/ResponsiveComponent";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 
 /**

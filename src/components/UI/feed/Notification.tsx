@@ -7,14 +7,13 @@
  */
 
 import React, { JSX, useEffect, useState } from "react";
-import "../../styles/index.css";
-import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import ResponsiveComponent from "./ResponsiveComponent";
+import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
+import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useWindowSize } from "../../hooks/responsive/useWindowSize";
-import type { TypedResponse } from "../../types/Response";
-import type { notification } from "../../types/notification";
+import { useWindowSize } from "../../../hooks/responsive/useWindowSize";
+import type { TypedResponse } from "../../../types/Response";
+import type { notification } from "../../../types/notification";
 
 /**
  * Props for the `Notification` component.

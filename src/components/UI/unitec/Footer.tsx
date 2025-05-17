@@ -1,8 +1,8 @@
-import ResponsiveComponent from "./ResponsiveComponent";
-import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import footer_logo from "../../assets/unitec/footer-logo.svg";
-import school_logo from "../../assets/eest2/eest2-white.svg";
-import { useWindowSize } from "../../hooks/responsive/useWindowSize";
+import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
+import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
+import footer_logo from "../../../assets/unitec/footer-logo.svg";
+import school_logo from "../../../assets/eest2/eest2-white.svg";
+import { useWindowSize } from "../../../hooks/responsive/useWindowSize";
 
 const Footer: React.FC<ResponsiveComponent> = ({ style, className }) => {
     // Re-Render on window resize

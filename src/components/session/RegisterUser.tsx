@@ -7,17 +7,16 @@
  */
 
 import ActionButton from "../UI/ActionButton";
-import "../../styles/index.css";
-import SelectionField from "../UI/SelectionField";
+import SelectionField from "../UI/form/SelectionField";
 import AppWindow from "../UI/AppWindow";
-import Logo from "../UI/Logo";
+import Logo from "../UI/unitec/Logo";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import InputField from "../UI/InputField";
-import TextBox from "../UI/TextBox";
+import InputField from "../UI/form/InputField";
+import TextBox from "../UI/form/TextBox";
 import { Link } from "react-router-dom";
-import LabelsSelection from "../UI/LabelsSelection";
-import LabelsContainer from "../UI/LabelsContainer";
-import Label from "../UI/Label";
+import LabelsSelection from "../UI/form/LabelsSelection";
+import LabelsContainer from "../UI/form/LabelsContainer";
+import Label from "../UI/form/Label";
 import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 
 /**

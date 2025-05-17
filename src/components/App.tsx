@@ -15,7 +15,7 @@ import ForgotPassword from './session/ForgotPassword';
 import RegisterUser from './session/RegisterUser';
 import axios from 'axios';
 import User from './session/User';
-import Footer from './UI/Footer';
+import Footer from './UI/unitec/Footer';
 import { JSX } from 'react';
 
 /**
