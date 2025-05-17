@@ -1,5 +1,5 @@
-<?php 
-require_once __DIR__ . "/../cors-policy.php";
+<?php
+ require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . "/../../logic/connection.php";
 require_once __DIR__ . "/../function/return_response.php";
 require_once __DIR__ . "/../function/get-user-from-request.php";
@@ -42,7 +42,31 @@ try {
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
-        return_response("success", "Usuario aceptado con exito.", null);
+        // Fetch the accepted user's info
+        $user_stmt = $connection->prepare("SELECT email, name FROM users WHERE id = :id");
+        $user_stmt->bindParam(':id', $target_user_id, PDO::PARAM_INT);
+        $user_stmt->execute();
+        $user = $user_stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user && isset($user['email'])) {
+            require_once __DIR__ . '/../../logic/send_email.php';
+            $to = $user['email'];
+            $name = isset($user['name']) ? $user['name'] : '';
+            $subject = "Notificación sobre el estado de su solicitud";
+            $body = "Estimado/a $name:\n
+                    Nos complace informarle que su solicitud para unirse a UNiTEC ha sido aprobada exitosamente.\n
+                    A partir de este momento, ya puede acceder a su cuenta y comenzar a disfrutar de todos los beneficios y funcionalidades que nuestra plataforma ofrece. Para iniciar sesión, utilice las credenciales registradas durante su proceso de solicitud.\n
+                    Si tiene alguna duda o necesita asistencia, no dude en ponerse en contacto con nuestro equipo de soporte.\n
+                    ¡Le damos la más cordial bienvenida y le deseamos una excelente experiencia con nosotros!\n
+                    \n
+                    Atentamente,\n
+                    Soporte de UNITEC\n
+                    UNITEC\n
+                    exampleUNiTEC@example.com
+                    ";
+            send_email($to, $subject, $body);
+        }
+    return_response("success", "Usuario aceptado con exito.", null);
     } else {
         return_response("failed", "No se encontró al usuario o ya estaba aceptado.", null);
     }
