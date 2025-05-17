@@ -26,7 +26,7 @@ require_once __DIR__ . '/../../logic/security/is_admin.php';
 if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
 
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($data->user_id) || !isset($data->name)) return_response("failed", "Faltan datos.", null);
+if (  !isset($data->user_id) || !isset($data->name)) return_response("failed", "Faltan datos.", null);
 
 if (!is_admin($data->user_id, $connection)) {
     return_response("failed", "Solo los administradores pueden agregar lenguajes.", null);

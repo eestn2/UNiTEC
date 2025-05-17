@@ -270,6 +270,34 @@ src/
 
 ---
 
+### [`requests/admin/accept-new-users.php`](../../src/API/requests/admin/accept-new-users.php)
+
+```php
+/**
+ * @file accept-new-users.php
+ * @description API endpoint for administrators to accept (activate) new user accounts.
+ * Handles PUT requests, verifies admin permissions, and updates the 'enabled' status of the target user.
+ * Returns a standardized JSON response indicating success or failure.
+ * @author Federico Nicolás Martínez
+ * @date May 17, 2025
+ *
+ * Usage:
+ *   Send a PUT request with JSON body containing:
+ *     - target_user_id: (int) ID of the user to accept (activate)
+ *     - id: (int) ID of the authenticated admin user (for permission check)
+ *
+ * Example:
+ *   PUT /src/API/requests/admin/accept-new-users.php
+ *   Body: { "target_user_id": 8, "id": 1 }
+ *   Response: { "status": "success", "message": "Usuario aceptado con exito.", "data": null }
+ */
+```
+
+- **Purpose:** Allows an administrator to activate (accept) a new user account.
+- **Usage:** PUT request with `target_user_id` and authenticated admin `id` in the body.
+
+---
+
 ### [`requests/function/get-notification-data.php`](../../src/API/requests/function/get-notification-data.php)
 
 ```php
