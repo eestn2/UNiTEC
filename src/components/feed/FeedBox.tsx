@@ -6,15 +6,15 @@
  * @date May 11, 2025
  */
 
-import "../../styles/index.css";
 import NavBar from '../UI/NavBar';
 import AppWindow from '../UI/AppWindow';
-import JobOffer from "../UI/JobOffer";
+import JobOffer from "../UI/feed/JobOffer";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import Notification from "../UI/Notification";
+import Notification from "../UI/feed/Notification";
 import { ReactElement, useEffect, useState } from "react";
 import axios from "axios";
 import User from "../session/User";
+import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 
 /**
  * A React functional component that renders the main feed with job offers and notifications.
@@ -30,33 +30,21 @@ import User from "../session/User";
  * @author Haziel Magallanes
  */
 function FeedBox() {
-  // Re-Render on window resize for responsive design
-  const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
-  console.log("Current window size: ", windowSize);
-  useEffect(() => {
-      const handleResize = () => {
-          setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-      };
-
-      window.addEventListener("resize", handleResize);
-      return () => {
-          window.removeEventListener("resize", handleResize);
-      };
-  }, []);
-    
-
+  // Re-Render on window resize
+  const windowSize = useWindowSize();
+  console.log("Window size:", windowSize);
+  // State variables for job offers and notifications
   const [jobOffers, setJobOffers] = useState<ReactElement[]>([]);
   const [notifications, setNotifications] = useState<ReactElement[]>([]);
   // Fetch job offers from the server
   const loadJobOffers = async () => {
     try {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.get(`${apiUrl}/requests/feed/job-offers.php`);
+      const response = await axios.get(`/feed/job-offers.php`);
       if (response.status !== 200 && response.data.status !== "success") {
         console.error("Failed to load job offers:", response.data.message);
       } else {
         const offers = await Promise.all(
-        response.data.job_offers.map(async (offer: any) => {
+        response.data.data.job_offers.map(async (offer: any) => {
           return (
             <JobOffer
               key={offer.id}
@@ -77,13 +65,12 @@ function FeedBox() {
   // Fetch notifications from the server
   const loadNotifications = async () => {
     try {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
       const userId = User.data.id;
-      const response = await axios.get(`${apiUrl}/requests/user/retrieve-notifications.php?user_id=${userId}`);
+      const response = await axios.get(`/user/retrieve-notifications.php?user_id=${userId}`);
       if (response.status !== 200 || response.data.status !== "success") {
         console.error("Failed to load notifications:", response.data.message);
       } else {
-        const notificationsList = response.data.notifications.map((notif: any) => (
+        const notificationsList = response.data.data.notifications.map((notif: any) => (
           <Notification key={notif.id} width={300} height={60} notificationId={notif.id} />
         ));
         setNotifications(notificationsList);

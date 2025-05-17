@@ -6,16 +6,16 @@
  * @date May 11, 2025
  */
 
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import ActionButton from "../UI/ActionButton";
-import "../../styles/index.css";
 import AppWindow from "../UI/AppWindow";
-import Logo from "../UI/Logo";
+import Logo from "../UI/unitec/Logo";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import InputField from "../UI/InputField";
-import TextBox from "../UI/TextBox";
+import InputField from "../UI/form/InputField";
+import TextBox from "../UI/form/TextBox";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 
 /**
  * A React functional component that renders a registration form for enterprises inside a responsive window.
@@ -31,20 +31,10 @@ import axios from "axios";
  * @author Daviel Díaz Gonzáles
  */
 const RegisterEnterprise: React.FC = () => {
-    // Re-Render on window resize for responsive design
-    const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
-    console.log("Current window size: ", windowSize);
-    useEffect(() => {
-        const handleResize = () => {
-            setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-        };
-
-        window.addEventListener("resize", handleResize);
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
-    }, []);
-
+    // Re-Render on window resize
+    const windowSize = useWindowSize();
+    console.log("Window size:", windowSize);
+    // State variables for form inputs
     const [enterpriseName, setEnterpriseName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

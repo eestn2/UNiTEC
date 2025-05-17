@@ -15,7 +15,9 @@ import ForgotPassword from './session/ForgotPassword';
 import RegisterUser from './session/RegisterUser';
 import axios from 'axios';
 import User from './session/User';
-import Footer from './UI/Footer';
+import Footer from './UI/unitec/Footer';
+import { JSX } from 'react';
+import AdminPanel from './admin/AdminPanel';
 
 /**
  * The main application component that handles routing and session management.
@@ -31,8 +33,10 @@ import Footer from './UI/Footer';
  * 
  * @Author: Haziel Magallanes
  */
-function App() {
+function App(): JSX.Element {
   // Axios configs
+  axios.defaults.baseURL = import.meta.env.DEV ? import.meta.env.VITE_API_URL_DEV : import.meta.env.VITE_API_URL_PROD;
+  axios.defaults.headers.common['Content-Type'] = 'application/json';
   axios.interceptors.request.use((config) => {
     console.log("Sending request to PHP Server.");
     return config;
@@ -69,6 +73,7 @@ function App() {
             <Route path='/register-enterprise' element={<RegisterEnterprise />} />
             <Route path='/register-user' element={<RegisterUser />} />
             <Route path='/password-reset' element={<ForgotPassword />} />
+          <Route path='/admin-menu' element={<AdminPanel />} />
           </Routes>
         </BrowserRouter>
       </div>
