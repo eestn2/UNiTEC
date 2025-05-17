@@ -1,7 +1,24 @@
 <?php
+/**
+ * @file get-active-offers.php
+ * @description API endpoint to retrieve all active job offers created by a specific enterprise user.
+ * Handles GET requests, validates the creator_id parameter, and returns all job offers with active status (status = 1) for the given creator.
+ * Returns a standardized JSON response with the list of active offers or an error message.
+ * @author Federico Nicolás Martínez
+ * @date May 17, 2025
+ *
+ * Usage:
+ *   Send a GET request with the creator_id as a query parameter:
+ *     - creator_id: (int) ID of the enterprise user whose active offers are requested
+ *
+ * Example:
+ *   GET /src/API/requests/enterprise/get-active-offers.php?creator_id=5
+ *   Response: { "status": "success", "message": "Ofertas de trabajo activas encontradas.", "data": [ ... ] }
+ */
+
 require_once "../cors-policy.php";
-require_once __DIR__ . '/../../logic/connection.php';
-require_once __DIR__ . '/../function/return_response.php';
+require_once __DIR__ . '/../../logic/database/connection.php';
+require_once __DIR__ . '/../../logic/communications/return_response.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Método no permitido.", null);
 

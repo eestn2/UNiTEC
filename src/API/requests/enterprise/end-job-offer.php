@@ -1,7 +1,26 @@
 <?php
+/**
+ * @file end-job-offer.php
+ * @description API endpoint for marking a job offer as closed by its creator (enterprise).
+ * Handles PUT requests, verifies that the user is the creator of the offer, and updates the offer status to closed.
+ * Returns a standardized JSON response indicating success or failure.
+ * @author Federico Nicolás Martínez
+ * @date May 17, 2025
+ *
+ * Usage:
+ *   Send a PUT request with JSON body containing:
+ *     - application_id: (int) ID of the job offer to close
+ *     - creator_id: (int) ID of the enterprise user (must be the creator)
+ *
+ * Example:
+ *   PUT /src/API/requests/enterprise/end-job-offer.php
+ *   Body: { "application_id": 7, "creator_id": 5 }
+ *   Response: { "status": "success", "message": "Oferta marcada como cerrada correctamente.", "data": null }
+ */
+
 require_once "../cors-policy.php";
-require_once __DIR__ . '/../../logic/connection.php';
-require_once __DIR__ . '/../function/return_response.php';
+require_once __DIR__ . '/../../logic/database/connection.php';
+require_once __DIR__ . '/../../logic/communications/return_response.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "PUT") return_response("failed", "Método no permitido.", null);
 

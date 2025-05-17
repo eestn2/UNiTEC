@@ -1,4 +1,22 @@
 <?php
+/**
+ * @file get_user_from_request.php
+ * @description Utility function to extract and sanitize user data from a request payload.
+ * Converts and trims string fields, casts booleans and integers, and ensures all expected user fields are present.
+ * Used to standardize user data input before database operations or further validation.
+ * @author Federico Nicolás Martínez
+ * @date May 17, 2025
+ *
+ * Usage:
+ *   Call this function with a decoded JSON object from a request body to obtain a sanitized associative array of user fields.
+ *
+ * Example:
+ *   $user = get_user_from_request($data);
+ *   // $user['name'], $user['email'], etc.
+ *
+ * @param object $data The decoded JSON object containing user fields.
+ * @return array Associative array with sanitized user fields.
+ */
 function get_user_from_request($data) {
     return [
         'id' => isset($data->id) ? intval($data->id) : null,
