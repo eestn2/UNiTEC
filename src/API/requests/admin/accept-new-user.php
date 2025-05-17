@@ -1,11 +1,29 @@
-<?php 
+<?php
+/**
+ * @file accept-new-user.php
+ * @description API endpoint for administrators to accept (activate) new user accounts and notify the user by email.
+ * Handles PUT requests, verifies admin permissions, updates the 'enabled' status of the target user, and sends a notification email upon successful activation.
+ * Returns a standardized JSON response indicating success or failure.
+ * @author Federico Nicolás Martínez
+ * @date May 17, 2025
+ *
+ * Usage:
+ *   Send a PUT request with JSON body containing:
+ *     - target_user_id: (int) ID of the user to accept (activate)
+ *     - id: (int) ID of the authenticated admin user (for permission check)
+ *
+ * Example:
+ *   PUT /src/API/requests/admin/accept-new-user.php
+ *   Body: { "target_user_id": 8, "id": 1 }
+ *   Response: { "status": "success", "message": "Usuario aceptado con exito.", "data": null }
+ */
+
 require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . "/../../logic/connection.php";
-require_once __DIR__ . "/../function/return_response.php";
-require_once __DIR__ . "/../function/get-user-from-request.php";
+require_once __DIR__ . "/../../logic/communications/return_response.php";
+require_once __DIR__ . "/../../logic/util/get_user_from_request.php";
 require_once __DIR__ . '/../../logic/security/is_admin.php';
 require_once __DIR__ . '/../../logic/send_email.php';
-
 
 if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
     return_response("failed", "Method not allowed", null);
@@ -63,16 +81,14 @@ try {
                     Atentamente,\n
                     Soporte de UNITEC\n
                     UNITEC\n
-                    exampleUNiTEC@example.com
                     ";
             send_email($to, $subject, $body);
         }
-    return_response("success", "Usuario aceptado con exito.", null);
+        return_response("success", "Usuario aceptado con exito.", null);
     } else {
         return_response("failed", "No se encontró al usuario o ya estaba aceptado.", null);
     }
 } catch(PDOException $e) {
-    // Log error server-side if needed
     return_response("failed", "Error al aceptar el usuario.", null);
     exit;
 }
