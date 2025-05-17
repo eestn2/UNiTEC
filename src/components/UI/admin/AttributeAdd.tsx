@@ -1,8 +1,9 @@
-import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import ActionButton from "./ActionButton";
-import AppWindow from "./AppWindow"
-import InputField from "./InputField";
-import ResponsiveComponent from "./ResponsiveComponent";
+import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
+import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
+import ActionButton from "../ActionButton";
+import AppWindow from "../AppWindow";
+import InputField from "../form/InputField";
+
 
 
 interface AttributeAddProps extends ResponsiveComponent {

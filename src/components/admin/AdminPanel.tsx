@@ -1,9 +1,10 @@
-import { ReactElement, useEffect, useState } from "react";
-import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import AppWindow from "../UI/AppWindow";
-import NavBar from "../UI/NavBar";
 import axios from "axios";
-import AttributeEditor from "../UI/AttributeEditor";
+import { ReactElement, useEffect, useState } from "react";
+import AttributeEditor from "../UI/admin/AttributeEditor";
+import NavBar from "../UI/NavBar";
+import AppWindow from "../UI/AppWindow";
+import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
+
 
 
 
@@ -12,7 +13,7 @@ const AdminPanel: React.FC = () => {
     const loadAttributes = async () => {
     try {
       const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.get(`${apiUrl}/requests/admin/see_language.php`);
+      const response = await axios.get(`${apiUrl}/admin/see_language.php`);
 
       console.log("Respuesta del backend:", response.data);
       

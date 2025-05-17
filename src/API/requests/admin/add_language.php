@@ -19,9 +19,9 @@
  */
 
 require_once __DIR__ . "../cors-policy.php";
-require_once __DIR__ . '/../../logic/database/connection.php';
-require_once __DIR__ . '/../../logic/communications/return_response.php';
-require_once __DIR__ . '/../../logic/security/is_admin.php';
+require_once __DIR__ . '/../../../API/logic/database/connection.php';
+require_once __DIR__ . '/../../../API/logic/communications/return_response.php';
+require_once __DIR__ . '/../../../API/logic/security/is_admin.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
 
