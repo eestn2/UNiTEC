@@ -61,16 +61,17 @@ const Notification: React.FC<NotificationProps> = ({ notificationId, width = 10,
     useEffect(() => {
         const fetchNotification = async () => {
             try {
-                const response = await axios.get(
+                const { data: response } = await axios.get<TypedResponse<notification>>(
                     `/function/get-notification-data.php?id=${notificationId}`
                 );
-                const notification = response.data as TypedResponse<notification>;
-                if (notification.status === "success" && notification.data) {
-                    setContent(notification.data.message);
-                    if (notification.data.action === "view_offer") {
-                        setAction(() => () => viewOffer(notification.data.sender_id));
+                const { status, message, data: notification } = response;
+                if (status === "success" && notification) {
+                    setContent(notification.message);
+                    if (notification.action === "view_offer") {
+                        setAction(() => () => viewOffer(notification.sender_id));
                     }
                 } else {
+                    console.error("Failed to fetch notification data:", message);
                     setContent("No se pudo cargar la notificación.");
                 }
             } catch (error) {
