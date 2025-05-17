@@ -1,7 +1,28 @@
 <?php
+/**
+ * @file change-password.php
+ * @description API endpoint for changing a user's password.
+ * Handles PATCH requests, validates the current password, checks new password requirements, and updates the password in the database.
+ * Ensures the new password is not the same as the current one and meets minimum security requirements.
+ * Returns a standardized JSON response indicating success or failure.
+ * @author Federico Nicolás Martínez
+ * @date May 17, 2025
+ *
+ * Usage:
+ *   Send a PATCH request with JSON body containing:
+ *     - id: (int) ID of the user whose password is being changed
+ *     - password: (string) Current password
+ *     - new_password: (string) New password
+ *
+ * Example:
+ *   PATCH /src/API/requests/session/change-password.php
+ *   Body: { "id": 7, "password": "oldpass", "new_password": "newpass123" }
+ *   Response: { "status": "success", "message": "Contraseña cambiada correctamente.", "data": null }
+ */
+
 require_once __DIR__ . "/../cors-policy.php";
-require_once __DIR__ . "/../../logic/connection.php";
-require_once __DIR__ . "/../function/return_response.php";
+require_once __DIR__ . "/../../logic/database/connection.php";
+require_once __DIR__ . "/../../logic/communications/return_response.php";
 
 if ($_SERVER["REQUEST_METHOD"] !== "PATCH") {
     return_response("failed", "Metodo no permitido.", null);

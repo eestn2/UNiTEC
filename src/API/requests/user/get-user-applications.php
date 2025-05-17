@@ -1,7 +1,25 @@
 <?php
+/**
+ * @file get-user-applications.php
+ * @description API endpoint to retrieve all active job applications (postulaciones) made by a specific user (postulante).
+ * Handles GET requests, verifies that the user is a postulante (user_type_id = 2), and returns all their active applications.
+ * Joins with applications and application_statuses tables to provide detailed information about each application.
+ * Returns a standardized JSON response with the list of applications or an error message.
+ * @author Federico Nicolás Martínez
+ * @date May 17, 2025
+ *
+ * Usage:
+ *   Send a GET request with the user_id as a query parameter:
+ *     - user_id: (int) ID of the postulante whose applications are requested
+ *
+ * Example:
+ *   GET /src/API/requests/user/get-user-applications.php?user_id=12
+ *   Response: { "status": "success", "message": "Postulaciones activas encontradas.", "data": [ ... ] }
+ */
+
 require_once __DIR__ . "/../cors-policy.php";
-require_once __DIR__ . "/../../logic/connection.php";
-require_once __DIR__ . "/../function/return_response.php";
+require_once __DIR__ . "/../../logic/database/connection.php";
+require_once __DIR__ . "/../../logic/communications/return_response.php";
 
 if ($_SERVER["REQUEST_METHOD"] !== "GET") {
     return_response("failed", "Metodo no permitido.", null);
@@ -28,28 +46,25 @@ try {
     // 3 = Pendiente
     $status_id = 3;
 
-$query = $connection->prepare("
-    SELECT
-        applicants.id AS applicant_id,                           -- ID único de la postulación del usuario
-        applicants.application_id,                                -- ID de la oferta de trabajo a la que se postuló
-        applications.title,                                       -- Título de la oferta
-        applications.description,                                 -- Descripción de la oferta
-        applications.date,                                        -- Fecha de publicación de la oferta
-        application_statuses.status AS application_status         -- Estado textual de la postulación (por ejemplo: pendiente, aceptada, rechazada)
-    FROM
-        applicants                                                 -- Tabla que guarda las postulaciones de usuarios a ofertas
-    JOIN 
-        applications ON applicants.application_id = applications.id
-        -- Se une con la tabla de ofertas para obtener los detalles de la oferta correspondiente a cada postulación
-    JOIN
-        application_statuses ON applicants.status_id = application_statuses.id
-        -- Se une con la tabla de estados para traducir el status_id de la postulación a un nombre más claro (texto)
-    WHERE
-        applicants.user_id = ?                                    -- Filtra solo las postulaciones del usuario que hace la consulta
-        AND applicants.status_id = ?                              -- Filtra por un estado específico de la postulación (ej: pendiente)
-        AND applications.status = 'disponible'                    -- Solo considera ofertas que aún están activas/disponibles
-");
-
+    $query = $connection->prepare("
+        SELECT
+            applicants.id AS applicant_id,
+            applicants.application_id,
+            applications.title,
+            applications.description,
+            applications.date,
+            application_statuses.status AS application_status
+        FROM
+            applicants
+        JOIN 
+            applications ON applicants.application_id = applications.id
+        JOIN
+            application_statuses ON applicants.status_id = application_statuses.id
+        WHERE
+            applicants.user_id = ?
+            AND applicants.status_id = ?
+            AND applications.status = 'disponible'
+    ");
 
     $query->execute([$user_id, $status_id]);
     $applications = $query->fetchAll(PDO::FETCH_ASSOC);
