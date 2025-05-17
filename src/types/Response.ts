@@ -15,8 +15,11 @@
  * @property {any} [data] - Optional data payload returned by the API.
  */
 export type Response = {
+    /*** The status of the response (e.g., "success", "error").*/
     status: string;
+    /*** A message describing the result of the API call.*/
     message: string;
+    /*** Optional data payload returned by the API.*/
     data?: any;
 }
 
@@ -32,5 +35,8 @@ export type Response = {
  * // const notification = response.data as TypedResponse<notification>;
  */
 export interface TypedResponse<T> extends Response {
+    /**
+     *  The strongly-typed data payload returned by the API.
+     *  @type {T} */
     data: T;
 }
