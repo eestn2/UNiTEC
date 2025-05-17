@@ -1,7 +1,28 @@
 <?php
+/**
+ * @file reject-application.php
+ * @description API endpoint for enterprises to reject a job application (postulante).
+ * Handles PUT requests, verifies permissions, checks application ownership, and updates applicant status to rejected.
+ * Ensures only enterprise users (user_type_id = 1) can reject applicants for their own job offers.
+ * Rolls back on failure and returns a standardized JSON response.
+ * @author Federico Nicolás Martínez
+ * @date May 17, 2025
+ *
+ * Usage:
+ *   Send a PUT request with JSON body containing:
+ *     - creator_id: (int) ID of the enterprise user (must be the creator of the offer)
+ *     - user_id: (int) ID of the applicant to reject
+ *     - application_id: (int) ID of the job offer
+ *
+ * Example:
+ *   PUT /src/API/requests/enterprise/reject-application.php
+ *   Body: { "creator_id": 5, "user_id": 12, "application_id": 7 }
+ *   Response: { "status": "success", "message": "Postulante rechazado con éxito.", "data": null }
+ */
+
 require_once __DIR__ . "/../cors-policy.php";
-require_once __DIR__ . '/../../logic/connection.php';
-require_once __DIR__ . '/../function/return_response.php';
+require_once __DIR__ . '/../../logic/database/connection.php';
+require_once __DIR__ . '/../../logic/communications/return_response.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "PUT") return_response("failed", "Metodo no permitido.", null);
 $data = json_decode(file_get_contents("php://input"));
@@ -11,7 +32,7 @@ if (!isset($data->creator_id) || !isset($data->user_id) || !isset($data->applica
 $creator_id = intval($data->creator_id);
 $user_id = intval($data->user_id);
 $application_id = intval($data->application_id);
-$accepted_status_id = 2; //REJECTED
+$accepted_status_id = 2; // REJECTED
 
 try{
     $connection->beginTransaction();

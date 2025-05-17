@@ -1,7 +1,27 @@
 <?php
+/**
+ * @file publish-offer.php
+ * @description API endpoint for publishing a new job offer by an enterprise user.
+ * Handles POST requests, verifies that the user is an enterprise, and inserts the new job offer into the database.
+ * Returns a standardized JSON response indicating success or failure.
+ * @author Federico Nicolás Martínez
+ * @date May 17, 2025
+ *
+ * Usage:
+ *   Send a POST request with JSON body containing:
+ *     - creator_id: (int) ID of the enterprise user publishing the offer (must be an enterprise)
+ *     - title: (string) Title of the job offer
+ *     - description: (string) Description of the job offer
+ *
+ * Example:
+ *   POST /src/API/requests/enterprise/publish-offer.php
+ *   Body: { "creator_id": 5, "title": "Frontend Developer", "description": "Buscamos desarrollador frontend..." }
+ *   Response: { "status": "success", "message": "Oferta de trabajo publicada con exito.", "data": null }
+ */
+
 require_once __DIR__ . "/../cors-policy.php";
-require_once __DIR__ . '/../../logic/connection.php';
-require_once __DIR__ . '/../function/return_response.php';
+require_once __DIR__ . '/../../logic/database/connection.php';
+require_once __DIR__ . '/../../logic/communications/return_response.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
 $data = json_decode(file_get_contents("php://input"));
@@ -27,12 +47,6 @@ try{
     }
 }catch (PDOException $e) {
     return_response("failed", "Error al verificar el tipo de usuario:" . $e->getMessage(), null);
-}
-
-try {
-    $connection->beginTransaction();
-} catch (PDOException $e) {
-    return_response("failed", "Error al iniciar la transacción: " . $e->getMessage(), null);
 }
 
 try {

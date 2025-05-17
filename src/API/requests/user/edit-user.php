@@ -1,7 +1,26 @@
 <?php
+/**
+ * @file edit-user.php
+ * @description API endpoint for editing user profile information.
+ * Handles PUT requests, validates input, and updates allowed user fields in the database.
+ * Only updates fields that are present in the request and allowed for editing.
+ * Returns a standardized JSON response indicating success or failure, and returns the updated user data on success.
+ * @author Federico Nicolás Martínez
+ * @date May 17, 2025
+ *
+ * Usage:
+ *   Send a PUT request with JSON body containing the user fields to update.
+ *   Only the following fields can be updated: name, birth_date, location, email, description, profile_picture, portfolio.
+ *
+ * Example:
+ *   PUT /src/API/requests/session/edit-user.php
+ *   Body: { "id": 7, "name": "Nuevo Nombre", "location": "Ciudad" }
+ *   Response: { "status": "success", "message": "Usuario actualizado correctamente", "data": { ...usuario actualizado... } }
+ */
+
 require_once __DIR__ . "/../cors-policy.php";
-require_once __DIR__ . "/../../logic/connection.php";
-require_once __DIR__ . "/../function/return_response.php";
+require_once __DIR__ . "/../../../logic/database/connection.php";
+require_once __DIR__ . "/../../../logic/communications/return_response.php";
 require_once __DIR__ . "/../function/get-user-from-request.php";
 
 if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {

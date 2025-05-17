@@ -1,9 +1,11 @@
-<?php
- require_once __DIR__ . "/../cors-policy.php";
+<?php 
+require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . "/../../logic/connection.php";
 require_once __DIR__ . "/../function/return_response.php";
 require_once __DIR__ . "/../function/get-user-from-request.php";
-require_once __DIR__ . '/../../logic/isAdmin.php';
+require_once __DIR__ . '/../../logic/security/is_admin.php';
+require_once __DIR__ . '/../../logic/send_email.php';
+
 
 if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
     return_response("failed", "Method not allowed", null);
@@ -30,7 +32,7 @@ if (!$auth_user || !isset($auth_user['id'])) {
 }
 
 // Verificar si el usuario autenticado es admin
-if (!isAdmin($auth_user['id'], $connection)) {
+if (!is_admin($auth_user['id'], $connection)) {
     return_response("failed", "Solo los administradores pueden aceptar usuarios.", null);
     exit;
 }
@@ -49,7 +51,6 @@ try {
         $user = $user_stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user && isset($user['email'])) {
-            require_once __DIR__ . '/../../logic/send_email.php';
             $to = $user['email'];
             $name = isset($user['name']) ? $user['name'] : '';
             $subject = "Notificación sobre el estado de su solicitud";
