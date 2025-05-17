@@ -1,8 +1,8 @@
 <?php
 
 require_once __DIR__ . "/../cors-policy.php";
-require_once __DIR__ . '/../../logic/connection.php';
-require_once __DIR__ . '/../function/return_response.php';
+require_once __DIR__ . '/../../../API/logic/database/connection.php';
+require_once __DIR__ . '/../../../API/logic/communications/return_response.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no permitido.", null);
 

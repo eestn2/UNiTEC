@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import AppWindow from "./AppWindow";
-import ResponsiveComponent from "./ResponsiveComponent";
-import edit_icon from "../../assets/icons/edit.svg";
-import ActionButton from "./ActionButton";
-import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import InputField from "./InputField";
+import { useState } from "react";
+import AppWindow from "../AppWindow";
+import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
+import InputField from "../form/InputField";
+import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
+import ActionButton from "../ActionButton";
+import edit_icon from  "../../../assets/icons/edit.svg"
 
 interface AttributeEditorProps extends ResponsiveComponent {
     type?: string;
