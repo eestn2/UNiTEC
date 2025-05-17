@@ -6,7 +6,6 @@
  * @date April 29, 2025
  */
 import React from "react";
-import "../../styles/index.css";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import ResponsiveComponent from "../../global/interface/ResponsiveComponent";
 

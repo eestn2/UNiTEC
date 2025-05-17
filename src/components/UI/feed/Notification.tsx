@@ -7,7 +7,6 @@
  */
 
 import React, { JSX, useEffect, useState } from "react";
-import "../../styles/index.css";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import axios from "axios";

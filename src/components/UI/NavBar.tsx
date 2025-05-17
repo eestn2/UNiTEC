@@ -6,7 +6,6 @@
  */
 
 import React from "react";
-import "../../styles/index.css";
 import notification_icon from "../../assets/navbar/bxs-bell-ring.svg";
 import about_us_icon from "../../assets/navbar/bxs-info-circle.svg";
 import phone_icon from "../../assets/navbar/bxs-phone.svg";

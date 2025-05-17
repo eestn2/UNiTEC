@@ -7,9 +7,8 @@
  */
 
 import React from "react";
-import "../../styles/index.css";
-import logo from "../../assets/unitec/unitec-icon.svg";
-import logo_text from "../../assets/unitec/unitec-text.svg";
+import logo from "../../../assets/unitec/unitec-icon.svg";
+import logo_text from "../../../assets/unitec/unitec-text.svg";
 import AppWindow from "../AppWindow"; 
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";

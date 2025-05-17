@@ -7,7 +7,6 @@
  */
 
 import React, { ChangeEvent, FormEvent, useState } from "react";
-import "../../styles/index.css";
 import InputField from "../UI/form/InputField";
 import AppWindow from "../UI/AppWindow";
 import Logo from "../UI/unitec/Logo";

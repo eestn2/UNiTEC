@@ -8,7 +8,6 @@
 
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import ActionButton from "../UI/ActionButton";
-import "../../styles/index.css";
 import AppWindow from "../UI/AppWindow";
 import Logo from "../UI/unitec/Logo";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";

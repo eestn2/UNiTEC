@@ -6,7 +6,6 @@
  * @date May 11, 2025
  */
 
-import "../../styles/index.css";
 import NavBar from '../UI/NavBar';
 import AppWindow from '../UI/AppWindow';
 import JobOffer from "../UI/feed/JobOffer";

@@ -7,7 +7,6 @@
  */
 
 import React from "react";
-import "../../styles/index.css";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import AppWindow from "../AppWindow";
 import ActionButton from "../ActionButton";

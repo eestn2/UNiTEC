@@ -7,7 +7,6 @@
  */
 
 import React, { ChangeEventHandler } from "react";
-import "../../styles/index.css";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 

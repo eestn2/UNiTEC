@@ -7,7 +7,6 @@
  */
 
 import ActionButton from "../UI/ActionButton";
-import "../../styles/index.css";
 import SelectionField from "../UI/form/SelectionField";
 import AppWindow from "../UI/AppWindow";
 import Logo from "../UI/unitec/Logo";
