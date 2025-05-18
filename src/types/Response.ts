@@ -40,3 +40,26 @@ export interface TypedResponse<T> extends Response {
      *  @type {T} */
     data: T;
 }
+/**
+ * Represents a typed API response where data is an object with a named array property.
+ * 
+ * @template T - The type of the array elements.
+ * @template K - The name of the array property in the data object.
+ * 
+ * @extends Response
+ * @property {{ [key in K]: T[] }} data - The strongly-typed data payload returned by the API, where the data is an object with a named array property.
+ * 
+ * @example
+ * // Usage in FeedBox.tsx:
+ * // const notification = response.data as TypedResponseWNamedArray<notification, "notifications">;
+ * // const jobOffers = response.data as TypedResponseWNamedArray<offer, "job_offers">;
+ */
+export interface TypedResponseWNamedArray<T, K extends string> extends Response {
+    /**
+     * The strongly-typed data payload returned by the API.
+     * @type {{ [key in K]: T[] }}
+     */
+    data: {
+        [key in K]: T[];
+    };
+}
