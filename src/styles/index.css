@@ -500,7 +500,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .notification .state div {
   border-radius: 50%;
-  position: absolute;
   transition: background-color 0.5s ease-in-out;
 }
 
