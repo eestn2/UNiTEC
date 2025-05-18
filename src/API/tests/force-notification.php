@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../logic/connection.php';
+require_once __DIR__ . '/../logic/database/connection.php';
 require_once __DIR__ . '/../logic/notifications/send_notification.php';
 
 // User ID to test notifications

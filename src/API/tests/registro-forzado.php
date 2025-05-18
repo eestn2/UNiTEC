@@ -5,8 +5,8 @@
  * It is intended to ensure that a test account is always available for testing purposes.
  * No additional logic is included in this file.
  */
-include_once(__DIR__ . '/../logic/connection.php');
-require_once(__DIR__ . '/../logic/security_functions.php');
+include_once(__DIR__ . '/../logic/database/connection.php');
+require_once(__DIR__ . '/../logic/security/security_functions.php');
 
 try {
     $connection->beginTransaction();
