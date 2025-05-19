@@ -56,8 +56,8 @@ const Notification: React.FC<NotificationProps> = ({ notificationId, width = 10,
         if (typeof action === "function") return <button onClick={() => {action()}} className="view-more">Ver más</button>;
         return null;
     }
-    const viewOffer = React.useCallback((id: number) => {
-        navigate(`/job-offer/${id}`);
+    const viewOffer = React.useCallback((id: number, message: string, type: number) => {
+        navigate(`/job-offer/${id}/${message}/${type}`);
     }, [navigate]);
     
     useEffect(() => {
@@ -70,7 +70,7 @@ const Notification: React.FC<NotificationProps> = ({ notificationId, width = 10,
                 if (status === "success" && notification) {
                     setContent(notification.message);
                     if (notification.action === "view_offer") {
-                        setAction(() => () => viewOffer(notification.sender_id));
+                        setAction(() => () => viewOffer(notification.sender_id, notification.message, notification.type));
                     }
                 } else {
                     console.error("Failed to fetch notification data:", message);

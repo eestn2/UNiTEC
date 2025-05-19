@@ -76,6 +76,7 @@ function App(): JSX.Element {
             <Route path='/password-reset' element={<ForgotPassword />} />
             <Route path='/admin-menu' element={<AdminPanel />} />
             <Route path="/job-offer/:offerId" element={<JobOfferFV />} />
+            <Route path="/job-offer/:offerId/:message/:type" element={<JobOfferFV />} />
           </Routes>
         </BrowserRouter>
       </div>
