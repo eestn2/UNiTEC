@@ -47,8 +47,8 @@ const Login: React.FC = () => {
             });
             if (response.status === 200 && response.data.status === "success") {
                 const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
-                document.cookie = `session=${JSON.stringify(response.data.user)}; path=/; expires=${expires};`;
-                User.set(await response.data.user);
+                document.cookie = `session=${JSON.stringify(await response.data.data.user)}; path=/; expires=${expires};`;
+                User.set(await response.data.data.user);
                 location.reload();
             } else {
                 console.error("Login failed:", await response.data.message);
@@ -60,7 +60,7 @@ const Login: React.FC = () => {
     };
     
     return (
-        <AppWindow width={370} height={650} style={{
+        <AppWindow width={370} height={650} vertical={true}  style={{
             display: "flex", 
             flexDirection: "column", 
             rowGap: TranslateFigmaCoords.translateFigmaYAlt(26),
@@ -69,19 +69,19 @@ const Login: React.FC = () => {
             height: "auto",
             top: "50%", left: "50%", translate: "-50% -50%"
         }}>
-            <Logo width={180} height={180} logo_size={140} logo_text_size={34}/>
+            <Logo width={180} height={180} logo_size={140} logo_text_size={34} vertical = {true}/>
             <form 
                 name="login"
                 id="login"
                 onSubmit={(event) => {handleLogin(event)}}
                 style={{display: "flex", flexDirection:"column", alignItems: "center", rowGap: TranslateFigmaCoords.translateFigmaYAlt(18)}}
             >
-                <InputField name="user" type="text" placeholder="Dirección de correo electrónico" width={320} height={50}
+                <InputField name="user" type="text" vertical={true} placeholder="Dirección de correo electrónico" width={320} height={50}
                     onChange={(event: ChangeEvent<HTMLInputElement>) => {setEmail(event.target.value)}}/>
-                <InputField name="password" type="password" placeholder="Contraseña" width={320} height={50}
+                <InputField name="password" type="password" vertical={true}  placeholder="Contraseña" width={320} height={50}
                     onChange={(event: ChangeEvent<HTMLInputElement>) => {setPassword(event.target.value)}}/>
                 <span style={{color: "#d40202"}}>{errors}</span>
-                <ActionButton height={50} text={"Iniciar Sesión"} action={(event) => {
+                <ActionButton vertical={true} height={50} text={"Iniciar Sesión"} action={(event) => {
                     event.preventDefault();
                     const form = document.getElementById("login") as HTMLFormElement;
                     if (form) form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true })); 

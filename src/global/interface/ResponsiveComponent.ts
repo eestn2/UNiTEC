@@ -13,6 +13,7 @@
  *
  * @property {number} [width] - The width of the component in pixels (converted to responsive units).
  * @property {number} [height] - The height of the component in pixels (converted to responsive units).
+ * @property {boolean} [vertical] - Decides wich TranslateFigma Function to use.
  * @property {React.ReactNode} [children] - The children elements to render inside the component.
  * @property {React.CSSProperties} [style] - Inline styles to apply to the component.
  * @property {string} [className] - Custom CSS classes to apply to the component.
@@ -25,6 +26,8 @@ export default interface ResponsiveComponent {
     width?: number;
     /** The height of the component in pixels (converted to responsive units). */
     height?: number;
+    /** Decides wich TranslateFigma Function to use. */
+    vertical?: boolean;
     /** The children elements to render inside the component. */
     children?: React.ReactNode;
     /** Inline styles to apply to the component. */

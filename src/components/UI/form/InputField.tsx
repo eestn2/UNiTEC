@@ -6,9 +6,9 @@
  * @date May 11, 2025
  */
 
-import { ChangeEventHandler, useEffect, useRef, useState } from "react";
+import { ChangeEventHandler } from "react";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
-import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
+import { getTranslates } from "../../../global/function/getTranslates";
 
 /**
  * Props for the `InputField` component.
@@ -19,6 +19,7 @@ import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords"
  * @property name - The name attribute for the input field, used for form submission.
  * @property placeholder - The placeholder text for the input field.
  * @property onChange - Optional event handler called when the input value changes.
+ * @property vertical - Decides wich TranslateFigmaCoords function to use (Default: false).
  * @property max - Optional maximum date for date inputs.
  * @property min - Optional minimum date for date inputs.
  * @property style - Optional inline styles to apply to the input field.
@@ -35,6 +36,8 @@ interface InputFieldProps extends ResponsiveComponent {
     placeholder: string;
     /** Optional event handler called when the input value changes. */
     onChange?: ChangeEventHandler;
+    /** Decides wich TranslateFigmaCoords function to use (Default: false).*/
+    vertical?: boolean;
     /** Optional maximum date for date inputs. */
     max?: string;
     /** Optional minimum date for date inputs. */
@@ -55,6 +58,7 @@ interface InputFieldProps extends ResponsiveComponent {
  * @param {string} props.type - The type of the input field (e.g., "text", "date").
  * @param {string} props.name - The name attribute for the input field.
  * @param {string} props.placeholder - The placeholder text for the input field.
+ * @param {boolean} props.vertical - Decides wich TranslateFigma Function to use (Default: false).
  * @param {React.CSSProperties} [props.style] - Additional inline styles for the input field.
  * @param {string} [props.className] - Additional CSS class names for the input field.
  * @param {(event: React.ChangeEvent<HTMLInputElement>) => void} [props.onChange] - Callback function triggered when the input value changes.
@@ -82,36 +86,17 @@ const InputField: React.FC<InputFieldProps> = ({
     onChange,
     type,
     name,
+    vertical = false,
     placeholder = "Input field",
     style,
     className,
     max,
     min,
 }) => {
-    // Use a ref to get the container size
-    const inputRef = useRef<HTMLInputElement>(null);
-    const [containerSize, setContainerSize] = useState<{ width: number; height: number }>({ width: 0, height: 0 });
-
-    useEffect(() => {
-        if (inputRef.current && inputRef.current.parentElement) {
-            const rect = inputRef.current.parentElement.getBoundingClientRect();
-            setContainerSize({ width: rect.width, height: rect.height });
-        }
-    }, []);
-
-    // Choose the translation function based on container size
-    console.log(containerSize)
-    const useAlt = containerSize.height > containerSize.width;
-    const translateX = useAlt
-        ? TranslateFigmaCoords.translateFigmaXAlt
-        : TranslateFigmaCoords.translateFigmaX;
-    const translateY = useAlt
-        ? TranslateFigmaCoords.translateFigmaYAlt
-        : TranslateFigmaCoords.translateFigmaY;
+    const [ translateX, translateY ] = getTranslates(vertical);
 
     return (
         <input
-            ref={inputRef}
             style={{
                 width: `${translateX(width - 18)}px`,
                 height: `${translateY(height)}px`,

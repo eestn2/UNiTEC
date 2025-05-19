@@ -17,7 +17,8 @@ import User from "../session/User";
 import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 import { TypedResponseWNamedArray } from '../../types/Response';
 import type { offer } from '../../types/JobOfferTypes';
-import { notification } from '../../types/notification';
+import type { notification } from '../../types/notification';
+import no_notifications from '../../assets/icons/no-notis.svg';
 
 /**
  * A React functional component that renders the main feed with job offers and notifications.
@@ -147,7 +148,17 @@ function FeedBox() {
           Notificaciones
         </div>
         {notifications.length > 0 ? notifications : (
-          <div>Pepito el placeholder</div>
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <img src={no_notifications} style={{
+              width: TranslateFigmaCoords.translateFigmaX(200),
+              height: TranslateFigmaCoords.translateFigmaX(200),
+            }} />
+            <span style={{
+              direction: "ltr",
+              color: "rgb(170, 164, 211)"
+            }}>No tienes notificaciones.</span>
+          </div>
+          
         )}
       </AppWindow>
     </div>
