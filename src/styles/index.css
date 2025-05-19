@@ -25,6 +25,7 @@
   :root {
    --x-multiplier: 100vw;
    --y-multiplier: 100vw;
+   --nav-height: calc((35 / 720) * 100vh);
   }
 }
 
@@ -323,15 +324,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: calc((30 / 1280) * var(--x-multiplier));
   box-shadow: rgba(50, 50, 93, 0.25) 0px calc((6 / 720) * var(--y-multiplier)) calc((12 / 720) * var(--y-multiplier)) calc((-2 / 720) * var(--y-multiplier)), rgba(0, 0, 0, 0.3) 0px calc((3 / 720) * var(--y-multiplier)) calc((7 / 720) * var(--y-multiplier)) calc((-3 / 720) * var(--y-multiplier));
 }
+
 .icons-section {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: calc((20 / 1280) * var(--x-multiplier));
+  gap: calc((15 / 1280) * var(--x-multiplier));
 }
 .icons-section img {
-  width: calc((35 / 1240) * var(--nav-width));
-  height: calc((37 / 60) * var(--nav-height));
+  width: calc((30 / 1240) * var(--nav-width));
+  height: calc((30 / 60) * var(--nav-height));
   fill: var(--icons-nav-bar);
 }
 .profile-pic {
@@ -343,6 +345,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background-position: center;
 }
 .icons-section .profile-pic {
+  margin-left: calc((10 / 1280) * var(--x-multiplier));
   width: calc((40 / 1240) * var(--nav-width));
   height: calc((40 / 1240) * var(--nav-width));
 }
@@ -355,6 +358,32 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .unitec-text {
   width: calc((130 / 1240) * var(--nav-width));
   height: calc((35 / 60) * var(--nav-height));
+  margin-left: calc((20 / 1280) * var(--x-multiplier));
+}
+@media (orientation: portrait) {
+  .nav-bar {
+    border-radius: calc((60 / 1280) * var(--x-multiplier));
+  }
+  .icons-section {
+    gap: calc((60 / 1280) * var(--x-multiplier));
+  }
+  .bell {
+    margin-bottom: calc((6 / 720) * var(--y-multiplier));
+  }
+  .icons-section img {
+    width: calc((65 / 1240) * var(--nav-width));
+    height: calc((67 / 60) * var(--nav-height));
+    fill: var(--icons-nav-bar);
+  }
+  .nav-bar .profile-pic {
+    width: calc((80 / 1240) * var(--nav-width));
+    height: calc((80 / 1240) * var(--nav-width));
+  }
+  .unitec-text {
+    margin-left: calc((40 / 1280) * var(--x-multiplier));
+    width: calc((260 / 1240) * var(--nav-width));
+    height: calc((125 / 60) * var(--nav-height));
+  }
 }
 
 /* =========================
@@ -602,7 +631,7 @@ footer{
   ========================= */
 .offer-fv-description-delimiter {
   height: 3px;
-  width: 40%;
+  width: 100%;
   background: var(--delimiters);
 }
 .offer-fv-deapply{
