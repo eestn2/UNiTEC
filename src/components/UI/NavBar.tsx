@@ -13,6 +13,7 @@ import chart_icon from "../../assets/navbar/bxs-bar-chart-alt-2.svg";
 import add_offer_icon from "../../assets/navbar/bxs-edit.svg";
 import unitec_text from "../../assets/unitec/unitec-text.svg";
 import User from "../session/User";
+import ResponsiveComponent from "../../global/interface/ResponsiveComponent";
 
 /**
  * A React functional component that renders the navigation bar with logo and icon buttons.
@@ -26,10 +27,19 @@ import User from "../session/User";
  * ```
  * @author Daviel Díaz Gonzáles
  */
-const NavBar: React.FC = () => {
+
+
+interface NavBarProps extends ResponsiveComponent{
+    isAdmin?: boolean;
+    
+}
+const NavBar: React.FC <NavBarProps>= ({
+    isAdmin = false,
+}) => {
+    
     // Conditional Variables to NavBar changes
     const user_type: number =  User.data.type as number;
-    const buttons: React.ReactElement[] | undefined[] = [
+    const buttons:React.ReactElement | React.ReactElement[] | undefined[] = [
         <a href="#footer"><img src={about_us_icon} alt="About Us" /></a>,
         <a href="#footer"><img src={phone_icon} alt="Phone" /></a>,
         <img src={notification_icon} alt="Notification" style={{ display: "none" }} />
@@ -46,15 +56,39 @@ const NavBar: React.FC = () => {
         }
     }
     return (
-        <div className="nav-bar">
-            <div className="logo-section">
-                <img src={unitec_text} alt="Unitec Text" className="unitec-text" />
+        isAdmin ? (
+            
+            <div className="nav-bar">
+                <div className="logo-section">
+                    <img src={unitec_text} alt="Unitec Text" className="unitec-text" />
+                </div>
+                <div className="icons-section">
+                    buttons = (
+                        <div style={{ display: "flex"}}>
+                            <button>Usuarios</button>
+                            <button>Idiomas</button>
+                            <button>Ofertas</button>
+                           
+                        </div>
+                    );  
+
+                </div>
             </div>
-            <div className="icons-section">
-                {buttons}
-                <div className="profile-pic"></div>
-            </div>
-        </div>
+
+        ) : (
+            <>
+                <div className="nav-bar">
+                <div className="logo-section">
+                    <img src={unitec_text} alt="Unitec Text" className="unitec-text" />
+                </div>
+                <div className="icons-section">
+                    {buttons}
+                    <div className="profile-pic"></div>
+                </div>
+                </div>
+            </>
+
+        )
     );
 };
 

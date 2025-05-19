@@ -27,8 +27,8 @@ const AttributeEditor: React.FC<AttributeEditorProps> = ({
             width={width}
             height={height}
             style={{
-                borderColor: "#305894",
-                borderWidth: `${TranslateFigmaCoords.translateFigmaX(3)}px`,
+                borderColor: "#5386FF",
+                borderWidth: `${TranslateFigmaCoords.translateFigmaX(2)}px`,
                 borderStyle: "solid"
             }}
         >
