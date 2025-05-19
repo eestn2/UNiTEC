@@ -38,13 +38,13 @@ const ForgotPassword: React.FC = () => {
             <AppWindow width={370} height={620} style={
                 {display: "flex", 
                 flexDirection: "column", 
-                rowGap: TranslateFigmaCoords.translateFigmaY(26),
+                rowGap: TranslateFigmaCoords.translateFigmaYAlt(26),
                 alignItems: "center", 
                 position: "absolute", 
                 top: "50%", left: "50%", translate: "-50% -50%"
                 }}>
-                <span className="title" style={{marginTop: TranslateFigmaCoords.translateFigmaY(40)}}>Olvidé mi Contraseña</span>
-                <form name="change-password" style={{display: "flex", flexDirection:"column", alignItems: "flex-start", rowGap: TranslateFigmaCoords.translateFigmaY(18)}} method="post">
+                <span className="title" style={{marginTop: TranslateFigmaCoords.translateFigmaYAlt(40)}}>Olvidé mi Contraseña</span>
+                <form name="change-password" style={{display: "flex", flexDirection:"column", alignItems: "flex-start", rowGap: TranslateFigmaCoords.translateFigmaYAlt(18)}} method="post">
                     <div className="black-text" style={{display: "flex", flexDirection:"column", rowGap: "1px"}}>
                         <span style={{color: "#335A95"}}>Hemos enviado un codigo de verificación a: </span>
                         <span style={{textDecoration: "underline"}}>placeholder@gmail.com</span>

@@ -63,7 +63,7 @@ const Login: React.FC = () => {
         <AppWindow width={370} height={650} style={{
             display: "flex", 
             flexDirection: "column", 
-            rowGap: TranslateFigmaCoords.translateFigmaY(26),
+            rowGap: TranslateFigmaCoords.translateFigmaYAlt(26),
             alignItems: "center", 
             position: "absolute", 
             height: "auto",
@@ -74,7 +74,7 @@ const Login: React.FC = () => {
                 name="login"
                 id="login"
                 onSubmit={(event) => {handleLogin(event)}}
-                style={{display: "flex", flexDirection:"column", alignItems: "center", rowGap: TranslateFigmaCoords.translateFigmaY(18)}}
+                style={{display: "flex", flexDirection:"column", alignItems: "center", rowGap: TranslateFigmaCoords.translateFigmaYAlt(18)}}
             >
                 <InputField name="user" type="text" placeholder="Dirección de correo electrónico" width={320} height={50}
                     onChange={(event: ChangeEvent<HTMLInputElement>) => {setEmail(event.target.value)}}/>
@@ -90,14 +90,14 @@ const Login: React.FC = () => {
             <div style={{
                 backgroundColor: "#D8DDF5",
                 borderColor: "#FFD64F",
-                borderTop: `${TranslateFigmaCoords.translateFigmaY(4)}px solid #FFD64F`,
-                borderBottom: `${TranslateFigmaCoords.translateFigmaY(4)}px solid #FFD64F`,
+                borderTop: `${TranslateFigmaCoords.translateFigmaYAlt(4)}px solid #FFD64F`,
+                borderBottom: `${TranslateFigmaCoords.translateFigmaYAlt(4)}px solid #FFD64F`,
                 width: "100%",
-                height: TranslateFigmaCoords.translateFigmaY(71),
+                height: TranslateFigmaCoords.translateFigmaYAlt(71),
                 display: "flex",
                 alignItems: "center"
             }}>
-                <Link to={'/password-reset'} className="link" style={{marginLeft: TranslateFigmaCoords.translateFigmaX(27)}}>Restablecer contraseña</Link>
+                <Link to={'/password-reset'} className="link" style={{marginLeft: TranslateFigmaCoords.translateFigmaXAlt(27)}}>Restablecer contraseña</Link>
             </div>
             <div style={{
                 display: "flex",
@@ -105,12 +105,12 @@ const Login: React.FC = () => {
                 alignSelf: "flex-start",
                 alignItems: "flex-start",
                 textAlign: "left",
-                marginTop: -TranslateFigmaCoords.translateFigmaY(12),
-                textIndent: TranslateFigmaCoords.translateFigmaX(27),
+                marginTop: -TranslateFigmaCoords.translateFigmaYAlt(12),
+                textIndent: TranslateFigmaCoords.translateFigmaXAlt(27),
                 color: "#00317B"
             }}>
                 <span>¿No tienes una cuenta?</span>
-                <span style={{paddingBottom: `${TranslateFigmaCoords.translateFigmaY(10)}px`}}>Registrate como <Link className="link" style={{color: "rgb(255, 193, 35)"}} to={'/register-enterprise'}>Empresa</Link> / <Link to={'register-user'} className="link" style={{color: "rgb(255, 193, 35)"}}>Estudiante</Link></span>
+                <span style={{paddingBottom: `${TranslateFigmaCoords.translateFigmaYAlt(10)}px`}}>Registrate como <Link className="link" style={{color: "rgb(255, 193, 35)"}} to={'/register-enterprise'}>Empresa</Link> / <Link to={'register-user'} className="link" style={{color: "rgb(255, 193, 35)"}}>Estudiante</Link></span>
             </div>
         </AppWindow>
     );

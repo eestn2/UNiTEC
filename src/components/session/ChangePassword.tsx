@@ -38,14 +38,14 @@ const ChangePassword: React.FC = () => {
             <AppWindow width={370} height={560} style={
                 {display: "flex", 
                 flexDirection: "column", 
-                rowGap: TranslateFigmaCoords.translateFigmaY(26),
+                rowGap: TranslateFigmaCoords.translateFigmaYAlt(26),
                 alignItems: "center", 
                 position: "absolute", 
                 top: "50%", left: "50%", translate: "-50% -50%"
                 }}>
                 <Logo width={180} height={180} logo_size={140} logo_text_size={34}/>
                 <span className="title">Cambiar contraseña</span>
-                <form name="change-password" style={{display: "flex", flexDirection:"column", alignItems: "center", rowGap: TranslateFigmaCoords.translateFigmaY(18)}} method="post">
+                <form name="change-password" style={{display: "flex", flexDirection:"column", alignItems: "center", rowGap: TranslateFigmaCoords.translateFigmaYAlt(18)}} method="post">
                     <InputField name="password" type="password" placeholder="Ingrese la nueva contraseña" width={320} height={50}/>
                     <InputField name="confirm_password" type="password" placeholder="Confirme la contraseña" width={320} height={50}/>
                 </form>

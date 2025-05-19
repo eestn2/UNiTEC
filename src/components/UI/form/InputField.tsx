@@ -6,7 +6,7 @@
  * @date May 11, 2025
  */
 
-import React, { ChangeEventHandler } from "react";
+import { ChangeEventHandler, useEffect, useRef, useState } from "react";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 
@@ -88,12 +88,34 @@ const InputField: React.FC<InputFieldProps> = ({
     max,
     min,
 }) => {
+    // Use a ref to get the container size
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [containerSize, setContainerSize] = useState<{ width: number; height: number }>({ width: 0, height: 0 });
+
+    useEffect(() => {
+        if (inputRef.current && inputRef.current.parentElement) {
+            const rect = inputRef.current.parentElement.getBoundingClientRect();
+            setContainerSize({ width: rect.width, height: rect.height });
+        }
+    }, []);
+
+    // Choose the translation function based on container size
+    console.log(containerSize)
+    const useAlt = containerSize.height > containerSize.width;
+    const translateX = useAlt
+        ? TranslateFigmaCoords.translateFigmaXAlt
+        : TranslateFigmaCoords.translateFigmaX;
+    const translateY = useAlt
+        ? TranslateFigmaCoords.translateFigmaYAlt
+        : TranslateFigmaCoords.translateFigmaY;
+
     return (
         <input
+            ref={inputRef}
             style={{
-                width: `${TranslateFigmaCoords.translateFigmaX(width - 18)}px`,
-                height: `${TranslateFigmaCoords.translateFigmaY(height)}px`,
-                paddingLeft: `${TranslateFigmaCoords.translateFigmaX(18)}px`,
+                width: `${translateX(width - 18)}px`,
+                height: `${translateY(height)}px`,
+                paddingLeft: `${translateX(18)}px`,
                 ...style,
             }}
             name={name}
@@ -101,8 +123,8 @@ const InputField: React.FC<InputFieldProps> = ({
             placeholder={placeholder}
             className={`input-field ${className || ""}`}
             onChange={onChange}
-            max={type === "date" ? max : undefined} // Apply max only for date inputs
-            min={type === "date" ? min : undefined} // Apply min only for date inputs
+            max={type === "date" ? max : undefined}
+            min={type === "date" ? min : undefined}
         />
     );
 };

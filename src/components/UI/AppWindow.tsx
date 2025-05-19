@@ -31,9 +31,15 @@ import ResponsiveComponent from "../../global/interface/ResponsiveComponent";
  * @Author: Haziel Magallanes
  */
 const AppWindow: React.FC<ResponsiveComponent> = ({ height = 10, width = 10, ref, children, style, className }) => {
-    // Check if is a square shaped window, if so, make calculated height the same as calculated width
-    height = height == width ? TranslateFigmaCoords.translateFigmaX(width) : TranslateFigmaCoords.translateFigmaY(height);
-    width = TranslateFigmaCoords.translateFigmaX(width);  // Convert Figma sizes to the same ratio as the screen size
+    // Check if vertical window
+    if ( height > width ) {
+        width = TranslateFigmaCoords.translateFigmaXAlt(width);
+        height = TranslateFigmaCoords.translateFigmaYAlt(height);
+    }else{
+        // Check if is a square shaped window, if so, make calculated height the same as calculated width
+        height = height == width ? TranslateFigmaCoords.translateFigmaX(width) : TranslateFigmaCoords.translateFigmaY(height);
+        width = TranslateFigmaCoords.translateFigmaX(width);  // Convert Figma sizes to the same ratio as the screen size
+    }
     return (
         <div
             className={`app-window ${className || ""}`}
