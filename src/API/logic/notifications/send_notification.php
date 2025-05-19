@@ -37,13 +37,13 @@ function send_notification(PDO $connection, int $type, int $receiver_id, array $
             if (!isset($extra['offer_id'])) return false;
 
             // Get offer info
-            $stmt = $connection->prepare("SELECT a.title, u.name AS author, a.creator_id FROM applications a JOIN users u ON a.creator_id = u.id WHERE a.id = ?");
+            $stmt = $connection->prepare("SELECT a.title, u.name AS author FROM applications a JOIN users u ON a.creator_id = u.id WHERE a.id = ?");
             $stmt->execute([$extra['offer_id']]);
             $offer = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$offer) return false;
 
-            $sender_id = $offer['creator_id'];
+            $sender_id = $extra['offer_id'];
             $offer_title = $offer['title'];
             $offer_author = $offer['author'];
 

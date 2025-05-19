@@ -10,7 +10,7 @@ import React, { JSX, useEffect, useState } from "react";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useWindowSize } from "../../../hooks/responsive/useWindowSize";
 import type { TypedResponse } from "../../../types/Response";
 import type { notification } from "../../../types/notification";
@@ -47,6 +47,8 @@ const Notification: React.FC<NotificationProps> = ({ notificationId, width = 10,
     const [content, setContent] = useState<string>("Cargando notificación...");
     const [action, setAction] = useState<string | CallableFunction | undefined>(undefined);
 
+    const navigate = useNavigate();
+
     width = TranslateFigmaCoords.translateFigmaX(width);
 
     function getAction(): JSX.Element | null {
@@ -54,9 +56,10 @@ const Notification: React.FC<NotificationProps> = ({ notificationId, width = 10,
         if (typeof action === "function") return <button onClick={() => {action()}} className="view-more">Ver más</button>;
         return null;
     }
-    function viewOffer(id: number) {
-        console.log("Ver aplicación con ID:", id);
-    }
+    const viewOffer = React.useCallback((id: number) => {
+        navigate(`/job-offer/${id}`);
+    }, [navigate]);
+    
     useEffect(() => {
         const fetchNotification = async () => {
             try {
@@ -79,7 +82,7 @@ const Notification: React.FC<NotificationProps> = ({ notificationId, width = 10,
             }
         };
         fetchNotification();
-    }, [notificationId]);
+    }, [notificationId, viewOffer]);
 
     return (
         <div

@@ -15,6 +15,10 @@ import { ReactElement, useEffect, useState } from "react";
 import axios from "axios";
 import User from "../session/User";
 import { useWindowSize } from "../../hooks/responsive/useWindowSize";
+import { TypedResponseWNamedArray } from '../../types/Response';
+import type { offer } from '../../types/JobOfferTypes';
+import type { notification } from '../../types/notification';
+import no_notifications from '../../assets/icons/no-notis.svg';
 
 /**
  * A React functional component that renders the main feed with job offers and notifications.
@@ -39,23 +43,20 @@ function FeedBox() {
   // Fetch job offers from the server
   const loadJobOffers = async () => {
     try {
-      const response = await axios.get(`/feed/job-offers.php`);
-      if (response.status !== 200 && response.data.status !== "success") {
-        console.error("Failed to load job offers:", response.data.message);
+      const {data: response} = await axios.get<TypedResponseWNamedArray<offer, "job_offers">>(`/feed/job-offers.php`);
+      if (response.status !== "success") {
+        console.error("Failed to load job offers:", response.message);
       } else {
-        const offers = await Promise.all(
-        response.data.data.job_offers.map(async (offer: any) => {
-          return (
-            <JobOffer
-              key={offer.id}
-              width={820}
-              height={400}
-              authorId={offer.creator_id}
-              title={offer.title}
-              description={offer.description}
-            />
-          );
-        }));
+        const offers = response.data.job_offers.map((offer) => (
+          <JobOffer
+            key={offer.id}
+            width={820}
+            height={400}
+            authorId={offer.creator_id}
+            title={offer.title}
+            description={offer.description}
+          />
+        ));
         setJobOffers(offers);
       }
     } catch (error) {
@@ -66,11 +67,11 @@ function FeedBox() {
   const loadNotifications = async () => {
     try {
       const userId = User.data.id;
-      const response = await axios.get(`/user/retrieve-notifications.php?user_id=${userId}`);
-      if (response.status !== 200 || response.data.status !== "success") {
-        console.error("Failed to load notifications:", response.data.message);
+      const { data: response } = await axios.get<TypedResponseWNamedArray<notification, "notifications">>(`/user/retrieve-notifications.php?user_id=${userId}`);
+      if (response.status !== "success") {
+        console.error("Failed to load notifications:", response.message);
       } else {
-        const notificationsList = response.data.data.notifications.map((notif: any) => (
+        const notificationsList = response.data.notifications.map((notif) => (
           <Notification key={notif.id} width={300} height={60} notificationId={notif.id} />
         ));
         setNotifications(notificationsList);
@@ -147,7 +148,17 @@ function FeedBox() {
           Notificaciones
         </div>
         {notifications.length > 0 ? notifications : (
-          <div>Pepito el placeholder</div>
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <img src={no_notifications} style={{
+              width: TranslateFigmaCoords.translateFigmaX(200),
+              height: TranslateFigmaCoords.translateFigmaX(200),
+            }} />
+            <span style={{
+              direction: "ltr",
+              color: "rgb(170, 164, 211)"
+            }}>No tienes notificaciones.</span>
+          </div>
+          
         )}
       </AppWindow>
     </div>

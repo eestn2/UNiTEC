@@ -1,5 +1,5 @@
 /**
- * @file JobOffer.ts
+ * @file offer.ts
  * @description Type definition for a job offer object as returned by the backend API.
  * Includes all attributes present in the job offer response.
  * @author Haziel Magallanes
@@ -12,7 +12,7 @@
  * @property {string} description - Detailed description of the job offer.
  * @property {number} status - Status code of the job offer.
  */
-export type JobOffer = {
+export type offer = {
     /** Unique identifier for the job offer */
     id: number;
     /** ID of the user who created the job offer */
@@ -26,3 +26,4 @@ export type JobOffer = {
     /** Status code of the job offer */
     status: number;
 };
+

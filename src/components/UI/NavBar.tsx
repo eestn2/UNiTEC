@@ -5,8 +5,7 @@
  * @date May 11, 2025
  */
 
-import React from "react";
-import notification_icon from "../../assets/navbar/bxs-bell-ring.svg";
+import notification_icon from "../../assets/icons/bell.svg";
 import about_us_icon from "../../assets/navbar/bxs-info-circle.svg";
 import phone_icon from "../../assets/navbar/bxs-phone.svg";
 import chart_icon from "../../assets/navbar/bxs-bar-chart-alt-2.svg";
@@ -37,12 +36,14 @@ const NavBar: React.FC <NavBarProps>= ({
     isAdmin = false,
 }) => {
     
+    // Re-Render on window resize
+
     // Conditional Variables to NavBar changes
     const user_type: number =  User.data.type as number;
     const buttons:React.ReactElement | React.ReactElement[] | undefined[] = [
+        <img src={notification_icon} alt="Notification" className="bell" style={{ display: window.innerWidth > window.innerHeight ? "none" : "block"}} />,
         <a href="#footer"><img src={about_us_icon} alt="About Us" /></a>,
-        <a href="#footer"><img src={phone_icon} alt="Phone" /></a>,
-        <img src={notification_icon} alt="Notification" style={{ display: "none" }} />
+        <a href="#footer"><img src={phone_icon} alt="Phone" /></a>
     ];
     if (user_type === 1) {
         buttons.unshift(
@@ -55,6 +56,7 @@ const NavBar: React.FC <NavBarProps>= ({
             buttons.shift();
         }
     }
+
     return (
         isAdmin ? (
             

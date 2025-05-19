@@ -35,21 +35,21 @@ const ChangePassword: React.FC = () => {
     return (
         <div>
             <Logo className="watermark"/>
-            <AppWindow width={370} height={560} style={
+            <AppWindow width={370} height={560} vertical = {true} style={
                 {display: "flex", 
                 flexDirection: "column", 
-                rowGap: TranslateFigmaCoords.translateFigmaY(26),
+                rowGap: TranslateFigmaCoords.translateFigmaYAlt(26),
                 alignItems: "center", 
                 position: "absolute", 
                 top: "50%", left: "50%", translate: "-50% -50%"
                 }}>
-                <Logo width={180} height={180} logo_size={140} logo_text_size={34}/>
+                <Logo width={180} height={180} logo_size={140} logo_text_size={34} vertical = {true} />
                 <span className="title">Cambiar contraseña</span>
-                <form name="change-password" style={{display: "flex", flexDirection:"column", alignItems: "center", rowGap: TranslateFigmaCoords.translateFigmaY(18)}} method="post">
-                    <InputField name="password" type="password" placeholder="Ingrese la nueva contraseña" width={320} height={50}/>
-                    <InputField name="confirm_password" type="password" placeholder="Confirme la contraseña" width={320} height={50}/>
+                <form name="change-password" style={{display: "flex", flexDirection:"column", alignItems: "center", rowGap: TranslateFigmaCoords.translateFigmaYAlt(18)}} method="post">
+                    <InputField name="password" type="password" vertical = {true}  placeholder="Ingrese la nueva contraseña" width={320} height={50}/>
+                    <InputField name="confirm_password" type="password" vertical = {true}  placeholder="Confirme la contraseña" width={320} height={50}/>
                 </form>
-                <ActionButton height={60} text={"Confirmar"} width={100}/>
+                <ActionButton height={60} text={"Confirmar"} width={100} vertical = {true} />
             </AppWindow>
         </div>
     );

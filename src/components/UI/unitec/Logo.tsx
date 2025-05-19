@@ -10,8 +10,8 @@ import React from "react";
 import logo from "../../../assets/unitec/unitec-icon.svg";
 import logo_text from "../../../assets/unitec/unitec-text.svg";
 import AppWindow from "../AppWindow"; 
-import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
+import { getTranslates } from "../../../global/function/getTranslates";
 
 /**
  * Props for the `Logo` component.
@@ -38,6 +38,7 @@ interface LogoProps extends ResponsiveComponent {
  * @param {number} [props.width=210] - The width of the logo window in Figma coordinates.
  * @param {number} [props.height=210] - The height of the logo window in Figma coordinates.
  * @param {number} [props.logo_size=140] - The size of the logo icon in Figma coordinates.
+ * @param {boolean} [vertical] - Decides wich TranslateFigmaFunction to use (Default: false).
  * @param {number} [props.logo_text_size=38] - The size of the logo text in Figma coordinates.
  * @param {React.CSSProperties} [props.style] - Additional inline styles for the window.
  * @param {string} [props.className] - Additional CSS class names for the window.
@@ -55,13 +56,16 @@ const Logo: React.FC<LogoProps> = ({
     height = 210,
     logo_size = 140,
     logo_text_size = 38,
+    vertical = false,
     style,
     className
 }) => {
+    const [ translateX ] = getTranslates(vertical);
     return (
         <AppWindow
             width={width}
             height={height}
+            vertical={vertical}
             style={{
                 borderTopLeftRadius: 0,
                 borderBottomLeftRadius: 0,
@@ -84,14 +88,14 @@ const Logo: React.FC<LogoProps> = ({
                 <img
                     src={logo}
                     alt="Unitec Logo"
-                    width={TranslateFigmaCoords.translateFigmaX(logo_size)}
-                    height={TranslateFigmaCoords.translateFigmaX(logo_size)}
+                    width={translateX(logo_size)}
+                    height={translateX(logo_size)}
                 />
                 <img
                     src={logo_text}
                     alt="Unitec Text"
-                    width={TranslateFigmaCoords.translateFigmaX(logo_size)}
-                    height={TranslateFigmaCoords.translateFigmaX(logo_text_size)}
+                    width={translateX(logo_size)}
+                    height={translateX(logo_text_size)}
                 />
             </div>
         </AppWindow>

@@ -18,6 +18,7 @@ import User from './session/User';
 import Footer from './UI/unitec/Footer';
 import { JSX } from 'react';
 import AdminPanel from './admin/AdminPanel';
+import JobOfferFV from './offers/JobOfferFV';
 
 /**
  * The main application component that handles routing and session management.
@@ -73,7 +74,8 @@ function App(): JSX.Element {
             <Route path='/register-enterprise' element={<RegisterEnterprise />} />
             <Route path='/register-user' element={<RegisterUser />} />
             <Route path='/password-reset' element={<ForgotPassword />} />
-          <Route path='/admin-menu' element={<AdminPanel />} />
+            <Route path='/admin-menu' element={<AdminPanel />} />
+            <Route path="/job-offer/:offerId" element={<JobOfferFV />} />
           </Routes>
         </BrowserRouter>
       </div>

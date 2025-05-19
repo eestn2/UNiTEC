@@ -11,6 +11,7 @@ import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import AppWindow from "../AppWindow";
 import ActionButton from "../ActionButton";
 import { useJobOffer } from "../../../hooks/offer/useJobOffer";
+import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 
 /**
  * Props for the `JobOffer` component.
@@ -93,12 +94,10 @@ const JobOffer: React.FC<JobOfferProps> = ({
             style={{
                 height: isExpanded ? "auto" : `${translatedHeight}px`,
                 width: `${translatedWidth}px`,
-                display: "flex",
-                flexDirection: "column",
                 position: "relative",
                 left: "50%",
                 transform: "translateX(-50%)",
-                marginBottom: "32px",
+                marginBottom: `${TranslateFigmaCoords.translateFigmaY(32)}px`,
                 ...style,
             }}
             ref={rootRef}
@@ -115,10 +114,10 @@ const JobOffer: React.FC<JobOfferProps> = ({
             >
                 <div
                     style={{
-                        marginLeft: "10px",
+                        marginLeft: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
                         display: "flex",
                         flexDirection: "row",
-                        columnGap: "10px",
+                        columnGap: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
                         alignItems: "center",
                     }}
                 >
@@ -144,13 +143,19 @@ const JobOffer: React.FC<JobOfferProps> = ({
                 </div>
                 {overflowing && !isExpanded ? (
                     <>
-                        <div className="fade-white" style={{ bottom: 0, height: "40px", width: "calc(100% - 20px)", marginLeft: "10px", borderRadius: "10px" }}></div>
+                        <div className="fade-white" style={{ 
+                            top: `${TranslateFigmaCoords.translateFigmaY(height - 80)}px`, 
+                            height: `${TranslateFigmaCoords.translateFigmaY(40)}px`, 
+                            width: `${TranslateFigmaCoords.translateFigmaX(width - 20)}px`, 
+                            marginLeft: `${TranslateFigmaCoords.translateFigmaX(10)}px`, 
+                            borderRadius: `${TranslateFigmaCoords.translateFigmaX(10)}px` 
+                            }}></div>
                         <ActionButton
                             text="Ver más"
                             height={40}
                             style={{
                                 position: "absolute",
-                                top: "80%",
+                                top: "75%",
                                 color: "white",
                                 left: "50%",
                                 transform: "translateX(-50%)",
