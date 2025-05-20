@@ -145,8 +145,8 @@ const JobOffer: React.FC<JobOfferProps> = ({
                 {overflowing && !isExpanded ? (
                     <>
                         <div className="fade-white" style={{ 
-                            top: `${TranslateFigmaCoords.translateFigmaY(height - 80)}px`, 
-                            height: `${TranslateFigmaCoords.translateFigmaY(40)}px`, 
+                            top: `${TranslateFigmaCoords.translateFigmaY(height - 100)}px`, 
+                            height: `${TranslateFigmaCoords.translateFigmaY(60)}px`, 
                             width: `${TranslateFigmaCoords.translateFigmaX(width - 20)}px`, 
                             marginLeft: `${TranslateFigmaCoords.translateFigmaX(10)}px`, 
                             borderRadius: `${TranslateFigmaCoords.translateFigmaX(10)}px` 
