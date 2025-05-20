@@ -11,6 +11,7 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 import ActionButton from "../UI/ActionButton";
 import { user } from "../../types/user";
+import TextWithBreaks from "../UI/TextWithBreaks";
 
 const JobOfferFV: React.FC = () => {
     // Re-Render on window resize
@@ -143,7 +144,7 @@ const JobOfferFV: React.FC = () => {
                             overflowY: "auto" 
                         }}
                         className="scrollbar">
-                            <span>{jobOffer.description}</span>
+                            <TextWithBreaks text={jobOffer.description} />
                         </div>
                         <div className="offer-fv-description-delimiter" style={{marginTop: `${TranslateFigmaCoords.translateFigmaY(4)}px`}}></div>
                         {iType === 4 || iType === 5 ? null : (

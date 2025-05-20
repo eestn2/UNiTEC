@@ -12,6 +12,7 @@ import AppWindow from "../AppWindow";
 import ActionButton from "../ActionButton";
 import { useJobOffer } from "../../../hooks/offer/useJobOffer";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
+import TextWithBreaks from "../TextWithBreaks";
 
 /**
  * Props for the `JobOffer` component.
@@ -139,7 +140,7 @@ const JobOffer: React.FC<JobOfferProps> = ({
                 <div className="text" style={{ marginBottom: "5px" }}>
                     <span className="offer-title">{title}</span>
                     <br />
-                    {description}
+                    <TextWithBreaks text={description}/>
                 </div>
                 {overflowing && !isExpanded ? (
                     <>

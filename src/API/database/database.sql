@@ -43,7 +43,7 @@ CREATE TABLE `applicants` (
 CREATE TABLE `applications` (
   `id` int(11) NOT NULL,
   `creator_id` int(10) NOT NULL,
-  `title` varchar(50) NOT NULL,
+  `title` text NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp(),
   `description` text NOT NULL,
   `status` tinyint(1) NOT NULL
@@ -159,7 +159,7 @@ CREATE TABLE `reviews` (
 
 CREATE TABLE `sent_emails` (
   `id` int(10) NOT NULL,
-  `subject` varchar(80) NOT NULL,
+  `subject` text NOT NULL,
   `message` text NOT NULL,
   `sender_id` int(10) NOT NULL,
   `receiver_id` int(10) NOT NULL,
@@ -251,7 +251,7 @@ CREATE TABLE `users` (
   `description` text NOT NULL,
   `last_active_date` date NOT NULL,
   `profile_picture` varchar(500) NOT NULL,
-  `portfolio` varchar(300) NOT NULL,
+  `portfolio` text NOT NULL,
   `enabled` varchar(100) NOT NULL,
   `user_type_id` int(10) NOT NULL,
   `status_id` int(10) NOT NULL
@@ -425,19 +425,19 @@ ALTER TABLE `user_types`
 -- AUTO_INCREMENT de la tabla `applicants`
 --
 ALTER TABLE `applicants`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT de la tabla `applications`
 --
 ALTER TABLE `applications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT de la tabla `application_statuses`
 --
 ALTER TABLE `application_statuses`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT de la tabla `application_tags`
@@ -473,7 +473,7 @@ ALTER TABLE `reviews`
 -- AUTO_INCREMENT de la tabla `sent_emails`
 --
 ALTER TABLE `sent_emails`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT de la tabla `statuses`
@@ -491,25 +491,25 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT de la tabla `user_languages`
 --
 ALTER TABLE `user_languages`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT de la tabla `user_tags`
 --
 ALTER TABLE `user_tags`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT de la tabla `user_types`
 --
 ALTER TABLE `user_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- Restricciones para tablas volcadas
