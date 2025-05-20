@@ -3,7 +3,7 @@ import AppWindow from "../UI/AppWindow";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import type { offer } from "../../types/JobOfferTypes";
-import type { TypedResponse, TypedResponseWNamedArray } from "../../types/Response";
+import type { TypedResponse } from "../../types/Response";
 import placeholder from "../../assets/defaults/profile-picture/1.svg";
 import close_icon from "../../assets/icons/close.svg";
 import NavBar from "../UI/NavBar";

@@ -17,8 +17,8 @@ import axios from 'axios';
 import User from './session/User';
 import Footer from './UI/unitec/Footer';
 import { JSX } from 'react';
-import AdminPanel from './admin/AdminPanel';
 import JobOfferFV from './offers/JobOfferFV';
+import AdminIndex from './admin/AdminIndex';
 
 /**
  * The main application component that handles routing and session management.
@@ -67,14 +67,15 @@ function App(): JSX.Element {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <div className="app-content">
-        <BrowserRouter basename="/UNiTEC">
+        <BrowserRouter basename="/UNiTEC/">
           <Routes>
             <Route path='/' element={!session ? <Login /> : <FeedBox />} />
             <Route path='/test' element={<FeedBox />} />
             <Route path='/register-enterprise' element={<RegisterEnterprise />} />
             <Route path='/register-user' element={<RegisterUser />} />
             <Route path='/password-reset' element={<ForgotPassword />} />
-            <Route path='/admin-menu' element={<AdminPanel />} />
+            {/*Add default admin-menu route to the approve users one. */}
+            <Route path='/admin-menu/:panel' element={<AdminIndex />} />
             <Route path="/job-offer/:offerId" element={<JobOfferFV />} />
             <Route path="/job-offer/:offerId/:message/:type" element={<JobOfferFV />} />
           </Routes>
