@@ -42,7 +42,7 @@ const AdminPanel: React.FC = () => {
 
     return (
         <div>
-            <NavBar isAdmin={true} />
+            <NavBar />
             <AppWindow
                 height={400}
                 width={1234}

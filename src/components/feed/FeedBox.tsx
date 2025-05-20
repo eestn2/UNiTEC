@@ -19,6 +19,7 @@ import { TypedResponseWNamedArray } from '../../types/Response';
 import type { offer } from '../../types/JobOfferTypes';
 import type { notification } from '../../types/notification';
 import no_notifications from '../../assets/icons/no-notis.svg';
+import no_feed from '../../assets/icons/no-feed.svg';
 
 /**
  * A React functional component that renders the main feed with job offers and notifications.
@@ -38,7 +39,7 @@ function FeedBox() {
   const windowSize = useWindowSize();
   console.log("Window size:", windowSize);
   // State variables for job offers and notifications
-  const [jobOffers, setJobOffers] = useState<ReactElement[]>([]);
+  const [jobOffers, setJobOffers] = useState<ReactElement[] | undefined>(undefined);
   const [notifications, setNotifications] = useState<ReactElement[]>([]);
   // Fetch job offers from the server
   const loadJobOffers = async () => {
@@ -110,14 +111,25 @@ function FeedBox() {
             height: `${TranslateFigmaCoords.translateFigmaY(53)}px`,
             position: "relative",
             left: "50%",
-            transform: "translateX(-47%)",
+            transform: "translateX(-50%)",
             marginTop: `${TranslateFigmaCoords.translateFigmaY(32)}px`,
             marginBottom: `${TranslateFigmaCoords.translateFigmaY(32)}px`,
           }}
         >
           Ofertas de Trabajo
         </div>
-        {jobOffers}
+        {jobOffers ? jobOffers : (
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <img src={no_feed} style={{
+              width: TranslateFigmaCoords.translateFigmaX(300),
+              height: TranslateFigmaCoords.translateFigmaX(300),
+            }} />
+            <span style={{
+              color: "rgb(170, 164, 211)",
+              textAlign: "center"
+            }}>No hay ofertas de trabajo.</span>
+          </div>
+        )}
       </AppWindow>
       <AppWindow
         height={600}
