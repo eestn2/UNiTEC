@@ -325,6 +325,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   box-shadow: rgba(50, 50, 93, 0.25) 0px calc((6 / 720) * var(--y-multiplier)) calc((12 / 720) * var(--y-multiplier)) calc((-2 / 720) * var(--y-multiplier)), rgba(0, 0, 0, 0.3) 0px calc((3 / 720) * var(--y-multiplier)) calc((7 / 720) * var(--y-multiplier)) calc((-3 / 720) * var(--y-multiplier));
 }
 
+
 .icons-section {
   display: flex;
   justify-content: center;
@@ -336,6 +337,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   height: calc((30 / 60) * var(--nav-height));
   fill: var(--icons-nav-bar);
 }
+.icons-sectionadmin{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: calc((50 / 1280) * var(--x-multiplier));
+  font-size: xx-large;
+}
 .profile-pic {
   width: calc((37 / 1240) * var(--nav-width));
   height: calc((37 / 1240) * var(--nav-width));
@@ -343,6 +351,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background-image: url(../assets/user/profile.jpg);
   background-size: cover;
   background-position: center;
+}
+.icons-sectionadmin .profile-pic{
+  width: calc((40 / 1240) * var(--nav-width));
+  height: calc((40 / 1240) * var(--nav-width));
+  margin-left: auto;
 }
 .icons-section .profile-pic {
   margin-left: calc((10 / 1280) * var(--x-multiplier));

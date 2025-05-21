@@ -252,7 +252,7 @@ CREATE TABLE `users` (
   `last_active_date` date NOT NULL,
   `profile_picture` varchar(500) NOT NULL,
   `portfolio` text NOT NULL,
-  `enabled` varchar(100) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
   `user_type_id` int(10) NOT NULL,
   `status_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
