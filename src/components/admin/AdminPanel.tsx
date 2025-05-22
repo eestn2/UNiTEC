@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import NavBar from "../UI/NavBar";
 import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-
+import { calculateAge } from "../../global/function/calculateAge";
+import ActionButton from "../UI/ActionButton";
 const AdminPanel: React.FC = () => {
     const [users, setUsers] = useState<any[]>([]);
     const loadUsers = async () => {
@@ -39,49 +40,61 @@ const AdminPanel: React.FC = () => {
                     borderBottomRightRadius: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
                 }}
             >
-                <h1 style={{ textAlign: "center", color: "#305894" }}>Listado de Usuarios No Habilitados</h1>
                 <div style={{ padding: '1rem' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                        <thead>
-                            <tr style={{ background: '#f0f4fa' }}>
-                                <th style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>ID</th>
-                                <th style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>Nombre</th>
-                                <th style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>Email</th>
-                                <th style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>Fecha de nacimiento</th>
-                                <th style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>Ubicación</th>
-                                <th style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>Descripción</th>
-                                <th style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>Última actividad</th>
-                                <th style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>Foto de perfil</th>
-                                <th style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>Portafolio</th>
-                                <th style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>Tipo de usuario</th>
-                                <th style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {users.length === 0 ? (
-                                <tr><td colSpan={11} style={{ textAlign: 'center', padding: `${TranslateFigmaCoords.translateFigmaX(16)}px` }}>No hay usuarios no habilitados.</td></tr>
-                            ) : (
-                                users.map((user) => (
-                                    <tr key={user.id}>
-                                        <td style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>{user.id}</td>
-                                        <td style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>{user.name}</td>
-                                        <td style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>{user.email}</td>
-                                        <td style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>{user.birth_date}</td>
-                                        <td style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>{user.location}</td>
-                                        <td style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>{user.description}</td>
-                                        <td style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>{user.last_active_date}</td>
-                                        <td style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>
-                                            {user.profile_picture ? <img src={user.profile_picture} alt="profile" style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: '50%' }} /> : '-'}
-                                        </td>
-                                        <td style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>{user.portfolio}</td>
-                                        <td style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>{user.user_type_id}</td>
-                                        <td style={{ border: '1px solid #ccc', padding: `${TranslateFigmaCoords.translateFigmaX(8)}px` }}>{user.status_id}</td>
-                                    </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                    <h1 style={{ textAlign: "center", color: "#305894" }}>Solicitudes de Registro</h1>
+
+                    {users.length === 0 ? (
+                        <p style={{ textAlign: 'center' }}>No hay solicitudes de registro.</p>
+                    ) : (
+                        users.map((user) => (
+                        <div key={user.id} style={{
+                            background: 'white',
+                            borderRadius: '15px',
+                            padding: '1rem',
+                            marginBottom: '1rem',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                            border: '2px solid #305894'
+                        }}>
+                            <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(6, 1fr)',
+                            gridTemplateRows: 'repeat(1, 1fr)',
+                            gap: '1rem',
+                            alignItems: 'center',
+                            border: '2px solid #305894',
+                            backgroundColor:'#DEE0EB',
+                            color:'#6F88B3',
+                            borderRadius: '10px',
+                            }}>
+                            <div><strong>{user.name}</strong></div>
+                            <div>{calculateAge(user.birth_date)} años</div>
+                            <div>{user.location}</div>
+                            <div>{user.email}</div>
+                            <div>{user.portfolio}</div>
+                            <div>{user.user_type_id}</div>
+                            </div>
+
+                            <div style={{ marginTop: `${TranslateFigmaCoords.translateFigmaX(5)}px`, display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+                            <ActionButton 
+                            text={"Aceptar"}
+                            style={{                
+                                borderRadius: '20px',
+                                padding: '12px 16px',}}
+                            action={() => alert(`Aceptar ${user.name}`)} 
+                            />
+                            <ActionButton 
+                            text={"Rechazar"}
+                            style={{                
+                                borderRadius: '20px',
+                                padding: '12px 16px',
+                                backgroundColor: "#F03D3D"}}
+                               action={() => alert(`Rechazar ${user.name}`)} 
+                            />
+                            </div>
+                        </div>
+                        ))
+                    )}
+                    </div>
             </AppWindow>
         </>
     );

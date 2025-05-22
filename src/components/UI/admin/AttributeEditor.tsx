@@ -11,16 +11,18 @@ interface AttributeEditorProps extends ResponsiveComponent {
     id?:    number;
     width?: number;
     height?: number;
+    onSubmit?: (attribute: string) => void;
 }
 
 const AttributeEditor: React.FC<AttributeEditorProps> = ({
     width = 230,
     height = 100,
     type = "AttributeEditor",
-    id
+    id,
+    onSubmit,
 }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [inputValue, setInputValue] = useState(type);
+    const [inputValue, setInputValue] = useState('');
 
     return (
         <AppWindow
@@ -88,6 +90,7 @@ const AttributeEditor: React.FC<AttributeEditorProps> = ({
                                     paddingRight: `${TranslateFigmaCoords.translateFigmaX(20)}px`
                                 }}
                                 action={() => {
+                                    onSubmit && onSubmit(inputValue)
                                     setIsEditing(false);
                                 }}
                             />

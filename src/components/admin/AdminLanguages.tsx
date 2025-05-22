@@ -33,7 +33,7 @@ const AdminLanguages: React.FC = () => {
         setAttributes(languages);
       }
     } catch (error) {
-      console.error("An error occurred while loading job offers:", error);
+      console.error("An error occurred while loading languages:", error);
     }
   };
   useEffect(() => {

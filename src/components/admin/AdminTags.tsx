@@ -13,27 +13,27 @@ const AdminTags: React.FC = () => {
     const loadAttributes = async () => {
     try {
       const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.get(`${apiUrl}/function/get-languages.php`);
+      const response = await axios.get(`${apiUrl}/function/get-tags.php`);
 
       console.log("Respuesta del backend:", response.data);
       
       if (response.status !== 200 && response.data.status !== "success") {
-        console.error("Failed to load languages:", response.data.message);
+        console.error("Failed to load tags:", response.data.message);
       } else {
-        const languages = await Promise.all(
-        response.data.data.languages.map(async (language: any) => {
+        const tags = await Promise.all(
+        response.data.data.tags.map(async (tag: any) => {
           return (
             <AttributeEditor
-              key={language.id}
-              id={language.id}
-              type={language.name}
+              key={tag.id}
+              id={tag.id}
+              type={tag.name}
             />
           );
         }));
-        setAttributes(languages);
+        setAttributes(tags);
       }
     } catch (error) {
-      console.error("An error occurred while loading job offers:", error);
+      console.error("An error occurred while loading tags:", error);
     }
   };
   useEffect(() => {

@@ -337,12 +337,27 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   height: calc((30 / 60) * var(--nav-height));
   fill: var(--icons-nav-bar);
 }
-.icons-sectionadmin{
+.icons-section.admin {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.admin{
+ font-weight: bold;
+ cursor: pointer;
+}
+.icons-section.admin .admin {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: calc((50 / 1280) * var(--x-multiplier));
-  font-size: xx-large;
+  flex-grow: 1;
+  gap: calc((20 / 1280) * var(--x-multiplier));
+ 
+}
+
+.icons-section.admin .profile-pic {
+  margin-left: auto;
 }
 .profile-pic {
   width: calc((37 / 1240) * var(--nav-width));
@@ -352,11 +367,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background-size: cover;
   background-position: center;
 }
-.icons-sectionadmin .profile-pic{
-  width: calc((40 / 1240) * var(--nav-width));
-  height: calc((40 / 1240) * var(--nav-width));
-  margin-left: auto;
-}
+
 .icons-section .profile-pic {
   margin-left: calc((10 / 1280) * var(--x-multiplier));
   width: calc((40 / 1240) * var(--nav-width));

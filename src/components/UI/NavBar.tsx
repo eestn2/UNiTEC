@@ -52,7 +52,7 @@ const NavBar: React.FC = () => {
     } else if (user_type === 4) {
         if (!location.pathname.includes("admin-menu")){
             buttons.unshift(
-                <div onClick={() => {navigate("/admin-menu/panel")}} style={{color: "black"}}>Admin menu</div>
+                <div className="admin" onClick={() => {navigate("/admin-menu/panel")}} style={{color: "#113893"}}>Admin menu</div>
             )
         }else{
             const amount: number = buttons.length;
@@ -60,10 +60,13 @@ const NavBar: React.FC = () => {
                 buttons.shift();
             }
             buttons.push(
-                <div  onClick={() => {navigate("/admin-menu/panel")}} style={{color: "#113893"}}>Gestion de Usuarios</div>,
-                <div  onClick={() => {navigate("/admin-menu/tags")}} style={{color: "#113893"}}>Etiquetas</div>,
-                <div onClick={() => {navigate("/admin-menu/languages")}} style={{color: "#113893"}}>Lenguajes</div>,
-                <div  onClick={() => {navigate("/admin-menu/inserts")}} style={{color: "#113893"}}>Inserciones</div>
+                <div className="admin">
+                    <div  onClick={() => {navigate("/admin-menu/panel")}} style={{color: "#113893"}}>Solicitudes de registro</div>
+                    <div  onClick={() => {navigate("/admin-menu/tags")}} style={{color: "#113893"}}>Etiquetas</div>
+                    <div onClick={() => {navigate("/admin-menu/languages")}} style={{color: "#113893"}}>Lenguajes</div>
+                    <div  onClick={() => {navigate("/admin-menu/inserts")}} style={{color: "#113893"}}>Inserciones</div>
+                    <div  onClick={() => {navigate("/admin-menu/inserts")}} style={{color: "#113893"}}>Designar Administradores</div>
+                </div>
             )
         }
     }
@@ -73,11 +76,11 @@ const NavBar: React.FC = () => {
                 <div className="logo-section">
                     <img src={unitec_text} alt="Unitec Text" className="unitec-text" />
                 </div>
-                <div className={!location.pathname.includes("admin-menu") ? "icons-section" : "icons-sectionadmin"}>
+                <div className={!location.pathname.includes("admin-menu") ? "icons-section" : "icons-section admin"}>
                     {buttons}
-                    
+                    <div className="profile-pic"></div>
                 </div>
-                <div className="profile-pic"></div>
+                
             </div>
     )
 };
