@@ -16,7 +16,6 @@
  */
 
 require_once __DIR__ . "/../cors-policy.php";
-require_once __DIR__ . "../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 require_once(__DIR__ . '/../../logic/security/security_functions.php');
