@@ -56,6 +56,7 @@ const Login: React.FC = () => {
             }
         } catch (error) {
             console.error("An error occurred during login:", error);
+            setError("No se ha podido establecer la conexión. Intentelo de nuevo más tarde.");
         }
     };
     
@@ -80,7 +81,7 @@ const Login: React.FC = () => {
                     onChange={(event: ChangeEvent<HTMLInputElement>) => {setEmail(event.target.value)}}/>
                 <InputField name="password" type="password" vertical={true}  placeholder="Contraseña" width={320} height={50}
                     onChange={(event: ChangeEvent<HTMLInputElement>) => {setPassword(event.target.value)}}/>
-                <span style={{color: "#d40202"}}>{errors}</span>
+                <span style={{color: "#d40202", width: TranslateFigmaCoords.translateFigmaXAlt(320), textAlign: "center"}}>{errors}</span>
                 <ActionButton vertical={true} height={50} text={"Iniciar Sesión"} action={(event) => {
                     event.preventDefault();
                     const form = document.getElementById("login") as HTMLFormElement;

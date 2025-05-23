@@ -18,7 +18,6 @@ const AttributeEditor: React.FC<AttributeEditorProps> = ({
     width = 230,
     height = 100,
     type = "AttributeEditor",
-    id,
     onSubmit,
 }) => {
     const [isEditing, setIsEditing] = useState(false);

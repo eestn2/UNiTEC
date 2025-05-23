@@ -1,0 +1,39 @@
+.flex{
+    display: flex;
+}
+.flex-row{
+    display: flex;
+    flex-direction: row;
+}
+.flex-column{
+    display: flex;
+    flex-direction: column;
+}
+.white{
+    color: white;
+}
+.black{
+    color: black;
+}
+.centered{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.centered-x{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.centered-y{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.align-center{
+    align-items: center;
+}
+.relative{
+    position: relative;
+}

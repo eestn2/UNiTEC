@@ -1,12 +1,8 @@
 import axios from "axios";
-import { ReactElement, useEffect, useState } from "react";
 import NavBar from "../UI/NavBar";
 import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import AttributeAdd from "../UI/admin/AttributeAdd";
-
-
-
 
 const AdminInserts: React.FC = () => {
   const handleAddLanguage = async (attribute: string) => {
