@@ -37,11 +37,11 @@ $accepted_status_id = 1; //Acepted
 try{
     $connection->beginTransaction();
     // Verificar que el creator_id es una empresa
-    $stmt = $connection->prepare("SELECT user_type_id FROM users WHERE id = :id");
+    $stmt = $connection->prepare("SELECT user_type FROM users WHERE id = :id");
     $stmt->bindParam(':id', $creator_id, PDO::PARAM_INT);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$user || intval($user['user_type_id']) !== 1){
+    if (!$user || intval($user['user_type']) !== 1){
         return_response("failed", "El usuario no tiene permisos para aceptar postulantes.", null);
     }
 

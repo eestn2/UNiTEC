@@ -90,6 +90,7 @@ const InputField: React.FC<InputFieldProps> = ({
     placeholder = "Input field",
     style,
     className,
+    children,
     max,
     min,
 }) => {
@@ -110,7 +111,7 @@ const InputField: React.FC<InputFieldProps> = ({
             onChange={onChange}
             max={type === "date" ? max : undefined}
             min={type === "date" ? min : undefined}
-        />
+        >{children}</input>
     );
 };
 
