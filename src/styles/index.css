@@ -56,7 +56,10 @@ html::-webkit-scrollbar-thumb {
 html::-webkit-scrollbar-thumb:hover {
   background-color: var(--feed-title-BG);
 }
-
+h1 {
+  font-size: calc((32 / 720) * var(--y-multiplier));
+  font-weight: 600;
+}
 .app-content{
   background-color: var(--BG);
   width: 100%;
@@ -111,6 +114,11 @@ html::-webkit-scrollbar-thumb:hover {
   color: #305894;
   font-weight: 550;
   font-size: calc((40 / 720) * var(--y-multiplier));
+}
+.profile-title {
+  color: #305894;
+  font-size: calc((30 / 720) * var(--y-multiplier));
+  font-weight: 550;
 }
 .black-text {
   color: black;
@@ -415,6 +423,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   ========================= */
 .action-button {
   display: inline-flex;
+  font-family: var(--app-font-family);
   justify-content: center;
   align-items: center;
   border-radius: calc((30 / 1280) * var(--x-multiplier));
@@ -425,6 +434,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   width: auto;
   white-space: nowrap;
   font-weight: 400;
+  text-decoration: none;
+  box-shadow: none;
+  border: none;
 }
 
 /* =========================
