@@ -31,8 +31,23 @@
     top: 50%;
     transform: translateY(-50%);
 }
+.centered-w-wm{
+    position: absolute;
+    top: 50%;
+    left: calc((240 / 1280) * 100vw);
+    transform: translateY(-50%);
+}
+@media (orientation: portrait) {
+    .centered-w-wm {
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
 .align-center{
     align-items: center;
+}
+.justify-center{
+    justify-content: center;
 }
 .relative{
     position: relative;

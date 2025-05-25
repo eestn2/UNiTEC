@@ -27,7 +27,7 @@ import { getTranslates } from "../../global/function/getTranslates";
  */
 interface ActionButtonProps extends ResponsiveComponent {
     /** The text to display inside the button. */
-    text: string;
+    text?: string;
     /** Optional click event handler for the button. */
     action?: MouseEventHandler;
 }
@@ -57,14 +57,14 @@ interface ActionButtonProps extends ResponsiveComponent {
  * ```
  * @author Haziel Magallanes, Daviel Díaz Gonzáles
  */
-const ActionButton: React.FC<ActionButtonProps> = ({ height = 10, vertical = false, width, text, action, style, className }) => {
+const ActionButton: React.FC<ActionButtonProps> = ({ height = 10, vertical = false, width, action, text, style, className, children }) => {
     let calculatedWidth: string = 'auto';
     const [ translateX, translateY ] = getTranslates(vertical);
     if(width) calculatedWidth = `${translateX(width)}px`
     return (
-        <div className={`action-button ${className || ''}`} style={{height: `${translateY(height)}px`, width: `${calculatedWidth}`, ...style}} onClick={action}>
-            <p>{text}</p>
-        </div>
+        <button className={`action-button ${className || ''}`} style={{height: `${translateY(height)}px`, width: `${calculatedWidth}`, display: "flex", flexDirection: "row", columnGap: translateX(4), ...style}} onClick={action}>
+            {children || text}
+        </button>
     );
 };
 
