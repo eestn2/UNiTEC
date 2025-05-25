@@ -14,7 +14,7 @@ try {
     $adminName = 'Admin';
     $adminPassword = encryption('admin');
     $enabled = 1;
-    $stmt = $connection->prepare("INSERT INTO `users`(`name`, `birth_date`, `location`, `email`, `password`, `description`, `last_active_date`, `profile_picture`, `portfolio`, `enabled`, `user_type_id`, `status_id`) VALUES (?, '1990-01-01', 'Ciudad', ?, ?, '', CURDATE(), '', '', ?, 4, 3)");
+    $stmt = $connection->prepare("INSERT INTO `users`(`name`, `birth_date`, `location`, `email`, `password`, `description`, `last_active_date`, `profile_picture`, `portfolio`, `enabled`, `user_type`, `status`) VALUES (?, '1990-01-01', 'Ciudad', ?, ?, '', CURDATE(), '', '', ?, 4, 3)");
     $stmt->execute([$adminName, $adminEmail, $adminPassword, $enabled]);
     $adminId = $connection->lastInsertId();
     // Insert student account
@@ -22,7 +22,7 @@ try {
     $studentName = 'Estudiante Raul';
     $studentPassword = encryption('estudiante');
     $enabled = 1;
-    $stmt = $connection->prepare("INSERT INTO `users`(`name`, `birth_date`, `location`, `email`, `password`, `description`, `last_active_date`, `profile_picture`, `portfolio`, `enabled`, `user_type_id`, `status_id`) VALUES (?, '1990-01-01', 'Ciudad', ?, ?, '', CURDATE(), '', '', ?, 2, 3)");
+    $stmt = $connection->prepare("INSERT INTO `users`(`name`, `birth_date`, `location`, `email`, `password`, `description`, `last_active_date`, `profile_picture`, `portfolio`, `enabled`, `user_type`, `status`) VALUES (?, '1990-01-01', 'Ciudad', ?, ?, '', CURDATE(), '', '', ?, 2, 3)");
     $stmt->execute([$studentName, $studentEmail, $studentPassword, $enabled]);
     $studentId = $connection->lastInsertId();
     // Insert graduate account
@@ -30,21 +30,21 @@ try {
     $graduateName = 'Egresado Juan';
     $graduatePassword = encryption('egresado');
     $enabled = 1;
-    $stmt = $connection->prepare("INSERT INTO `users`(`name`, `birth_date`, `location`, `email`, `password`, `description`, `last_active_date`, `profile_picture`, `portfolio`, `enabled`, `user_type_id`, `status_id`) VALUES (?, '1990-01-01', 'Ciudad', ?, ?, '', CURDATE(), '', '', ?, 3, 3)");
+    $stmt = $connection->prepare("INSERT INTO `users`(`name`, `birth_date`, `location`, `email`, `password`, `description`, `last_active_date`, `profile_picture`, `portfolio`, `enabled`, `user_type`, `status`) VALUES (?, '1990-01-01', 'Ciudad', ?, ?, '', CURDATE(), '', '', ?, 3, 3)");
     $stmt->execute([$graduateName, $graduateEmail, $graduatePassword, $enabled]);
     $graduateId = $connection->lastInsertId();
     // Insert enterprise 1
     $microsoftEmail = 'empresa@empresa.com';
     $microsoftName = 'Microsoft';
     $microsoftPassword = encryption('empresa');
-    $stmt = $connection->prepare("INSERT INTO `users`(`name`, `birth_date`, `location`, `email`, `password`, `description`, `last_active_date`, `profile_picture`, `portfolio`, `enabled`, `user_type_id`, `status_id`) VALUES (?, '1991-02-02', 'Ciudad', ?, ?, '', CURDATE(), '', '', ?, 1, 3)");
+    $stmt = $connection->prepare("INSERT INTO `users`(`name`, `birth_date`, `location`, `email`, `password`, `description`, `last_active_date`, `profile_picture`, `portfolio`, `enabled`, `user_type`, `status`) VALUES (?, '1991-02-02', 'Ciudad', ?, ?, '', CURDATE(), '', '', ?, 1, 3)");
     $stmt->execute([$microsoftName, $microsoftEmail, $microsoftPassword, $enabled]);
     $microsoftId = $connection->lastInsertId();
     // Insert enterprise 2
     $sistemasJEmail = 'sistemas@junin.com';
     $sistemasJName = 'Sistemas Junín';
     $sistemasJPassword = encryption('sistemasjunin');
-    $stmt = $connection->prepare("INSERT INTO `users`(`name`, `birth_date`, `location`, `email`, `password`, `description`, `last_active_date`, `profile_picture`, `portfolio`, `enabled`, `user_type_id`, `status_id`) VALUES (?, '1991-02-02', 'Ciudad', ?, ?, '', CURDATE(), '', '', ?, 1, 3)");
+    $stmt = $connection->prepare("INSERT INTO `users`(`name`, `birth_date`, `location`, `email`, `password`, `description`, `last_active_date`, `profile_picture`, `portfolio`, `enabled`, `user_type`, `status`) VALUES (?, '1991-02-02', 'Ciudad', ?, ?, '', CURDATE(), '', '', ?, 1, 3)");
     $stmt->execute([$sistemasJName, $sistemasJEmail, $sistemasJPassword, $enabled]);
     $sistemasJId = $connection->lastInsertId();
 
@@ -92,7 +92,7 @@ try {
     
     ¡Únete a Microsoft EcoSentry Technologies y sé parte del cambio!
     ";
-    $stmt = $connection->prepare("INSERT INTO `applications`(`creator_id`, `title`, `description`, `status`) VALUES (?, ?, ?, 1)");
+    $stmt = $connection->prepare("INSERT INTO `offers`(`creator_id`, `title`, `description`, `status`) VALUES (?, ?, ?, 1)");
     $stmt->execute([$microsoftId, $title1, $desc1]);
 
     // Insert Job Offer by Sistemas Junín
@@ -137,11 +137,16 @@ try {
     Sumate a Sistemas Junín y crezcamos juntos.
 
 ";
-    $stmt = $connection->prepare("INSERT INTO `applications`(`creator_id`, `title`, `description`, `status`) VALUES (?, ?, ?, 1)");
+    $stmt = $connection->prepare("INSERT INTO `offers`(`creator_id`, `title`, `description`, `status`) VALUES (?, ?, ?, 1)");
     $stmt->execute([$sistemasJId, $title2, $desc2]);
 
     $connection->commit();
     echo "Test users and job offers created successfully.";
+    echo "<br>Admin ID: $adminId";
+    echo "<br>Student ID: $studentId";
+    echo "<br>Graduate ID: $graduateId";
+    echo "<br>Microsoft ID: $microsoftId";
+    echo "<br>Sistemas Junín ID: $sistemasJId";
 } catch (Exception $e) {
     $connection->rollBack();
     die("Error: " . $e->getMessage());

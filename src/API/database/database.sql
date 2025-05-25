@@ -241,11 +241,6 @@ ALTER TABLE `offers`
   ADD PRIMARY KEY (`id`),
   ADD KEY `postulacion_creador` (`creator_id`);
 
---
--- Indices de la tabla `offer_statuses`
---
-ALTER TABLE `offer_statuses`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `offer_tags`
@@ -260,12 +255,6 @@ ALTER TABLE `offer_tags`
 -- Indices de la tabla `languages`
 --
 ALTER TABLE `languages`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `levels`
---
-ALTER TABLE `levels`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -301,7 +290,7 @@ ALTER TABLE `tags`
 -- Indices de la tabla `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `user_languages`
@@ -309,7 +298,7 @@ ALTER TABLE `users`
 ALTER TABLE `user_languages`
   ADD PRIMARY KEY (`id`),
   ADD KEY `in_idioma` (`language_id`),
-  ADD KEY `usuario_id` (`user_id`),
+  ADD KEY `usuario_id` (`user_id`);
 
 --
 -- Indices de la tabla `user_tags`
@@ -317,7 +306,7 @@ ALTER TABLE `user_languages`
 ALTER TABLE `user_tags`
   ADD PRIMARY KEY (`id`),
   ADD KEY `usuario_id` (`user_id`,`tag_id`),
-  ADD KEY `idetiqueta_etiqueta` (`tag_id`),
+  ADD KEY `idetiqueta_etiqueta` (`tag_id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -347,11 +336,7 @@ ALTER TABLE `offer_tags`
 ALTER TABLE `languages`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
---
--- AUTO_INCREMENT de la tabla `levels`
---
-ALTER TABLE `levels`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+-- (Removed AUTO_INCREMENT for non-existent table `levels`)
 
 --
 -- AUTO_INCREMENT de la tabla `notifications`
@@ -413,13 +398,10 @@ ALTER TABLE `offers`
 --
 -- Filtros para la tabla `offer_tags`
 --
+
 ALTER TABLE `offer_tags`
   ADD CONSTRAINT `idetiqueta_etiquetapost` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`),
-  ADD CONSTRAINT `idpostulacion_etiquetapost` FOREIGN KEY (`offer_id`) REFERENCES `offers` (`id`)
-
---
--- Filtros para la tabla `notifications`
---
+  ADD CONSTRAINT `idpostulacion_etiquetapost` FOREIGN KEY (`offer_id`) REFERENCES `offers` (`id`);
 ALTER TABLE `notifications`
   ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -445,13 +427,12 @@ ALTER TABLE `user_languages`
   ADD CONSTRAINT `ididioma_idioma` FOREIGN KEY (`language_id`) REFERENCES `languages` (`id`),
   ADD CONSTRAINT `idusuario_idioma` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
 --
+
+--
 -- Filtros para la tabla `user_tags`
 --
 ALTER TABLE `user_tags`
   ADD CONSTRAINT `idetiqueta_etiqueta` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`),
-  ADD CONSTRAINT `idusuario_etiqueta` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-COMMIT;
+  ADD CONSTRAINT `idusuario_etiqueta` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+COMMIT;

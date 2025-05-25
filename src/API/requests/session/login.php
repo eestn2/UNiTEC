@@ -48,6 +48,6 @@ return_response("success", "Inicio de sesión exitoso.", ["user" => [
     "portfolio" => $user["portfolio"],
     "is_enabled" => $user["enabled"],
     "type" => $user["user_type"],
-    "status" => $user["status_id"]
+    "status" => $user["status"]
 ]]);
 ?>
