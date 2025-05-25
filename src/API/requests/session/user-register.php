@@ -55,7 +55,7 @@ try {
 
     // Insert user data
     $stmt = $connection->prepare(
-        "INSERT INTO users (name, birth_date, location, email, password, description, last_active_date, profile_picture, portfolio, enabled, user_type_id, status_id)
+        "INSERT INTO users (name, birth_date, location, email, password, description, last_active_date, profile_picture, portfolio, enabled, user_type, status_id)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
     );
     $stmt->execute([

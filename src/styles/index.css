@@ -345,14 +345,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .admin{
  font-weight: bold;
- cursor: pointer;
+ 
 }
 .icons-section.admin .admin {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-grow: 1;
-  gap: calc((20 / 1280) * var(--x-multiplier));
+  gap: calc((30 / 1280) * var(--x-multiplier));
  
 }
 

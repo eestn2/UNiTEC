@@ -47,7 +47,7 @@ return_response("success", "Inicio de sesión exitoso.", ["user" => [
     "profile_picture" => $user["profile_picture"],
     "portfolio" => $user["portfolio"],
     "is_enabled" => $user["enabled"],
-    "type_id" => $user["user_type_id"],
+    "type" => $user["user_type"],
     "status" => $user["status_id"]
 ]]);
 ?>
