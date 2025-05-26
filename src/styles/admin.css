@@ -1,0 +1,9 @@
+.users_approve{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: x-large;
+    min-height: calc((40 / 720) * var(--y-multiplier));
+    height: fit-content;
+}

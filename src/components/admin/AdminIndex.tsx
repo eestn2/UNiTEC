@@ -5,7 +5,7 @@ import AdminLanguages from "./AdminLanguages";
 import AdminInserts from "./AdminInserts";
 import AdminDesignate from "./AdminDesignate";
 import AdminReport from "./AdminReport";
-
+import "../../styles/admin.css";
 const AdminIndex: React.FC = () => {
     const { panel } = useParams<{ panel: string }>();
     switch (panel) {
