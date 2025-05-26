@@ -6,13 +6,17 @@
  * @date May 5, 2025
  */
 
-import React from "react";
+import React, { useState } from "react";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import AppWindow from "../AppWindow";
 import ActionButton from "../ActionButton";
 import { useJobOffer } from "../../../hooks/offer/useJobOffer";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import TextWithBreaks from "../TextWithBreaks";
+import User from "../../session/User";
+import apply_icon from "../../../assets/icons/apply.svg";
+import deapply_icon from "../../../assets/icons/deapply.svg";
+import StateButton from "../StateButton";
 
 /**
  * Props for the `JobOffer` component.
@@ -88,6 +92,29 @@ const JobOffer: React.FC<JobOfferProps> = ({
         titleHeight,
         translatedWidth,
     } = useJobOffer({ height, width, authorId, description });
+    const [placeholderApplyState, setPlaceholderApplyState] = useState(false);
+    let extraButton: React.ReactNode = undefined;
+    if (![1, 4].includes(User.data.user_type as number)) {
+        extraButton = <StateButton 
+        trueIcon={apply_icon}
+        falseIcon={deapply_icon}
+        trueText="Postularse"
+        falseText="Despostularse"
+        state = {placeholderApplyState}
+        setState = {setPlaceholderApplyState}
+        action={() => {
+            if (placeholderApplyState) {
+                // Logic to deapply
+                console.log("Despostularse clicked");
+                return;
+            }
+            // Logic to apply
+            console.log("Postularse clicked");
+        }}
+        />                    
+    } else if (User.data.user_type === 1 && User.data.id === authorId) {
+        extraButton = <ActionButton text="Borrar" />;
+    }
 
     return (
         <div
@@ -124,6 +151,9 @@ const JobOffer: React.FC<JobOfferProps> = ({
                 >
                     <div className="profile-pic"></div>
                     {author.name}
+                    <div className="job-offer-buttons" style={{position: "absolute", right: TranslateFigmaCoords.translateFigmaX(2)}}>
+                        {extraButton ? extraButton : null}
+                    </div>
                 </div>
             </div>
             <AppWindow

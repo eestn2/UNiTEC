@@ -25,7 +25,7 @@ import { getTranslates } from "../../global/function/getTranslates";
  * 
  * @author Haziel Magallanes, Daviel Díaz Gonzáles
  */
-interface ActionButtonProps extends ResponsiveComponent {
+export interface ActionButtonProps extends ResponsiveComponent {
     /** The text to display inside the button. */
     text?: string;
     /** Optional click event handler for the button. */
