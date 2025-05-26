@@ -75,7 +75,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = () => {
         <Logo className='watermark'/>
         <AppWindow
           width={980}
-          height={620}
+          height={680}
           className='centered-w-wm flex-column'
         >
             {/* Header */}
@@ -98,7 +98,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = () => {
                     <img src={reportIcon} width={TranslateFigmaCoords.translateFigmaX(25)} height={TranslateFigmaCoords.translateFigmaY(23)}/><span style={{
                         fontWeight: 600,
                     }}>Reportar</span>
-                </ActionButton>
+            </ActionButton>
             <div className="offer-fv-description-delimiter centered-x" style={{
                 width: `${TranslateFigmaCoords.translateFigmaX(950)}px`,
                 top: TranslateFigmaCoords.translateFigmaY(68),
@@ -146,8 +146,12 @@ const ProfileInfo: React.FC<ProfileInfoProps> = () => {
                     <div>Estado: {userData.status}</div>
                 </div>
                 
-                <div className='user-skills-section'>
-                    <h3>Etiquetas:</h3>
+                <div className='user-skills-section' >
+                    <div className='flex-column' style={{padding: TranslateFigmaCoords.translateFigmaX(13)}}>
+                        <p>Etiquetas:</p>
+
+                    </div>
+
                     <div className="skills-list">
                         {userData.skills.map((skill, index) => (
                             <div key={index} className="skill-tag">
@@ -170,21 +174,21 @@ const ProfileInfo: React.FC<ProfileInfoProps> = () => {
                 
                 {/* Column 3: Description and Action Buttons */}
                 <div className='user-description-section input-field'>
-                    <h3>Descripción:</h3>
-                    <p>{userData.description}</p>
+                    <p>Descripción:<br/>
+                    {userData.description}</p>
                 </div>
-                <div className='user-button-section'>
-                    <ActionButton height={40} action={handleEditProfile}>
+                <div className='user-button-section' style={{fontSize: TranslateFigmaCoords.translateFigmaY(24)}}>
+                    <ActionButton height={60} action={handleEditProfile}>
                         Editar Perfil
                     </ActionButton>
-                    <ActionButton height={40} action={handleChangePassword}>
+                    <ActionButton height={60} action={handleChangePassword} style={{backgroundColor: '#DFB529'}}>
                         Cambiar Contraseña
                     </ActionButton>
-                    <ActionButton height={40} action={handleLogout}>
+                    <ActionButton height={60} action={handleLogout} style={{backgroundColor: '#F0823D'}}>
                         Cerrar Sesión
                     </ActionButton>
                     <ActionButton 
-                        height={40} 
+                        height={60} 
                         action={handleDeleteAccount}
                         style={{backgroundColor: 'var(--danger)', color: 'white'}}>
                         Eliminar Cuenta
