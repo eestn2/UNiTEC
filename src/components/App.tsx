@@ -75,7 +75,7 @@ function App(): JSX.Element {
             <Route path='/register-enterprise' element={<RegisterEnterprise />} />
             <Route path='/register-user' element={<RegisterUser />} />
             <Route path='/password-reset' element={<ForgotPassword />} />
-            <Route path='/account-details' element={<ProfileInfo />} />
+            <Route path='/profile/:id' element={<ProfileInfo />} />
             {/*Add default admin-menu route to the approve users one. */}
             <Route path='/admin-menu/:panel' element={<AdminIndex />} />
             <Route path="/job-offer/:offerId" element={<JobOfferFV />} />
