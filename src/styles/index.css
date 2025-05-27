@@ -371,20 +371,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .icons-section.admin .profile-pic {
   margin-left: auto;
 }
-.profile-pic {
-  width: calc((37 / 1240) * var(--nav-width));
-  height: calc((37 / 1240) * var(--nav-width));
-  border-radius: 50%;
-  background-image: url(../assets/user/profile.jpg);
-  background-size: cover;
-  background-position: center;
-}
-
-.icons-section .profile-pic {
-  margin-left: calc((10 / 1280) * var(--x-multiplier));
-  width: calc((40 / 1240) * var(--nav-width));
-  height: calc((40 / 1240) * var(--nav-width));
-}
 .nav-bar .logo-section {
   display: flex;
   justify-content: center;

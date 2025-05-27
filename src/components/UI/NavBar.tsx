@@ -14,6 +14,7 @@ import unitec_text from "../../assets/unitec/unitec-text.svg";
 import User from "../session/User";
 import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 import { useLocation, useNavigate } from "react-router-dom";
+import ProfilePicture from "./user/ProfilePicture";
 
 /**
  * A React functional component that renders the navigation bar with logo and icon buttons.
@@ -79,7 +80,7 @@ const NavBar: React.FC = () => {
                 </div>
                 <div className={!location.pathname.includes("admin-menu") ? "icons-section" : "icons-section admin"}>
                     {buttons}
-                    <div className="profile-pic"></div>
+                    <ProfilePicture userId={User.data.id as number} size={40} vertical={window.innerWidth > window.innerHeight} />
                 </div>
                 
             </div>
