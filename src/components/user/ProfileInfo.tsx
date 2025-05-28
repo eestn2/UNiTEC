@@ -7,47 +7,34 @@
  * @date May 20, 2025
  */
 
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import AppWindow from '../UI/AppWindow';
 import ActionButton from '../UI/ActionButton';
 import TranslateFigmaCoords from '../../global/function/TranslateFigmaCoords';
 import { useWindowSize } from '../../hooks/responsive/useWindowSize';
 import reportIcon from '../../assets/icons/report.svg';
 import Logo from '../UI/unitec/Logo';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 
-interface ProfileInfoProps {
-  // Any custom props could be defined here
-}
 
-const ProfileInfo: React.FC<ProfileInfoProps> = () => {
+const ProfileInfo: React.FC = () => {
   // Re-render on window resize
   const windowSize = useWindowSize();
   console.log("Window size:", windowSize);
-  // Use navigate for routing
-  const navigate = useNavigate();
   
-  // Example user data (static for now)
-  const userData = {
-    name: "Nombre del usuario",
-    email: "ejemplo.email@gmail.com",
-    location: "JuninBs As",
-    portfolio: "webEmpresa.dinero",
-    userType: "Egresado",
-    status: "Trabajando - Buscando Beca",
-    description: "Lorem ipsum dolor sit amet, consectetur. Eget vel eget lobortis ac aenean pellentesque egestas. Nibh sit porttitor mollis convallis interdum ipsum. Dignissim sed condimentum ac elementum. Eget commodo rhoncus ac eget aliquet.",
-    skills: [
-      { name: "Joomla", level: "Avanzado" },
-      { name: "Wordpress", level: "Intermedio" },
-      { name: "Java", level: "Básico" },
-      { name: "GDScript", level: "Básico" },
-      { name: "Pseudocode", level: "Intermedio" }
-    ],
-    languages: [
-      { name: "Ruso", level: "Básico" },
-      { name: "Ruso", level: "Intermedio" },
-      { name: "Ruso", level: "Avanzado" }
-    ]
-  };
+  const { id } = useParams<{ id: string }>();
+  const [userData, setUserData] = useState<any>(null);
+
+  useEffect(() => {
+    if (!id) return;
+    axios.get(`/user/user-info.php?id=${id}`)
+      .then(res => {
+        if (res.data.status === "success") {
+          setUserData(res.data.data.user);
+        }
+      });
+  }, [id]);
 
   // Example handlers
   const handleEditProfile = () => {
@@ -120,30 +107,30 @@ const ProfileInfo: React.FC<ProfileInfoProps> = () => {
                         marginBottom: TranslateFigmaCoords.translateFigmaY(10)
                     }}>
                         {/* Profile image here */}
-                        <img src="path-to-profile-image" alt={userData.name} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                        <img src="path-to-profile-image" alt={userData?.name} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
                     </div>
-                    <h2>{userData.name}</h2>
+                    <h2>{userData?.name}</h2>
                 </div>
                 
                 <div className='user-info-item profile-field input-field' style={{gridRow: 6}}>
-                    <div>Email: {userData.email}</div>
+                    <div>Email: {userData?.email}</div>
                 </div>
                 
                 <div className='user-info-item profile-field input-field' style={{gridRow: 7}}>
-                    <div>Localidad: {userData.location}</div>
+                    <div>Localidad: {userData?.location}</div>
                 </div>
                 
                 <div className='user-info-item profile-field input-field' style={{gridRow: 8}}>
-                    <div>Portfolio web: {userData.portfolio}</div>
+                    <div>Portfolio web: {userData?.portfolio}</div>
                 </div>
                 
                 {/* Column 2: Type, Status, Skills, Languages */}
                 <div className='user-labels-section profile-field  input-field'>
-                    <div>Tipo de Usuario: {userData.userType}</div>
+                    <div>Tipo de Usuario: {userData?.userType}</div>
                 </div>
                 
                 <div className='user-status-section profile-field  input-field'>
-                    <div>Estado: {userData.status}</div>
+                    <div>Estado: {userData?.status}</div>
                 </div>
                 
                 <div className='user-skills-section' >
@@ -153,7 +140,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = () => {
                     </div>
 
                     <div className="skills-list">
-                        {userData.skills.map((skill, index) => (
+                        {userData?.skills?.map((skill, index) => (
                             <div key={index} className="skill-tag">
                                 {skill.name}
                             </div>
@@ -164,7 +151,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = () => {
                 <div className='user-languages-section'>
                     <h3>Idiomas:</h3>
                     <div className="languages-list">
-                        {userData.languages.map((language, index) => (
+                        {userData?.languages?.map((language, index) => (
                             <div key={index} className="language-tag">
                                 {language.name}
                             </div>
@@ -175,7 +162,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = () => {
                 {/* Column 3: Description and Action Buttons */}
                 <div className='user-description-section input-field'>
                     <p>Descripción:<br/>
-                    {userData.description}</p>
+                    {userData?.description}</p>
                 </div>
                 <div className='user-button-section' style={{fontSize: TranslateFigmaCoords.translateFigmaY(24)}}>
                     <ActionButton height={60} action={handleEditProfile}>
