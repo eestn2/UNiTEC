@@ -16,7 +16,29 @@ import reportIcon from '../../assets/icons/report.svg';
 import Logo from '../UI/unitec/Logo';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { user as UserType } from '../../types/user';
+import default_profile from '../../assets/defaults/profile-picture/1.svg';
 
+// Add types for skills and languages
+interface Skill {
+  name: string;
+  level?: 'Básico' | 'Intermedio' | 'Avanzado';
+}
+interface Language {
+  name: string;
+  level?: 'Básico' | 'Intermedio' | 'Avanzado';
+}
+
+const LEVELS = ['Básico', 'Intermedio', 'Avanzado'] as const;
+
+type Level = typeof LEVELS[number];
+
+const groupByLevel = <T extends { level?: Level }>(items: T[]): Record<Level, T[]> => {
+  return LEVELS.reduce((acc, level) => {
+    acc[level] = items.filter(item => item.level === level);
+    return acc;
+  }, {} as Record<Level, T[]>);
+};
 
 const ProfileInfo: React.FC = () => {
   // Re-render on window resize
@@ -24,7 +46,10 @@ const ProfileInfo: React.FC = () => {
   console.log("Window size:", windowSize);
   
   const { id } = useParams<{ id: string }>();
-  const [userData, setUserData] = useState<any>(null);
+  const [userData, setUserData] = useState<UserType & {
+    skills?: Skill[];
+    languages?: Language[];
+  } | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -57,6 +82,10 @@ const ProfileInfo: React.FC = () => {
     console.log("Report clicked");
   };
 
+  // Group skills and languages by level
+  const skillsByLevel = groupByLevel(userData?.skills || []);
+  const languagesByLevel = groupByLevel(userData?.languages || []);
+
   return (
     <div>
         <Logo className='watermark'/>
@@ -64,6 +93,7 @@ const ProfileInfo: React.FC = () => {
           width={980}
           height={680}
           className='centered-w-wm flex-column'
+          style={{paddingBottom: TranslateFigmaCoords.translateFigmaY(5)}}
         >
             {/* Header */}
             <h1 className='profile-title centered-x' style={{
@@ -98,18 +128,17 @@ const ProfileInfo: React.FC = () => {
                 left: TranslateFigmaCoords.translateFigmaX(15),
             }}>
                 {/* Column 1: Profile Photo and Contact Info */}
-                <div className='profile-photo-section input-field'>
+                <div className='profile-photo-section input-field' style={{padding: TranslateFigmaCoords.translateFigmaY(20)}}>
                     <div className="user-photo-container" style={{ 
                         width: TranslateFigmaCoords.translateFigmaX(200),
                         height: TranslateFigmaCoords.translateFigmaX(200),
                         borderRadius: '50%',
                         overflow: 'hidden',
-                        marginBottom: TranslateFigmaCoords.translateFigmaY(10)
                     }}>
                         {/* Profile image here */}
-                        <img src="path-to-profile-image" alt={userData?.name} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                        <img src={default_profile} alt={userData?.name} style={{width: '100%', height: '100%'}} />
                     </div>
-                    <h2>{userData?.name}</h2>
+                    <h1>{userData?.name}</h1>
                 </div>
                 
                 <div className='user-info-item profile-field input-field' style={{gridRow: 6}}>
@@ -126,39 +155,45 @@ const ProfileInfo: React.FC = () => {
                 
                 {/* Column 2: Type, Status, Skills, Languages */}
                 <div className='user-labels-section profile-field  input-field'>
-                    <div>Tipo de Usuario: {userData?.userType}</div>
+                    <div>Tipo de Usuario: {userData?.type}</div>
                 </div>
                 
-                <div className='user-status-section profile-field  input-field'>
+                <div className='user-status-section profile-field  input-field'>  
                     <div>Estado: {userData?.status}</div>
                 </div>
                 
-                <div className='user-skills-section' >
-                    <div className='flex-column' style={{padding: TranslateFigmaCoords.translateFigmaX(13)}}>
-                        <p>Etiquetas:</p>
-
-                    </div>
-
-                    <div className="skills-list">
-                        {userData?.skills?.map((skill, index) => (
-                            <div key={index} className="skill-tag">
-                                {skill.name}
+                {/* Etiquetas (Skills) Section */}
+                <div className='user-skills-section input-field'>
+                    <h2>Habilidades</h2>
+                    {Object.entries(skillsByLevel).map(([level, skills]) => (
+                        skills.length > 0 && (
+                            <div key={level} className='skill-level-group'>
+                                <h3>{level}</h3>
+                                <ul>
+                                    {skills.map(skill => (
+                                        <li key={skill.name}>{skill.name}</li>
+                                    ))}
+                                </ul>
                             </div>
-                        ))}
-                    </div>
+                        )
+                    ))}
                 </div>
-                
-                <div className='user-languages-section'>
-                    <h3>Idiomas:</h3>
-                    <div className="languages-list">
-                        {userData?.languages?.map((language, index) => (
-                            <div key={index} className="language-tag">
-                                {language.name}
+                {/* Idiomas (Languages) Section */}
+                <div className='user-languages-section profile-field input-field'>
+                    <h2>Idiomas</h2>
+                    {Object.entries(languagesByLevel).map(([level, languages]) => (
+                        languages.length > 0 && (
+                            <div key={level} className='language-level-group'>
+                                <h3>{level}</h3>
+                                <ul>
+                                    {languages.map(language => (
+                                        <li key={language.name}>{language.name}</li>
+                                    ))}
+                                </ul>
                             </div>
-                        ))}
-                    </div>
-                </div>
-                
+                        )
+                    ))}
+                </div>                
                 {/* Column 3: Description and Action Buttons */}
                 <div className='user-description-section input-field'>
                     <p>Descripción:<br/>
