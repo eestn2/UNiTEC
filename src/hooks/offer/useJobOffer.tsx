@@ -11,6 +11,7 @@ import { useEffect, useRef, useState, Ref } from "react";
 import axios from "axios";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import { useWindowSize } from "../responsive/useWindowSize";
+import { user } from "../../types/user";
 
 /**
  * Props for the `useJobOffer` hook.
@@ -83,12 +84,15 @@ export function useJobOffer({ height, width, authorId, description }: UseJobOffe
                     params: { id: authorId },
                 });
                 if (response.status === 200 && response.data.status === "success") {
-                    setAuthor(response.data.data.user);
+                    setAuthor({name: response.data.data.user.name, profile_picture: response.data.data.user.profile_picture});
+                    console.log(`Author details fetched successfully for ID ${authorId}:`, response.data.data.user);
+                    console.log(author)
                 }
             } catch (error) {
                 // handle error
                 console.error(`An error occurred while fetching author details for ID ${authorId}:`, error);
             }
+            
         };
         fetchAuthorDetails();
     }, [authorId]);

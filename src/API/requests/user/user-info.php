@@ -44,7 +44,7 @@ try {
             "status" => $user["status"],
             "description" => $user["description"],
             "portfolio" => $user["portfolio"],
-            "type" => $user["type"],
+            "type" => $user["user_type"],
             "profile_picture" => $user["profile_picture"] ?? null
         ]
     ]);
