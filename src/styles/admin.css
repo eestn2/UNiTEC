@@ -4,6 +4,12 @@
     align-items: center;
     text-align: center;
     font-size: x-large;
-    min-height: calc((40 / 720) * var(--y-multiplier));
+    min-height: calc((90 / 720) * var(--y-multiplier));
+    padding-left: calc((40 / 720) * var(--y-multiplier));
+    padding-right: calc((20 / 720) * var(--y-multiplier));
     height: fit-content;
+    word-break: break-all;
+    white-space: normal;
+   
+    overflow-wrap: break-word;
 }

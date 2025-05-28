@@ -42,18 +42,56 @@ const AdminPanel: React.FC = () => {
             >
                 <div style={{ padding: `${TranslateFigmaCoords.translateFigmaX(16)}px` }}>
                     <h1 style={{ textAlign: "center", color: "#305894" }}>Solicitudes de Registro</h1>
+                    
+                   <div style={{display:"flex",width:"100%", justifyContent:"center", alignItems:"center" }}>
 
+                    <div
+                        style={{
+                            width: `${TranslateFigmaCoords.translateFigmaX(1100)}px`,
+                            display: "flex",
+                            borderRadius: `${TranslateFigmaCoords.translateFigmaX(30)}px`,
+                            border: `${TranslateFigmaCoords.translateFigmaX(2)}px solid #5386FF`,
+                            backgroundColor: "#E5E8F6",
+                            overflow: "hidden",
+                            
+                        }}
+                        >
+                        {["Nombre", "Edad", "Localidad", "Email", "Portfolio", "Tipo de Usuario"].map((title, index) => (
+                            <div
+                            key={title}
+                            style={{
+                                flex: 1,
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                padding: `${TranslateFigmaCoords.translateFigmaX(6)}px 0`,
+                                fontWeight: "bold",
+                                color: "#305894",
+                                fontSize: "large",
+                                borderLeft: index === 0 ? "none" : `${TranslateFigmaCoords.translateFigmaX(2)}px solid #5386FF`,
+                            }}
+                            >
+                            {title}
+                            </div>
+                        ))}
+                        </div>
+                   </div>
                     {users.length === 0 ? (
                         <p style={{ textAlign: 'center', color:"#305894" }}>No hay solicitudes de registro.</p>
                     ) : (
+                        
                         users.map((user) => (
                         <div key={user.id} style={{
                             background: 'white',
-                            borderRadius: `${TranslateFigmaCoords.translateFigmaX(15)}px`,
-                            padding: `${TranslateFigmaCoords.translateFigmaX(16)}px`,
+                            borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
+                            padding: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
+                            marginTop: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
                             marginBottom: `${TranslateFigmaCoords.translateFigmaX(16)}px`,
                             boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                            border: '2px solid #305894'
+                            borderWidth :`${TranslateFigmaCoords.translateFigmaX(3)}px`,
+                            borderColor: '#5386FF',
+                            borderStyle: 'solid'
+                            
                         }}>
                             <div style={{
                             display: 'grid',
@@ -65,51 +103,55 @@ const AdminPanel: React.FC = () => {
                             paddingLeft: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
                             backgroundColor:'#DEE0EB',
                             color:'#6F88B3',
-                            borderRadius: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
-                            borderWidth :`${TranslateFigmaCoords.translateFigmaX(5)}px`,
-                            borderColor: '#305894',
+                            borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
+                            borderWidth :`${TranslateFigmaCoords.translateFigmaX(3)}px`,
+                            borderColor: '#5386FF',
                             borderStyle: 'solid'
                             }}>
-                            <div className="users_approve" ><strong>{user.name}</strong></div>
+                            <div style={{    display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            textAlign: "center",
+                            fontSize: "x-large",}} ><strong>{user.name}</strong></div>
                             <div className="users_approve" style={{                           
-                            borderLeftWidth: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
-                            borderLeftColor: '#305894',
+                            borderLeftWidth: `${TranslateFigmaCoords.translateFigmaX(3)}px`,
+                            borderLeftColor: '#5386FF',
                             borderLeftStyle: 'solid',}}
                             >{calculateAge(user.birth_date)} años</div>
                             <div className="users_approve" style={{                           
-                            borderLeftWidth: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
-                            borderLeftColor: '#305894',
+                            borderLeftWidth: `${TranslateFigmaCoords.translateFigmaX(3)}px`,
+                            borderLeftColor: '#5386FF',
                             borderLeftStyle: 'solid',}}
                             >{user.location}</div>
                             <div className="users_approve" style={{                           
-                            borderLeftWidth: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
-                            borderLeftColor: '#305894',
+                            borderLeftWidth: `${TranslateFigmaCoords.translateFigmaX(3)}px`,
+                            borderLeftColor: '#5386FF',
                             borderLeftStyle: 'solid',}}
                             >{user.email}</div>
                             <div  className="users_approve" 
                             style={{                           
-                            borderLeftWidth: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
-                            borderLeftColor: '#305894',
+                            borderLeftWidth: `${TranslateFigmaCoords.translateFigmaX(3)}px`,
+                            borderLeftColor: '#5386FF',
                             borderLeftStyle: 'solid',}}>{user.portfolio}</div>
                             <div className="users_approve" style={{                           
-                            borderLeftWidth: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
-                            borderLeftColor: '#305894',
+                            borderLeftWidth: `${TranslateFigmaCoords.translateFigmaX(3)}px`,
+                            borderLeftColor: '#5386FF',
                             borderLeftStyle: 'solid',}}>{user.user_type}</div>
                             </div>
 
-                            <div className="users_approve" style={{ marginTop: `${TranslateFigmaCoords.translateFigmaX(5)}px`, display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+                            <div style={{ marginTop:`${TranslateFigmaCoords.translateFigmaX(10)}px`, display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
                             <ActionButton 
                             text={"Aceptar"}
                             style={{                
                                 borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
-                                padding: '12px 16px',}}
+                                padding: `${TranslateFigmaCoords.translateFigmaX(18)}px ${TranslateFigmaCoords.translateFigmaY(16)}px`,}}
                             action={() => alert(`Aceptar ${user.name}`)} 
                             />
                             <ActionButton 
                             text={"Rechazar"}
                             style={{                
                                 borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
-                                padding: '12px 16px',
+                                padding: `${TranslateFigmaCoords.translateFigmaX(18)}px ${TranslateFigmaCoords.translateFigmaY(16)}px`,
                                 backgroundColor: "#F03D3D"}}
                                action={() => alert(`Rechazar ${user.name}`)} 
                             />
