@@ -4,11 +4,22 @@ import AttributeEditor from "../UI/admin/AttributeEditor";
 import NavBar from "../UI/NavBar";
 import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
+import User from "../session/User";
 
 
 
 
 const AdminLanguages: React.FC = () => {
+    const handleChangeAttribute = async (attribute: string, id: number) => {
+      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+      const userId = User.data.id;
+      const response = await axios.put(`${apiUrl}/admin/edit_language.php`, {
+          user_id:userId,
+          id:id,
+          name:attribute
+      });
+    console.log(response);
+    };
     const [attributes, setAttributes] = useState<ReactElement[]>([]);
     const loadAttributes = async () => {
     try {
@@ -27,6 +38,7 @@ const AdminLanguages: React.FC = () => {
               key={language.id}
               id={language.id}
               type={language.name}
+              onSubmit={handleChangeAttribute}
             />
           );
         }));
@@ -36,6 +48,8 @@ const AdminLanguages: React.FC = () => {
       console.error("An error occurred while loading languages:", error);
     }
   };
+
+
   useEffect(() => {
       loadAttributes();
     }, []);
@@ -44,7 +58,7 @@ const AdminLanguages: React.FC = () => {
         <div>
             <NavBar />
             <AppWindow
-                height={400}
+                height={600}
                 width={1234}
                 className="feedbox"
                 style={{

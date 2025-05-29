@@ -39,8 +39,8 @@ try{
     $stmt = $connection->prepare($query);
     $stmt->bindParam(':name', $name, PDO::PARAM_STR);
     $stmt->bindParam(':id', $data->id, PDO::PARAM_INT);
-    $stmt->execute();
     $connection->beginTransaction();
+    $stmt->execute();
     $connection->commit();
     return_response("success", "lenguaje editado con exito.", null);
 

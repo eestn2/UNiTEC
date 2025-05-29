@@ -4,11 +4,22 @@ import AttributeEditor from "../UI/admin/AttributeEditor";
 import NavBar from "../UI/NavBar";
 import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
+import User from "../session/User";
 
 
 
 
 const AdminTags: React.FC = () => {
+      const handleChangeAttribute = async (attribute: string, id: number) => {
+      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+      const userId = User.data.id;
+      const response = await axios.put(`${apiUrl}/admin/edit_language.php`, {
+          user_id:userId,
+          id:id,
+          name:attribute
+      });
+    console.log(response);
+    };
     const [attributes, setAttributes] = useState<ReactElement[]>([]);
     const loadAttributes = async () => {
     try {
@@ -27,6 +38,7 @@ const AdminTags: React.FC = () => {
               key={tag.id}
               id={tag.id}
               type={tag.name}
+              onSubmit={handleChangeAttribute}
             />
           );
         }));
@@ -44,7 +56,7 @@ const AdminTags: React.FC = () => {
         <div>
             <NavBar />
             <AppWindow
-                height={400}
+                height={600}
                 width={1234}
                 className="feedbox"
                 style={{

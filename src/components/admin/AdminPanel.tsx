@@ -28,7 +28,7 @@ const AdminPanel: React.FC = () => {
         <>
         <NavBar />
             <AppWindow
-                height={400}
+                height={600}
                 width={1234}
                 className="feedbox"
                 style={{
@@ -67,7 +67,7 @@ const AdminPanel: React.FC = () => {
                                 padding: `${TranslateFigmaCoords.translateFigmaX(6)}px 0`,
                                 fontWeight: "bold",
                                 color: "#305894",
-                                fontSize: "large",
+                                fontSize: "medium",
                                 borderLeft: index === 0 ? "none" : `${TranslateFigmaCoords.translateFigmaX(2)}px solid #5386FF`,
                             }}
                             >
@@ -112,7 +112,7 @@ const AdminPanel: React.FC = () => {
                             justifyContent: "center",
                             alignItems: "center",
                             textAlign: "center",
-                            fontSize: "x-large",}} ><strong>{user.name}</strong></div>
+                            fontSize: "large",}} ><strong>{user.name}</strong></div>
                             <div className="users_approve" style={{                           
                             borderLeftWidth: `${TranslateFigmaCoords.translateFigmaX(3)}px`,
                             borderLeftColor: '#5386FF',

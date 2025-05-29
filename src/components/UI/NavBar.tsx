@@ -67,6 +67,7 @@ const NavBar: React.FC = () => {
                     <div  onClick={() => {navigate("/admin-menu/inserts")}} style={{color: "#113893", cursor:"pointer"}}>Inserciones</div>
                     <div  onClick={() => {navigate("/admin-menu/designate")}} style={{color: "#113893", cursor:"pointer"}}>Designar Administradores</div>
                     <div  onClick={() => {navigate("/admin-menu/report")}} style={{color: "#113893", cursor:"pointer"}}>Reportes</div>
+                    <div  onClick={() => {navigate("/admin-menu/review")}} style={{color: "#113893", cursor:"pointer"}}>Resenias</div>
                 </div>
             )
         }

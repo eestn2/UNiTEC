@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppWindow from "../AppWindow";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import InputField from "../form/InputField";
@@ -11,17 +11,23 @@ interface AttributeEditorProps extends ResponsiveComponent {
     id?:    number;
     width?: number;
     height?: number;
-    onSubmit?: (attribute: string) => void;
+    onSubmit?: (attribute: string, id:number) => void;
 }
 
 const AttributeEditor: React.FC<AttributeEditorProps> = ({
     width = 230,
     height = 100,
+    id = 0,
     type = "AttributeEditor",
     onSubmit,
 }) => {
     const [isEditing, setIsEditing] = useState(false);
+    const [attribute, setAttribute] = useState(type);
     const [inputValue, setInputValue] = useState('');
+    
+    useEffect(() => {
+        setAttribute(type);
+    }, [type]);
 
     return (
         <AppWindow
@@ -58,14 +64,15 @@ const AttributeEditor: React.FC<AttributeEditorProps> = ({
                         <InputField
                             type="text"
                             name="attribute"
-                            placeholder={type}
+                            placeholder={attribute}
                             onChange={e => setInputValue((e.target as HTMLInputElement).value)}
                             width={160}
                             height={35}
+                            value={inputValue}
                         />
                     ) : (
                         <>
-                            {type}
+                            {attribute}
                             <img src={edit_icon} alt="Edit" />
                         </>
                     )}
@@ -89,7 +96,10 @@ const AttributeEditor: React.FC<AttributeEditorProps> = ({
                                     paddingRight: `${TranslateFigmaCoords.translateFigmaX(20)}px`
                                 }}
                                 action={() => {
-                                    onSubmit && onSubmit(inputValue)
+                                    if(onSubmit) onSubmit(inputValue, id);
+                                    alert( attribute + " modificado a " + inputValue);
+                                    setAttribute(inputValue);
+                                    setInputValue('');
                                     setIsEditing(false);
                                 }}
                             />
