@@ -85,47 +85,47 @@ const ProfileInfo: React.FC = () => {
   // Group skills and languages by level
   const skillsByLevel = groupByLevel(userData?.skills || []);
   const languagesByLevel = groupByLevel(userData?.languages || []);
-
+  const windowWidth = window.innerWidth > window.innerHeight ? 980 : 1120;
   return (
+    
     <div>
         <Logo className='watermark'/>
         <AppWindow
-          width={980}
+          width={windowWidth}
           height={680}
           className='centered-w-wm flex-column'
-          style={{paddingBottom: TranslateFigmaCoords.translateFigmaY(5)}}
+          style={{padding: TranslateFigmaCoords.translateFigmaX(10), paddingBottom: TranslateFigmaCoords.translateFigmaY(0), height: 'fit-content', minHeight: TranslateFigmaCoords.translateFigmaY(680), rowGap: TranslateFigmaCoords.translateFigmaY(16)}}
         >
             {/* Header */}
+            <div className="flex-row-reversed" style={{width: "100%", height: TranslateFigmaCoords.translateFigmaY(60), textAlign: 'center', alignItems: 'center', justifyContent: 'space-between'}}>
             <h1 className='profile-title centered-x' style={{
                 top: TranslateFigmaCoords.translateFigmaY(14),
                 transform: 'translate(-50%, -50%)',
             }}>Detalles de la Cuenta</h1>
-            <ActionButton
-            style={{ 
-                position: 'absolute', 
-                top: TranslateFigmaCoords.translateFigmaY(12), 
-                right: TranslateFigmaCoords.translateFigmaX(68),
-                transform: 'translate(50%, 0%)',
-                backgroundColor: 'var(--danger)',
-                paddingLeft: TranslateFigmaCoords.translateFigmaX(10),
-                paddingRight: TranslateFigmaCoords.translateFigmaX(10),
-             }} 
-                height={40}
-                action={handleReport}>
-                    <img src={reportIcon} width={TranslateFigmaCoords.translateFigmaX(25)} height={TranslateFigmaCoords.translateFigmaY(23)}/><span style={{
-                        fontWeight: 600,
-                    }}>Reportar</span>
-            </ActionButton>
+                <ActionButton
+                style={{ 
+                    width: TranslateFigmaCoords.translateFigmaX(windowWidth - 880),
+                    backgroundColor: 'var(--danger)',
+                    paddingLeft: TranslateFigmaCoords.translateFigmaX(10),
+                    paddingRight: TranslateFigmaCoords.translateFigmaX(10),
+                    justifySelf: 'flex-end',
+                }} 
+                    height={40}
+                    action={handleReport}>
+                        <img src={reportIcon} width={TranslateFigmaCoords.translateFigmaX(25)} height={TranslateFigmaCoords.translateFigmaY(23)}/><span style={{
+                            fontWeight: 600,
+                        }}>Reportar</span>
+                </ActionButton>
+            </div>
             <div className="offer-fv-description-delimiter centered-x" style={{
-                width: `${TranslateFigmaCoords.translateFigmaX(950)}px`,
+                width: `${TranslateFigmaCoords.translateFigmaX(windowWidth - 30)}px`,
                 top: TranslateFigmaCoords.translateFigmaY(68),
             }} />
+            
             {/* User Info Grid Container */}
             <div className='user-info-container' style={{
-                width: `${TranslateFigmaCoords.translateFigmaX(952)}px`,
-                position: 'absolute',
-                top: TranslateFigmaCoords.translateFigmaY(85),
-                left: TranslateFigmaCoords.translateFigmaX(15),
+                width: `width: 100%`,
+                alignContent: 'center',
             }}>
                 {/* Column 1: Profile Photo and Contact Info */}
                 <div className='profile-photo-section input-field' style={{padding: TranslateFigmaCoords.translateFigmaY(20)}}>
