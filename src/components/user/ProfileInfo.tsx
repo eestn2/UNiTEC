@@ -85,139 +85,199 @@ const ProfileInfo: React.FC = () => {
   // Group skills and languages by level
   const skillsByLevel = groupByLevel(userData?.skills || []);
   const languagesByLevel = groupByLevel(userData?.languages || []);
+  const isPortrait = window.innerHeight > window.innerWidth;
   const windowWidth = window.innerWidth > window.innerHeight ? 980 : 1120;
+
   return (
-    
     <div>
-        <Logo className='watermark'/>
-        <AppWindow
-          width={windowWidth}
-          height={680}
-          className='centered-w-wm flex-column'
-          style={{padding: TranslateFigmaCoords.translateFigmaX(10), paddingBottom: TranslateFigmaCoords.translateFigmaY(0), height: 'fit-content', minHeight: TranslateFigmaCoords.translateFigmaY(680), rowGap: TranslateFigmaCoords.translateFigmaY(16)}}
+      <Logo className='watermark'/>
+      <AppWindow
+        width={windowWidth}
+        height={isPortrait ? undefined : 680}
+        className='centered-w-wm flex-column'
+        style={{
+          padding: TranslateFigmaCoords.translateFigmaX(10),
+          paddingBottom: TranslateFigmaCoords.translateFigmaY(0),
+          minHeight: TranslateFigmaCoords.translateFigmaY(680),
+          rowGap: TranslateFigmaCoords.translateFigmaY(16),
+          height: 'fit-content',
+        }}
+      >
+        {/* Header */}
+        <div className="flex-row-reversed" style={{width: "100%", height: TranslateFigmaCoords.translateFigmaY(60), textAlign: 'center', alignItems: 'center', justifyContent: 'space-between'}}>
+          <h1 className='profile-title centered-x' style={{
+              top: TranslateFigmaCoords.translateFigmaY(14),
+              transform: 'translate(-50%, -50%)',
+          }}>Detalles de la Cuenta</h1>
+          <ActionButton
+            style={{ 
+              width: TranslateFigmaCoords.translateFigmaX(windowWidth - 880),
+              backgroundColor: 'var(--danger)',
+              paddingLeft: TranslateFigmaCoords.translateFigmaX(10),
+              paddingRight: TranslateFigmaCoords.translateFigmaX(10),
+              justifySelf: 'flex-end',
+            }} 
+            height={40}
+            action={handleReport}>
+              <img src={reportIcon} width={TranslateFigmaCoords.translateFigmaX(25)} height={TranslateFigmaCoords.translateFigmaY(23)}/><span style={{ fontWeight: 600 }}>Reportar</span>
+          </ActionButton>
+        </div>
+        <div className="offer-fv-description-delimiter centered-x" style={{
+            width: `${TranslateFigmaCoords.translateFigmaX(windowWidth - 30)}px`,
+            top: TranslateFigmaCoords.translateFigmaY(68),
+        }} />
+        {/* Responsive User Info Grid Container */}
+        <div
+          className='user-info-container'
+          style={
+            isPortrait
+              ? {
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gridTemplateRows: 'repeat(8, auto)',
+                  gap: '12px 16px',
+                  width: '100%',
+                  alignContent: 'center',
+                }
+              : {
+                  width: '100%',
+                  alignContent: 'center',
+                }
+          }
         >
-            {/* Header */}
-            <div className="flex-row-reversed" style={{width: "100%", height: TranslateFigmaCoords.translateFigmaY(60), textAlign: 'center', alignItems: 'center', justifyContent: 'space-between'}}>
-            <h1 className='profile-title centered-x' style={{
-                top: TranslateFigmaCoords.translateFigmaY(14),
-                transform: 'translate(-50%, -50%)',
-            }}>Detalles de la Cuenta</h1>
-                <ActionButton
-                style={{ 
-                    width: TranslateFigmaCoords.translateFigmaX(windowWidth - 880),
-                    backgroundColor: 'var(--danger)',
-                    paddingLeft: TranslateFigmaCoords.translateFigmaX(10),
-                    paddingRight: TranslateFigmaCoords.translateFigmaX(10),
-                    justifySelf: 'flex-end',
-                }} 
-                    height={40}
-                    action={handleReport}>
-                        <img src={reportIcon} width={TranslateFigmaCoords.translateFigmaX(25)} height={TranslateFigmaCoords.translateFigmaY(23)}/><span style={{
-                            fontWeight: 600,
-                        }}>Reportar</span>
-                </ActionButton>
-            </div>
-            <div className="offer-fv-description-delimiter centered-x" style={{
-                width: `${TranslateFigmaCoords.translateFigmaX(windowWidth - 30)}px`,
-                top: TranslateFigmaCoords.translateFigmaY(68),
-            }} />
-            
-            {/* User Info Grid Container */}
-            <div className='user-info-container' style={{
-                width: `width: 100%`,
-                alignContent: 'center',
+          {/* Column 1: Profile Photo and Contact Info */}
+          <div
+            className='profile-photo-section input-field'
+            style={isPortrait ? { gridColumn: '1', gridRow: '1 / span 2', padding: TranslateFigmaCoords.translateFigmaY(20) } : { padding: TranslateFigmaCoords.translateFigmaY(20) }}
+          >
+            <div className="user-photo-container" style={{ 
+              width: TranslateFigmaCoords.translateFigmaX(200),
+              height: TranslateFigmaCoords.translateFigmaX(200),
+              borderRadius: '50%',
+              overflow: 'hidden',
             }}>
-                {/* Column 1: Profile Photo and Contact Info */}
-                <div className='profile-photo-section input-field' style={{padding: TranslateFigmaCoords.translateFigmaY(20)}}>
-                    <div className="user-photo-container" style={{ 
-                        width: TranslateFigmaCoords.translateFigmaX(200),
-                        height: TranslateFigmaCoords.translateFigmaX(200),
-                        borderRadius: '50%',
-                        overflow: 'hidden',
-                    }}>
-                        {/* Profile image here */}
-                        <img src={default_profile} alt={userData?.name} style={{width: '100%', height: '100%'}} />
-                    </div>
-                    <h1>{userData?.name}</h1>
-                </div>
-                
-                <div className='user-info-item profile-field input-field' style={{gridRow: 6}}>
-                    <div>Email: {userData?.email}</div>
-                </div>
-                
-                <div className='user-info-item profile-field input-field' style={{gridRow: 7}}>
-                    <div>Localidad: {userData?.location}</div>
-                </div>
-                
-                <div className='user-info-item profile-field input-field' style={{gridRow: 8}}>
-                    <div>Portfolio web: {userData?.portfolio}</div>
-                </div>
-                
-                {/* Column 2: Type, Status, Skills, Languages */}
-                <div className='user-labels-section profile-field  input-field'>
-                    <div>Tipo de Usuario: {userData?.type}</div>
-                </div>
-                
-                <div className='user-status-section profile-field  input-field'>  
-                    <div>Estado: {userData?.status}</div>
-                </div>
-                
-                {/* Etiquetas (Skills) Section */}
-                <div className='user-skills-section input-field'>
-                    <h2>Habilidades</h2>
-                    {Object.entries(skillsByLevel).map(([level, skills]) => (
-                        skills.length > 0 && (
-                            <div key={level} className='skill-level-group'>
-                                <h3>{level}</h3>
-                                <ul>
-                                    {skills.map(skill => (
-                                        <li key={skill.name}>{skill.name}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )
-                    ))}
-                </div>
-                {/* Idiomas (Languages) Section */}
-                <div className='user-languages-section profile-field input-field'>
-                    <h2>Idiomas</h2>
-                    {Object.entries(languagesByLevel).map(([level, languages]) => (
-                        languages.length > 0 && (
-                            <div key={level} className='language-level-group'>
-                                <h3>{level}</h3>
-                                <ul>
-                                    {languages.map(language => (
-                                        <li key={language.name}>{language.name}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )
-                    ))}
-                </div>                
-                {/* Column 3: Description and Action Buttons */}
-                <div className='user-description-section input-field'>
-                    <p>Descripción:<br/>
-                    {userData?.description}</p>
-                </div>
-                <div className='user-button-section' style={{fontSize: TranslateFigmaCoords.translateFigmaY(24)}}>
-                    <ActionButton height={60} action={handleEditProfile}>
-                        Editar Perfil
-                    </ActionButton>
-                    <ActionButton height={60} action={handleChangePassword} style={{backgroundColor: '#DFB529'}}>
-                        Cambiar Contraseña
-                    </ActionButton>
-                    <ActionButton height={60} action={handleLogout} style={{backgroundColor: '#F0823D'}}>
-                        Cerrar Sesión
-                    </ActionButton>
-                    <ActionButton 
-                        height={60} 
-                        action={handleDeleteAccount}
-                        style={{backgroundColor: 'var(--danger)', color: 'white'}}>
-                        Eliminar Cuenta
-                    </ActionButton>
-                </div>
+              <img src={default_profile} alt={userData?.name} style={{width: '100%', height: '100%'}} />
             </div>
-        </AppWindow>
+            <h1>{userData?.name}</h1>
+          </div>
+          <div
+            className='user-info-item profile-field input-field'
+            style={isPortrait ? { gridColumn: '1', gridRow: '3' } : { gridRow: 6 }}
+          >
+            <div>Email: {userData?.email}</div>
+          </div>
+          <div
+            className='user-info-item profile-field input-field'
+            style={isPortrait ? { gridColumn: '1', gridRow: '4' } : { gridRow: 7 }}
+          >
+            <div>Localidad: {userData?.location}</div>
+          </div>
+          <div
+            className='user-info-item profile-field input-field'
+            style={isPortrait ? { gridColumn: '1', gridRow: '5' } : { gridRow: 8 }}
+          >
+            <div>Portfolio web: {userData?.portfolio}</div>
+          </div>
+          {/* Column 2: Type, Status, Description */}
+          <div
+            className='user-labels-section profile-field input-field'
+            style={isPortrait ? { gridColumn: '2', gridRow: '1' } : {}}
+          >
+            <div>Tipo de Usuario: {userData?.type}</div>
+          </div>
+          <div
+            className='user-status-section profile-field input-field'
+            style={isPortrait ? { gridColumn: '2', gridRow: '2' } : {}}
+          >
+            <div>Estado: {userData?.status}</div>
+          </div>
+          <div
+            className='user-description-section input-field'
+            style={isPortrait ? { gridColumn: '2', gridRow: '3 / span 3' } : {}}
+          >
+            <p>Descripción:<br/>{userData?.description}</p>
+          </div>
+          {/* Tags and Languages below portfolio/description in portrait */}
+          <div
+            className='user-skills-section input-field'
+            style={isPortrait ? { gridColumn: '1', gridRow: '6 / span 2' } : {}}
+          >
+            <h2>Habilidades</h2>
+            {Object.entries(skillsByLevel).map(([level, skills]) => (
+              skills.length > 0 && (
+                <div key={level} className='skill-level-group'>
+                  <h3>{level}</h3>
+                  <ul>
+                    {skills.map(skill => (
+                      <li key={skill.name}>{skill.name}</li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            ))}
+          </div>
+          <div
+            className='user-languages-section profile-field input-field'
+            style={isPortrait ? { gridColumn: '2', gridRow: '6 / span 2' } : {}}
+          >
+            <h2>Idiomas</h2>
+            {Object.entries(languagesByLevel).map(([level, languages]) => (
+              languages.length > 0 && (
+                <div key={level} className='language-level-group'>
+                  <h3>{level}</h3>
+                  <ul>
+                    {languages.map(language => (
+                      <li key={language.name}>{language.name}</li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            ))}
+          </div>
+          {/* Buttons below tags/languages, 2 per column in portrait */}
+          {isPortrait ? (
+            <div
+              className='user-button-section'
+              style={{
+                gridColumn: '1 / span 2',
+                gridRow: '8',
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: 12,
+                marginTop: 12,
+              }}
+            >
+              <ActionButton height={60} action={handleEditProfile} style={{ gridColumn: 1 }}>
+                Editar Perfil
+              </ActionButton>
+              <ActionButton height={60} action={handleChangePassword} style={{ backgroundColor: '#DFB529', gridColumn: 2 }}>
+                Cambiar Contraseña
+              </ActionButton>
+              <ActionButton height={60} action={handleLogout} style={{ backgroundColor: '#F0823D', gridColumn: 1 }}>
+                Cerrar Sesión
+              </ActionButton>
+              <ActionButton height={60} action={handleDeleteAccount} style={{ backgroundColor: 'var(--danger)', color: 'white', gridColumn: 2 }}>
+                Eliminar Cuenta
+              </ActionButton>
+            </div>
+          ) : (
+            <div className='user-button-section' style={{ fontSize: TranslateFigmaCoords.translateFigmaY(24) }}>
+              <ActionButton height={60} action={handleEditProfile}>
+                Editar Perfil
+              </ActionButton>
+              <ActionButton height={60} action={handleChangePassword} style={{ backgroundColor: '#DFB529' }}>
+                Cambiar Contraseña
+              </ActionButton>
+              <ActionButton height={60} action={handleLogout} style={{ backgroundColor: '#F0823D' }}>
+                Cerrar Sesión
+              </ActionButton>
+              <ActionButton height={60} action={handleDeleteAccount} style={{ backgroundColor: 'var(--danger)', color: 'white' }}>
+                Eliminar Cuenta
+              </ActionButton>
+            </div>
+          )}
+        </div>
+      </AppWindow>
     </div>
   );
 };

@@ -42,9 +42,8 @@ const AppWindow: React.FC<ResponsiveComponent> = ({ height = 10, width = 10, ver
             className={`app-window ${className || ""}`}
             style={{
                 minHeight: `${height}px`,
-                minWidth: `${width}px`,
                 height: 'fit-content',
-                width: 'fit-content',
+                width: `${width}px`,
                 ...style,
             }}
             ref={ref}
