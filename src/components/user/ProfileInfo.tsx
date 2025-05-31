@@ -83,8 +83,10 @@ const ProfileInfo: React.FC = () => {
   };
 
   // Group skills and languages by level
-  const skillsByLevel = groupByLevel(userData?.skills || []);
-  const languagesByLevel = groupByLevel(userData?.languages || []);
+  const skillsByLevel = groupByLevel(userData?.skills || ["Ejemplo 1", "Ejemplo 2"].map(skill => ({ name: skill, level: 'Básico' })));
+  // For demonstration, using static skills if userData is not available
+  const languagesByLevel = groupByLevel(userData?.languages || ["Español", "Inglés"].map(language => ({ name: language, level: 'Intermedio' })));
+  // For demonstration, using static languages if userData is not available
   const isPortrait = window.innerHeight > window.innerWidth;
   const windowWidth = window.innerWidth > window.innerHeight ? 980 : 1120;
 
@@ -199,22 +201,70 @@ const ProfileInfo: React.FC = () => {
           </div>
           {/* Tags and Languages below portfolio/description in portrait */}
           <div
-            className='user-skills-section input-field'
-            style={isPortrait ? { gridColumn: '1', gridRow: '6 / span 2' } : {}}
+            className='user-skills-section input-field tag-display-profile flex-row'
+            style={{
+                ...(isPortrait ? { gridColumn: '1', gridRow: '6 / span 2' } : {}),
+                alignItems: 'flex-start',
+                justifyContent: 'flex-start',
+            }}
           >
-            <h2>Habilidades</h2>
-            {Object.entries(skillsByLevel).map(([level, skills]) => (
-              skills.length > 0 && (
-                <div key={level} className='skill-level-group'>
-                  <h3>{level}</h3>
-                  <ul>
-                    {skills.map(skill => (
-                      <li key={skill.name}>{skill.name}</li>
-                    ))}
-                  </ul>
-                </div>
-              )
-            ))}
+            <div className='flex-column' style={{
+                width: TranslateFigmaCoords.translateFigmaX(130),
+                borderRight: `${TranslateFigmaCoords.translateFigmaX(2)}px solid var(--delimiters)`,
+                paddingTop: TranslateFigmaCoords.translateFigmaY(7),
+                paddingLeft: TranslateFigmaCoords.translateFigmaY(7),
+                height: '97%',
+            }}>
+                <span style={{ fontWeight: 600 }}>Etiquetas:</span>
+                {LEVELS.map(level => (
+                <label key={level} style={{ display: 'flex', alignItems: 'center', fontWeight: 500, color: '#2A4374' }}>
+                    <input
+                    type="checkbox"
+                    checked={skillsByLevel[level].length > 0}
+                    readOnly
+                    style={{
+                        accentColor: '#2A4374',
+                        width: TranslateFigmaCoords.translateFigmaX(18),
+                        height: TranslateFigmaCoords.translateFigmaX(18),
+                        pointerEvents: 'none',
+                    }}
+                    tabIndex={-1}
+                    />
+                    {level}
+                </label>)
+                )}
+            </div>
+            <div style={{
+                width: TranslateFigmaCoords.translateFigmaX(206),
+                height: '97%',
+                borderLeft: `${TranslateFigmaCoords.translateFigmaX(2)}px solid var(--delimiters)`,
+                paddingTop: TranslateFigmaCoords.translateFigmaY(7),
+                paddingLeft: TranslateFigmaCoords.translateFigmaY(7),
+                backgroundColor: '#AABAC9',
+                color: 'rgba(0, 49, 123, 0.5)',
+                }}>
+                {Object.values(skillsByLevel).flat().length === 0 ? (
+                <span style={{ color: '#888' }}>Sin habilidades</span>
+                ) : (
+                Object.values(skillsByLevel).flat().map(skill => (
+                    <span
+                    key={skill.name}
+                    style={{ 
+                        display: 'inline-block', 
+                        margin: '4px 0', 
+                        padding: '4px 8px', 
+                        backgroundColor: '#fff', 
+                        borderRadius: TranslateFigmaCoords.translateFigmaX(20),
+                        width: TranslateFigmaCoords.translateFigmaX(170),
+                        textAlign: 'center',
+                        
+                    }}
+                    >
+                    {skill.name}
+                    </span>
+                ))
+                )}
+            </div>
           </div>
           <div
             className='user-languages-section profile-field input-field'
