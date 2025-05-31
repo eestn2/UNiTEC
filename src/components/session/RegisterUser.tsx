@@ -18,6 +18,8 @@ import LabelsSelection from "../UI/form/LabelsSelection";
 import LabelsContainer from "../UI/form/LabelsContainer";
 import Label from "../UI/form/Label";
 import { useWindowSize } from "../../hooks/responsive/useWindowSize";
+import axios from "axios";
+import { useState } from "react";
 
 /**
  * A React functional component that renders a registration form for students inside a responsive window.
@@ -35,8 +37,40 @@ import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 function RegisterUser() {
   // Re-Render on window resize
   const windowSize = useWindowSize();
-  console.log("Window size:", windowSize);
-  // State variables for form inputs
+  const [error, setError] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    birth_date: "",
+    email: "",
+    password: "",
+    confirm_password: "",
+    location: "",
+    description: "",
+    portfolio: "",
+    user_type_id: 2,
+    status_id: 1,
+  });
+  const handleChange = (field: string, value: string) => {
+    setForm(prev => ({ ...prev, [field]: value }));
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    if (form.password !== form.confirm_password) {
+      setError("Las contraseñas no coinciden.");
+      return;
+    }
+    try {
+      const res = await axios.post("/session/user-register.php", form);
+      if (res.data.status === "success") {
+        window.location.reload();
+      } else {
+        setError(res.data.message || "Error en el registro");
+      }
+    } catch (err) {
+      setError("No se pudo registrar. Intente de nuevo más tarde.");
+    }
+  };
   return (
     <>
       <Logo className="watermark"></Logo>
@@ -229,6 +263,7 @@ function RegisterUser() {
             </LabelsContainer>
           </div>
         </div>
+        {error && <div style={{ color: 'red', marginTop: 10 }}>{error}</div>}
       </AppWindow>
     </>
   );

@@ -14,7 +14,7 @@ import ActionButton from "../UI/ActionButton";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import User from "./User";
+
 import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 
 /**
@@ -46,10 +46,8 @@ const Login: React.FC = () => {
                 password
             });
             if (response.status === 200 && response.data.status === "success") {
-                const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
-                document.cookie = `session=${JSON.stringify(await response.data.data.user)}; path=/; expires=${expires};`;
-                User.set(await response.data.data.user);
-                location.reload();
+                // Session is now set server-side; reload to update app state
+                window.location.reload();
             } else {
                 console.error("Login failed:", await response.data.message);
                 setError(response.data.message);

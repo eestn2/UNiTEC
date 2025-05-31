@@ -70,8 +70,14 @@ const ProfileInfo: React.FC = () => {
     console.log("Change password clicked");
   };
 
-  const handleLogout = () => {
-    console.log("Logout clicked");
+  const handleLogout = async () => {
+    try {
+      await axios.get('/session/logout.php');
+      window.location.href = '/';
+    } catch (e) {
+      alert('Error al cerrar sesión.');
+      console.error("Logout error:", e);
+    }
   };
 
   const handleDeleteAccount = () => {

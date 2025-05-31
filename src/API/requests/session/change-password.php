@@ -20,6 +20,7 @@
  *   Response: { "status": "success", "message": "Contraseña cambiada correctamente.", "data": null }
  */
 
+session_start();
 require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . "/../../logic/database/connection.php";
 require_once __DIR__ . "/../../logic/communications/return_response.php";
@@ -31,16 +32,17 @@ if ($_SERVER["REQUEST_METHOD"] !== "PATCH") {
 
 $data = json_decode(file_get_contents("php://input"));
 
-if (!isset($data->id) || !isset($data->password) || !isset($data->new_password)) {
+
+if (!isset($data->password) || !isset($data->new_password)) {
     return_response("failed", "Faltan datos requeridos.", null);
     exit;
 }
 
-$user_id = intval($data->id);
-if ($user_id <= 0) {
-    return_response("failed", "ID de usuario inválido.", null);
+if (!isset($_SESSION['user']['id'])) {
+    return_response("failed", "No autenticado.", null);
     exit;
 }
+$user_id = intval($_SESSION['user']['id']);
 
 // Validar la nueva contraseña (longitud mínima, etc.)
 if (strlen($data->new_password) < 8) {
