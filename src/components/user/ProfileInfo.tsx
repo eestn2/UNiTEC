@@ -89,7 +89,7 @@ const ProfileInfo: React.FC = () => {
   };
 
   // Group skills and languages by level
-  const skillsByLevel = groupByLevel(userData?.skills || ["Ejemplo 1", "Ejemplo 2"].map(skill => ({ name: skill, level: 'Básico' })));
+  const skillsByLevel = groupByLevel(userData?.skills || ["Ejemplo 1", "Ejemplo 2", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", ].map(skill => ({ name: skill, level: 'Básico' })));
   // For demonstration, using static skills if userData is not available
   const languagesByLevel = groupByLevel(userData?.languages || ["Español", "Inglés"].map(language => ({ name: language, level: 'Intermedio' })));
   // For demonstration, using static languages if userData is not available
@@ -106,7 +106,7 @@ const ProfileInfo: React.FC = () => {
         style={{
           padding: TranslateFigmaCoords.translateFigmaY(10),
           paddingBottom: TranslateFigmaCoords.translateFigmaY(10),
-          minHeight: TranslateFigmaCoords.translateFigmaY(680),
+          minHeight: TranslateFigmaCoords.translateFigmaY(isPortrait ? 680 : 620),
           rowGap: TranslateFigmaCoords.translateFigmaY(16),
           height: 'fit-content',
         }}
@@ -127,7 +127,7 @@ const ProfileInfo: React.FC = () => {
             }} 
             height={40}
             action={handleReport}>
-              <img src={reportIcon} width={TranslateFigmaCoords.translateFigmaX(25)} height={TranslateFigmaCoords.translateFigmaY(23)}/><span style={{ fontWeight: 600 }}>Reportar</span>
+              <img src={reportIcon} width={TranslateFigmaCoords.translateFigmaY(25)} height={TranslateFigmaCoords.translateFigmaY(23)}/><span style={{ fontWeight: 600 }}>Reportar</span>
           </ActionButton>
         </div>
         <div className="offer-fv-description-delimiter centered-x" style={{
@@ -137,31 +137,33 @@ const ProfileInfo: React.FC = () => {
         {/* Responsive User Info Grid Container */}
         <div
           className='user-info-container'
-          style={
-            isPortrait
-              ? {
-                  display: 'grid',
+          style={{
+            ...( isPortrait ? 
+                {
                   gridTemplateColumns: '1fr 1fr',
-                  gridTemplateRows: 'repeat(8, auto)',
-                  gap: '12px 16px',
-                  width: '100%',
-                  alignContent: 'center',
                 }
               : {
-                  width: '100%',
-                  alignContent: 'center',
-                }
-          }
+                  gridTemplateColumns: `repeat(3, 1fr)`,
+                }),
+            display: 'grid',
+            width: '100%',
+            alignContent: 'center',
+            gridTemplateRows: `repeat(8, ${TranslateFigmaCoords.translateFigmaY(55)}px)`,
+            gap: `${TranslateFigmaCoords.translateFigmaX(12)}px ${TranslateFigmaCoords.translateFigmaY(16)}px`,
+          }}
         >
           {/* Column 1: Profile Photo and Contact Info */}
           <div
             className='profile-photo-section input-field'
-            style={isPortrait ? { gridColumn: '1', gridRow: '1 / span 2', padding: TranslateFigmaCoords.translateFigmaY(20) } : { padding: TranslateFigmaCoords.translateFigmaY(20) }}
+            style={{...( isPortrait ? { gridColumn: '1', gridRow: '1 / span 4', padding: TranslateFigmaCoords.translateFigmaY(20) } : { padding: TranslateFigmaCoords.translateFigmaY(20)}),
+              color: '#113893',
+            }}
           >
             <div className="user-photo-container" style={{ 
-              width: TranslateFigmaCoords.translateFigmaX(200),
-              height: TranslateFigmaCoords.translateFigmaX(200),
+              width: TranslateFigmaCoords.translateFigmaX(isPortrait ? 200 : 160),
+              height: TranslateFigmaCoords.translateFigmaX(isPortrait ? 200 : 160),
               borderRadius: '50%',
+              border: `${TranslateFigmaCoords.translateFigmaX(4)}px solid #113893`,
               overflow: 'hidden',
             }}>
               <img src={default_profile} alt={userData?.name} style={{width: '100%', height: '100%'}} />
@@ -170,66 +172,67 @@ const ProfileInfo: React.FC = () => {
           </div>
           <div
             className='user-info-item profile-field input-field'
-            style={isPortrait ? { gridColumn: '1', gridRow: '3' } : { gridRow: 6 }}
+            style={isPortrait ? { gridColumn: '2', gridRow: '1' } : { gridRow: 6 }}
           >
             <div>Email: {userData?.email}</div>
           </div>
           <div
             className='user-info-item profile-field input-field'
-            style={isPortrait ? { gridColumn: '1', gridRow: '4' } : { gridRow: 7 }}
+            style={isPortrait ? { gridColumn: '2', gridRow: '2' } : { gridRow: 7 }}
           >
             <div>Localidad: {userData?.location}</div>
           </div>
           <div
             className='user-info-item profile-field input-field'
-            style={isPortrait ? { gridColumn: '1', gridRow: '5' } : { gridRow: 8 }}
+            style={isPortrait ? { gridColumn: '2', gridRow: '3' } : { gridRow: 8 }}
           >
             <div>Portfolio web: {userData?.portfolio}</div>
           </div>
           {/* Column 2: Type, Status, Description */}
           <div
             className='user-labels-section profile-field input-field'
-            style={isPortrait ? { gridColumn: '2', gridRow: '1' } : {}}
+            style={isPortrait ? { gridColumn: '2', gridRow: '4' } : {}}
           >
             <div>Tipo de Usuario: {userData?.type}</div>
           </div>
           <div
             className='user-status-section profile-field input-field'
-            style={isPortrait ? { gridColumn: '2', gridRow: '2' } : {}}
+            style={isPortrait ? { gridColumn: '2', gridRow: '5' } : {}}
           >
             <div>Estado: {userData?.status}</div>
           </div>
           <div
             className='user-description-section input-field'
-            style={isPortrait ? { gridColumn: '2', gridRow: '3 / span 3' } : {}}
+            style={isPortrait ? { gridColumn: '2', gridRow: '6 / span 6' } : {}}
           >
             <p>Descripción:<br/>{userData?.description}</p>
           </div>
           {/* Tags and Languages below portfolio/description in portrait */}
           <div
-            className='user-skills-section input-field tag-display-profile flex-row'
+            className='user-skills-section input-field flex-row'
             style={{
-                ...(isPortrait ? { gridColumn: '1', gridRow: '6 / span 2' } : {}),
+                ...(isPortrait ? { gridColumn: '1', gridRow: '5 / span 3', height: TranslateFigmaCoords.translateFigmaY(240) } : {}),
                 alignItems: 'flex-start',
                 justifyContent: 'flex-start',
+                color: 'rgba(0, 49, 123, 0.5)',
             }}
           >
             <div className='flex-column' style={{
-                width: TranslateFigmaCoords.translateFigmaX(130),
+                width: TranslateFigmaCoords.translateFigmaY(isPortrait ? 140 : 130),
                 borderRight: `${TranslateFigmaCoords.translateFigmaX(2)}px solid var(--delimiters)`,
                 paddingTop: TranslateFigmaCoords.translateFigmaY(7),
                 paddingLeft: TranslateFigmaCoords.translateFigmaY(7),
-                height: '97%',
+                height: '96%',
             }}>
-                <span style={{ fontWeight: 600 }}>Etiquetas:</span>
+                <span style={{ fontWeight: 600, fontSize: TranslateFigmaCoords.translateFigmaY(22), color: 'rgba(0, 49, 123, 0.8)'}}>Etiquetas:</span>
                 {LEVELS.map(level => (
-                <label key={level} style={{ display: 'flex', alignItems: 'center', fontWeight: 500, color: '#2A4374' }}>
+                <label key={level} style={{ display: 'flex', alignItems: 'center', fontWeight: 500}}>
                     <input
                     type="checkbox"
                     checked={skillsByLevel[level].length > 0}
                     readOnly
                     style={{
-                        accentColor: '#2A4374',
+                        accentColor: '#335A95',
                         width: TranslateFigmaCoords.translateFigmaX(18),
                         height: TranslateFigmaCoords.translateFigmaX(18),
                         pointerEvents: 'none',
@@ -241,14 +244,17 @@ const ProfileInfo: React.FC = () => {
                 )}
             </div>
             <div style={{
-                width: TranslateFigmaCoords.translateFigmaX(206),
-                height: '97%',
+                width: TranslateFigmaCoords.translateFigmaY(isPortrait ? 189 : 229),
+                height: '96%',
                 borderLeft: `${TranslateFigmaCoords.translateFigmaX(2)}px solid var(--delimiters)`,
                 paddingTop: TranslateFigmaCoords.translateFigmaY(7),
                 paddingLeft: TranslateFigmaCoords.translateFigmaY(7),
+                borderTopRightRadius: TranslateFigmaCoords.translateFigmaX(8),
+                borderBottomRightRadius: TranslateFigmaCoords.translateFigmaX(8),
                 backgroundColor: '#AABAC9',
-                color: 'rgba(0, 49, 123, 0.5)',
-                }}>
+                overflowY: 'scroll',
+                }}
+                className='tag-display-profile'>
                 {Object.values(skillsByLevel).flat().length === 0 ? (
                 <span style={{ color: '#888' }}>Sin habilidades</span>
                 ) : (
@@ -257,13 +263,12 @@ const ProfileInfo: React.FC = () => {
                     key={skill.name}
                     style={{ 
                         display: 'inline-block', 
-                        margin: '4px 0', 
-                        padding: '4px 8px', 
+                        margin: `${TranslateFigmaCoords.translateFigmaY(4)}px 0`, 
+                        padding: `${TranslateFigmaCoords.translateFigmaY(4)}px ${TranslateFigmaCoords.translateFigmaY(8)}px`, 
                         backgroundColor: '#fff', 
                         borderRadius: TranslateFigmaCoords.translateFigmaX(20),
-                        width: TranslateFigmaCoords.translateFigmaX(170),
+                        width: TranslateFigmaCoords.translateFigmaY(isPortrait ? 145 : 185),
                         textAlign: 'center',
-                        
                     }}
                     >
                     {skill.name}
@@ -274,7 +279,7 @@ const ProfileInfo: React.FC = () => {
           </div>
           <div
             className='user-languages-section profile-field input-field'
-            style={isPortrait ? { gridColumn: '2', gridRow: '6 / span 2' } : {}}
+            style={isPortrait ? { gridColumn: '1', gridRow: '9 / span 3' } : {}}
           >
             <h2>Idiomas</h2>
             {Object.entries(languagesByLevel).map(([level, languages]) => (
@@ -296,7 +301,7 @@ const ProfileInfo: React.FC = () => {
               className='user-button-section'
               style={{
                 gridColumn: '1 / span 2',
-                gridRow: '8',
+                gridRow: '12',
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr',
                 gap: 12,
