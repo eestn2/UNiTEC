@@ -567,7 +567,7 @@ footer{
   background-color: var(--footer);
   width: 100%;
   height: calc((260 / 720) * var(--y-multiplier));
-  top: 100vh;
+  top: 100%;
 }
 
 .footer-content {

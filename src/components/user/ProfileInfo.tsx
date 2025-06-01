@@ -104,8 +104,8 @@ const ProfileInfo: React.FC = () => {
         height={isPortrait ? undefined : 680}
         className='centered-w-wm flex-column'
         style={{
-          padding: TranslateFigmaCoords.translateFigmaX(10),
-          paddingBottom: TranslateFigmaCoords.translateFigmaY(0),
+          padding: TranslateFigmaCoords.translateFigmaY(10),
+          paddingBottom: TranslateFigmaCoords.translateFigmaY(10),
           minHeight: TranslateFigmaCoords.translateFigmaY(680),
           rowGap: TranslateFigmaCoords.translateFigmaY(16),
           height: 'fit-content',
