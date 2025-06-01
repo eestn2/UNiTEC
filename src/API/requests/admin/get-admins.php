@@ -10,16 +10,17 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no p
 
 if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
 if (!is_admin($_SESSION['user']['id'], $connection)) {
-    return_response("failed", "Solo los administradores pueden ver los usuarios a aprobar.", null);
+    return_response("failed", "Solo los administradores pueden ver la lista de admins.", null);
 }
 
 try {
-    $stmt = $connection->query("SELECT * FROM users WHERE enabled= 0");
-    $users = $stmt->fetchAll();
-    return_response("success", "not enabled retrieved successfully.", ["users" => $users]);
+    $stmt = $connection->prepare("SELECT * FROM users WHERE user_type = '4' AND id != :id");
+    $stmt->execute(['id' => $_SESSION['user']['id']]);
+    $admins = $stmt->fetchAll();
+    return_response("success", "not enabled retrieved successfully.", ["admins" => $admins]);
 } catch (PDOException $e) {
     error_log("Error retrieving users: " . $e->getMessage());
-    return_response("failed", "Error retrieving users.", null);
+    return_response("failed", "Error retrieving admins.", null);
 }
 
 ?>

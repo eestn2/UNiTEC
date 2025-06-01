@@ -4,24 +4,29 @@ import AttributeEditor from "../UI/admin/AttributeEditor";
 import NavBar from "../UI/NavBar";
 import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import User from "../session/User";
 
 
 
 
 const AdminLanguages: React.FC = () => {
+    const handleDeleteAttribute = async (id: number) => {
+      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+      const response = await axios.delete(`${apiUrl}/admin/delete_language.php`, {
+          data:{
+            id:id,}
+      }); 
+    console.log(response);
+    };
     const handleChangeAttribute = async (attribute: string, id: number) => {
       const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const userId = User.data.id;
       const response = await axios.put(`${apiUrl}/admin/edit_language.php`, {
-          user_id:userId,
           id:id,
           name:attribute
       });
     console.log(response);
     };
     const [attributes, setAttributes] = useState<ReactElement[]>([]);
-    const loadAttributes = async () => {
+  const loadAttributes = async () => {
     try {
       const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
       const response = await axios.get(`${apiUrl}/function/get-languages.php`);
@@ -39,6 +44,7 @@ const AdminLanguages: React.FC = () => {
               id={language.id}
               type={language.name}
               onSubmit={handleChangeAttribute}
+              onDelete={handleDeleteAttribute}
             />
           );
         }));
@@ -65,18 +71,14 @@ const AdminLanguages: React.FC = () => {
                     position: "absolute",
                     left: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
                     top: `${TranslateFigmaCoords.translateFigmaY(100)}px`,
-                    overflowY: "scroll",
                     borderTopRightRadius: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
                     borderBottomRightRadius: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
                 }}
             >
                 <h1 style={{textAlign:"center", color:"#305894"}}>Listado de Idiomas</h1>
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-                  gap: '1rem',
-                  padding: '1rem',
-                }}>
+                <div 
+                className= "admin_attributes_grid"
+                >
                   {attributes}
                 </div>
             </AppWindow>

@@ -14,12 +14,12 @@ if (!is_admin($_SESSION['user']['id'], $connection)) {
 }
 
 try {
-    $stmt = $connection->query("SELECT * FROM users WHERE enabled= 0");
-    $users = $stmt->fetchAll();
-    return_response("success", "not enabled retrieved successfully.", ["users" => $users]);
+    $stmt = $connection->query("SELECT * FROM reviews");
+    $reviews = $stmt->fetchAll();
+    return_response("success", "reviews retrieved successfully.", ["reviews" => $reviews]);
 } catch (PDOException $e) {
-    error_log("Error retrieving users: " . $e->getMessage());
-    return_response("failed", "Error retrieving users.", null);
+    error_log("Error retrieving reviews: " . $e->getMessage());
+    return_response("failed", "Error retrieving reviews.", null);
 }
 
 ?>

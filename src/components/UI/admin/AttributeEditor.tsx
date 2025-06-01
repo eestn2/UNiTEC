@@ -12,6 +12,7 @@ interface AttributeEditorProps extends ResponsiveComponent {
     width?: number;
     height?: number;
     onSubmit?: (attribute: string, id:number) => void;
+    onDelete?: (id: number) => void;
 }
 
 const AttributeEditor: React.FC<AttributeEditorProps> = ({
@@ -20,6 +21,7 @@ const AttributeEditor: React.FC<AttributeEditorProps> = ({
     id = 0,
     type = "AttributeEditor",
     onSubmit,
+    onDelete,
 }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [attribute, setAttribute] = useState(type);
@@ -136,7 +138,11 @@ const AttributeEditor: React.FC<AttributeEditorProps> = ({
                                     paddingRight: `${TranslateFigmaCoords.translateFigmaX(25)}px`,
                                     backgroundColor: "#F03D3D"
                                 }}
-                                action={() => alert("Button clicked!")}
+                                action={() => {
+                                    alert(attribute +" fue eliminado")
+                                    onDelete && onDelete(id);
+                                }
+                            }
                             />
                         </>
                     )}
