@@ -25,6 +25,7 @@
   :root {
    --x-multiplier: 100vw;
    --y-multiplier: 100vw;
+   --nav-height: calc((35 / 720) * 100vh);
   }
 }
 
@@ -55,7 +56,10 @@ html::-webkit-scrollbar-thumb {
 html::-webkit-scrollbar-thumb:hover {
   background-color: var(--feed-title-BG);
 }
-
+h1 {
+  font-size: calc((32 / 720) * var(--y-multiplier));
+  font-weight: 600;
+}
 .app-content{
   background-color: var(--BG);
   width: 100%;
@@ -64,6 +68,26 @@ html::-webkit-scrollbar-thumb:hover {
   background-repeat: repeat;
   background-size: calc((100 / 720) * var(--y-multiplier));
 }
+
+/* =========================
+  Scrollbar Styles
+  ========================= */
+.scrollbar::-webkit-scrollbar {
+  width: calc((6 / 1280) * var(--x-multiplier));
+}
+.scrollbar::-webkit-scrollbar-track {
+  border-radius: calc((8 / 1280) * var(--x-multiplier));
+  background-color: var(--action-button) !important;
+  border: calc((1 / 1280) * var(--x-multiplier)) solid #cacaca;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+  border-radius: calc((8 / 1280) * var(--x-multiplier));
+  background-color: var(--icons-nav-bar);
+}
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: var(--feed-title-BG);
+}
+
 /* =========================
   Links
   ========================= */
@@ -90,6 +114,11 @@ html::-webkit-scrollbar-thumb:hover {
   color: #305894;
   font-weight: 550;
   font-size: calc((40 / 720) * var(--y-multiplier));
+}
+.profile-title {
+  color: #305894;
+  font-size: calc((32 / 720) * var(--y-multiplier));
+  font-weight: 550;
 }
 .black-text {
   color: black;
@@ -133,6 +162,10 @@ html::-webkit-scrollbar-thumb:hover {
   color: var(--input);
   font-family: var(--app-font-family);
   font-weight: 600;
+}
+.profile-field{
+  text-indent: calc((18 / 1280) * var(--x-multiplier));
+  align-content: center;
 }
 .input-field:focus,
 .selection-field:focus {
@@ -303,28 +336,40 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: calc((30 / 1280) * var(--x-multiplier));
   box-shadow: rgba(50, 50, 93, 0.25) 0px calc((6 / 720) * var(--y-multiplier)) calc((12 / 720) * var(--y-multiplier)) calc((-2 / 720) * var(--y-multiplier)), rgba(0, 0, 0, 0.3) 0px calc((3 / 720) * var(--y-multiplier)) calc((7 / 720) * var(--y-multiplier)) calc((-3 / 720) * var(--y-multiplier));
 }
+
+
 .icons-section {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: calc((20 / 1280) * var(--x-multiplier));
+  gap: calc((15 / 1280) * var(--x-multiplier));
 }
 .icons-section img {
-  width: calc((35 / 1240) * var(--nav-width));
-  height: calc((37 / 60) * var(--nav-height));
+  width: calc((30 / 1240) * var(--nav-width));
+  height: calc((30 / 60) * var(--nav-height));
   fill: var(--icons-nav-bar);
 }
-.profile-pic {
-  width: calc((37 / 1240) * var(--nav-width));
-  height: calc((37 / 1240) * var(--nav-width));
-  border-radius: 50%;
-  background-image: url(../assets/user/profile.jpg);
-  background-size: cover;
-  background-position: center;
+.icons-section.admin {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
-.icons-section .profile-pic {
-  width: calc((40 / 1240) * var(--nav-width));
-  height: calc((40 / 1240) * var(--nav-width));
+.admin{
+ font-weight: bold;
+ 
+}
+.icons-section.admin .admin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  gap: calc((30 / 1280) * var(--x-multiplier));
+ 
+}
+
+.icons-section.admin .profile-pic {
+  margin-left: auto;
 }
 .nav-bar .logo-section {
   display: flex;
@@ -335,6 +380,32 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .unitec-text {
   width: calc((130 / 1240) * var(--nav-width));
   height: calc((35 / 60) * var(--nav-height));
+  margin-left: calc((20 / 1280) * var(--x-multiplier));
+}
+@media (orientation: portrait) {
+  .nav-bar {
+    border-radius: calc((60 / 1280) * var(--x-multiplier));
+  }
+  .icons-section {
+    gap: calc((60 / 1280) * var(--x-multiplier));
+  }
+  .bell {
+    margin-bottom: calc((6 / 720) * var(--y-multiplier));
+  }
+  .icons-section img {
+    width: calc((65 / 1240) * var(--nav-width));
+    height: calc((67 / 60) * var(--nav-height));
+    fill: var(--icons-nav-bar);
+  }
+  .nav-bar .profile-pic {
+    width: calc((80 / 1240) * var(--nav-width));
+    height: calc((80 / 1240) * var(--nav-width));
+  }
+  .unitec-text {
+    margin-left: calc((40 / 1280) * var(--x-multiplier));
+    width: calc((260 / 1240) * var(--nav-width));
+    height: calc((125 / 60) * var(--nav-height));
+  }
 }
 
 /* =========================
@@ -342,6 +413,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   ========================= */
 .action-button {
   display: inline-flex;
+  font-family: var(--app-font-family);
   justify-content: center;
   align-items: center;
   border-radius: calc((30 / 1280) * var(--x-multiplier));
@@ -352,6 +424,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   width: auto;
   white-space: nowrap;
   font-weight: 400;
+  text-decoration: none;
+  box-shadow: none;
+  border: none;
+  color: white; /* VERY IMPORTANT!!!!!!!!!!!!!!!!!!! */
 }
 
 /* =========================
@@ -390,6 +466,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border: solid var(--job-title) calc((3 / 1280) * var(--x-multiplier));
   border-radius: calc((20 / 1280) * var(--x-multiplier));
   background-color: var(--job-title);
+  display: "flex";
+  flex-direction: "column";
   overflow: hidden;
 }
 .job-offer .title {
@@ -411,6 +489,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   position: absolute;
   background-image: linear-gradient(0deg,rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
 }
+
 
 /* =========================
   Notification Styles
@@ -478,7 +557,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .notification .state div {
   border-radius: 50%;
-  position: absolute;
   transition: background-color 0.5s ease-in-out;
 }
 
@@ -489,7 +567,7 @@ footer{
   background-color: var(--footer);
   width: 100%;
   height: calc((260 / 720) * var(--y-multiplier));
-  top: 100vh;
+  top: 100%;
 }
 
 .footer-content {
@@ -573,4 +651,103 @@ footer{
   .footer-content .links{
     margin-left: 0;
   }
+}
+
+
+/* =========================
+  Offer full view styles
+  ========================= */
+.offer-fv-description-delimiter {
+  height: 3px;
+  width: 100%;
+  background: var(--delimiters);
+}
+.offer-fv-deapply{
+  background-color: var(--danger);
+  color: white;
+}
+
+/* =========================
+  Profile info Styles
+  ========================= */
+
+.user-info-container {
+  display: grid;
+}
+
+/* Column sections */
+.user-info-section {
+  width: 100%;
+}
+
+/* Profile photo section */
+.profile-photo-section {
+  grid-column: 1;
+  grid-row: 1 / span 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Column 1 individual items */
+.user-info-item {
+  grid-column: 1;
+  width: 100%;
+}
+
+/* Column 2 items */
+.user-labels-section {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.user-status-section {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.user-skills-section {
+  grid-column: 2;
+  grid-row: 3 / span 3;
+}
+
+.user-languages-section {
+  grid-column: 2;
+  grid-row: 6 / span 3;
+}
+
+/* Column 3 items */
+.user-description-section {
+  grid-column: 3;
+  grid-row: 1 / span 4;
+}
+.user-description-section > * {
+  width: calc(100% - (18 / 1280) * var(--x-multiplier));
+  margin-left: calc((18 / 1280) * var(--x-multiplier));
+}
+
+.user-button-section {
+  grid-column: 3;
+  grid-row: 5 / span 4;
+  display: flex;
+  flex-direction: column;
+  gap: calc((12 / 1280) * var(--x-multiplier));
+}
+
+.tag-display-profile::-webkit-scrollbar {
+  width: calc((18 / 1280) * var(--x-multiplier));
+  left: 0;
+}
+.tag-display-profile::-webkit-scrollbar-track {
+  border-top-right-radius: calc((8 / 1280) * var(--x-multiplier));
+  border-bottom-right-radius: calc((8 / 1280) * var(--x-multiplier));
+  background-color: #3D8AF0;
+}
+.tag-display-profile::-webkit-scrollbar-thumb {
+  border-radius: calc((8 / 1280) * var(--x-multiplier));
+  background-color: var(--delimiters);
+  border: solid calc((4 / 1280) * var(--x-multiplier)) #3D8AF0;
+}
+.tag-display-profile::-webkit-scrollbar-thumb:hover {
+  background-color: var(--feed-title-BG);
 }

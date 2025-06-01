@@ -1,9 +1,9 @@
 <?php
-require_once __DIR__ . '/../logic/connection.php';
+require_once __DIR__ . '/../logic/database/connection.php';
 require_once __DIR__ . '/../logic/notifications/send_notification.php';
 
 // User ID to test notifications
-$user_id = 12;
+$user_id = 3;
 
 // Type 1: System notification - pending approval
 send_notification($connection, 1, $user_id);

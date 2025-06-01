@@ -18,7 +18,7 @@
  *   Response: { "status": "success", "message": "Oferta marcada como cerrada correctamente.", "data": null }
  */
 
-require_once "../cors-policy.php";
+require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 

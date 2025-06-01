@@ -1,3 +1,4 @@
+import { ChangeEvent, useState } from "react";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import ActionButton from "../ActionButton";
@@ -10,14 +11,16 @@ interface AttributeAddProps extends ResponsiveComponent {
     type?: string;
     width?: number;
     height?: number;
+    onSubmit?: (attribute: string) => void;
 }
 
 const AttributeAdd: React.FC<AttributeAddProps> = ({
     width = 320,
     height = 208,
     type = "AttributeAdd",
-
+    onSubmit,
 }) => {
+    const [attribute, setAttribute] = useState('');
     return (
 
         <AppWindow width={width} height={height} style={{
@@ -36,10 +39,12 @@ const AttributeAdd: React.FC<AttributeAddProps> = ({
                 <InputField 
                     type="text"
                     name="attribute"
-                    placeholder="Ingresa el nuevo"
+                    placeholder="Cargalo aqui"
                     width={280}
                     height={60}
                     style={{borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,}}
+                    value={attribute}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => setAttribute(event.target.value)}
                 />
                 <ActionButton
                     height={50}
@@ -48,8 +53,14 @@ const AttributeAdd: React.FC<AttributeAddProps> = ({
                         borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
                         paddingLeft: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
                         paddingRight: `${TranslateFigmaCoords.translateFigmaX(20)}px`
+                        
                     }}  
-                
+            
+                    action={() => {
+                        if (onSubmit) onSubmit(attribute);
+                        alert("Atributo agregado: " + attribute);
+                        setAttribute('');
+                    }}
                 />
             </div>
 

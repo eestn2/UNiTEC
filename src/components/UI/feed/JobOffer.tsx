@@ -6,11 +6,17 @@
  * @date May 5, 2025
  */
 
-import React from "react";
+import React, { useState } from "react";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import AppWindow from "../AppWindow";
 import ActionButton from "../ActionButton";
 import { useJobOffer } from "../../../hooks/offer/useJobOffer";
+import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
+import TextWithBreaks from "../TextWithBreaks";
+import User from "../../session/User";
+import apply_icon from "../../../assets/icons/apply.svg";
+import deapply_icon from "../../../assets/icons/deapply.svg";
+import StateButton from "../StateButton";
 
 /**
  * Props for the `JobOffer` component.
@@ -86,6 +92,29 @@ const JobOffer: React.FC<JobOfferProps> = ({
         titleHeight,
         translatedWidth,
     } = useJobOffer({ height, width, authorId, description });
+    const [placeholderApplyState, setPlaceholderApplyState] = useState(false);
+    let extraButton: React.ReactNode = undefined;
+    if (![1, 4].includes(User.data.type as number)) {
+        extraButton = <StateButton 
+        trueIcon={apply_icon}
+        falseIcon={deapply_icon}
+        trueText="Postularse"
+        falseText="Despostularse"
+        state = {placeholderApplyState}
+        setState = {setPlaceholderApplyState}
+        action={() => {
+            if (placeholderApplyState) {
+                // Logic to deapply
+                console.log("Despostularse clicked");
+                return;
+            }
+            // Logic to apply
+            console.log("Postularse clicked");
+        }}
+        />                    
+    } else if (User.data.type === 1 && User.data.id === authorId) {
+        extraButton = <ActionButton text="Borrar" />;
+    }
 
     return (
         <div
@@ -93,12 +122,10 @@ const JobOffer: React.FC<JobOfferProps> = ({
             style={{
                 height: isExpanded ? "auto" : `${translatedHeight}px`,
                 width: `${translatedWidth}px`,
-                display: "flex",
-                flexDirection: "column",
                 position: "relative",
                 left: "50%",
                 transform: "translateX(-50%)",
-                marginBottom: "32px",
+                marginBottom: `${TranslateFigmaCoords.translateFigmaY(32)}px`,
                 ...style,
             }}
             ref={rootRef}
@@ -115,15 +142,18 @@ const JobOffer: React.FC<JobOfferProps> = ({
             >
                 <div
                     style={{
-                        marginLeft: "10px",
+                        marginLeft: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
                         display: "flex",
                         flexDirection: "row",
-                        columnGap: "10px",
+                        columnGap: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
                         alignItems: "center",
                     }}
                 >
                     <div className="profile-pic"></div>
                     {author.name}
+                    <div className="job-offer-buttons" style={{position: "absolute", right: TranslateFigmaCoords.translateFigmaX(2)}}>
+                        {extraButton ? extraButton : null}
+                    </div>
                 </div>
             </div>
             <AppWindow
@@ -140,17 +170,23 @@ const JobOffer: React.FC<JobOfferProps> = ({
                 <div className="text" style={{ marginBottom: "5px" }}>
                     <span className="offer-title">{title}</span>
                     <br />
-                    {description}
+                    <TextWithBreaks text={description}/>
                 </div>
                 {overflowing && !isExpanded ? (
                     <>
-                        <div className="fade-white" style={{ bottom: 0, height: "40px", width: "calc(100% - 20px)", marginLeft: "10px", borderRadius: "10px" }}></div>
+                        <div className="fade-white" style={{ 
+                            top: `${TranslateFigmaCoords.translateFigmaY(height - 100)}px`, 
+                            height: `${TranslateFigmaCoords.translateFigmaY(60)}px`, 
+                            width: `${TranslateFigmaCoords.translateFigmaX(width - 20)}px`, 
+                            marginLeft: `${TranslateFigmaCoords.translateFigmaX(10)}px`, 
+                            borderRadius: `${TranslateFigmaCoords.translateFigmaX(10)}px` 
+                            }}></div>
                         <ActionButton
                             text="Ver más"
                             height={40}
                             style={{
                                 position: "absolute",
-                                top: "80%",
+                                top: "75%",
                                 color: "white",
                                 left: "50%",
                                 transform: "translateX(-50%)",

@@ -34,7 +34,7 @@ const Footer: React.FC<ResponsiveComponent> = ({ style, className }) => {
                         Teléfono: <a href="tel:+5492364590201">+54 9 2364 590201</a>
                     </div>
                     <div>
-                        Web Institucional: <a href="https://www.eest2.edu.ar" target="_blank" rel="noopener noreferrer">www.eest2.edu.ar</a>
+                        Web Institucional: <a href="https://www.eest2.dominio" target="_blank" rel="noopener noreferrer">www.eest2.dominio</a>
                     </div>
                     <div>
                         Dirección: <a href="https://maps.google.com/?q=Argentina,+Bs+As,+Junín,+Discépolo+400" target="_blank" rel="noopener noreferrer">

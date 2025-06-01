@@ -19,15 +19,18 @@
  *   Response: { "status": "success", "message": "Oferta de trabajo eliminada con éxito.", "data": null }
  */
 
-require_once "../cors-policy.php";
+session_start();
+require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "DELETE") return_response("failed", "Metodo no permitido.", null);
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($data->creator_id) || !isset($data->id)) return_response("failed", "Faltan datos.", null);
 
-$creator_id = intval($data->creator_id);
+if (!isset($data->id)) return_response("failed", "Faltan datos.", null);
+
+if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
+$creator_id = intval($_SESSION['user']['id']);
 $id = intval($data->id);
 
 try{

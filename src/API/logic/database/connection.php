@@ -56,6 +56,7 @@ try {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // Fetch results as associative arrays
         PDO::ATTR_EMULATE_PREPARES => false, // Disable emulated prepared statements for security
         PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4', // Set character set to utf8mb4
+        PDO::MYSQL_ATTR_FOUND_ROWS => true, // Enable found rows for SELECT statements
     ]);
 } catch (PDOException $e) {
     error_log("Database connection failed: " . $e->getMessage());

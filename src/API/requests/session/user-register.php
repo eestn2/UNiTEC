@@ -15,8 +15,9 @@
  *   Response: { "status": "success", "message": "...", ... }
  */
 
+
+session_start();
 require_once __DIR__ . "/../cors-policy.php";
-require_once __DIR__ . "../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 require_once(__DIR__ . '/../../logic/security/security_functions.php');
@@ -56,7 +57,7 @@ try {
 
     // Insert user data
     $stmt = $connection->prepare(
-        "INSERT INTO users (name, birth_date, location, email, password, description, last_active_date, profile_picture, portfolio, enabled, user_type_id, status_id)
+        "INSERT INTO users (name, birth_date, location, email, password, description, last_active_date, profile_picture, portfolio, enabled, user_type, status_id)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
     );
     $stmt->execute([
@@ -108,23 +109,23 @@ try {
     $stmt->execute([$user_id]);
     $user = $stmt->fetch();
 
-    // Respond with success
-    return_response("success", "Usuario registrado correctamente. Debe esperar aprobación.", [
-        "user" => [
-            "id" => $user["id"],
-            "name" => $user["name"],
-            "age" => $user["birth_date"],
-            "location" => $user["location"],
-            "email" => $user["email"],
-            "description" => $user["description"],
-            "last_active_date" => $user["last_active_date"],
-            "profile_picture" => $user["profile_picture"],
-            "portfolio" => $user["portfolio"],
-            "is_enabled" => $user["enabled"],
-            "type_id" => $user["user_type_id"],
-            "status" => $user["status_id"]
-        ]
-    ]);
+    // Store user in session (auto-login after registration)
+    $_SESSION['user'] = [
+        "id" => $user["id"],
+        "name" => $user["name"],
+        "age" => $user["birth_date"],
+        "location" => $user["location"],
+        "email" => $user["email"],
+        "description" => $user["description"],
+        "last_active_date" => $user["last_active_date"],
+        "profile_picture" => $user["profile_picture"],
+        "portfolio" => $user["portfolio"],
+        "is_enabled" => $user["enabled"],
+        "type_id" => $user["user_type_id"],
+        "status" => $user["status_id"]
+    ];
+    // Respond with success (no user data)
+    return_response("success", "Usuario registrado correctamente. Debe esperar aprobación.", null);
 } catch (Exception $e) {
     $connection->rollBack();
     return_response("failed", "Ocurrió un error: " . $e->getMessage(), null);

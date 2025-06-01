@@ -8,7 +8,7 @@
 
 import React, { MouseEventHandler } from "react";
 import ResponsiveComponent from "../../global/interface/ResponsiveComponent";
-import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
+import { getTranslates } from "../../global/function/getTranslates";
 
 /**
  * Props for the `ActionButton` component.
@@ -19,14 +19,15 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
  * @property action - Optional click event handler for the button.
  * @property width - The width of the button in Figma coordinates.
  * @property height - The height of the button in Figma coordinates.
+ * @property vertical - Decides wich TranslateFigma Function to use (Default: false).
  * @property style - Optional inline styles to apply to the button.
  * @property className - Optional custom CSS classes to apply to the button.
  * 
  * @author Haziel Magallanes, Daviel Díaz Gonzáles
  */
-interface ActionButtonProps extends ResponsiveComponent {
+export interface ActionButtonProps extends ResponsiveComponent {
     /** The text to display inside the button. */
-    text: string;
+    text?: string;
     /** Optional click event handler for the button. */
     action?: MouseEventHandler;
 }
@@ -38,6 +39,7 @@ interface ActionButtonProps extends ResponsiveComponent {
  * @param {string} text - The text to display inside the button.
  * @param {number} [width] - The width of the button in Figma coordinates.
  * @param {number} [height=10] - The height of the button in Figma coordinates.
+ * @param {boolean} [vertical] - Decides wich TranslateFigmaFunction to use (Default: false).
  * @param {React.CSSProperties} [style] - Additional inline styles for the button.
  * @param {string} [className] - Additional CSS class names for the button.
  * @param {React.MouseEventHandler} [action] - Callback function triggered when the button is clicked.
@@ -55,13 +57,14 @@ interface ActionButtonProps extends ResponsiveComponent {
  * ```
  * @author Haziel Magallanes, Daviel Díaz Gonzáles
  */
-const ActionButton: React.FC<ActionButtonProps> = ({ height = 10, width, text, action, style, className }) => {
+const ActionButton: React.FC<ActionButtonProps> = ({ height = 10, vertical = false, width, action, text, style, className, children }) => {
     let calculatedWidth: string = 'auto';
-    if(width) calculatedWidth = `${TranslateFigmaCoords.translateFigmaX(width)}px`
+    const [ translateX, translateY ] = getTranslates(vertical);
+    if(width) calculatedWidth = `${translateX(width)}px`
     return (
-        <div className={`action-button ${className || ''}`} style={{height: `${TranslateFigmaCoords.translateFigmaY(height)}px`, width: `${calculatedWidth}`, ...style}} onClick={action}>
-            <p>{text}</p>
-        </div>
+        <button className={`action-button ${className || ''}`} style={{height: `${translateY(height)}px`, width: `${calculatedWidth}`, display: "flex", flexDirection: "row", columnGap: translateX(4), ...style}} onClick={action}>
+            {children || text}
+        </button>
     );
 };
 

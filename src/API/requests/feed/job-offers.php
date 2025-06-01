@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no p
 
 try {
     // Query to fetch all job offers, latest first
-    $stmt = $connection->query("SELECT * FROM applications ORDER BY id DESC");
+    $stmt = $connection->query("SELECT * FROM offers ORDER BY id DESC");
     $jobOffers = $stmt->fetchAll();
     return_response("success", "Job offers retrieved successfully.", ["job_offers" => $jobOffers]);
 } catch (PDOException $e) {

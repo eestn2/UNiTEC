@@ -16,6 +16,21 @@ dist-ssr
 .vscode/*
 !.vscode/extensions.json
 .idea
+Backups/
+blob_storage/
+Cache/
+CachedData/
+CachedProfilesData/
+Code Cache/
+Crashpad/
+DawnGraphiteCache/
+DawnWebGPUCache/
+Dictionaries/
+GPUCache/
+Local Storage/
+Session Storage/
+Shared Dictionary/
+User/
 .DS_Store
 *.suo
 *.ntvs*

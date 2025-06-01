@@ -25,7 +25,6 @@
 
   /* Application Colors */
   --BG: #3D8AF0;
-  --BG-2: rgba(188, 46, 48, 1);
   --delimiters: rgba(255, 193, 35, 1);
   --bold: rgba(104, 94, 167, 1);
   --job-title: #5386FF;
@@ -41,6 +40,8 @@
   --feed-title: #113893;
   --feed-title-BG: #D1E7FC;
   --footer:  #123490;
+  --danger: #D43D3D;
+  --success: #1BD731;
 }
 
 /* =========================

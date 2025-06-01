@@ -18,7 +18,8 @@
  *   Response: { "status": "success", "message": "tag insertada con exito.", "data": null }
  */
 
-require_once __DIR__ . "../cors-policy.php";
+session_start();
+require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 require_once __DIR__ . '/../../logic/security/is_admin.php';
@@ -26,9 +27,10 @@ require_once __DIR__ . '/../../logic/security/is_admin.php';
 if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
 
 $data = json_decode(file_get_contents("php://input"));
-if (  !isset($data->user_id) || !isset($data->name)) return_response("failed", "Faltan datos.", null);
+if (!isset($data->name)) return_response("failed", "Faltan datos.", null);
 
-if (!is_admin($data->user_id, $connection)) {
+if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
+if (!is_admin($_SESSION['user']['id'], $connection)) {
     return_response("failed", "Solo los administradores pueden agregar tags.", null);
 }
 $name = $data->name;

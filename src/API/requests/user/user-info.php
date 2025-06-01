@@ -30,15 +30,22 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $id = intval($_GET['id']);
 
 try {
-    $stmt = $connection->prepare("SELECT name, profile_picture FROM users WHERE id = ?");
+    $stmt = $connection->prepare("SELECT * FROM users WHERE id = ?");
     $stmt->execute([$id]);
     $user = $stmt->fetch();
 
     if (!$user) return_response("failed", "Usuario no encontrado.", null);
     return_response("success", "Datos del usuario devueltos correctamente.", [
         "user" => [
+            "id" => $user["id"],
             "name" => $user["name"],
-            "profile_picture" => $user["profile_picture"]
+            "email" => $user["email"],
+            "location" => $user["location"],
+            "status" => $user["status"],
+            "description" => $user["description"],
+            "portfolio" => $user["portfolio"],
+            "type" => $user["user_type"],
+            "profile_picture" => $user["profile_picture"] ?? null
         ]
     ]);
 } catch (PDOException $e) {

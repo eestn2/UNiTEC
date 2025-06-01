@@ -15,6 +15,11 @@ import { ReactElement, useEffect, useState } from "react";
 import axios from "axios";
 import User from "../session/User";
 import { useWindowSize } from "../../hooks/responsive/useWindowSize";
+import { TypedResponseWNamedArray } from '../../types/Response';
+import type { offer } from '../../types/JobOfferTypes';
+import type { notification } from '../../types/notification';
+import no_notifications from '../../assets/icons/no-notis.svg';
+import no_feed from '../../assets/icons/no-feed.svg';
 
 /**
  * A React functional component that renders the main feed with job offers and notifications.
@@ -34,28 +39,25 @@ function FeedBox() {
   const windowSize = useWindowSize();
   console.log("Window size:", windowSize);
   // State variables for job offers and notifications
-  const [jobOffers, setJobOffers] = useState<ReactElement[]>([]);
+  const [jobOffers, setJobOffers] = useState<ReactElement[] | undefined>(undefined);
   const [notifications, setNotifications] = useState<ReactElement[]>([]);
   // Fetch job offers from the server
   const loadJobOffers = async () => {
     try {
-      const response = await axios.get(`/feed/job-offers.php`);
-      if (response.status !== 200 && response.data.status !== "success") {
-        console.error("Failed to load job offers:", response.data.message);
+      const {data: response} = await axios.get<TypedResponseWNamedArray<offer, "job_offers">>(`/feed/job-offers.php`);
+      if (response.status !== "success") {
+        console.error("Failed to load job offers:", response.message);
       } else {
-        const offers = await Promise.all(
-        response.data.data.job_offers.map(async (offer: any) => {
-          return (
-            <JobOffer
-              key={offer.id}
-              width={820}
-              height={400}
-              authorId={offer.creator_id}
-              title={offer.title}
-              description={offer.description}
-            />
-          );
-        }));
+        const offers = response.data.job_offers.map((offer) => (
+          <JobOffer
+            key={offer.id}
+            width={820}
+            height={400}
+            authorId={offer.creator_id}
+            title={offer.title}
+            description={offer.description}
+          />
+        ));
         setJobOffers(offers);
       }
     } catch (error) {
@@ -66,11 +68,11 @@ function FeedBox() {
   const loadNotifications = async () => {
     try {
       const userId = User.data.id;
-      const response = await axios.get(`/user/retrieve-notifications.php?user_id=${userId}`);
-      if (response.status !== 200 || response.data.status !== "success") {
-        console.error("Failed to load notifications:", response.data.message);
+      const { data: response } = await axios.get<TypedResponseWNamedArray<notification, "notifications">>(`/user/retrieve-notifications.php?user_id=${userId}`);
+      if (response.status !== "success") {
+        console.error("Failed to load notifications:", response.message);
       } else {
-        const notificationsList = response.data.data.notifications.map((notif: any) => (
+        const notificationsList = response.data.notifications.map((notif) => (
           <Notification key={notif.id} width={300} height={60} notificationId={notif.id} />
         ));
         setNotifications(notificationsList);
@@ -98,6 +100,7 @@ function FeedBox() {
           left: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
           top: `${TranslateFigmaCoords.translateFigmaY(100)}px`,
           overflowY: "scroll",
+          height: `${TranslateFigmaCoords.translateFigmaY(600)}px`,
           borderTopRightRadius: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
           borderBottomRightRadius: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
         }}
@@ -109,14 +112,25 @@ function FeedBox() {
             height: `${TranslateFigmaCoords.translateFigmaY(53)}px`,
             position: "relative",
             left: "50%",
-            transform: "translateX(-47%)",
+            transform: "translateX(-50%)",
             marginTop: `${TranslateFigmaCoords.translateFigmaY(32)}px`,
             marginBottom: `${TranslateFigmaCoords.translateFigmaY(32)}px`,
           }}
         >
           Ofertas de Trabajo
         </div>
-        {jobOffers}
+        {jobOffers ? jobOffers : (
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <img src={no_feed} style={{
+              width: TranslateFigmaCoords.translateFigmaX(300),
+              height: TranslateFigmaCoords.translateFigmaX(300),
+            }} />
+            <span style={{
+              color: "rgb(170, 164, 211)",
+              textAlign: "center"
+            }}>No hay ofertas de trabajo.</span>
+          </div>
+        )}
       </AppWindow>
       <AppWindow
         height={600}
@@ -147,7 +161,17 @@ function FeedBox() {
           Notificaciones
         </div>
         {notifications.length > 0 ? notifications : (
-          <div>Pepito el placeholder</div>
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <img src={no_notifications} style={{
+              width: TranslateFigmaCoords.translateFigmaX(200),
+              height: TranslateFigmaCoords.translateFigmaX(200),
+            }} />
+            <span style={{
+              direction: "ltr",
+              color: "rgb(170, 164, 211)"
+            }}>No tienes notificaciones.</span>
+          </div>
+          
         )}
       </AppWindow>
     </div>

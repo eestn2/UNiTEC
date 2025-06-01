@@ -6,8 +6,8 @@
  * @date April 29, 2025
  */
 import React from "react";
-import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import ResponsiveComponent from "../../global/interface/ResponsiveComponent";
+import { getTranslates } from "../../global/function/getTranslates";
 
 /**
  * Renders a responsive application window component that adapts its size based on Figma design coordinates.
@@ -18,6 +18,7 @@ import ResponsiveComponent from "../../global/interface/ResponsiveComponent";
  *  @param {number} height - The height of the window in pixels.
  *  @param {React.ReactNode} children - The children to be rendered inside the window.
  *  @param {React.CSSProperties} style - The inline styles to be applied to the window.
+ *  @param {boolean} vertical - Decides wich TranslateFigma function to use (Default: false).
  *  @param {React.RefObject<HTMLDivElement>} ref - A ref to the window for direct DOM manipulation.
  *  @param {string} className - The custom CSS classes to be applied to the window.
  *  @returns {JSX.Element} - The AppWindow component.
@@ -30,15 +31,18 @@ import ResponsiveComponent from "../../global/interface/ResponsiveComponent";
  * ```
  * @Author: Haziel Magallanes
  */
-const AppWindow: React.FC<ResponsiveComponent> = ({ height = 10, width = 10, ref, children, style, className }) => {
+const AppWindow: React.FC<ResponsiveComponent> = ({ height = 10, width = 10, vertical = false, ref, children, style, className }) => {
+    // Wich translate function should it use? For vertical or horizontal containers.
+    const [ translateX, translateY ] = getTranslates(vertical);
     // Check if is a square shaped window, if so, make calculated height the same as calculated width
-    height = height == width ? TranslateFigmaCoords.translateFigmaX(width) : TranslateFigmaCoords.translateFigmaY(height);
-    width = TranslateFigmaCoords.translateFigmaX(width);  // Convert Figma sizes to the same ratio as the screen size
+    height = height == width ? translateX(width) : translateY(height);
+    width = translateX(width);  // Convert Figma sizes to the same ratio as the screen size
     return (
         <div
             className={`app-window ${className || ""}`}
             style={{
-                height: `${height}px`,
+                minHeight: `${height}px`,
+                height: 'fit-content',
                 width: `${width}px`,
                 ...style,
             }}

@@ -15,6 +15,8 @@
  *   Response: { "status": "success", "message": "...", "user": { ...user fields... } }
  */
 
+
+session_start();
 require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
@@ -36,7 +38,8 @@ if (!$user) return_response("failed", "Dirección de correo electronico no regis
 
 if (!password_verify($password, $user["password"])) return_response("failed", "Contraseña incorrecta.", null);
 
-return_response("success", "Inicio de sesión exitoso.", ["user" => [
+// Store user data in session (do not include password)
+$_SESSION['user'] = [
     "id" => $user["id"],
     "name" => $user["name"],
     "age" => $user["birth_date"],
@@ -47,7 +50,9 @@ return_response("success", "Inicio de sesión exitoso.", ["user" => [
     "profile_picture" => $user["profile_picture"],
     "portfolio" => $user["portfolio"],
     "is_enabled" => $user["enabled"],
-    "type_id" => $user["user_type_id"],
-    "status" => $user["status_id"]
-]]);
+    "type" => $user["user_type"],
+    "status" => $user["status"]
+];
+
+return_response("success", "Inicio de sesión exitoso.", null);
 ?>

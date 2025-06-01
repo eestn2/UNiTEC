@@ -130,11 +130,11 @@ src/
 
 ## 👨‍💻 Autores
 
-- **Haziel Magallanes** — Frontend, Arquitectura, API Endpoints, UX, Documentación.
-- **Daviel Díaz Gonzáles** — Frontend, UI/UX.
-- **Federico Nicolás Martínez** — Backend, API Endpoints, Seguridad, Mantenimiento y reforma de old codebase.
-- **Daniel Alejandro Rivas** — Mantenimiento y reforma de old codebase.
-- **Francesco Sidotti** — Mantenimiento y reestructurado de antigua Database.
+- **Haziel Magallanes** — Frontend, Arquitectura, API Endpoints, UX, Documentación, Director del proyecto, Backend.
+- **Daviel Díaz Gonzáles** — Frontend, Diseño UI/UX en Figma, Creación de Assets.
+- **Federico Nicolás Martínez** — Backend, API Endpoints.
+- **Daniel Alejandro Rivas** — Revisión e informe sobre antigua versión del proyecto.
+- **Francesco Sidotti** — Mantenimiento y reestructurado de antigua Database, Frontend, Admin panel, API Endpoints, Backend, Subdirector del proyecto.
 
 
 ---
