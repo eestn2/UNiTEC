@@ -1,64 +1,53 @@
 import axios from "axios";
-import { ReactElement, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import AttributeEditor from "../UI/admin/AttributeEditor";
 import NavBar from "../UI/NavBar";
 import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import User from "../session/User";
 
 
 
 
 const AdminTags: React.FC = () => {
-   const handleDeleteAttribute = async (id: number) => {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const userId = User.data.id;
-      const response = await axios.delete(`${apiUrl}/admin/delete_tag.php`, {
-          data:{
-            user_id:userId,
-            id:id,}
-      });
-    console.log(response);
+  const [tags, setTags] = useState<any[]>([]);
+  const handleDeleteAttribute = async (id: number) => {
+      try {
+        const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+        await axios.delete(`${apiUrl}/admin/delete_tag.php`, {
+          data: {
+            id: id,
+          }
+        });
+        // Remove the deleted tag from state
+        setTags(prevTags => prevTags.filter(tag => tag.id !== id));
+        // Optionally, show user feedback
+        // alert("Tag deleted successfully.");
+      } catch (error) {
+        console.error("Failed to delete tag:", error);
+        alert("Error deleting tag. Please try again.");
+      }
     };
       const handleChangeAttribute = async (attribute: string, id: number) => {
       const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const userId = User.data.id;
       const response = await axios.put(`${apiUrl}/admin/edit_tag.php`, {
-          user_id:userId,
           id:id,
           name:attribute
       });
     console.log(response);
     };
-    const [attributes, setAttributes] = useState<ReactElement[]>([]);
     const loadAttributes = async () => {
-    try {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.get(`${apiUrl}/function/get-tags.php`);
-
-      console.log("Respuesta del backend:", response.data);
-      
-      if (response.status !== 200 && response.data.status !== "success") {
-        console.error("Failed to load tags:", response.data.message);
-      } else {
-        const tags = await Promise.all(
-        response.data.data.tags.map(async (tag: any) => {
-          return (
-            <AttributeEditor
-              key={tag.id}
-              id={tag.id}
-              type={tag.name}
-              onSubmit={handleChangeAttribute}
-              onDelete={handleDeleteAttribute}
-            />
-          );
-        }));
-        setAttributes(tags);
+      try {
+        const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+        const response = await axios.get(`${apiUrl}/function/get-tags.php`);
+        if (response.status !== 200 && response.data.status !== "success") {
+          console.error("Failed to load tags:", response.data.message);
+        } else {
+          setTags(response.data.data.tags);
+        }
+      } catch (error) {
+        console.error("An error occurred while loading tags:", error);
       }
-    } catch (error) {
-      console.error("An error occurred while loading tags:", error);
-    }
-  };
+    };
   useEffect(() => {
       loadAttributes();
     }, []);
@@ -83,7 +72,15 @@ const AdminTags: React.FC = () => {
                 <div 
                   className= "admin_attributes_grid"
                 >
-                  {attributes}
+                  {tags.map(tag => (
+                    <AttributeEditor
+                      key={tag.id}
+                      id={tag.id}
+                      type={tag.name}
+                      onSubmit={handleChangeAttribute}
+                      onDelete={handleDeleteAttribute}
+                    />
+                  ))}
                 </div>
             </AppWindow>
             

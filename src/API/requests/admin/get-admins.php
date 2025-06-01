@@ -14,7 +14,7 @@ if (!is_admin($_SESSION['user']['id'], $connection)) {
 }
 
 try {
-    $stmt = $connection->prepare("SELECT * FROM users WHERE user_type = '4' AND id != :id");
+    $stmt = $connection->prepare("SELECT * FROM users WHERE user_type = 4 AND id != :id");
     $stmt->execute(['id' => $_SESSION['user']['id']]);
     $admins = $stmt->fetchAll();
     return_response("success", "not enabled retrieved successfully.", ["admins" => $admins]);

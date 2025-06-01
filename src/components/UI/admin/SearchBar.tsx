@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
 import InputField from "../form/InputField";
 import ActionButton from "../ActionButton";
+import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 
 interface SearchBarProps {
   placeholder?: string;
@@ -63,10 +64,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
         placeholder={placeholder}
         height={60}
         style={{
-            borderRadius: "15px",
-            border: "1px solid #ccc",
+            borderRadius: `${TranslateFigmaCoords.translateFigmaX(15)}px`,
+            border: `${TranslateFigmaCoords.translateFigmaX(1)}px solid #ccc`,
             width: "100%",
-            paddingRight: "120px", // space for button
+            paddingRight:  `${TranslateFigmaCoords.translateFigmaX(120)}px`, // space for button
             boxSizing: "border-box",
             ...inputStyle,
         }}
@@ -84,11 +85,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
         >
         <ActionButton
             style={{
-            padding: "20px 20px",
+            padding:  `${TranslateFigmaCoords.translateFigmaX(20)}px  ${TranslateFigmaCoords.translateFigmaX(20)}px`,
             backgroundColor: "#5386FF",
             color: "white",
             border: "none",
-            borderRadius: "20px",
+            borderRadius:  `${TranslateFigmaCoords.translateFigmaX(20)}px`,
             cursor: "pointer",
             ...buttonStyle,
             }}
@@ -105,12 +106,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
                 top: 65,
                 background: "#fff",
                 border: "1px solid #ccc",
-                borderRadius: "0 0 15px 15px",
+                borderRadius: `0 0  ${TranslateFigmaCoords.translateFigmaX(15)}px  ${TranslateFigmaCoords.translateFigmaX(15)}px`,
                 margin: 0,
-                padding: "0.5rem 0",
+                padding:  `${TranslateFigmaCoords.translateFigmaX(8)}px 0`,
                 listStyle: "none",
                 zIndex: 3,
-                maxHeight: 200,
+                maxHeight:  `${TranslateFigmaCoords.translateFigmaX(200)}px`,
                 overflowY: "auto",
                 color:"black"
             }}
@@ -119,9 +120,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
                 <li
                 key={i}
                 style={{
-                    padding: "10px 20px",
+                    padding:  `${TranslateFigmaCoords.translateFigmaX(10)}px ${TranslateFigmaCoords.translateFigmaX(20)}px`,
                     cursor: "pointer",
-                    borderBottom: i !== suggestions.length - 1 ? "1px solid #eee" : "none",
+                    borderBottom: i !== suggestions.length - 1 ?  `${TranslateFigmaCoords.translateFigmaX(1)}px solid #eee` : "none",
                 }}
                 onClick={() => handleSuggestionClick(s)}
                 >

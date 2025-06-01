@@ -61,7 +61,7 @@ const AdminReview: React.FC = () => {
       >
         <div style={{ padding: 20 }}>
           <h2 style={{ textAlign: "center", color: "#305894" }}>
-            Reseñas de: <u>Usuarios sobre Ofertas</u>
+            Reseñas
           </h2>
 
           {resenias.map((res) => (

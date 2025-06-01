@@ -4,6 +4,7 @@ import AppWindow from "../UI/AppWindow";
 import axios from "axios";
 import ActionButton from "../UI/ActionButton";
 import SearchBar from "../UI/admin/SearchBar";
+import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 
 const AdminDesignate: React.FC = () => {
     type Admin = {
@@ -16,7 +17,8 @@ const AdminDesignate: React.FC = () => {
     const loadAdmins = async () => {
       try {
         const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-        const response = await axios.get(`${apiUrl}/admin/get-admins.php`);
+        const response = await axios.get(`${apiUrl}/admin/get-admins.php`,
+          {withCredentials: true,});
 
         if (response.status !== 200 || response.data.status !== "success") {
           console.error("Failed to load admins:", response.data.message);
@@ -35,9 +37,11 @@ const AdminDesignate: React.FC = () => {
     const handleAdd = async (attribute: string) => {
       const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
       const response = await axios.post(`${apiUrl}/admin/add_admin.php`, {
-          admin_email:attribute
+          admin_email:attribute,
+          withCredentials: true,
       });
       console.log(response);
+      await loadAdmins();
    };
 
     const handleRemove = async (id: number) => {
@@ -46,7 +50,8 @@ const AdminDesignate: React.FC = () => {
           data:{
             id:id,}
       }); 
-    console.log(response);
+      console.log(response);
+     await loadAdmins();
     };
     const handleLoadSuggestions = async (input: string) => {
       if (input.length < 3) {
@@ -57,6 +62,7 @@ const AdminDesignate: React.FC = () => {
         const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
         const response = await axios.get(`${apiUrl}/admin/get-users-by-email.php`, {
           params: { email: input },
+          withCredentials: true,
         });
         if (response.data.status === "success") {
           setSuggestions(response.data.data.users.map((u: any) => `${u.email}`));
@@ -80,11 +86,11 @@ const AdminDesignate: React.FC = () => {
         className="admin-box"
         style={{
           margin: "0 auto",
-          marginTop: "100px",
+          marginTop: `${TranslateFigmaCoords.translateFigmaX(100)}px`,
           background: "white",
-          borderRadius: "20px",
-          padding: "30px",
-          boxShadow: "0px 0px 15px rgba(0,0,0,0.1)",
+          borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
+          padding: `${TranslateFigmaCoords.translateFigmaX(30)}px`,
+          boxShadow: `0px 0px ${TranslateFigmaCoords.translateFigmaX(15)}px rgba(0,0,0,0.1)`,
         }}
       >
         <h2 style={{ textAlign: "center", color: "#305894" }}>Designar Administradores</h2>
@@ -97,10 +103,14 @@ const AdminDesignate: React.FC = () => {
           }}
           onInputChange={handleLoadSuggestions}
           suggestions={suggestions}
-          style={{ marginBottom: "20px",  }}
+          style={{ marginBottom: `${TranslateFigmaCoords.translateFigmaX(20)}px`,  }}
         />
         <h2 style={{ color: "#305894", textAlign: "center" }}>Lista de Administradores</h2>
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "10px", overflowY: "scroll", maxHeight:" 280px"}}>
+        <div style={{ display: "flex", flexDirection: "column",
+          gap: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
+          marginTop: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
+          overflowY: "scroll",
+          maxHeight: `${TranslateFigmaCoords.translateFigmaX(200)}px`}}>
         {admins.map((admin) => (
           <div
             key={admin.id}
@@ -109,9 +119,9 @@ const AdminDesignate: React.FC = () => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              padding: "4px 20px",
-              border: "2px solid #5386FF",
-              borderRadius: "20px",
+              padding: `${TranslateFigmaCoords.translateFigmaX(4)}px ${TranslateFigmaCoords.translateFigmaX(20)}px`,
+              border: `${TranslateFigmaCoords.translateFigmaX(1)}px solid #5386FF`,
+              borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
             }}
           >
             <span>{admin.name} ({admin.email})</span>
@@ -120,8 +130,8 @@ const AdminDesignate: React.FC = () => {
                 backgroundColor: "#D43D3D",
                 color: "white",
                 border: "none",
-                padding: "15px 22px",
-                borderRadius: "20px",
+                padding: `${TranslateFigmaCoords.translateFigmaX(15)}px ${TranslateFigmaCoords.translateFigmaX(22)}px`,
+                borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
                 cursor: "pointer",
               }}
               text={"Remover"}

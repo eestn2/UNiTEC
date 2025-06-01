@@ -5,6 +5,7 @@ import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import { calculateAge } from "../../global/function/calculateAge";
 import ActionButton from "../UI/ActionButton";
+import { getUserType } from "../../global/function/getUserType";
 
 
 const AdminPanel: React.FC = () => {
@@ -14,6 +15,7 @@ const AdminPanel: React.FC = () => {
           target_user_id:id,
       });
     console.log(response);
+    await loadUsers();
     };
     const handleRejectUser = async ( id: number) => {
       const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
@@ -21,6 +23,7 @@ const AdminPanel: React.FC = () => {
           target_user_id:id,
       });
     console.log(response);
+    await loadUsers();
     };
     const [users, setUsers] = useState<any[]>([]);
     const loadUsers = async () => {
@@ -104,7 +107,7 @@ const AdminPanel: React.FC = () => {
                             padding: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
                             marginTop: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
                             marginBottom: `${TranslateFigmaCoords.translateFigmaX(16)}px`,
-                            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                            boxShadow: `0 ${TranslateFigmaCoords.translateFigmaX(2)}px ${TranslateFigmaCoords.translateFigmaX(8)}px rgba(0,0,0,0.1)`,
                             borderWidth :`${TranslateFigmaCoords.translateFigmaX(3)}px`,
                             borderColor: '#5386FF',
                             borderStyle: 'solid',
@@ -154,7 +157,7 @@ const AdminPanel: React.FC = () => {
                             <div className="users_approve" style={{                           
                             borderLeftWidth: `${TranslateFigmaCoords.translateFigmaX(3)}px`,
                             borderLeftColor: '#5386FF',
-                            borderLeftStyle: 'solid',}}>{user.user_type}</div>
+                            borderLeftStyle: 'solid',}}>{getUserType(user.user_type)}</div>
                             </div>
 
                             <div style={{ marginTop:`${TranslateFigmaCoords.translateFigmaX(10)}px`, display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
