@@ -10,8 +10,7 @@
 import { useEffect, useRef, useState, Ref } from "react";
 import axios from "axios";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import { useWindowSize } from "../responsive/useWindowSize";
-import { user } from "../../types/user";
+import { useWindowSize } from "../responsive/useWindowSize"; 
 
 /**
  * Props for the `useJobOffer` hook.

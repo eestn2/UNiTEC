@@ -1,39 +1,32 @@
 import TranslateFigmaCoords from '../../global/function/TranslateFigmaCoords';
-import { useAutocomplete } from '../../hooks/AutoComplete';
 import '../../styles/publish-offer.css';
 import AppWindow from '../UI/AppWindow';
 import NavBar from '../UI/NavBar';
 import InputField from '../UI/form/InputField';
+import TextBox from '../UI/form/TextBox';
 
-const techOptions = [
-    "JavaScript", "TypeScript", "Python", "Java", "C", "C++", "C#", "Go", "Rust",
-    "Ruby", "PHP", "Swift", "Kotlin", "Dart", "Scala", "Perl", "Haskell", "Elixir", "Lua", "Shell"
-];
 
-const languageOptions = [
-    "Español", "Inglés", "Francés", "Alemán", "Chino", "Japonés", "Árabe", "Ruso", "Portugués", "Hindi"
-];
 
 const PublishOffer: React.FC = () => {
-    const techAuto = useAutocomplete(techOptions);
-    const langAuto = useAutocomplete(languageOptions);
 
     return (
         <>
             <NavBar />
             <AppWindow
-                height={600}
-                width={920}
+                width={850}
                 style={{
                     position: "absolute",
-                    top: '${TranslateFigmaCoords.translateFigmaY(100)}px',
+                    height: `${TranslateFigmaCoords.translateFigmaY(600)}px`,
+                    width: `${TranslateFigmaCoords.translateFigmaY(920)}px`,
+                    top: `${TranslateFigmaCoords.translateFigmaY(100)}px`,
                     left: "50%",
                     transform: "translate(-50%, 0%)",
                     display: "flex",
-                    justifyContent: "center",
+                    alignItems: "center",
+                    justifyContent: "space-evenly",
                 }}
             >
-                <div className="offer-form">
+                <div className="offer-form" style={{ height: `${TranslateFigmaCoords.translateFigmaY(520)}px`, width: `${TranslateFigmaCoords.translateFigmaY(580)}px`, }}>
                     <div className="title">
                         <h2>Generador de Ofertas de Empleo</h2>
                     </div>
@@ -43,87 +36,30 @@ const PublishOffer: React.FC = () => {
                             type="text"
                             name="username"
                             placeholder="Ingrese el título de la oferta"
-                            width={520}
-                            height={55} 
+                            style={{ height: `${TranslateFigmaCoords.translateFigmaY(50)}px`, width: `${TranslateFigmaCoords.translateFigmaY(500)}px`, }}
                         />
-                        <textarea
+                        <TextBox
                             placeholder="Ingrese la descripción de la oferta"
-                            className="field text-area"
+                            name='text-tarea'
+                            style={{ height: `${TranslateFigmaCoords.translateFigmaY(235)}px`, width: `${TranslateFigmaCoords.translateFigmaY(500)}px`, }}
                         />
-
                         {/* AUTOCOMPLETE BUSCADOR */}
                         <div className='search'>
-                            {/* Campo de tecnologías */}
-                            <div className='input-group'>
-                                <input
-                                    value={techAuto.input}
-                                    onChange={(e) => techAuto.setInput(e.target.value)}
-                                    onKeyDown={techAuto.handleKeyDown}
-                                    onFocus={() => techAuto.setIsFocused(true)}
-                                    onBlur={() => setTimeout(() => techAuto.setIsFocused(false), 100)}
-                                    placeholder="Agregar tecnología"
-                                />
-
-                                <button onClick={techAuto.handleEnter}>
-                                    <i className="fa-solid fa-magnifying-glass"></i>
-                                </button>
-                                {techAuto.input.length > 0 && techAuto.filteredOptions.length > 0 && techAuto.isFocused && (
-                                    <ul className="opcionesCategorias">
-                                        {techAuto.filteredOptions.map((option, index) => (
-                                            <li
-                                                key={option}
-                                                onMouseDown={() => techAuto.handleSelect(option)}
-                                                style={{
-                                                    padding: "6px 8px",
-                                                    backgroundColor:
-                                                        index === techAuto.highlightedIndex ? "#e0f0ff" : "transparent",
-                                                    cursor: "pointer",
-                                                }}
-                                            >
-                                                {option}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-
-                            </div>
-
+                            {/* Campo de etiquetas */}
+                            <InputField
+                                type="text"
+                                name="username"
+                                placeholder="Añadir etiqueta"
+                                style={{ height: `${TranslateFigmaCoords.translateFigmaY(55)}px`, width: `${TranslateFigmaCoords.translateFigmaY(230)}px`, }}
+                            />
+                            <InputField
+                                type="text"
+                                name="username"
+                                placeholder="Añadir idioma"
+                                style={{ height: `${TranslateFigmaCoords.translateFigmaY(55)}px`, width: `${TranslateFigmaCoords.translateFigmaY(230)}px`, }}
+                            />
                             {/* Campo de idiomas */}
-                            <div className='input-group'>
-                                <input
-                                    type="text"
-                                    value={langAuto.input}
-                                    onChange={(e) => langAuto.setInput(e.target.value)}
-                                    onKeyDown={langAuto.handleKeyDown}
-                                    onFocus={() => langAuto.setIsFocused(true)}
-                                    onBlur={() => setTimeout(() => langAuto.setIsFocused(false), 100)}
-                                    placeholder="Añadir idioma"
-                                />
 
-                                <button onClick={langAuto.handleEnter}>
-                                    <i className="fa-solid fa-magnifying-glass"></i>
-                                </button>
-                                {langAuto.input.length > 0 && langAuto.filteredOptions.length > 0 && langAuto.isFocused && (
-                                    <ul className="opcionesCategorias">
-                                        {langAuto.filteredOptions.map((option, index) => (
-                                            <li
-                                                key={option}
-                                                onMouseDown={() => langAuto.handleSelect(option)}
-                                                style={{
-                                                    padding: "6px 8px",
-                                                    backgroundColor:
-                                                        index === langAuto.highlightedIndex ? "#e0f0ff" : "transparent",
-                                                    cursor: "pointer",
-                                                }}
-                                            >
-                                                {option}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-
-
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -137,7 +73,7 @@ const PublishOffer: React.FC = () => {
                                     Etiquetas
                                 </h3>
                             </div>
-                            <div className="tags-list">{techAuto.etiquetas}</div>
+                            <div className="tags-list">{ }</div>
                         </div>
                         <div className="tags">
                             <div className="tags-header">
@@ -145,7 +81,7 @@ const PublishOffer: React.FC = () => {
                                     Idiomas
                                 </h3>
                             </div>
-                            <div className="tags-list">{langAuto.etiquetas}</div>
+                            <div className="tags-list">{ }</div>
                         </div>
                     </div>
                     <div className='Cuadrante-btns'>
