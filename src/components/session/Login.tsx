@@ -43,7 +43,8 @@ const Login: React.FC = () => {
         try {
             const response = await axios.post(`/session/login.php`, {
                 email,
-                password
+                password,
+                withCredentials: true // Ensure cookies are sent with the request
             });
             if (response.status === 200 && response.data.status === "success") {
                 // Session is now set server-side; reload to update app state
