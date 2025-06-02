@@ -47,7 +47,8 @@ const Login: React.FC = () => {
             );
             if (response.status === 200 && response.data.status === "success") {
                 // Session is now set server-side; reload to update app state
-                //window.location.reload();
+                console.log(response.data);
+                window.location.reload();
             } else {
                 console.error("Login failed:", await response.data.message);
                 setError(response.data.message);
