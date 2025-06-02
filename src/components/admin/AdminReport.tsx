@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React/* , { useEffect, useState }  */from "react";
 import NavBar from "../UI/NavBar";
 import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import ReportRow from "../UI/admin/ReportRow";
 
-interface Report {
+/* interface Report {
   id: number;
   reportedUser: string;
   reportingUser: string;
-}
+} */
 
-const AdminReport: React.FC = () => {
-  const mockData: Report[] = [
+ const AdminReport: React.FC = () => { 
+/*   const mockData: Report[] = [
     {
       id: 1,
       reportedUser: "usuarioInfractor@gmail.com",
       reportingUser: "reporter@example.com",
     },
-  ];
-
-  const [reports, setReports] = useState<Report[]>([]);
-
+  ]; */
+/* 
+/*   const [ reports,  setReports] = useState<Report[]>([]); */ 
+/* 
   useEffect(() => {
     setReports(mockData);
-  }, []);
+  }, []); */
 
   return (
     <div>

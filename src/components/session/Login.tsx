@@ -41,14 +41,13 @@ const Login: React.FC = () => {
     const handleLogin = async (event: FormEvent) => {
         event.preventDefault();
         try {
-            const response = await axios.post(`/session/login.php`, {
-                email,
-                password,
-                withCredentials: true // Ensure cookies are sent with the request
-            });
+            const response = await axios.post(
+            `/session/login.php`,
+            { email, password }
+            );
             if (response.status === 200 && response.data.status === "success") {
                 // Session is now set server-side; reload to update app state
-                window.location.reload();
+                //window.location.reload();
             } else {
                 console.error("Login failed:", await response.data.message);
                 setError(response.data.message);

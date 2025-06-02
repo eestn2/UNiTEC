@@ -18,11 +18,11 @@ interface ReportRowProps {
 const ReportRow: React.FC<ReportRowProps> = ({
   reporterMail = "default@gmail.com",
   reportedMail = "default@gmail.com",
-  onClickSeeProfile,
+ /*  onClickSeeProfile,
   onClickBan,
-  onClickDiscard,
+  onClickDiscard, */
   style,
-  buttonStyle,
+/*   buttonStyle, */
 }) => {
 
     return (

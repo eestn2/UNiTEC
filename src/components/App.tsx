@@ -68,7 +68,7 @@ function App(): JSX.Element {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div>Tenemos que hacer una pantallita de carga...</div>;
+  if (loading) return <div className='app-window' style={{minHeight: '100vh'}}>Tenemos que hacer una pantallita de carga...</div>;
 
   // Browser routings
   return (

@@ -24,7 +24,15 @@ require_once __DIR__ . '/../../logic/communications/return_response.php';
 if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
 
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($data->email) || !isset($data->password)) return_response("failed", "Faltan datos.", null);
+if (!isset($data->email) || !isset($data->password)) return_response("failed", "Faltan datos.", [
+    "debug" => [
+        "session_id" => session_id(),
+        "session_status" => session_status(),
+        "session" => $_SESSION,
+        "cookies" => $_COOKIE,
+        "body" => $data
+    ]
+]);
 
 $email = $data->email;
 $password = $data->password;
@@ -34,9 +42,25 @@ $stmt = $connection->prepare("SELECT * FROM users WHERE email = ?");
 $stmt->execute([$email]);
 $user = $stmt->fetch();
 
-if (!$user) return_response("failed", "Dirección de correo electronico no registrada.", null);
+if (!$user) return_response("failed", "Dirección de correo electronico no registrada.", [
+    "debug" => [
+        "session_id" => session_id(),
+        "session_status" => session_status(),
+        "session" => $_SESSION,
+        "cookies" => $_COOKIE,
+        "body" => $data
+    ]
+]);
 
-if (!password_verify($password, $user["password"])) return_response("failed", "Contraseña incorrecta.", null);
+if (!password_verify($password, $user["password"])) return_response("failed", "Contraseña incorrecta.", [
+    "debug" => [
+        "session_id" => session_id(),
+        "session_status" => session_status(),
+        "session" => $_SESSION,
+        "cookies" => $_COOKIE,
+        "body" => $data
+    ]
+]);
 
 // Store user data in session (do not include password)
 $_SESSION['user'] = [
@@ -54,5 +78,13 @@ $_SESSION['user'] = [
     "status" => $user["status"]
 ];
 
-return_response("success", "Inicio de sesión exitoso.", null);
+return_response("success", "Inicio de sesión exitoso.", [
+    "debug" => [
+        "session_id" => session_id(),
+        "session_status" => session_status(),
+        "session" => $_SESSION,
+        "cookies" => $_COOKIE,
+        "body" => $data
+    ]
+]);
 ?>

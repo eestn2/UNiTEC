@@ -18,8 +18,8 @@ import LabelsSelection from "../UI/form/LabelsSelection";
 import LabelsContainer from "../UI/form/LabelsContainer";
 import Label from "../UI/form/Label";
 import { useWindowSize } from "../../hooks/responsive/useWindowSize";
-import axios from "axios";
-import { useState } from "react";
+/* import axios from "axios";
+import { useState } from "react"; */
 
 /**
  * A React functional component that renders a registration form for students inside a responsive window.
@@ -37,8 +37,9 @@ import { useState } from "react";
 function RegisterUser() {
   // Re-Render on window resize
   const windowSize = useWindowSize();
-  const [error, setError] = useState("");
-  const [form, setForm] = useState({
+  console.log("Window size:", windowSize);
+/*   const [error, setError] = useState("");
+  const [form, setForm] = useState({ 
     name: "",
     birth_date: "",
     email: "",
@@ -49,8 +50,8 @@ function RegisterUser() {
     portfolio: "",
     user_type_id: 2,
     status_id: 1,
-  });
-  const handleChange = (field: string, value: string) => {
+  }); 
+   const handleChange = (field: string, value: string) => {
     setForm(prev => ({ ...prev, [field]: value }));
   };
   const handleSubmit = async (e: React.FormEvent) => {
@@ -70,7 +71,7 @@ function RegisterUser() {
     } catch (err) {
       setError("No se pudo registrar. Intente de nuevo más tarde.");
     }
-  };
+  }; */
   return (
     <>
       <Logo className="watermark"></Logo>
@@ -263,7 +264,7 @@ function RegisterUser() {
             </LabelsContainer>
           </div>
         </div>
-        {error && <div style={{ color: 'red', marginTop: 10 }}>{error}</div>}
+{/*         {error && <div style={{ color: 'red', marginTop: 10 }}>{error}</div>} */}
       </AppWindow>
     </>
   );
