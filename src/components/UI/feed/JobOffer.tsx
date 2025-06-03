@@ -94,7 +94,7 @@ const JobOffer: React.FC<JobOfferProps> = ({
     } = useJobOffer({ height, width, authorId, description });
     const [placeholderApplyState, setPlaceholderApplyState] = useState(false);
     let extraButton: React.ReactNode = undefined;
-    if (![1, 4].includes(User.data.user_type as number)) {
+    if (![1, 4].includes(User.data.type as number)) {
         extraButton = <StateButton 
         trueIcon={apply_icon}
         falseIcon={deapply_icon}
@@ -112,7 +112,7 @@ const JobOffer: React.FC<JobOfferProps> = ({
             console.log("Postularse clicked");
         }}
         />                    
-    } else if (User.data.user_type === 1 && User.data.id === authorId) {
+    } else if (User.data.type === 1 && User.data.id === authorId) {
         extraButton = <ActionButton text="Borrar" />;
     }
 

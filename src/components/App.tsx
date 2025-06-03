@@ -35,34 +35,40 @@ import ProfileInfo from './user/ProfileInfo';
  * 
  * @Author: Haziel Magallanes
  */
+
+import { useEffect, useState } from 'react';
+import PublishOffer from './offers/PublishOffer';
+import SeeApplicants from './offers/SeeApplicants';
+
 function App(): JSX.Element {
   // Axios configs
   axios.defaults.baseURL = import.meta.env.DEV ? import.meta.env.VITE_API_URL_DEV : import.meta.env.VITE_API_URL_PROD;
   axios.defaults.headers.common['Content-Type'] = 'application/json';
+  axios.defaults.withCredentials = true;
   axios.interceptors.request.use((config) => {
     console.log("Sending request to PHP Server.");
     return config;
   });
 
-  // Retrieve session from cookies
-  let session: string | undefined = document.cookie
-    .split('; ')
-    .find(row => row.startsWith('session='))
-    ?.split('=')[1];
+  const [session, setSession] = useState<Record<string, unknown> | null | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
 
-  if (session) {
-    try {
-      const parsedValue = JSON.parse(decodeURIComponent(session));
-      User.set(parsedValue);
-      session = parsedValue;
-    } catch (error) {
-      console.error(error);
-      session = undefined;
-    }
-  } else {
-    console.log("Session not found, sending to login.");
-    session = undefined;
-  }
+  useEffect(() => {
+    // Check session from server
+    axios.get('/session/me.php')
+      .then(res => {
+        if (res.data.status === 'success' && res.data.data && res.data.data.user) {
+          User.set(res.data.data.user);
+          setSession(res.data.data.user);
+        } else {
+          setSession(null);
+        }
+      })
+      .catch(() => setSession(null))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <div>Tenemos que hacer una pantallita de carga...</div>;
 
   // Browser routings
   return (
@@ -80,6 +86,8 @@ function App(): JSX.Element {
             <Route path='/admin-menu/:panel' element={<AdminIndex />} />
             <Route path="/job-offer/:offerId" element={<JobOfferFV />} />
             <Route path="/job-offer/:offerId/:message/:type" element={<JobOfferFV />} />
+            <Route path="/publish-offer" element={<PublishOffer />} />
+            <Route path="/see-applicants" element={<SeeApplicants />} />
           </Routes>
         </BrowserRouter>
       </div>

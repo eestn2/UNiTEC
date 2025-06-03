@@ -38,8 +38,7 @@ const NavBar: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     // Conditional Variables to NavBar changes
-    const user_type: number =  User.data.type_id as number;
-    console.log(user_type, User.data)
+    const user_type: number =  User.data.type as number;
     const buttons: React.ReactElement[] | undefined[] = [
         <img src={notification_icon} alt="Notification" className="bell" style={{ display: window.innerWidth > window.innerHeight ? "none" : "block"}} />,
         <a href="#footer"><img src={about_us_icon} alt="About Us" /></a>,
@@ -64,10 +63,11 @@ const NavBar: React.FC = () => {
                 <div className="admin">
                     <div  onClick={() => {navigate("/admin-menu/panel")}} style={{color: "#113893", cursor:"pointer"}}>Solicitudes de registro</div>
                     <div  onClick={() => {navigate("/admin-menu/tags")}} style={{color: "#113893", cursor:"pointer"}}>Etiquetas</div>
-                    <div onClick={() => {navigate("/admin-menu/languages")}} style={{color: "#113893", cursor:"pointer"}}>Lenguajes</div>
+                    <div  onClick={() => {navigate("/admin-menu/languages")}} style={{color: "#113893", cursor:"pointer"}}>Lenguajes</div>
                     <div  onClick={() => {navigate("/admin-menu/inserts")}} style={{color: "#113893", cursor:"pointer"}}>Inserciones</div>
                     <div  onClick={() => {navigate("/admin-menu/designate")}} style={{color: "#113893", cursor:"pointer"}}>Designar Administradores</div>
                     <div  onClick={() => {navigate("/admin-menu/report")}} style={{color: "#113893", cursor:"pointer"}}>Reportes</div>
+                    <div  onClick={() => {navigate("/admin-menu/review")}} style={{color: "#113893", cursor:"pointer"}}>Resenias</div>
                 </div>
             )
         }

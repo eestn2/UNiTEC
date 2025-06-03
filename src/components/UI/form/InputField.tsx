@@ -36,6 +36,8 @@ interface InputFieldProps extends ResponsiveComponent {
     placeholder: string;
     /** Optional event handler called when the input value changes. */
     onChange?: ChangeEventHandler;
+
+    value?: string;
     /** Decides wich TranslateFigmaCoords function to use (Default: false).*/
     vertical?: boolean;
     /** Optional maximum date for date inputs. */
@@ -90,6 +92,7 @@ const InputField: React.FC<InputFieldProps> = ({
     placeholder = "Input field",
     style,
     className,
+    value,
     children,
     max,
     min,
@@ -109,6 +112,7 @@ const InputField: React.FC<InputFieldProps> = ({
             placeholder={placeholder}
             className={`input-field ${className || ""}`}
             onChange={onChange}
+            value={value}
             max={type === "date" ? max : undefined}
             min={type === "date" ? min : undefined}
         >{children}</input>

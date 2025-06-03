@@ -1,10 +1,9 @@
--- SQLBook: Code
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-05-2025 a las 22:26:54
+-- Tiempo de generación: 03-06-2025 a las 15:02:21
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -19,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `bolsadev`
+-- Base de datos: `database`
 --
 
 -- --------------------------------------------------------
@@ -33,35 +32,6 @@ CREATE TABLE `applicants` (
   `user_id` int(10) NOT NULL,
   `offer_id` int(10) NOT NULL,
   `status` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `offers`
---
-
-CREATE TABLE `offers` (
-  `id` int(11) NOT NULL,
-  `creator_id` int(10) NOT NULL,
-  `title` text NOT NULL,
-  `date` timestamp NOT NULL DEFAULT current_timestamp(),
-  `description` text NOT NULL,
-  `status` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `offer_tags`
---
-
-CREATE TABLE `offer_tags` (
-  `id` int(10) NOT NULL,
-  `tag_id` int(10) NOT NULL,
-  `offer_id` int(10) NOT NULL,
-  `level` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -88,7 +58,6 @@ INSERT INTO `languages` (`id`, `name`) VALUES
 (6, 'Chino');
 
 -- --------------------------------------------------------
--- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `notifications`
@@ -105,12 +74,65 @@ CREATE TABLE `notifications` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `offers`
+--
+
+CREATE TABLE `offers` (
+  `id` int(11) NOT NULL,
+  `creator_id` int(10) NOT NULL,
+  `title` text NOT NULL,
+  `date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `description` text NOT NULL,
+  `status` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `offer_languages`
+--
+
+CREATE TABLE `offer_languages` (
+  `id` int(10) NOT NULL,
+  `language_id` int(10) NOT NULL,
+  `offer_id` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `offer_tags`
+--
+
+CREATE TABLE `offer_tags` (
+  `id` int(10) NOT NULL,
+  `tag_id` int(10) NOT NULL,
+  `offer_id` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `reports`
+--
+
+CREATE TABLE `reports` (
+  `id` int(11) NOT NULL,
+  `reported_id` int(11) NOT NULL,
+  `reporter_id` int(11) NOT NULL,
+  `reason` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `reviews`
 --
 
 CREATE TABLE `reviews` (
   `id` int(11) NOT NULL,
   `user_id` int(10) NOT NULL,
+  `reviewed_id` int(11) NOT NULL,
   `text` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -128,7 +150,6 @@ CREATE TABLE `sent_emails` (
   `receiver_id` int(10) NOT NULL,
   `sent_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 
 -- --------------------------------------------------------
 
@@ -197,6 +218,18 @@ CREATE TABLE `users` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `user_following`
+--
+
+CREATE TABLE `user_following` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `following_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `user_languages`
 --
 
@@ -220,8 +253,6 @@ CREATE TABLE `user_tags` (
   `level` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- --------------------------------------------------------
-
 --
 -- Índices para tablas volcadas
 --
@@ -233,23 +264,6 @@ ALTER TABLE `applicants`
   ADD PRIMARY KEY (`id`),
   ADD KEY `usuario_id` (`user_id`),
   ADD KEY `postulacion_id` (`offer_id`);
-
---
--- Indices de la tabla `offers`
---
-ALTER TABLE `offers`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `postulacion_creador` (`creator_id`);
-
-
---
--- Indices de la tabla `offer_tags`
---
-ALTER TABLE `offer_tags`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `in_etiqueta` (`tag_id`),
-  ADD KEY `postulacion_id` (`offer_id`),
-  ADD KEY `nivel` (`level`);
 
 --
 -- Indices de la tabla `languages`
@@ -265,11 +279,43 @@ ALTER TABLE `notifications`
   ADD KEY `receiver_id` (`receiver_id`);
 
 --
+-- Indices de la tabla `offers`
+--
+ALTER TABLE `offers`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `postulacion_creador` (`creator_id`);
+
+--
+-- Indices de la tabla `offer_languages`
+--
+ALTER TABLE `offer_languages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `in_etiqueta` (`language_id`),
+  ADD KEY `postulacion_id` (`offer_id`);
+
+--
+-- Indices de la tabla `offer_tags`
+--
+ALTER TABLE `offer_tags`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `in_etiqueta` (`tag_id`),
+  ADD KEY `postulacion_id` (`offer_id`);
+
+--
+-- Indices de la tabla `reports`
+--
+ALTER TABLE `reports`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `reports_ibfk_1` (`reported_id`),
+  ADD KEY `reporter_id` (`reporter_id`);
+
+--
 -- Indices de la tabla `reviews`
 --
 ALTER TABLE `reviews`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `resenia_usuario` (`user_id`);
+  ADD KEY `resenia_usuario` (`user_id`),
+  ADD KEY `reviewed_id` (`reviewed_id`);
 
 --
 -- Indices de la tabla `sent_emails`
@@ -278,7 +324,6 @@ ALTER TABLE `sent_emails`
   ADD PRIMARY KEY (`id`),
   ADD KEY `mail_emisor` (`sender_id`),
   ADD KEY `mail_receptor` (`receiver_id`);
-
 
 --
 -- Indices de la tabla `tags`
@@ -291,6 +336,14 @@ ALTER TABLE `tags`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `user_following`
+--
+ALTER TABLE `user_following`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `following_id` (`following_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indices de la tabla `user_languages`
@@ -316,13 +369,31 @@ ALTER TABLE `user_tags`
 -- AUTO_INCREMENT de la tabla `applicants`
 --
 ALTER TABLE `applicants`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `languages`
+--
+ALTER TABLE `languages`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de la tabla `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `offers`
 --
 ALTER TABLE `offers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `offer_languages`
+--
+ALTER TABLE `offer_languages`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `offer_tags`
@@ -331,18 +402,10 @@ ALTER TABLE `offer_tags`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `languages`
+-- AUTO_INCREMENT de la tabla `reports`
 --
-ALTER TABLE `languages`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
--- (Removed AUTO_INCREMENT for non-existent table `levels`)
-
---
--- AUTO_INCREMENT de la tabla `notifications`
---
-ALTER TABLE `notifications`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `reports`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `reviews`
@@ -354,7 +417,7 @@ ALTER TABLE `reviews`
 -- AUTO_INCREMENT de la tabla `sent_emails`
 --
 ALTER TABLE `sent_emails`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `tags`
@@ -366,19 +429,27 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `user_following`
+--
+ALTER TABLE `user_following`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `user_languages`
 --
 ALTER TABLE `user_languages`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `user_tags`
 --
 ALTER TABLE `user_tags`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
 -- Restricciones para tablas volcadas
 --
 
@@ -390,26 +461,43 @@ ALTER TABLE `applicants`
   ADD CONSTRAINT `postulados_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
+-- Filtros para la tabla `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `offers`
 --
 ALTER TABLE `offers`
   ADD CONSTRAINT `postulacion_creador` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`);
 
 --
+-- Filtros para la tabla `offer_languages`
+--
+ALTER TABLE `offer_languages`
+  ADD CONSTRAINT `offer_languages_ibfk_1` FOREIGN KEY (`language_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `offer_tags`
 --
-
 ALTER TABLE `offer_tags`
   ADD CONSTRAINT `idetiqueta_etiquetapost` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`),
   ADD CONSTRAINT `idpostulacion_etiquetapost` FOREIGN KEY (`offer_id`) REFERENCES `offers` (`id`);
-ALTER TABLE `notifications`
-  ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `reports`
+--
+ALTER TABLE `reports`
+  ADD CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`reported_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `reports_ibfk_2` FOREIGN KEY (`reporter_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `reviews`
 --
 ALTER TABLE `reviews`
-  ADD CONSTRAINT `usuario_resenia` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`reviewed_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `usuario_resenia` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `sent_emails`
@@ -418,21 +506,14 @@ ALTER TABLE `sent_emails`
   ADD CONSTRAINT `mails_enviados_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `mails_enviados_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`);
 
-
-
 --
--- Filtros para la tabla `user_languages`
+-- Filtros para la tabla `user_following`
 --
-ALTER TABLE `user_languages`
-  ADD CONSTRAINT `ididioma_idioma` FOREIGN KEY (`language_id`) REFERENCES `languages` (`id`),
-  ADD CONSTRAINT `idusuario_idioma` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
---
-
---
--- Filtros para la tabla `user_tags`
---
-ALTER TABLE `user_tags`
-  ADD CONSTRAINT `idetiqueta_etiqueta` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`),
-  ADD CONSTRAINT `idusuario_etiqueta` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
+ALTER TABLE `user_following`
+  ADD CONSTRAINT `user_following_ibfk_1` FOREIGN KEY (`following_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `user_following_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -100,6 +100,7 @@ function FeedBox() {
           left: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
           top: `${TranslateFigmaCoords.translateFigmaY(100)}px`,
           overflowY: "scroll",
+          height: `${TranslateFigmaCoords.translateFigmaY(600)}px`,
           borderTopRightRadius: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
           borderBottomRightRadius: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
         }}

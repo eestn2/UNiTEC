@@ -43,6 +43,7 @@ const AttributeAdd: React.FC<AttributeAddProps> = ({
                     width={280}
                     height={60}
                     style={{borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,}}
+                    value={attribute}
                     onChange={(event: ChangeEvent<HTMLInputElement>) => setAttribute(event.target.value)}
                 />
                 <ActionButton
@@ -55,7 +56,11 @@ const AttributeAdd: React.FC<AttributeAddProps> = ({
                         
                     }}  
             
-                    action={() => onSubmit && onSubmit(attribute)}
+                    action={() => {
+                        if (onSubmit) onSubmit(attribute);
+                        alert("Atributo agregado: " + attribute);
+                        setAttribute('');
+                    }}
                 />
             </div>
 

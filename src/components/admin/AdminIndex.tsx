@@ -6,6 +6,7 @@ import AdminInserts from "./AdminInserts";
 import AdminDesignate from "./AdminDesignate";
 import AdminReport from "./AdminReport";
 import "../../styles/admin.css";
+import AdminReview from "./AdminReview";
 const AdminIndex: React.FC = () => {
     const { panel } = useParams<{ panel: string }>();
     switch (panel) {
@@ -19,6 +20,8 @@ const AdminIndex: React.FC = () => {
             return <AdminDesignate />
         case "report":
             return <AdminReport />
+        case "review":
+            return <AdminReview />
         case "panel":
             return <AdminPanel />
         default:

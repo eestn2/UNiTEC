@@ -3,7 +3,31 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: x-large;
-    min-height: calc((40 / 720) * var(--y-multiplier));
+    font-size: large;
+    min-height: calc((90 / 720) * var(--y-multiplier));
+    padding-left: calc((40 / 720) * var(--y-multiplier));
+    padding-right: calc((20 / 720) * var(--y-multiplier));
     height: fit-content;
+    word-break: break-all;
+    white-space: normal;
+   
+    overflow-wrap: break-word;
+}
+.admin_attributes_grid{
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc((250 / 720) * var(--y-multiplier)), 1fr));
+    gap: calc((16 / 720) * var(--y-multiplier));
+    padding: calc((16 / 720) * var(--y-multiplier));
+    overflow-y: scroll;
+    max-height: calc((480 / 720) * var(--y-multiplier));
+}
+
+@media (max-width: 600px) {
+  .admin_attributes_grid {
+    grid-template-columns: 1fr 1fr !important;
+    padding: calc((8 / 720) * var(--y-multiplier));
+    gap: calc((8 / 720) * var(--y-multiplier));
+    max-height: calc((400 / 720) * var(--y-multiplier));
+  }
 }
