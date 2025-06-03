@@ -37,6 +37,8 @@ import ProfileInfo from './user/ProfileInfo';
  */
 
 import { useEffect, useState } from 'react';
+import PublishOffer from './offers/PublishOffer';
+import SeeApplicants from './offers/SeeApplicants';
 
 function App(): JSX.Element {
   // Axios configs
@@ -84,6 +86,8 @@ function App(): JSX.Element {
             <Route path='/admin-menu/:panel' element={<AdminIndex />} />
             <Route path="/job-offer/:offerId" element={<JobOfferFV />} />
             <Route path="/job-offer/:offerId/:message/:type" element={<JobOfferFV />} />
+            <Route path="/publish-offer" element={<PublishOffer />} />
+            <Route path="/see-applicants" element={<SeeApplicants />} />
           </Routes>
         </BrowserRouter>
       </div>

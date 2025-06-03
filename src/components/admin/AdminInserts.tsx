@@ -3,23 +3,19 @@ import NavBar from "../UI/NavBar";
 import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import AttributeAdd from "../UI/admin/AttributeAdd";
-import User from "../session/User";
+
 
 const AdminInserts: React.FC = () => {
   const handleAddLanguage = async (attribute: string) => {
     const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-    const userId = User.data.id;
     const response = await axios.post(`${apiUrl}/admin/add_language.php`, {
-        user_id:userId,
         name:attribute
     });
     console.log(response);
   };
     const handleAddTag = async (attribute: string) => {
     const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-    const userId = User.data.id;
     const response = await axios.post(`${apiUrl}/admin/add_tag.php`, {
-        user_id:userId,
         name:attribute
     });
     console.log(response);
