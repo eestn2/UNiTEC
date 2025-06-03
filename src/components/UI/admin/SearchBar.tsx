@@ -53,7 +53,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         style={{
         position: "relative",
         width: "100%",
-        maxWidth: 500,
+        maxWidth: `${TranslateFigmaCoords.translateFigmaX(500)}px`,
         margin: "0 auto",
         ...style,
         }}
@@ -105,7 +105,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
                 right: 0,
                 top: 65,
                 background: "#fff",
-                border: "1px solid #ccc",
+                border: `${TranslateFigmaCoords.translateFigmaX(1)}px solid #ccc`,
                 borderRadius: `0 0  ${TranslateFigmaCoords.translateFigmaX(15)}px  ${TranslateFigmaCoords.translateFigmaX(15)}px`,
                 margin: 0,
                 padding:  `${TranslateFigmaCoords.translateFigmaX(8)}px 0`,
