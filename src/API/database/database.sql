@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-05-2025 a las 22:53:31
+-- Tiempo de generación: 03-06-2025 a las 15:02:21
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -89,14 +89,25 @@ CREATE TABLE `offers` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `offer_languages`
+--
+
+CREATE TABLE `offer_languages` (
+  `id` int(10) NOT NULL,
+  `language_id` int(10) NOT NULL,
+  `offer_id` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `offer_tags`
 --
 
 CREATE TABLE `offer_tags` (
   `id` int(10) NOT NULL,
   `tag_id` int(10) NOT NULL,
-  `offer_id` int(10) NOT NULL,
-  `level` int(10) NOT NULL
+  `offer_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -107,7 +118,8 @@ CREATE TABLE `offer_tags` (
 
 CREATE TABLE `reports` (
   `id` int(11) NOT NULL,
-  `reported` int(11) NOT NULL,
+  `reported_id` int(11) NOT NULL,
+  `reporter_id` int(11) NOT NULL,
   `reason` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -120,6 +132,7 @@ CREATE TABLE `reports` (
 CREATE TABLE `reviews` (
   `id` int(11) NOT NULL,
   `user_id` int(10) NOT NULL,
+  `reviewed_id` int(11) NOT NULL,
   `text` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -273,27 +286,36 @@ ALTER TABLE `offers`
   ADD KEY `postulacion_creador` (`creator_id`);
 
 --
+-- Indices de la tabla `offer_languages`
+--
+ALTER TABLE `offer_languages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `in_etiqueta` (`language_id`),
+  ADD KEY `postulacion_id` (`offer_id`);
+
+--
 -- Indices de la tabla `offer_tags`
 --
 ALTER TABLE `offer_tags`
   ADD PRIMARY KEY (`id`),
   ADD KEY `in_etiqueta` (`tag_id`),
-  ADD KEY `postulacion_id` (`offer_id`),
-  ADD KEY `nivel` (`level`);
+  ADD KEY `postulacion_id` (`offer_id`);
 
 --
 -- Indices de la tabla `reports`
 --
 ALTER TABLE `reports`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `reports_ibfk_1` (`reported`);
+  ADD KEY `reports_ibfk_1` (`reported_id`),
+  ADD KEY `reporter_id` (`reporter_id`);
 
 --
 -- Indices de la tabla `reviews`
 --
 ALTER TABLE `reviews`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `resenia_usuario` (`user_id`);
+  ADD KEY `resenia_usuario` (`user_id`),
+  ADD KEY `reviewed_id` (`reviewed_id`);
 
 --
 -- Indices de la tabla `sent_emails`
@@ -366,6 +388,12 @@ ALTER TABLE `notifications`
 --
 ALTER TABLE `offers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `offer_languages`
+--
+ALTER TABLE `offer_languages`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `offer_tags`
@@ -445,6 +473,12 @@ ALTER TABLE `offers`
   ADD CONSTRAINT `postulacion_creador` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`);
 
 --
+-- Filtros para la tabla `offer_languages`
+--
+ALTER TABLE `offer_languages`
+  ADD CONSTRAINT `offer_languages_ibfk_1` FOREIGN KEY (`language_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `offer_tags`
 --
 ALTER TABLE `offer_tags`
@@ -455,13 +489,15 @@ ALTER TABLE `offer_tags`
 -- Filtros para la tabla `reports`
 --
 ALTER TABLE `reports`
-  ADD CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`reported`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`reported_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `reports_ibfk_2` FOREIGN KEY (`reporter_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `reviews`
 --
 ALTER TABLE `reviews`
-  ADD CONSTRAINT `usuario_resenia` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`reviewed_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `usuario_resenia` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `sent_emails`
