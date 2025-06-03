@@ -52,3 +52,8 @@
 .relative{
     position: relative;
 }
+
+.error {
+    color: #d40202;
+    text-align: center;
+}

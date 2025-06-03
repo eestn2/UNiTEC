@@ -6,14 +6,14 @@
  * @date May 11, 2025
  */
 
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, ReactElement, useState } from "react";
 import ActionButton from "../UI/ActionButton";
 import AppWindow from "../UI/AppWindow";
 import Logo from "../UI/unitec/Logo";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import InputField from "../UI/form/InputField";
 import TextBox from "../UI/form/TextBox";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 
@@ -42,18 +42,36 @@ const RegisterEnterprise: React.FC = () => {
     const [website, setWebsite] = useState('');
     const [description, setDescription] = useState('');
 
+    const [ error, setError ] = useState<ReactElement | undefined>();
+    const navigate = useNavigate()
+
+    function getWrongPassText(): ReactElement{
+        return confirmPassword !== password ? <span className="error">Las contraseñas no coinciden.</span> : <></>;
+    }
+
     const handleRegister = async (event: FormEvent) => {
-        event.preventDefault();
-        const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-        const response = await axios.post(`${apiUrl}/requests/session/registerEnterprise.php`, {
-            enterpriseName,
-            email,
-            password,
-            confirmPassword,
-            website,
-            description
-        });
-        console.log(response);
+        event.preventDefault(); 
+        if (confirmPassword !== password) return;
+        try {
+            const response = await axios.post(`/session/user-register.php`, {
+                name: enterpriseName,
+                email,
+                password,
+                portfolio: website,
+                user_type: 1, // 1 for enterprise
+                description: description
+            });
+            if (response.status === 200 && response.data.status === "success") {
+                //navigate('/')
+                console.log(response.data);
+            } else {
+                console.error("Register failed:", await response.data.message);
+                setError(<span className="error">{response.data.message}</span>);
+            }
+        } catch (error) {
+            console.error("An error occurred during register:", error);
+            setError(<span className="error">No se ha podido establecer la conexión. Intentelo de nuevo más tarde.</span>);
+        }
     };
 
     return (
@@ -121,8 +139,11 @@ const RegisterEnterprise: React.FC = () => {
                         placeholder="Confirmar Contraseña" 
                         width={305} 
                         height={55}
-                        onChange={(event: ChangeEvent<HTMLInputElement>) => setConfirmPassword(event.target.value)}
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                            setConfirmPassword(event.target.value);
+                        }}
                     />
+                    {getWrongPassText()}
                     <InputField 
                         name="website-enterprise" 
                         type="text" 
@@ -151,10 +172,11 @@ const RegisterEnterprise: React.FC = () => {
                         const form = document.getElementById("register-enterprise") as HTMLFormElement;
                         if (form) form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
                     }}/>
+                    {error}
                     <div className="delimiter"></div>
                     <span className="form-text">
                         Registrarse como <Link to={'/register-user'} className="golden-link">Estudiante</Link><br />
-                        ¿Ya tienes cuenta? <Link to={'//'} className="golden-link">Iniciar Sesión</Link>
+                        ¿Ya tienes cuenta? <Link to={'/'} className="golden-link">Iniciar Sesión</Link>
                     </span>
                 </div>
             </form>

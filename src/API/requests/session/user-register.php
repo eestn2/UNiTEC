@@ -20,7 +20,7 @@ session_start();
 require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
-require_once(__DIR__ . '/../../logic/security/security_functions.php');
+require_once __DIR__ . '/../../logic/security/security_functions.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
 
@@ -28,17 +28,17 @@ $data = json_decode(file_get_contents("php://input"));
 if (!isset($data->email) || !isset($data->password)) return_response("failed", "Faltan datos.", null);
 
 // Assign request body values to variables
-$user_name = $data->name ?? null;
+$name = $data->name ?? null;
 $user_age = $data->birth_date ?? null;
 $user_location = $data->location ?? null;
-$user_email = $data->email;
+$email = $data->email;
 $user_password = password_hash($data->password, PASSWORD_DEFAULT);
 $user_description = $data->description ?? null;
 $user_last_update_date = date('Y-m-d H:i:s');
 $user_profile_picture = $data->profile_picture ?? null;
 $user_portfolio = $data->portfolio ?? null;
 $user_is_enabled = 0; // Default to disabled until approved
-$user_rol = isset($data->user_type_id) ? intval($data->user_type_id) : 2; // Default to student
+$user_rol = isset($data->user_type) ? intval($data->user_type) : 2; // Default to student
 $user_status = isset($data->status_id) ? intval($data->status_id) : 1; // Default status
 
 // Additional arrays for languages/tags if present
@@ -46,6 +46,7 @@ $user_languages = $data->languages ?? [];
 $knownLanguagesWithLevels = $data->languages_levels ?? [];
 $user_tags = $data->tags ?? [];
 $tags_levels = $data->tags_levels ?? [];
+
 
 try {
     $connection->beginTransaction();
@@ -56,12 +57,13 @@ try {
     if ($stmt->fetch()) return_response("failed", "El correo ya existe.", null);
 
     // Insert user data
-    $stmt = $connection->prepare(
-        "INSERT INTO users (name, birth_date, location, email, password, description, last_active_date, profile_picture, portfolio, enabled, user_type, status_id)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-    );
+     
+        $stmt = $connection->prepare(
+            "INSERT INTO users (name, birth_date, location, email, password, description, last_active_date, profile_picture, portfolio, enabled, user_type, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        );
     $stmt->execute([
-        $user_name, $user_age, $user_location, $user_email, $user_password, $user_description,
+        $name, $user_age, $user_location, $user_email, $user_password, $user_description,
         $user_last_update_date, $user_profile_picture, $user_portfolio, $user_is_enabled, $user_rol, $user_status
     ]);
     $user_id = $connection->lastInsertId();
@@ -121,7 +123,7 @@ try {
         "profile_picture" => $user["profile_picture"],
         "portfolio" => $user["portfolio"],
         "is_enabled" => $user["enabled"],
-        "type_id" => $user["user_type_id"],
+        "type_id" => $user["user_type"],
         "status" => $user["status_id"]
     ];
     // Respond with success (no user data)
