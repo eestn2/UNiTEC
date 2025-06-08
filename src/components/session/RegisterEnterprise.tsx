@@ -41,17 +41,48 @@ const RegisterEnterprise: React.FC = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [website, setWebsite] = useState('');
     const [description, setDescription] = useState('');
-
+    const [emailError , setEmailError] = useState<ReactElement | null>(null);
+    const [passError , setPassError] = useState<ReactElement | null>(null);
     const [ error, setError ] = useState<ReactElement | undefined>();
+    const [ isCorrect, setIsCorrect ] = useState<boolean>(true);
+    const [ isCorrectPass, setIsCorrectPass ] = useState<boolean>(true);
     const navigate = useNavigate()
 
-    function getWrongPassText(): ReactElement{
-        return confirmPassword !== password ? <span className="error">Las contraseñas no coinciden.</span> : <></>;
+    function getWrongPassText(passTry : string, confirmPassTry : string){
+        setConfirmPassword(confirmPassTry);
+        setPassword(passTry);
+        if( passTry !== confirmPassTry){
+            setIsCorrectPass(false);
+            setPassError( <span className="error">Las contraseñas no coinciden.</span>);
+            
+        }else{
+            setPassError(<></>);
+            setIsCorrectPass(true);
+        }
+    }
+    function getWrongEmailText(emailTry : string) {
+        setEmail(emailTry);
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailTry && !emailRegex.test(emailTry)) {
+            setIsCorrect(false);
+            setEmailError(<span className="error">El correo electrónico no es válido.</span>);
+            
+        }else{
+            setIsCorrect(true);
+            setEmailError(null);
+        }
+    }
+
+    function valueForm() : boolean{
+        if (!isCorrect || !isCorrectPass || password.trim() === "" || enterpriseName.trim() === "" || description.trim() === "" ){
+            return false
+        }
+        return true
     }
 
     const handleRegister = async (event: FormEvent) => {
         event.preventDefault(); 
-        if (confirmPassword !== password) return;
+        if (!valueForm()) return setError(<span className="error">Por favor, complete todos los campos correctamente.</span>);
         try {
             const response = await axios.post(`/session/user-register.php`, {
                 name: enterpriseName,
@@ -62,8 +93,7 @@ const RegisterEnterprise: React.FC = () => {
                 description: description
             });
             if (response.status === 200 && response.data.status === "success") {
-                //navigate('/')
-                console.log(response.data);
+                navigate('/')
             } else {
                 console.error("Register failed:", await response.data.message);
                 setError(<span className="error">{response.data.message}</span>);
@@ -123,15 +153,20 @@ const RegisterEnterprise: React.FC = () => {
                         placeholder="Correo Electrónico" 
                         width={305} 
                         height={55}
-                        onChange={(event: ChangeEvent<HTMLInputElement>) => setEmail(event.target.value)}
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                            getWrongEmailText(event.target.value);
+                        }
+                        }
                     />
+                    {emailError}
                     <InputField 
                         name="password-enterprise" 
                         type="password" 
                         placeholder="Contraseña" 
                         width={305} 
                         height={55}
-                        onChange={(event: ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)}
+                        onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                            getWrongPassText( event.target.value, confirmPassword)}
                     />
                     <InputField 
                         name="password-confirm-enterprise" 
@@ -140,10 +175,10 @@ const RegisterEnterprise: React.FC = () => {
                         width={305} 
                         height={55}
                         onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                            setConfirmPassword(event.target.value);
+                            getWrongPassText(password, event.target.value);
                         }}
                     />
-                    {getWrongPassText()}
+                    {passError}
                     <InputField 
                         name="website-enterprise" 
                         type="text" 
