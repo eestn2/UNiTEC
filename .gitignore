@@ -30,7 +30,6 @@ GPUCache/
 Local Storage/
 Session Storage/
 Shared Dictionary/
-User/
 .DS_Store
 *.suo
 *.ntvs*

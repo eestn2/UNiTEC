@@ -1,25 +1,80 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../UI/NavBar";
 import AppWindow from "../UI/AppWindow";
+import axios from "axios";
+import ActionButton from "../UI/ActionButton";
+import SearchBar from "../UI/admin/SearchBar";
+import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 
 const AdminDesignate: React.FC = () => {
-    const [admins, setAdmins] = useState<string[]>([]);
-    const [newAdmin, setNewAdmin] = useState("");
+    type Admin = {
+      id: number;
+      email: string;
+      name: string;
+    };
+    const [admins, setAdmins] = useState<Admin[]>([]);
+    const [suggestions, setSuggestions] = useState<string[]>([]);
+    const loadAdmins = async () => {
+      try {
+        const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+        const response = await axios.get(`${apiUrl}/admin/get-admins.php`,
+          {withCredentials: true,});
 
-    const handleAdd = () => {
-        if (newAdmin && !admins.includes(newAdmin)) {
-        setAdmins([...admins, newAdmin]);
-        setNewAdmin("");
+        if (response.status !== 200 || response.data.status !== "success") {
+          console.error("Failed to load admins:", response.data.message);
+        } else {
+          const adminsList = response.data.data.admins.map((admin: any) => ({
+            id: admin.id,
+            email: admin.email,
+            name: admin.name,
+          }));
+          setAdmins(adminsList);
         }
+      } catch (error) {
+        console.error("An error occurred while loading admins:", error);
+      }
     };
+    const handleAdd = async (attribute: string) => {
+      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+      const response = await axios.post(`${apiUrl}/admin/add_admin.php`, {
+          admin_email:attribute,
+          withCredentials: true,
+      });
+      console.log(response);
+      await loadAdmins();
+   };
 
-    const handleRemove = (admin: string) => {
-        setAdmins(admins.filter(a => a !== admin));
+    const handleRemove = async (id: number) => {
+      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+      const response = await axios.delete(`${apiUrl}/admin/delete_admin.php`, {
+          data:{
+            id:id,}
+      }); 
+      console.log(response);
+     await loadAdmins();
     };
-
+    const handleLoadSuggestions = async (input: string) => {
+      if (input.length < 3) {
+        setSuggestions([]);
+        return;
+      }
+      try {
+        const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+        const response = await axios.get(`${apiUrl}/admin/get-users-by-email.php`, {
+          params: { email: input },
+          withCredentials: true,
+        });
+        if (response.data.status === "success") {
+          setSuggestions(response.data.data.users.map((u: any) => `${u.email}`));
+        } else {
+          setSuggestions([]);
+        }
+      } catch (e) {
+        setSuggestions([]);
+      }
+    };
     useEffect(() => {
-        // Simulación de carga inicial
-        setAdmins(["NombreUsuario123", "NombreUsuario123", "NombreUsuario123"]);
+        loadAdmins();
     }, []);
 
     return (
@@ -27,75 +82,65 @@ const AdminDesignate: React.FC = () => {
       <NavBar />
       <AppWindow
         height={500}
-        width={800}
+        width={480}
         className="admin-box"
         style={{
           margin: "0 auto",
-          marginTop: "100px",
+          marginTop: `${TranslateFigmaCoords.translateFigmaX(100)}px`,
           background: "white",
-          borderRadius: "20px",
-          padding: "30px",
-          boxShadow: "0px 0px 15px rgba(0,0,0,0.1)",
+          borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
+          padding: `${TranslateFigmaCoords.translateFigmaX(30)}px`,
+          boxShadow: `0px 0px ${TranslateFigmaCoords.translateFigmaX(15)}px rgba(0,0,0,0.1)`,
         }}
       >
         <h2 style={{ textAlign: "center", color: "#305894" }}>Designar Administradores</h2>
-        <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "20px" }}>
-          <input
-            type="text"
-            placeholder="Ingrese el correo electrónico"
-            value={newAdmin}
-            onChange={(e) => setNewAdmin(e.target.value)}
+        <SearchBar
+          placeholder="Ingrese el correo "
+          buttonText="Agregar"
+          onSubmit={(value) => {
+            alert(`Agregaste a: ${value}`);
+            handleAdd(value);
+          }}
+          onInputChange={handleLoadSuggestions}
+          suggestions={suggestions}
+          style={{ marginBottom: `${TranslateFigmaCoords.translateFigmaX(20)}px`,  }}
+        />
+        <h2 style={{ color: "#305894", textAlign: "center" }}>Lista de Administradores</h2>
+        <div style={{ display: "flex", flexDirection: "column",
+          gap: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
+          marginTop: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
+          overflowY: "scroll",
+          maxHeight: `${TranslateFigmaCoords.translateFigmaX(200)}px`}}>
+        {admins.map((admin) => (
+          <div
+            key={admin.id}
             style={{
-              padding: "10px",
-              borderRadius: "10px",
-              border: "1px solid #ccc",
-              width: "60%",
-            }}
-          />
-          <button
-            onClick={handleAdd}
-            style={{
-              padding: "10px 20px",
-              backgroundColor: "#305894",
-              color: "white",
-              border: "none",
-              borderRadius: "10px",
-              cursor: "pointer",
+              color: "#6F88B3",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: `${TranslateFigmaCoords.translateFigmaX(4)}px ${TranslateFigmaCoords.translateFigmaX(20)}px`,
+              border: `${TranslateFigmaCoords.translateFigmaX(1)}px solid #5386FF`,
+              borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
             }}
           >
-            Agregar
-          </button>
-        </div>
-        <h3 style={{ color: "#305894", textAlign: "center" }}>Lista de Administradores</h3>
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "10px" }}>
-          {admins.map((admin, index) => (
-            <div
-              key={index}
+            <span>{admin.name} ({admin.email})</span>
+            <ActionButton
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "10px 20px",
-                border: "2px solid #305894",
-                borderRadius: "20px",
+                backgroundColor: "#D43D3D",
+                color: "white",
+                border: "none",
+                padding: `${TranslateFigmaCoords.translateFigmaX(15)}px ${TranslateFigmaCoords.translateFigmaX(22)}px`,
+                borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
+                cursor: "pointer",
               }}
-            >
-              <span>{admin}</span>
-              <button
-                onClick={() => handleRemove(admin)}
-                style={{
-                  backgroundColor: "#d9534f",
-                  color: "white",
-                  border: "none",
-                  padding: "8px 15px",
-                  borderRadius: "10px",
-                  cursor: "pointer",
-                }}
-              >
-                Remove Administrator
-              </button>
-            </div>
-          ))}
+              text={"Remover"}
+              action={() => {
+              alert(`Eliminaste a ${admin.name}`);
+              handleRemove(admin.id);}}>
+            </ActionButton>
+          </div>
+        ))}
         </div>
       </AppWindow>
     </div>

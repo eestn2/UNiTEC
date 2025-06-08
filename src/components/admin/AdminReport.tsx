@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import NavBar from "../UI/NavBar";
 import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
+import ReportRow from "../UI/admin/ReportRow";
 
 interface Report {
   id: number;
@@ -59,82 +60,11 @@ const AdminReport: React.FC = () => {
           <div style={{ width: "50%", textAlign:"center" }}>Usuario reportado</div>
           <div style={{ width: "50%", textAlign:"center" }}>Usuario que reporta</div>
         </div>
+        <ReportRow>
+          
+        </ReportRow>
 
-        {/* Lista de reportes */}
-        {reports.map((report) => (
-          <div
-            key={report.id}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              backgroundColor: "#f0f4ff",
-              margin: "10px 20px",
-              padding: "10px",
-              borderRadius: "12px",
-              border: "2px solid #87a5f8",
-            }}
-          >
-            {/* Columna: Usuario reportado */}
-            <div style={{ width: "50%", display: "flex", alignItems: "center" }}>
-              <div
-                style={{
-                  width: "24px",
-                  height: "24px",
-                  borderRadius: "50%",
-                  backgroundColor: "#7893e0",
-                  marginRight: "10px",
-                }}
-              ></div>
-              <span>{report.reportedUser}</span>
-              <button
-                style={{
-                  backgroundColor: "#facc15",
-                  borderRadius: "8px",
-                  padding: "5px 10px",
-                  fontWeight: "bold",
-                }}
-              >
-                Ver Perfil
-              </button>
-              <button
-                style={{
-                  backgroundColor: "#ef4444",
-                  color: "white",
-                  borderRadius: "8px",
-                  padding: "5px 10px",
-                  fontWeight: "bold",
-                }}
-              >
-                Banear
-              </button>
-              <button
-                style={{
-                  backgroundColor: "transparent",
-                  border: "none",
-                  cursor: "pointer",
-                  fontSize: "18px",
-                }}
-              >
-                🗑️
-              </button>
-            </div>
-
-            {/* Columna: Usuario que reporta y botones */}
-            <div
-              style={{
-                width: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                gap: "10px",
-              }}
-            >
-              <span>{report.reportingUser}</span>
-              
-            </div>
-          </div>
-        ))}
+        
       </AppWindow>
     </div>
   );
