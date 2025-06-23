@@ -17,7 +17,7 @@ try {
     $stmt = $connection->prepare("SELECT * FROM users WHERE user_type = 4 AND id != :id");
     $stmt->execute(['id' => $_SESSION['user']['id']]);
     $admins = $stmt->fetchAll();
-    return_response("success", "not enabled retrieved successfully.", ["admins" => $admins]);
+    return_response("success", "Lista de administradores recuperada correctamente.", ["admins" => $admins]);
 } catch (PDOException $e) {
     error_log("Error retrieving users: " . $e->getMessage());
     return_response("failed", "Error retrieving admins.", null);

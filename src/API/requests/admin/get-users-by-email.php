@@ -20,7 +20,7 @@ if (!isset($_GET['email']) || empty(trim($_GET['email']))) {
 $email = trim($_GET['email']);
 
 try {
-    $stmt = $connection->prepare("SELECT * FROM users WHERE email LIKE :email AND user_type !=4");
+    $stmt = $connection->prepare("SELECT * FROM users WHERE email LIKE :email AND user_type != 4");
     $search = '%' . $email . '%';
     $stmt->bindParam(':email', $search, PDO::PARAM_STR);
     $stmt->execute();
