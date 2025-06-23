@@ -20,8 +20,6 @@
  *   Response: { "status": "success", "message": "Idioma eliminado con éxito.", "data": null }
  */
 
-
-
 session_start();
 require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
@@ -38,15 +36,18 @@ if (!is_admin($_SESSION['user']['id'], $connection)) {
 $data->id = intval($data->id);
 
 try {
+    $connection->beginTransaction(); 
+
     $query = "DELETE FROM languages WHERE id = :id";
     $stmt = $connection->prepare($query);
     $stmt->bindParam(':id', $data->id, PDO::PARAM_INT);
     $stmt->execute();
-    $connection->beginTransaction();
-    $connection->commit();
-    return_response("success", "Idioma eliminado con exito.", null);
 
+    $connection->commit(); 
+
+    return_response("success", "Idioma eliminado con exito.", null);
 } catch(PDOException $e) {
+    $connection->rollBack(); 
     return_response("failed", "Error al eliminar el idioma: " . $e->getMessage(), null);
 }
 ?>

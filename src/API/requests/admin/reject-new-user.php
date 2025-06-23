@@ -20,7 +20,6 @@
  *   Response: { "status": "success", "message": "Usuario rechazado con éxito.", "data": null }
  */
 
-
 session_start();
 require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . "/../../logic/database/connection.php";
