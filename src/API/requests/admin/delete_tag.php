@@ -2,20 +2,22 @@
 /**
  * @file delete_tag.php
  * @description API endpoint for deleting a tag. Only administrators are authorized to perform this action.
- * Handles DELETE requests, verifies admin permissions, and deletes the tag from the database.
+ * Handles DELETE requests, verifies admin permissions using session authentication, and deletes the tag from the database.
  * Returns a standardized JSON response indicating success or failure.
+ * 
+ * Note: The authenticated user is retrieved from the session, not from the request body.
+ * 
  * @author Francesco Sidotti
  * @date May 31, 2025
  *
  * Usage:
  *   Send a DELETE request with JSON body containing:
- *     - user_id: (int) ID of the user requesting the deletion (must be an admin)
  *     - id: (int) ID of the tag to delete
  *
  * Example:
  *   DELETE /src/API/requests/admin/delete_tag.php
- *   Body: { "user_id": 4, "id": 2 }
- *   Response: { "status": "success", "message": "Tag eliminada con exito.", "data": null }
+ *   Body: { "id": 2 }
+ *   Response: { "status": "success", "message": "Tag eliminada con éxito.", "data": null }
  */
 
  session_start();
