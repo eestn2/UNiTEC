@@ -10,6 +10,11 @@ $data = json_decode(file_get_contents("php://input"));
 
 if (!isset($data->reviewed_id) || !isset($data->text)) return_response("failed", "Faltan datos.", null);
 
+// Validate session and user authentication
+if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id'])) {
+    return_response("failed", "Usuario no autenticado.", null);
+}
+
 $user_id = $_SESSION['user'] ['id'] ;
 $reviewed_id = intval($data->reviewed_id);
 $text = trim($data->text);
@@ -21,7 +26,7 @@ try{
         $connection->beginTransaction();
 
         $stmt = $connection -> prepare( 
-            "INSERT INTO reports (user_id, reviewed_id, text) VALUES (?, ?, ?)");
+            "INSERT INTO reviews (user_id, reviewed_id, text) VALUES (?, ?, ?)");
         $stmt->execute([$user_id, $reviewed_id, $text]);
 
         $connection->commit();
