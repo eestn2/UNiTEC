@@ -142,7 +142,7 @@ try {
         "portfolio" => $user["portfolio"],
         "is_enabled" => $user["enabled"],
         "type_id" => $user["user_type"],
-        "status" => $user["status_id"]
+        "status" => $user["status"]
     ];
 
     return_response("success", "Usuario registrado correctamente. Debe esperar aprobación.", null);
