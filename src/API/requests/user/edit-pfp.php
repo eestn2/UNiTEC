@@ -61,8 +61,9 @@ if ($image_data === false) {
     return_response("failed", "No se pudo decodificar la imagen.", null);
 }
 
-// Validar tamaño (2 MB)
-$max_file_size = 2 * 1024 * 1024;
+// Define file size limit as constant
+define('MAX_FILE_SIZE', 2 * 1024 * 1024); // 2 MB
+$max_file_size = MAX_FILE_SIZE;
 if (strlen($image_data) > $max_file_size) {
     return_response("failed", "La imagen es demasiado grande. Máximo 2 MB.", null);
 }
@@ -70,7 +71,7 @@ if (strlen($image_data) > $max_file_size) {
 // Crear carpeta si no existe
 $upload_dir = __DIR__ . '/../../uploads/profile-pictures/';
 if (!file_exists($upload_dir)) {
-    mkdir($upload_dir, 0777, true);
+    mkdir($upload_dir, 0755, true);
 }
 
 // BORRAR TODAS LAS FOTOS ANTERIORES DEL USUARIO EN /uploads/profile-pictures/
