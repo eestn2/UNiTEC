@@ -25,19 +25,16 @@ require_once __DIR__ . "/../function/get-user-from-request.php";
 
 if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
     return_response("failed", "Method not allowed", null);
-    exit;
 }
 
 $data = json_decode(file_get_contents("php://input"));
 if (!$data) {
     return_response("failed", "No se recibieron datos", null);
-    exit;
 }
 
 $user = get_user_from_request($data);
 if (!$user || !isset($user['id'])) {
     return_response("failed", "Usuario no encontrado", null);
-    exit;
 }
 
 $allowed_fields = ["name", "birth_date", "location", "email", "description", "profile_picture", "portfolio"];
