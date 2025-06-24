@@ -31,10 +31,8 @@ $id = intval($_SESSION['user']['id']);
 // Leer y decodificar el JSON
 $data = json_decode(file_get_contents("php://input"));
 
-if (
-    !isset($data->profile_picture) || !isset($data->filename) || !isset($data->type)
-) {
-    return_response("failed", "Datos inválidos.", null);
+if ($data === null) {
+    return_response("failed", "JSON inválido.", null);
 }
 
 $base64_image = $data->profile_picture;
@@ -86,11 +84,10 @@ foreach ($files as $file) {
 $unique_filename = uniqid("profile_{$id}_") . '.' . $ext;
 $target_path = $upload_dir . $unique_filename;
 $API_base_url = $env === 'production' ? getenv('API_BASE_URL_PROD') : getenv('API_BASE_URL_DEV');
-$picture_path = $API_base_url . "/uploads/profile-pictures/" . $unique_filename;
-
-if (file_put_contents($target_path, $image_data) === false) {
-    return_response("failed", "No se pudo guardar la imagen.", null);
+if (!$API_base_url) {
+    return_response("failed", "Error de configuración del servidor.", null);
 }
+$picture_path = $API_base_url . "/uploads/profile-pictures/" . $unique_filename;
 
 // Actualizar base de datos
 try {
