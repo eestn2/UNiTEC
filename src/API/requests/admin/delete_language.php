@@ -2,8 +2,7 @@
 /**
  * @file delete_language.php
  * @description API endpoint for deleting a language. Only administrators are authorized to perform this action.
- * Handles DELETE requests, verifies admin permissions using session authentication, and deletes the language from the database.
- * Returns a standardized JSON response indicating success or failure.
+ * Handles DELETE requests, verifies admin permissions, and deletes the language from the database.
  * 
  * Note: The authenticated user is obtained from the session, not from the request body.
  * 
@@ -29,7 +28,9 @@ require_once __DIR__ . '/../../logic/security/is_admin.php';
 if ($_SERVER["REQUEST_METHOD"] !== "DELETE") return_response("failed", "Metodo no permitido.", null);
 
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
+if (!$data || !isset($data->id)) {
+    return_response("failed", "Datos de entrada inválidos.", null);
+}
 if (!is_admin($_SESSION['user']['id'], $connection)) {
     return_response("failed", "Solo los administradores pueden eliminar idiomas.", null);
 }
