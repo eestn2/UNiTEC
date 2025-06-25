@@ -36,11 +36,11 @@ if (!is_admin($_SESSION['user']['id'], $connection)) {
 $data->id = intval($data->id);
 
 try {
+    $connection->beginTransaction();
     $query = "DELETE FROM users WHERE id = :id";
     $stmt = $connection->prepare($query);
     $stmt->bindParam(':id', $data->id, PDO::PARAM_INT);
     $stmt->execute();
-    $connection->beginTransaction();
     $connection->commit();
     return_response("success", "Usuario eliminado con exito.", null);
 

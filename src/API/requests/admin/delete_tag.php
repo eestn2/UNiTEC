@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "DELETE") return_response("failed", "Metodo n
 $data = json_decode(file_get_contents("php://input"));
 if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
 if (!is_admin($_SESSION['user']['id'], $connection)) {
-    return_response("failed", "Solo los administradores pueden eliminar idiomas.", null);
+    return_response("failed", "Solo los administradores pueden eliminar tags.", null);
 }
 $data->id = intval($data->id);
 
@@ -39,8 +39,8 @@ try {
     $query = "DELETE FROM tags WHERE id = :id";
     $stmt = $connection->prepare($query);
     $stmt->bindParam(':id', $data->id, PDO::PARAM_INT);
-    $stmt->execute();
     $connection->beginTransaction();
+    $stmt->execute();
     $connection->commit();
     return_response("success", "Tag eliminada con exito.", null);
 
