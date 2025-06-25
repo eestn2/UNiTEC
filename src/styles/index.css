@@ -14,6 +14,7 @@
 :root {
   --x-multiplier: 100vw;
   --y-multiplier: 100vh;
+  --font-multiplier: 1;
   --nav-width: calc((1240 / 1280) * 100vw);
   --nav-height: calc((60 / 720) * 100vh);
   --app-font-family: "Archivo Narrow", Helvetica;
@@ -25,6 +26,7 @@
   :root {
    --x-multiplier: 100vw;
    --y-multiplier: 100vw;
+   --font-multiplier: 1.25; /* Adjust font size for better readability on smaller screens */
    --nav-height: calc((35 / 720) * 100vh);
   }
 }
@@ -35,7 +37,7 @@
 body {
   font-family: var(--app-font-family);
   margin: 0;
-  font-size: calc((18 / 720) * var(--y-multiplier));
+  font-size: calc((18 / 720) * var(--y-multiplier) * var(--font-multiplier));
   overflow-y: scroll;
 }
 html {
@@ -57,7 +59,7 @@ html::-webkit-scrollbar-thumb:hover {
   background-color: var(--feed-title-BG);
 }
 h1 {
-  font-size: calc((32 / 720) * var(--y-multiplier));
+  font-size: calc((32 / 720) * var(--y-multiplier) * var(--font-multiplier));
   font-weight: 600;
 }
 .app-content{
@@ -102,7 +104,7 @@ h1 {
 }
 .golden-link {
   color: var(--delimiters);
-  font-size: calc((20 / 720) * var(--y-multiplier));
+  font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
   font-weight: bold;
   text-decoration: underline;
 }
@@ -113,21 +115,21 @@ h1 {
 .title {
   color: #305894;
   font-weight: 550;
-  font-size: calc((40 / 720) * var(--y-multiplier));
+  font-size: calc((40 / 720) * var(--y-multiplier) * var(--font-multiplier));
 }
 .profile-title {
   color: #305894;
-  font-size: calc((32 / 720) * var(--y-multiplier));
+  font-size: calc((32 / 720) * var(--y-multiplier) * var(--font-multiplier));
   font-weight: 550;
 }
 .black-text {
   color: black;
-  font-size: calc((20 / 720) * var(--y-multiplier));
+  font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
   font-weight: 550;
 }
 .form-text {
   color: var(--forms-text);
-  font-size: calc((20 / 720) * var(--y-multiplier));
+  font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
   font-weight: bold;
 }
 .watermark {
@@ -152,8 +154,8 @@ h1 {
   text-align: left;
   align-items: center;
   color: var(--input);
-  font-family: var(--app-font-family);
-  font-size: calc((20 / 720) * var(--y-multiplier));
+  font-family: var(--app-font-family) ;
+  font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
   font-weight: 600;
   letter-spacing: 0;
   line-height: normal;
@@ -455,11 +457,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: calc((20 / 1280) * var(--x-multiplier));
   align-content: center;
   text-align: center;
-  font-size: calc((32 / 720) * var(--y-multiplier));
+  font-size: calc((32 / 720) * var(--y-multiplier) * var(--font-multiplier));
   font-weight: 600;
 }
 .offer-title {
-  font-size: calc((32 / 720) * var(--y-multiplier));
+  font-size: calc((32 / 720) * var(--y-multiplier) * var(--font-multiplier));
   font-weight: 600;
 }
 .job-offer {
@@ -474,7 +476,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background-color: var(--job-title);
   color: white;
   border-radius: 0;
-  font-size: calc((34 / 720) * var(--y-multiplier));
+  font-size: calc((34 / 720) * var(--y-multiplier) * var(--font-multiplier));
 }
 .job-offer .app-window {
   color: black;
@@ -524,7 +526,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: calc((15 / 1280) * var(--x-multiplier));
   right: 50%;
   transform: translateX(50%);
-  font-size: calc((20 / 720) * var(--y-multiplier));
+  font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
   font-weight: 600;
   direction: ltr;
 }
@@ -538,7 +540,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
   text-decoration: underline;
   font-family: var(--app-font-family);
-  font-size: calc((20 / 720) * var(--y-multiplier));
+  font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
   color: black;
   font-weight: 600;
   text-indent: -6px;
@@ -614,12 +616,12 @@ footer{
 }
 .contact strong, .links strong {
   margin-bottom: calc((8 / 720) * var(--y-multiplier));
-  font-size: calc((24 / 720) * var(--y-multiplier));
+  font-size: calc((24 / 720) * var(--y-multiplier) * var(--font-multiplier));
 }
 .contact a, .links a {
   color: #fff;
   text-decoration: underline;
-  font-size: calc((20 / 720) * var(--y-multiplier));
+  font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
 }
 
 /* --- Responsive Footer --- */
@@ -750,4 +752,16 @@ footer{
 }
 .tag-display-profile::-webkit-scrollbar-thumb:hover {
   background-color: var(--feed-title-BG);
+}
+
+
+
+/* =========================
+  Register Styles
+  ========================= */
+
+  @media
+
+.responsive-registers {
+
 }

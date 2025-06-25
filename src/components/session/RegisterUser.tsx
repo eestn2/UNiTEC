@@ -85,11 +85,8 @@ function RegisterUser() {
           rowGap: TranslateFigmaCoords.translateFigmaY(20),
           padding: `${TranslateFigmaCoords.translateFigmaY(20)}px`,
           flexDirection: "column",
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          translate: "-40% -50%",
         }}
+        className="centered-w-wm responsive-registers"
       >
         <span
           className="top-section title"
