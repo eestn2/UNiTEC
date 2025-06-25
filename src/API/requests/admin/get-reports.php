@@ -16,6 +16,7 @@ if (!is_admin($_SESSION['user']['id'], $connection)) {
 try {
     $stmt = $connection->prepare("SELECT * FROM reports");
     $stmt->execute();
+    $reports = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return_response("success", "reports retrieved successfully.", ["reports" => $reports]);
 } catch (PDOException $e) {
     error_log("Error retrieving reports: " . $e->getMessage());

@@ -46,7 +46,7 @@ try {
 
     $connection->commit(); 
 
-    return_response("success", "Idioma eliminado con exito.", null);
+    return_response("success", "Idioma eliminado con éxito.", null);
 } catch(PDOException $e) {
     $connection->rollBack(); 
     return_response("failed", "Error al eliminar el idioma: " . $e->getMessage(), null);
