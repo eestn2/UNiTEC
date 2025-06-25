@@ -100,6 +100,16 @@ const LabelsSelection: React.FC<LabelsSelectionProps> = ({ width = 100, height =
                     <option value="1">Selection 1</option>
                     <option value="2">Selection 2</option>
                     <option value="3">Selection 3</option>
+                    <option value="4">Selection 4</option>
+                    <option value="5">Selection 5</option>
+                    <option value="6">Selection 6</option>
+                    <option value="7">Selection 7</option>
+                    <option value="8">Selection 8</option>
+                    <option value="9">Selection 9</option>
+                    <option value="10">Selection 10</option>
+                    <option value="11">Selection 11</option>
+                    <option value="12">Selection 12</option>
+                    <option value="13">Selection 13</option>
                 </select>
                 <div
                     className="checkbox-group"

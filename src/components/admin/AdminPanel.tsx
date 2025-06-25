@@ -167,8 +167,8 @@ const AdminPanel: React.FC = () => {
                                 borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
                                 padding: `${TranslateFigmaCoords.translateFigmaX(18)}px ${TranslateFigmaCoords.translateFigmaY(16)}px`,}}
                             action={() => {
-                                    alert(`Aceptaste a: ${user.name}`);
-                                    handleAcceptUser(user.id);}}    
+                                alert(`Aceptaste a: ${user.name}`);
+                                handleAcceptUser(user.id);}}    
                             />
                             <ActionButton 
                             text={"Rechazar"}
