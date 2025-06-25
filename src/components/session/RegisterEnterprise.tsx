@@ -74,7 +74,7 @@ const RegisterEnterprise: React.FC = () => {
     }
 
     function valueForm() : boolean{
-        if (!isCorrect || !isCorrectPass || password.trim() === "" || enterpriseName.trim() === "" || description.trim() === "" ){
+        if (!isCorrect || !isCorrectPass || email.trim() === "" || password.trim() === "" || enterpriseName.trim() === "" || description.trim() === "" ){
             return false
         }
         return true
