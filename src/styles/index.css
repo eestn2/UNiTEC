@@ -765,3 +765,31 @@ footer{
 .responsive-registers {
 
 }
+
+/* =========================
+  Register Enterprise Styles
+  ========================= */
+
+  @media (orientation: portrait){
+    .register-enterprise-window {
+      width: 90% !important;
+      height: 36vh !important;
+    }
+
+    .register-enterprise-window .input-field {
+      font-size: 1em;
+      height: 30px !important;
+      min-width: 150px !important;
+    }
+    
+    .register-enterprise-window textarea.input-field {
+      font-size: 1em;
+      height: 60px !important;
+    }
+
+    .register-enterprise-window .action-button {
+      font-size: 1.9em;
+      height: 40px !important;
+      min-width: 90% !important;
+    }
+  }

@@ -116,7 +116,8 @@ const RegisterEnterprise: React.FC = () => {
             flexDirection: "column",
             position: "absolute",
             top: "50%", left: "50%", translate: "-50% -50%"
-        }}>
+        }}
+        className="register-enterprise-window">
 
             <span className="top-section title" 
                 style={{
