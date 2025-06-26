@@ -9,6 +9,7 @@
 import { ChangeEventHandler } from "react";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import { getTranslates } from "../../../global/function/getTranslates";
+import useResponsiveDimensions from "../../../hooks/responsive/useResponsiveDimensions";
 
 /**
  * Props for the `InputField` component.
@@ -97,13 +98,18 @@ const InputField: React.FC<InputFieldProps> = ({
     max,
     min,
 }) => {
-    const [ translateX, translateY ] = getTranslates(vertical);
-
+    const [ translateX ] = getTranslates(vertical);
+    const { finalHeight, finalWidth } = useResponsiveDimensions({
+        height,
+        width,
+        vertical
+    });
+    
     return (
         <input
             style={{
-                width: `${translateX(width - 18)}px`,
-                height: `${translateY(height)}px`,
+                width: finalWidth,
+                height: finalHeight,
                 paddingLeft: `${translateX(18)}px`,
                 ...style,
             }}

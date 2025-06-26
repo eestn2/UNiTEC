@@ -9,6 +9,7 @@
 import React, { MouseEventHandler } from "react";
 import ResponsiveComponent from "../../global/interface/ResponsiveComponent";
 import { getTranslates } from "../../global/function/getTranslates";
+import useResponsiveDimensions from "../../hooks/responsive/useResponsiveDimensions";
 
 /**
  * Props for the `ActionButton` component.
@@ -57,12 +58,15 @@ export interface ActionButtonProps extends ResponsiveComponent {
  * ```
  * @author Haziel Magallanes, Daviel Díaz Gonzáles
  */
-const ActionButton: React.FC<ActionButtonProps> = ({ height = 10, vertical = false, width, action, text, style, className, children }) => {
-    let calculatedWidth: string = 'auto';
-    const [ translateX, translateY ] = getTranslates(vertical);
-    if(width) calculatedWidth = `${translateX(width)}px`
+const ActionButton: React.FC<ActionButtonProps> = ({ height = 10, vertical = false, width = 'auto', action, text, style, className, children }) => {
+    const { finalHeight, finalWidth } = useResponsiveDimensions({
+        height,
+        width,
+        vertical
+    });
+    const [translateX] = getTranslates(vertical);
     return (
-        <button className={`action-button ${className || ''}`} style={{height: `${translateY(height)}px`, width: `${calculatedWidth}`, display: "flex", flexDirection: "row", columnGap: translateX(4), ...style}} onClick={action}>
+        <button className={`action-button ${className || ''}`} style={{height: finalHeight, width: finalWidth, display: "flex", flexDirection: "row", columnGap: translateX(4), ...style}} onClick={action}>
             {children || text}
         </button>
     );

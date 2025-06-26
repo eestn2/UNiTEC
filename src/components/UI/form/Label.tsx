@@ -8,6 +8,7 @@
 
 import React from "react";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
+import useResponsiveDimensions from "../../../hooks/responsive/useResponsiveDimensions";
 
 /**
  * Props for the `Label` component.
@@ -28,6 +29,8 @@ interface LabelProps {
     width?: number;
     /** The height of the label in Figma coordinates. */
     height?: number;
+    /** Decides which TranslateFigmaCoords function to use (Default: false). */
+    vertical?: boolean;
     /** Additional inline styles for the label container. */
     style?: React.CSSProperties;
     /** Additional CSS class names for the label container. */
@@ -56,13 +59,19 @@ interface LabelProps {
  * ```
  * @author Daviel Díaz Gonzáles
  */
-const Label: React.FC<LabelProps> = ({ text, width = 50, height = 20, style, className, onDelete }) => {
+const Label: React.FC<LabelProps> = ({ text, width = 50, height = 20, vertical = false, style, className, onDelete }) => {
+    const { finalHeight, finalWidth } = useResponsiveDimensions({
+        height,
+        width,
+        vertical
+    });
+    
     return (
         <div
             className={`label-container ${className || ""}`}
             style={{
-                width: `${TranslateFigmaCoords.translateFigmaX(width)}px`,
-                height: `${TranslateFigmaCoords.translateFigmaY(height)}px`,
+                width: finalWidth,
+                height: finalHeight,
                 padding: "10px",
                 borderRadius: "20px",
                 backgroundColor: "#ffffff",

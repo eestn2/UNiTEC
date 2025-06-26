@@ -4,6 +4,8 @@ import ResponsiveComponent from "../../global/interface/ResponsiveComponent";
 import ActionButton from "./ActionButton";
 
 interface StateButtonProps extends ResponsiveComponent {
+    width?: number;
+    height?: number;
     state: boolean;
     setState: (state: boolean) => void;
     trueIcon: string;
