@@ -7,15 +7,15 @@
  */
 import React from "react";
 import ResponsiveComponent from "../../global/interface/ResponsiveComponent";
-import { getTranslates } from "../../global/function/getTranslates";
+import useResponsiveDimensions from "../../hooks/responsive/useResponsiveDimensions";
 
 /**
  * Renders a responsive application window component that adapts its size based on Figma design coordinates.
  * If the window is square-shaped (height equals width), both dimensions are calculated using the X-axis translation.
  * Otherwise, height and width are calculated independently using their respective translation functions.
  *
- *  @param {number} width - The width of the window in pixels.
- *  @param {number} height - The height of the window in pixels.
+ *  @param {number | ResponsiveUnit} width - The width of the window in pixels or responsive units.
+ *  @param {number | ResponsiveUnit} height - The height of the window in pixels or responsive units.
  *  @param {React.ReactNode} children - The children to be rendered inside the window.
  *  @param {React.CSSProperties} style - The inline styles to be applied to the window.
  *  @param {boolean} vertical - Decides wich TranslateFigma function to use (Default: false).
@@ -32,18 +32,19 @@ import { getTranslates } from "../../global/function/getTranslates";
  * @Author: Haziel Magallanes
  */
 const AppWindow: React.FC<ResponsiveComponent> = ({ height = 10, width = 10, vertical = false, ref, children, style, className }) => {
-    // Wich translate function should it use? For vertical or horizontal containers.
-    const [ translateX, translateY ] = getTranslates(vertical);
-    // Check if is a square shaped window, if so, make calculated height the same as calculated width
-    height = height == width ? translateX(width) : translateY(height);
-    width = translateX(width);  // Convert Figma sizes to the same ratio as the screen size
+    const { finalHeight, finalWidth } = useResponsiveDimensions({
+        height,
+        width,
+        vertical
+    });
+
     return (
         <div
             className={`app-window ${className || ""}`}
             style={{
-                minHeight: `${height}px`,
+                minHeight: `${finalHeight}`,
                 height: 'fit-content',
-                width: `${width}px`,
+                width: `${finalWidth}`,
                 ...style,
             }}
             ref={ref}

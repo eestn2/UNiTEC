@@ -1,7 +1,7 @@
 /**
  * @file ProfileInfo.tsx
  * @description User profile information display component with responsive layout.
- * Shows user details, skills, status, languages and provides options to edit profile, 
+ * Shows user details, tags, status, languages and provides options to edit profile, 
  * change password and logout.
  * @author Haziel Magallanes
  * @date May 20, 2025
@@ -19,8 +19,8 @@ import { useState, useEffect } from 'react';
 import { user as UserType } from '../../types/user';
 import default_profile from '../../assets/defaults/profile-picture/1.svg';
 
-// Add types for skills and languages
-interface Skill {
+// Add types for tags and languages
+interface tag {
   name: string;
   level?: 'Básico' | 'Intermedio' | 'Avanzado';
 }
@@ -44,10 +44,9 @@ const ProfileInfo: React.FC = () => {
   // Re-render on window resize
   const windowSize = useWindowSize();
   console.log("Window size:", windowSize);
-  
   const { id } = useParams<{ id: string }>();
   const [userData, setUserData] = useState<UserType & {
-    skills?: Skill[];
+    tags?: tag[];
     languages?: Language[];
   } | null>(null);
 
@@ -72,8 +71,11 @@ const ProfileInfo: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.get('/session/logout.php');
-      window.location.href = '/';
+      // Use absolute API URL for production
+      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+      await axios.get(`${apiUrl}/session/logout.php`, { withCredentials: true });
+      // Redirect to home after logout
+      window.location.href = '/UNiTEC/';
     } catch (e) {
       alert('Error al cerrar sesión.');
       console.error("Logout error:", e);
@@ -88,13 +90,20 @@ const ProfileInfo: React.FC = () => {
     console.log("Report clicked");
   };
 
-  // Group skills and languages by level
-  const skillsByLevel = groupByLevel(userData?.skills || ["Ejemplo 1", "Ejemplo 2", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", ].map(skill => ({ name: skill, level: 'Básico' })));
-  // For demonstration, using static skills if userData is not available
+  // Group tags and languages by level
+  const tagsByLevel = groupByLevel(userData?.tags || ["Ejemplo 1", "Ejemplo 2", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", ].map(tag => ({ name: tag, level: 'Básico' })));
+  // For demonstration, using static tags if userData is not available
   const languagesByLevel = groupByLevel(userData?.languages || ["Español", "Inglés"].map(language => ({ name: language, level: 'Intermedio' })));
   // For demonstration, using static languages if userData is not available
   const isPortrait = window.innerHeight > window.innerWidth;
   const windowWidth = window.innerWidth > window.innerHeight ? 980 : 1120;
+
+  // State for selected language
+  const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null);
+  const selectedLanguageLevel = selectedLanguage?.level;
+  // State for selected tag
+  const [selectedTag, setSelectedTag] = useState<tag | null>(null);
+  const selectedTagLevel = selectedTag?.level;
 
   return (
     <div>
@@ -222,6 +231,8 @@ const ProfileInfo: React.FC = () => {
                 borderRight: `${TranslateFigmaCoords.translateFigmaX(2)}px solid var(--delimiters)`,
                 paddingTop: TranslateFigmaCoords.translateFigmaY(7),
                 paddingLeft: TranslateFigmaCoords.translateFigmaY(7),
+                paddingRight: TranslateFigmaCoords.translateFigmaY(16),
+                gap: TranslateFigmaCoords.translateFigmaY(16),
                 height: '96%',
             }}>
                 <span style={{ fontWeight: 600, fontSize: TranslateFigmaCoords.translateFigmaY(22), color: 'rgba(0, 49, 123, 0.8)'}}>Etiquetas:</span>
@@ -229,7 +240,7 @@ const ProfileInfo: React.FC = () => {
                 <label key={level} style={{ display: 'flex', alignItems: 'center', fontWeight: 500}}>
                     <input
                     type="checkbox"
-                    checked={skillsByLevel[level].length > 0}
+                    checked={selectedTagLevel === level}
                     readOnly
                     style={{
                         accentColor: '#335A95',
@@ -243,8 +254,9 @@ const ProfileInfo: React.FC = () => {
                 </label>)
                 )}
             </div>
+            {/* Tags list on the right side */}
             <div style={{
-                width: TranslateFigmaCoords.translateFigmaY(isPortrait ? 189 : 229),
+                width: /* TranslateFigmaCoords.translateFigmaY(isPortrait ? 189 : 229), */ "100%",
                 height: '96%',
                 borderLeft: `${TranslateFigmaCoords.translateFigmaX(2)}px solid var(--delimiters)`,
                 paddingTop: TranslateFigmaCoords.translateFigmaY(7),
@@ -255,45 +267,51 @@ const ProfileInfo: React.FC = () => {
                 overflowY: 'scroll',
                 }}
                 className='tag-display-profile'>
-                {Object.values(skillsByLevel).flat().length === 0 ? (
+                {Object.values(tagsByLevel).flat().length === 0 ? (
                 <span style={{ color: '#888' }}>Sin habilidades</span>
                 ) : (
-                Object.values(skillsByLevel).flat().map(skill => (
+                Object.values(tagsByLevel).flat().map(tag => {
+                    // Check if the tag is selected
+                    const isSelected = selectedTag && selectedTag.name === tag.name && selectedTag.level === tag.level;
+                    return (
                     <span
-                    key={skill.name}
+                    key={tag.name}
                     style={{ 
                         display: 'inline-block', 
                         margin: `${TranslateFigmaCoords.translateFigmaY(4)}px 0`, 
                         padding: `${TranslateFigmaCoords.translateFigmaY(4)}px ${TranslateFigmaCoords.translateFigmaY(8)}px`, 
-                        backgroundColor: '#fff', 
+                        backgroundColor: isSelected ? '#D6F5F9' : '#fff', 
                         borderRadius: TranslateFigmaCoords.translateFigmaX(20),
                         width: TranslateFigmaCoords.translateFigmaY(isPortrait ? 145 : 185),
                         textAlign: 'center',
+                        cursor: 'pointer',
+                        fontWeight: isSelected ? 600 : undefined,
+                        color: isSelected ? '#113893' : undefined,
+                        border: isSelected ? '2px solid #00B6D9' : 'none',
+                        transition: 'background 0.15s, border 0.15s',
+                    }}
+                    onClick={() => {
+                      console.log("Tag clicked:", tag);
+                      setSelectedTag(isSelected ? tag : null)
                     }}
                     >
-                    {skill.name}
+                    {tag.name}
                     </span>
-                ))
-                )}
+                )}))}
             </div>
           </div>
+          {/* Idiomas styled like Etiquetas */}
           <div
-            className='user-languages-section profile-field input-field'
-            style={isPortrait ? { gridColumn: '1', gridRow: '9 / span 3' } : {}}
+            className='user-languages-section profile-field input-field flex-row'
+            style={{
+                ...(isPortrait ? { gridColumn: '1', gridRow: '9 / span 3', height: TranslateFigmaCoords.translateFigmaY(240) } : {}),
+                alignItems: 'flex-start',
+                justifyContent: 'flex-start',
+                color: 'rgba(0, 49, 123, 0.5)',
+            }}
           >
-            <h2>Idiomas</h2>
-            {Object.entries(languagesByLevel).map(([level, languages]) => (
-              languages.length > 0 && (
-                <div key={level} className='language-level-group'>
-                  <h3>{level}</h3>
-                  <ul>
-                    {languages.map(language => (
-                      <li key={language.name}>{language.name}</li>
-                    ))}
-                  </ul>
-                </div>
-              )
-            ))}
+            {/* Languages list on the right side */}
+
           </div>
           {/* Buttons below tags/languages, 2 per column in portrait */}
           {isPortrait ? (
