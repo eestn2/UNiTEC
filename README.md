@@ -132,9 +132,10 @@ src/
 
 - **Haziel Magallanes** — Frontend, Arquitectura, API Endpoints, UX, Documentación, Director del proyecto, Backend.
 - **Daviel Díaz Gonzáles** — Frontend, Diseño UI/UX en Figma, Creación de Assets.
-- **Federico Nicolás Martínez** — Backend, API Endpoints.
-- **Daniel Alejandro Rivas** — Revisión e informe sobre antigua versión del proyecto.
+- **Federico Nicolás Martínez** — Backend, API Endpoints, Revisiones y arreglos en seguridad.
+- **Daniel Alejandro Rivas** — Revisión e informe sobre antigua versión del proyecto, Ayuda en Responsiveness de la página, HTML Para correos.
 - **Francesco Sidotti** — Mantenimiento y reestructurado de antigua Database, Frontend, Admin panel, API Endpoints, Backend, Subdirector del proyecto.
+- **Emiliano Matias Ezequiel Grecco** — Frontend.
 
 
 ---
