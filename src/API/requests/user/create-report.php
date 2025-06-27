@@ -9,6 +9,9 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no 
 $data = json_decode(file_get_contents("php://input"));
 
 if ( !isset($data->reported_id) || !isset($data->reason)) return_response("failed", "Faltan datos.", null);
+if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id'])) {
+    return_response("failed", "Usuario no autenticado.", null);
+}
 
 $reporter_id = $_SESSION['user'] ['id'];
 $reported_id = intval($data->reported_id);

@@ -2,20 +2,22 @@
 /**
  * @file reject-new-user.php
  * @description API endpoint for administrators to reject (deactivate) new user accounts and notify the user by email.
- * Handles PUT requests, verifies admin permissions, updates the 'enabled' status of the target user to 0, and sends a notification email upon rejection.
+ * Handles PUT requests, verifies admin permissions using session authentication, sets the 'enabled' status of the target user to 0, and sends a rejection email.
  * Returns a standardized JSON response indicating success or failure.
+ * 
+ * Note: The authenticated admin is retrieved from the session. No admin ID is required in the body.
+ *
  * @author Federico Nicolás Martínez
  * @date May 17, 2025
  *
  * Usage:
  *   Send a PUT request with JSON body containing:
- *     - target_user_id: (int) ID of the user to reject (deactivate)
- *     - id: (int) ID of the authenticated admin user (for permission check)
+ *     - target_user_id: (int) ID of the user to reject
  *
  * Example:
  *   PUT /src/API/requests/admin/reject-new-user.php
- *   Body: { "target_user_id": 8, "id": 1 }
- *   Response: { "status": "success", "message": "Usuario rechazado con exito.", "data": null }
+ *   Body: { "target_user_id": 8 }
+ *   Response: { "status": "success", "message": "Usuario rechazado con éxito.", "data": null }
  */
 
 session_start();
@@ -50,7 +52,7 @@ $auth_user_id = $_SESSION['user']['id'];
 
 // Verificar si el usuario autenticado es admin
 if (!is_admin($auth_user_id, $connection)) {
-    return_response("failed", "Solo los administradores pueden aceptar usuarios.", null);
+    return_response("failed", "Solo los administradores pueden rechazar usuarios.", null);
     exit;
 }
 

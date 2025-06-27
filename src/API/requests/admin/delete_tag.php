@@ -2,20 +2,22 @@
 /**
  * @file delete_tag.php
  * @description API endpoint for deleting a tag. Only administrators are authorized to perform this action.
- * Handles DELETE requests, verifies admin permissions, and deletes the tag from the database.
+ * Handles DELETE requests, verifies admin permissions using session authentication, and deletes the tag from the database.
  * Returns a standardized JSON response indicating success or failure.
+ * 
+ * Note: The authenticated user is retrieved from the session, not from the request body.
+ * 
  * @author Francesco Sidotti
  * @date May 31, 2025
  *
  * Usage:
  *   Send a DELETE request with JSON body containing:
- *     - user_id: (int) ID of the user requesting the deletion (must be an admin)
  *     - id: (int) ID of the tag to delete
  *
  * Example:
  *   DELETE /src/API/requests/admin/delete_tag.php
- *   Body: { "user_id": 4, "id": 2 }
- *   Response: { "status": "success", "message": "Tag eliminada con exito.", "data": null }
+ *   Body: { "id": 2 }
+ *   Response: { "status": "success", "message": "Tag eliminada con éxito.", "data": null }
  */
 
  session_start();
@@ -29,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "DELETE") return_response("failed", "Metodo n
 $data = json_decode(file_get_contents("php://input"));
 if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
 if (!is_admin($_SESSION['user']['id'], $connection)) {
-    return_response("failed", "Solo los administradores pueden eliminar idiomas.", null);
+    return_response("failed", "Solo los administradores pueden eliminar tags.", null);
 }
 $data->id = intval($data->id);
 
@@ -37,8 +39,8 @@ try {
     $query = "DELETE FROM tags WHERE id = :id";
     $stmt = $connection->prepare($query);
     $stmt->bindParam(':id', $data->id, PDO::PARAM_INT);
-    $stmt->execute();
     $connection->beginTransaction();
+    $stmt->execute();
     $connection->commit();
     return_response("success", "Tag eliminada con exito.", null);
 

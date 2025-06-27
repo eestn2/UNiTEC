@@ -1,21 +1,24 @@
 <?php
 /**
- * @file test-accept.php
+ * @file accept-new-user.php
  * @description API endpoint for administrators to accept (activate) new user accounts and notify the user by email.
- * Handles PUT requests, verifies admin permissions, updates the 'enabled' status of the target user to 1, and sends a notification email upon acceptance.
+ * Handles PUT requests, verifies admin permissions using session authentication, updates the 'enabled' status of the target user to 1, and sends a notification email upon acceptance.
  * Returns a standardized JSON response indicating success or failure.
+ *
+ * Note: The authenticated admin user is retrieved from the session. No admin ID is required in the request body.
+ * 
+ * @author Francesco Sidotti
+ * @date May 31, 2025
  *
  * Usage:
  *   Send a PUT request with JSON body containing:
  *     - target_user_id: (int) ID of the user to accept (activate)
- *     - id: (int) ID of the authenticated admin user (for permission check)
  *
  * Example:
- *   PUT /src/API/requests/admin/test-accept.php
- *   Body: { "target_user_id": 8, "id": 1 }
- *   Response: { "status": "success", "message": "Usuario aceptado con exito.", "data": null }
+ *   PUT /src/API/requests/admin/accept-new-user.php
+ *   Body: { "target_user_id": 8 }
+ *   Response: { "status": "success", "message": "Usuario aceptado con éxito.", "data": null }
  */
-
 
 session_start();
 require_once __DIR__ . "/../cors-policy.php";
@@ -71,7 +74,8 @@ try {
     $stmt->bindParam(':id', $target_user_id, PDO::PARAM_INT);
     $stmt->execute();
 
-    if ($stmt->rowCount() > 0) {
+    // PostgreSQL & MySQL return 0 when the value is unchanged
+    if ($stmt->rowCount() >= 0) {
         // 3. Send the email after successful enable
         if (isset($user['email'])) {
             require_once __DIR__ . '/../../logic/send_email.php';
