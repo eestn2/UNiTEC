@@ -93,12 +93,23 @@ try {
                     Soporte de UNITEC\n
                     UNITEC\n
                     ";
-            send_email($to, $subject, $body);
-            $connection->commit();
+            $email_sent = send_email($to, $subject, $body);
+            if ($email_sent) {
+                $connection->commit();
+                return_response("success", "Usuario rechazado con exito.", null);
+            } else {
+                $connection->rollback();
+                return_response("failed", "Usuario deshabilitado pero no se pudo enviar el email de notificación.", null);
+            }
+        } else {
+            $connection->rollback();
+            return_response("failed", "No se pudo obtener el email del usuario.", null);
+
         }
         $connection->rollback();
         return_response("success", "Usuario rechazado con exito.", null);
     } else {
+        $connection->rollback();
         return_response("failed", "No se pudo rechazar al usuario.", null);
     }
 } catch(PDOException $e) {
