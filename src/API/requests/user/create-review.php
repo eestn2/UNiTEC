@@ -21,23 +21,19 @@ $text = trim($data->text);
 if ($user_id <= 0 || $reviewed_id <= 0 || empty($text)) {
     return_response("failed", "Datos invalidos.", null);
 }
-try{
-    try {
-        $connection->beginTransaction();
+try {
+    $connection->beginTransaction();
 
-        $stmt = $connection -> prepare( 
-            "INSERT INTO reviews (user_id, reviewed_id, text) VALUES (?, ?, ?)");
-        $stmt->execute([$user_id, $reviewed_id, $text]);
+    $stmt = $connection->prepare( 
+        "INSERT INTO reviews (user_id, reviewed_id, text) VALUES (?, ?, ?)");
+    $stmt->execute([$user_id, $reviewed_id, $text]);
 
-        $connection->commit();
-        return_response("success", "Resenia enviado con exito.", null);
-    } catch (PDOException $e) {
-        if ($connection->inTransaction()) {
-            $connection->rollBack();
-        }
-        return_response("failed", "Error al insertar la resenia: " . $e->getMessage(), null);
+    $connection->commit();
+    return_response("success", "Reseña enviada con éxito.", null);
+} catch (PDOException $e) {
+    if ($connection->inTransaction()) {
+        $connection->rollBack();
     }
-}catch (PDOException $e) {
-    return_response("failed", "Error al reseniar usuario:" . $e->getMessage(), null);
+    return_response("failed", "Error al insertar la reseña: " . $e->getMessage(), null);
 }
 ?>

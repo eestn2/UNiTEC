@@ -59,6 +59,7 @@ if (!is_admin($auth_user_id, $connection)) {
 
 // Rechazar al usuario destino
 try {
+    $connection->beginTransaction();
     // 1. Get the user's email and name first
     $email_stmt = $connection->prepare("SELECT email, name FROM users WHERE id = :id");
     $email_stmt->bindParam(':id', $target_user_id, PDO::PARAM_INT);
@@ -70,8 +71,8 @@ try {
         exit;
     }
 
-    // 2. Delete or disable the user
-    $stmt = $connection->prepare("DELETE FROM users WHERE id = :id"); // or UPDATE users SET enabled = 0 WHERE id = :id
+    // 2. Disable the user (soft deletion)
+    $stmt = $connection->prepare("UPDATE users SET enabled = 0 WHERE id = :id");
     $stmt->bindParam(':id', $target_user_id, PDO::PARAM_INT);
     $stmt->execute();
 
@@ -93,12 +94,15 @@ try {
                     UNITEC\n
                     ";
             send_email($to, $subject, $body);
+            $connection->commit();
         }
+        $connection->rollback();
         return_response("success", "Usuario rechazado con exito.", null);
     } else {
         return_response("failed", "No se pudo rechazar al usuario.", null);
     }
 } catch(PDOException $e) {
+    $connection->rollback();
     return_response("failed", "Error al rechazar el usuario.", null);
     exit;
 }
