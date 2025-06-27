@@ -7,7 +7,6 @@
  */
 
 import React from "react";
-import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import useResponsiveDimensions from "../../../hooks/responsive/useResponsiveDimensions";
 
 /**

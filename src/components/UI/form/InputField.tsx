@@ -8,7 +8,6 @@
 
 import { ChangeEventHandler } from "react";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
-import { getTranslates } from "../../../global/function/getTranslates";
 import useResponsiveDimensions from "../../../hooks/responsive/useResponsiveDimensions";
 
 /**
@@ -98,8 +97,7 @@ const InputField: React.FC<InputFieldProps> = ({
     max,
     min,
 }) => {
-    const [ translateX ] = getTranslates(vertical);
-    const { finalHeight, finalWidth } = useResponsiveDimensions({
+    const { finalHeight, finalWidth, translateX } = useResponsiveDimensions({
         height,
         width,
         vertical

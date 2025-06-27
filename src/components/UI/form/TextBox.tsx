@@ -8,7 +8,6 @@
 
 import React, { ChangeEventHandler } from "react";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
-import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import useResponsiveDimensions from "../../../hooks/responsive/useResponsiveDimensions";
 
 /**
@@ -55,7 +54,7 @@ interface TextBoxProps extends ResponsiveComponent {
  * @author Daviel Díaz Gonzáles
  */
 const TextBox: React.FC<TextBoxProps> = ({ width = 50, height = 10, name, placeholder = "Text Box", vertical = false, style, className, onChange }) => {
-    const { finalHeight, finalWidth } = useResponsiveDimensions({
+    const { finalHeight, finalWidth, translateX } = useResponsiveDimensions({
         height,
         width,
         vertical
@@ -66,8 +65,8 @@ const TextBox: React.FC<TextBoxProps> = ({ width = 50, height = 10, name, placeh
             style={{
                 width: finalWidth,
                 height: finalHeight,
-                paddingLeft: `${TranslateFigmaCoords.translateFigmaX(18)}px`,
-                paddingTop: `${TranslateFigmaCoords.translateFigmaX(14)}px`,
+                paddingLeft: `${translateX(18)}px`,
+                paddingTop: `${translateX(14)}px`,
                 ...style,
             }}
             name={name}
