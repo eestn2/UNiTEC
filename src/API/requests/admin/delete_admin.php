@@ -33,6 +33,7 @@ if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado."
 if (!is_admin($_SESSION['user']['id'], $connection)) {
     return_response("failed", "Solo los administradores pueden eliminar usuarios.", null);
 }
+
 $data->id = intval($data->id);
 
 try {
