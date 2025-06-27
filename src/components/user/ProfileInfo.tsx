@@ -69,18 +69,16 @@ const ProfileInfo: React.FC = () => {
     console.log("Change password clicked");
   };
 
-  const handleLogout = async () => {
-    try {
-      // Use absolute API URL for production
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      await axios.get(`${apiUrl}/session/logout.php`, { withCredentials: true });
-      // Redirect to home after logout
-      window.location.href = '/UNiTEC/';
-    } catch (e) {
-      alert('Error al cerrar sesión.');
-      console.error("Logout error:", e);
-    }
-  };
+const handleLogout = async () => {
+  try {
+    const baseUrl = window.location.origin;
+    await axios.get('/session/logout.php', { withCredentials: true });
+    window.location.href = `${baseUrl}/UNiTEC/`;
+  } catch (error) {
+    alert("Error al cerrar sesión. Por favor, inténtalo de nuevo.");
+    console.error("Logout failed:", error);
+  }
+};
 
   const handleDeleteAccount = () => {
     console.log("Delete account clicked");

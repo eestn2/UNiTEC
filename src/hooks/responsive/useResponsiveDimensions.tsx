@@ -9,10 +9,11 @@
  */
 import { useMemo } from "react";
 import { getTranslates } from "../../global/function/getTranslates";
+import { ResponsiveUnit } from "../../global/interface/ResponsiveComponent";
 
 interface UseResponsiveDimensionsProps {
-  height: number | string;
-  width: number | string;
+  height: number | ResponsiveUnit;
+  width: number | ResponsiveUnit;
   vertical: boolean;
 }
 /**
@@ -24,10 +25,10 @@ interface UseResponsiveDimensionsProps {
  * @param {number | string} width - The width in pixels or responsive units.
  * @param {number | string} height - The height in pixels or responsive units.
  * @param {boolean} vertical - Decides which translation function to use (default: false).
- * @returns {{ finalHeight: string | number, finalWidth: string | number }} - The calculated responsive height and width.
+ * @returns {{ finalHeight: string | number, finalWidth: string | number, translateX: Function, translateY: Function }} - The calculated responsive height and width, and the translation functions.
  *
  * @example
- * const { finalHeight, finalWidth } = useResponsiveDimensions({ height: 100, width: 200, vertical: false });
+ * const { finalHeight, finalWidth, translateX, translateY } = useResponsiveDimensions({ height: 100, width: 200, vertical: false });
  * // finalHeight and finalWidth are ready to be used in style props
  *
  * @author Haziel Magallanes
@@ -36,7 +37,7 @@ export default function useResponsiveDimensions({
   height,
   width,
   vertical,
-}: UseResponsiveDimensionsProps): { finalHeight: string | number; finalWidth: string | number } {
+}: UseResponsiveDimensionsProps): { finalHeight: string | number; finalWidth: string | number; translateX: Function; translateY: Function } {
   return useMemo(() => {
     const [translateX, translateY] = getTranslates(vertical);
 
@@ -51,6 +52,6 @@ export default function useResponsiveDimensions({
       finalWidth = `${translateX(width as number)}px`;
     }
 
-    return { finalHeight, finalWidth };
+    return { finalHeight, finalWidth, translateX, translateY };
   }, [height, width, vertical]);
 }

@@ -8,7 +8,7 @@
 
 /** 
  *  Type representing vw, vh, dvh and % units. */
-type ResponsiveUnit = `${number}${'vw' | 'vh' | 'dvh' | '%' | 'px'}` | 'auto' | 'fit-content' | 'max-content' | 'min-content';
+export type ResponsiveUnit = `${number}${'vw' | 'vh' | 'dvh' | '%' | 'px'}` | 'auto' | 'fit-content' | 'max-content' | 'min-content';
 
 /**
  * Interface for creating responsive UI components with consistent props.
