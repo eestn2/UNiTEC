@@ -71,9 +71,8 @@ const ProfileInfo: React.FC = () => {
 
 const handleLogout = async () => {
   try {
-    const baseUrl = window.location.origin;
     await axios.get('/session/logout.php', { withCredentials: true });
-    window.location.href = `${baseUrl}/UNiTEC/`;
+    window.location.href = `/UNiTEC/`;
   } catch (error) {
     alert("Error al cerrar sesión. Por favor, inténtalo de nuevo.");
     console.error("Logout failed:", error);
