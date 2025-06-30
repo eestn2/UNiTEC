@@ -8,20 +8,23 @@
 
 import React from "react";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
+import useResponsiveDimensions from "../../../hooks/responsive/useResponsiveDimensions";
 
 /**
  * Props for the `LabelsSelection` component.
  *
- * @property {number} [width=100] - The width of the selection container in Figma coordinates.
- * @property {number} [height=50] - The height of the selection container in Figma coordinates.
+ * @property {number | string} [width=100] - The width of the selection container.
+ * @property {number | string} [height=50] - The height of the selection container.
  * 
  * @author Daviel Díaz Gonzáles
  */
 interface LabelsSelectionProps {
-    /** The width of the selection container in Figma coordinates. */
-    width?: number;
-    /** The height of the selection container in Figma coordinates. */
-    height?: number;
+    /** The width of the selection container. */
+    width?: number | string;
+    /** The height of the selection container. */
+    height?: number | string;
+    /** Decides which TranslateFigmaCoords function to use (Default: false). */
+    vertical?: boolean;
 }
 
 
@@ -58,7 +61,13 @@ const Checkbox: React.FC<{ label: string; name: string; onChange?: React.ChangeE
  * ```
  * @author Daviel Díaz Gonzáles
  */
-const LabelsSelection: React.FC<LabelsSelectionProps> = ({ width = 100, height = 50 }) => {
+const LabelsSelection: React.FC<LabelsSelectionProps> = ({ width = 100, height = 50, vertical = false }) => {
+    const { finalHeight, finalWidth } = useResponsiveDimensions({
+        height,
+        width,
+        vertical
+    });
+
     return (
         <div
             className="row-layout input-field"
@@ -67,8 +76,8 @@ const LabelsSelection: React.FC<LabelsSelectionProps> = ({ width = 100, height =
                 justifyContent: "center",
                 alignItems: "center",
                 gap: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
-                width: `${TranslateFigmaCoords.translateFigmaX(width)}px`,
-                height: `${TranslateFigmaCoords.translateFigmaY(height)}px`,
+                width: finalWidth,
+                height: finalHeight,
             }}
         >
             {/* Left Section */}

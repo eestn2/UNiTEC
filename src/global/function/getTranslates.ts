@@ -9,7 +9,7 @@ import TranslateFigmaCoords from "./TranslateFigmaCoords";
  * @returns An array containing the appropriate X and Y translation functions.
  * @author Haziel Magallanes.
  */
-export function getTranslates(vertical: boolean): CallableFunction[]{
+export function getTranslates(vertical: boolean): [(value: number) => number, (value: number) => number]{
     // Wich translate function should it use? For vertical or horizontal containers.
     const translateX = vertical
         ? TranslateFigmaCoords.translateFigmaXAlt

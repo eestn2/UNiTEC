@@ -37,6 +37,7 @@ import { ChangeEvent, useState } from "react";
 function RegisterUser() {
   // Re-Render on window resize
   const windowSize = useWindowSize();
+  console.log("Window size:", windowSize);
   const [error, setError] = useState("");
   const [form, setForm] = useState({
     name: "",

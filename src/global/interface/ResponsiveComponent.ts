@@ -6,13 +6,17 @@
  * @Author: Haziel Magallanes
  */
 
+/** 
+ *  Type representing vw, vh, dvh and % units. */
+export type ResponsiveUnit = `${number}${'vw' | 'vh' | 'dvh' | '%' | 'px'}` | 'auto' | 'fit-content' | 'max-content' | 'min-content';
+
 /**
  * Interface for creating responsive UI components with consistent props.
  *
  * @interface ResponsiveComponent
  *
- * @property {number} [width] - The width of the component in pixels (converted to responsive units).
- * @property {number} [height] - The height of the component in pixels (converted to responsive units).
+ * @property {number | ResponsiveUnit} [width] - The width of the component in pixels (Later converted with {@link global/function/TranslateFigmaCoords}) or responsive units..
+ * @property {number | ResponsiveUnit} [height] - The height of the component in pixels (Later converted with {@link global/function/TranslateFigmaCoords}) or responsive units..
  * @property {boolean} [vertical] - Decides wich TranslateFigma Function to use.
  * @property {React.ReactNode} [children] - The children elements to render inside the component.
  * @property {React.CSSProperties} [style] - Inline styles to apply to the component.
@@ -21,11 +25,12 @@
  *
  * @author Haziel Magallanes
  */
+
 export default interface ResponsiveComponent {
-    /** The width of the component in pixels (converted to responsive units). */
-    width?: number;
-    /** The height of the component in pixels (converted to responsive units). */
-    height?: number;
+    /** The width of the component in pixels (Later converted with {@link global/function/TranslateFigmaCoords}) or responsive units. */
+    width?: number | ResponsiveUnit;
+    /** The height of the component in pixels (Later converted with {@link global/function/TranslateFigmaCoords}) or responsive units.*/
+    height?: number | ResponsiveUnit;
     /** Decides wich TranslateFigma Function to use. */
     vertical?: boolean;
     /** The children elements to render inside the component. */

@@ -9,6 +9,7 @@
 import React, { ChangeEventHandler } from "react";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
+import useResponsiveDimensions from "../../../hooks/responsive/useResponsiveDimensions";
 
 
 /**
@@ -75,17 +76,24 @@ const SelectionField: React.FC<SelectionFieldProps> = ({
     height = 10,
     onChange,
     name,
+    vertical = false,
     options,
     style,
     className,
     defaultValue,
     placeholder,
 }) => {
+    const { finalHeight, finalWidth } = useResponsiveDimensions({
+        height,
+        width,
+        vertical
+    });
+    
     return (
         <div
             style={{
-                width: `${TranslateFigmaCoords.translateFigmaX(width)}px`,
-                height: `${TranslateFigmaCoords.translateFigmaY(height)}px`,
+                width: finalWidth,
+                height: finalHeight,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
