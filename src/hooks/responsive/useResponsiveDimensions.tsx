@@ -25,7 +25,7 @@ interface UseResponsiveDimensionsProps {
  * @param {number | string} width - The width in pixels or responsive units.
  * @param {number | string} height - The height in pixels or responsive units.
  * @param {boolean} vertical - Decides which translation function to use (default: false).
- * @returns {{ finalHeight: string | number, finalWidth: string | number, translateX: Function, translateY: Function }} - The calculated responsive height and width, and the translation functions.
+ * @returns {{ finalHeight: string | number, finalWidth: string | number, translateX: (value: number) => number, translateY: (value: number) => number}} - The calculated responsive height and width, and the translation functions.
  *
  * @example
  * const { finalHeight, finalWidth, translateX, translateY } = useResponsiveDimensions({ height: 100, width: 200, vertical: false });
@@ -37,7 +37,7 @@ export default function useResponsiveDimensions({
   height,
   width,
   vertical,
-}: UseResponsiveDimensionsProps): { finalHeight: string | number; finalWidth: string | number; translateX: Function; translateY: Function } {
+}: UseResponsiveDimensionsProps): { finalHeight: string | number; finalWidth: string | number; translateX: (value: number) => number; translateY: (value: number) => number;} {
   return useMemo(() => {
     const [translateX, translateY] = getTranslates(vertical);
 
@@ -45,7 +45,7 @@ export default function useResponsiveDimensions({
     let finalWidth: number | string = width;
 
     if (typeof height !== "string") {
-      finalHeight = height === width ? translateX(width as number) : translateY(height as number);
+      finalHeight = height === width && typeof width === "number" ? translateX(width) : translateY(height);
       finalHeight = `${finalHeight}px`;
     }
     if (typeof width !== "string") {
