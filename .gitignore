@@ -37,3 +37,4 @@ Shared Dictionary/
 *.sln
 *.sw?
 .env
+vendor
