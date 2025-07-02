@@ -1,0 +1,15 @@
+{
+    "name": "eestn2/unitec-api",
+    "description": "RESTful API for EESTN2 UNiTEC.",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Eestn2\\UnitecApi\\": "src/"
+        }
+    },
+    "require": {
+        "phpmailer/phpmailer": "^6.10",
+        "vlucas/phpdotenv": "^5.6"
+    }
+}

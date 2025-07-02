@@ -1,0 +1,53 @@
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL_DEV=http://localhost:9090/src/API/requests
+      - VITE_API_URL_PROD=http://localhost:9090/src/API/requests
+    restart: unless-stopped
+    # In production, serve built files. In dev, override with volume and npm run dev.
+
+  backend:
+    build: ./backend
+    ports:
+      - "9090:80"
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=production
+      - DB_HOST_PROD=${DB_HOST_PROD}
+      - DB_NAME_PROD=${DB_NAME_PROD}
+      - DB_USER_PROD=${DB_USER_PROD}
+      - DB_PASS_PROD=${DB_PASS_PROD}
+      - DB_PORT_PROD=${DB_PORT_PROD}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      - AES=${AES}
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_PORT=${EMAIL_PORT}
+      - EMAIL_USERNAME=${EMAIL_USERNAME}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+    depends_on:
+      - mysql
+    # In production, serve built PHP files. In dev, override with volume.
+    # volumes:
+    #   - ./backend/.env:/var/www/html/.env:ro
+
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/src/API/database/database.sql:/docker-entrypoint-initdb.d/database.sql:ro
+
+volumes:
+  mysql_data:
