@@ -17,7 +17,7 @@ sudo pacman -S docker docker-compose
 * **Distribuciones basadas en Debian (Ubuntu, etc.):**
 
 ```bash
-sudo apt-get install docker.io docker-compose-plugin
+sudo apt-get install docker.io docker-compose
 ```
 
 **Permitir usar Docker sin `sudo`:**
