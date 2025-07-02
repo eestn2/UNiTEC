@@ -17,7 +17,7 @@ sudo pacman -S docker docker-compose
 * **Distribuciones basadas en Debian (Ubuntu, etc.):**
 
 ```bash
-sudo apt-get install docker docker-compose
+sudo apt-get install docker.io docker-compose-plugin
 ```
 
 **Permitir usar Docker sin `sudo`:**
@@ -60,13 +60,13 @@ sudo apt-get install composer
 * **Arch:**
 
 ```bash
-sudo pacman -S npm
+sudo pacman -S npm nodejs
 ```
 
 * **Debian:**
 
 ```bash
-sudo apt-get install npm
+sudo apt-get install npm nodejs
 ```
 
 ### En Windows:
