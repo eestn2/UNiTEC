@@ -1,5 +1,3 @@
-Aquí tienes una versión mejorada, más clara y bien formateada de tu guía:
-
 ---
 
 # 🛠 Guía para Ejecutar la Nueva Versión del Proyecto **UNiTEC**
@@ -141,5 +139,3 @@ docker-compose up
 ```
 
 ---
-
-¿Querés que también prepare una versión PDF o Markdown (`README.md`) con esta guía?
