@@ -2,43 +2,47 @@
 /**
  * @file login.php
  * @description API endpoint for user login. Validates credentials and returns user data on success.
- * Handles POST requests, checks email and password and returns a standardized JSON response.
- * @author Haziel Magallanes, Federico Nicolás Martínez.
- * @date May 11, 2025
- *
- * Usage:
- *   Send a POST request with JSON body containing 'email' and 'password' to authenticate a user.
- *
- * Example:
- *   POST /src/php/requests/session/login.php
- *   Body: { "email": "user@example.com", "password": "password123" }
- *   Response: { "status": "success", "message": "...", "user": { ...user fields... } }
+ * Adds response delay to mitigate brute-force attacks.
  */
-
 
 session_start();
 require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
+require_once __DIR__ . '/../../logic/security/delay_response.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
+$startTime = microtime(true);
+
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    wait_until_five_seconds($startTime);
+    return_response("failed", "Método no permitido.", null);
+}
 
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($data->email) || !isset($data->password)) return_response("failed", "Faltan datos.", null);
+if (!isset($data->email) || !isset($data->password)) {
+    wait_until_five_seconds($startTime);
+    return_response("failed", "Faltan datos.", null);
+}
 
 $email = $data->email;
 $password = $data->password;
 
-// Search for user email in database
+// Buscar usuario
 $stmt = $connection->prepare("SELECT * FROM users WHERE email = ?");
 $stmt->execute([$email]);
 $user = $stmt->fetch();
 
-if (!$user) return_response("failed", "Dirección de correo electronico no registrada.", null);
+if (!$user) {
+    wait_until_five_seconds($startTime);
+    return_response("failed", "Dirección de correo electrónico no registrada.", null);
+}
 
-if (!password_verify($password, $user["password"])) return_response("failed", "Contraseña incorrecta.", null);
+if (!password_verify($password, $user["password"])) {
+    wait_until_five_seconds($startTime);
+    return_response("failed", "Contraseña incorrecta.", null);
+}
 
-// Store user data in session (do not include password)
+// Guardar datos de sesión (sin contraseña)
 $_SESSION['user'] = [
     "id" => $user["id"],
     "name" => $user["name"],
@@ -54,5 +58,6 @@ $_SESSION['user'] = [
     "status" => $user["status"]
 ];
 
+wait_until_five_seconds($startTime);
 return_response("success", "Inicio de sesión exitoso.", null);
 ?>
