@@ -54,7 +54,9 @@ function App(): JSX.Element {
   const [session, setSession] = useState<Record<string, unknown> | null | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const windowSize = useWindowSize();
-  console.log("Window size changed to: ", windowSize, ", re-rendering...");
+  if (import.meta.env.DEV) {
+    console.log("Window size changed to: ", windowSize, ", re-rendering...");
+  }
   useEffect(() => {
     // Check session from server
     axios.get('/session/me.php')

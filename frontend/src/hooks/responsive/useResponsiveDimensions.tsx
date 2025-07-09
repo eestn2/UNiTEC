@@ -38,7 +38,9 @@ export default function useResponsiveDimensions({
   width,
   vertical,
 }: UseResponsiveDimensionsProps): { finalHeight: string | number; finalWidth: string | number; translateX: (value: number) => number; translateY: (value: number) => number;} {
-  // Memoize only the translate functions
+  // Memoize only the translate functions.
+  // Note: finalHeight/finalWidth calculations are intentionally un-memoized
+  // to prevent stale values on each render, per responsiveness fix.
   const [translateX, translateY] = useMemo(() => getTranslates(vertical), [vertical]);
 
   let finalHeight: number | string = height;
