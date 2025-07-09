@@ -6,43 +6,46 @@
  * @date May 11, 2025
  */
 
+import type { user as UserType } from "../../types/user";
+
 /**
  * A singleton class for managing user session data.
  *
  * @class
- * @property {Record<string, unknown>} user_data - The internal storage for user session data.
+ * @property {UserType | null} user_data - The internal storage for user session data.
  *
- * @method set(user: Record<string, unknown>): void
+ * @method set(user: UserType): void
  *   Sets the user session data.
- * @method get data: Proxy<Record<string, unknown>>
+ * @method get data: Proxy<UserType | null>
  *   Returns a Proxy to access user session data properties directly.
  *
  * @example
  * ```typescript
  * import User from "./User";
- * User.set({ id: 1, name: "Alice" });
+ * User.set({ id: 1, name: "Alice", ... });
  * console.log(User.data.name); // "Alice"
  * ```
  * @author Haziel Magallanes
  */
 class User {
-    private user_data: Record<string, unknown> = {};
+    private user_data: UserType | null = null;
 
     /**
      * Sets the user session data.
-     * @param {Record<string, unknown>} user - The user data to store.
+     * @param {UserType} user - The user data to store.
      */
-    set(user: Record<string, unknown>) {
+    set(user: UserType) {
         this.user_data = user;
     }
 
     /**
      * Returns a Proxy to access user session data properties directly.
-     * @returns {Proxy<Record<string, unknown>>}
+     * @returns {Proxy<UserType | null>}
      */
     get data() {
-        return new Proxy(this.user_data, {
-            get: (target, prop: string) => target[prop],
+        // If user_data is null, return a Proxy with all properties undefined
+        return new Proxy(this.user_data ?? ({} as UserType), {
+            get: (target: UserType, prop: string) => target[prop as keyof UserType],
         });
     }
 }

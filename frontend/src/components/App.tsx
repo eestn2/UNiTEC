@@ -40,6 +40,7 @@ import { useEffect, useState } from 'react';
 import PublishOffer from './offers/PublishOffer';
 import SeeApplicants from './offers/SeeApplicants';
 import { useWindowSize } from '../hooks/responsive/useWindowSize';
+import type { user } from '../types/user';
 
 function App(): JSX.Element {
   // Axios configs
@@ -51,7 +52,7 @@ function App(): JSX.Element {
     return config;
   });
 
-  const [session, setSession] = useState<Record<string, unknown> | null | undefined>(undefined);
+  const [session, setSession] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const windowSize = useWindowSize();
   if (import.meta.env.DEV) {
@@ -61,14 +62,12 @@ function App(): JSX.Element {
     // Check session from server
     axios.get('/session/me.php')
       .then(res => {
-        if (res.data.status === 'success' && res.data.data && res.data.data.user) {
-          User.set(res.data.data.user);
-          setSession(res.data.data.user);
-        } else {
-          setSession(null);
+        if (res.data.status === 'success' && res.data.data && res.data.data.user as user) {
+          User.set(res.data.data.user as user);
+          setSession(true);
         }
       })
-      .catch(() => setSession(null))
+      .catch(() => setSession(false))
       .finally(() => setLoading(false));
   }, []);
 
