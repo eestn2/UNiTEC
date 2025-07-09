@@ -6,7 +6,7 @@
  * @date May 11, 2025
  */
 
-import React, { MouseEventHandler, useState } from "react";
+import React, { MouseEventHandler } from "react";
 import ResponsiveComponent from "../../global/interface/ResponsiveComponent";
 import useResponsiveDimensions from "../../hooks/responsive/useResponsiveDimensions";
 
@@ -63,7 +63,6 @@ const ActionButton: React.FC<ActionButtonProps> = ({ height = 10, vertical = fal
         width,
         vertical
     });
-    const [scale, setScale] = useState(1);
     const animationDuration = 0.2; // seconds
     const buttonStyle: React.CSSProperties = {
         transition: `all ${animationDuration}s ease-in-out`,
@@ -72,7 +71,6 @@ const ActionButton: React.FC<ActionButtonProps> = ({ height = 10, vertical = fal
         justifyContent: "center",
         display: "flex",
         flexDirection: "row",
-        scale: scale,
         width: finalWidth,
         height: finalHeight,
         columnGap: translateX(4),
@@ -80,10 +78,16 @@ const ActionButton: React.FC<ActionButtonProps> = ({ height = 10, vertical = fal
     };
 
     return (
-        <button className={`action-button ${className || ''}`} style={{...buttonStyle}} onClick={action} onMouseDown={() => {
-            setScale(0.9);
-        }} onMouseUp={() => {
-            setScale(1);
+        <button className={`action-button ${className || ''}`} style={{...buttonStyle}} onClick={action} onMouseDown={(e) => {
+            e.preventDefault(); // Prevent default button behavior
+            e.currentTarget.style.scale = '0.9';
+        }} onMouseUp={(e) => {
+            e.preventDefault(); 
+            e.currentTarget.style.scale = '1';
+        }}
+        onMouseLeave={(e) => {
+            e.preventDefault();
+            e.currentTarget.style.scale = '1';
         }}>
             {children || text}
         </button>
