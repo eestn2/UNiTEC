@@ -6,7 +6,7 @@
  * @date May 11, 2025
  */
 
-import React, { MouseEventHandler } from "react";
+import React, { MouseEventHandler, useState } from "react";
 import ResponsiveComponent from "../../global/interface/ResponsiveComponent";
 import useResponsiveDimensions from "../../hooks/responsive/useResponsiveDimensions";
 
@@ -63,8 +63,28 @@ const ActionButton: React.FC<ActionButtonProps> = ({ height = 10, vertical = fal
         width,
         vertical
     });
+    const [scale, setScale] = useState(1);
+    const animationDuration = 0.2; // seconds
+    const buttonStyle: React.CSSProperties = {
+        transition: `all ${animationDuration}s ease-in-out`,
+        cursor: "pointer",
+        alignItems: "center",
+        justifyContent: "center",
+        display: "flex",
+        flexDirection: "row",
+        scale: scale,
+        width: finalWidth,
+        height: finalHeight,
+        columnGap: translateX(4),
+        ...style,
+    };
+
     return (
-        <button className={`action-button ${className || ''}`} style={{height: finalHeight, width: finalWidth, display: "flex", flexDirection: "row", columnGap: translateX(4), ...style}} onClick={action}>
+        <button className={`action-button ${className || ''}`} style={{...buttonStyle}} onClick={action} onMouseDown={() => {
+            setScale(0.9);
+        }} onMouseUp={() => {
+            setScale(1);
+        }}>
             {children || text}
         </button>
     );
