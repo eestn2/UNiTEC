@@ -85,7 +85,7 @@ const Logo: React.FC<LogoProps> = ({
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
-                    transition: "transform 0.2s ease-in-out",
+                    transition: "scale 0.2s ease-in-out",
                     cursor: "pointer",
                     userSelect: "none",
                 }}
