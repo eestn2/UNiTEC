@@ -14,9 +14,6 @@ import ActionButton from "../UI/ActionButton";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import { Link } from "react-router-dom";
 import axios from "axios";
-
-import { useWindowSize } from "../../hooks/responsive/useWindowSize";
-
 /**
  * A React functional component that renders the login form inside a responsive window.
  * Handles window resize for responsive design, manages form state, and provides links for password reset and registration.
@@ -31,9 +28,6 @@ import { useWindowSize } from "../../hooks/responsive/useWindowSize";
  * @author Haziel Magallanes
  */
 const Login: React.FC = () => {
-    // Re-Render on window resize
-    const windowSize = useWindowSize();
-    console.log("Window size:", windowSize);
     // State variables for form inputs and error messages
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

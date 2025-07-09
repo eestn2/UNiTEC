@@ -23,7 +23,6 @@ use Dotenv\Dotenv;
 // Load environment variables from .env file
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../../../../');
 $dotenv->safeLoad();
-error_log("CORS Policy: Environment variables loaded from .env");
 
 $allowedOrigins = explode(',', getenv('ALLOWED_ORIGINS'));
 $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';

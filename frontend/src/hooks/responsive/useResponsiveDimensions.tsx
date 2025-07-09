@@ -38,20 +38,19 @@ export default function useResponsiveDimensions({
   width,
   vertical,
 }: UseResponsiveDimensionsProps): { finalHeight: string | number; finalWidth: string | number; translateX: (value: number) => number; translateY: (value: number) => number;} {
-  return useMemo(() => {
-    const [translateX, translateY] = getTranslates(vertical);
+  // Memoize only the translate functions
+  const [translateX, translateY] = useMemo(() => getTranslates(vertical), [vertical]);
 
-    let finalHeight: number | string = height;
-    let finalWidth: number | string = width;
+  let finalHeight: number | string = height;
+  let finalWidth: number | string = width;
 
-    if (typeof height !== "string") {
-      finalHeight = height === width && typeof width === "number" ? translateX(width) : translateY(height);
-      finalHeight = `${finalHeight}px`;
-    }
-    if (typeof width !== "string") {
-      finalWidth = `${translateX(width as number)}px`;
-    }
+  if (typeof height !== "string") {
+    finalHeight = height === width && typeof width === "number" ? translateX(width) : translateY(height);
+    finalHeight = `${finalHeight}px`;
+  }
+  if (typeof width !== "string") {
+    finalWidth = `${translateX(width as number)}px`;
+  }
 
-    return { finalHeight, finalWidth, translateX, translateY };
-  }, [height, width, vertical]);
+  return { finalHeight, finalWidth, translateX, translateY };
 }

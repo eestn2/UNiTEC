@@ -14,7 +14,6 @@ import Notification from "../UI/feed/Notification";
 import { ReactElement, useEffect, useState } from "react";
 import axios from "axios";
 import User from "../session/User";
-import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 import { TypedResponseWNamedArray } from '../../types/Response';
 import type { offer } from '../../types/JobOfferTypes';
 import type { notification } from '../../types/notification';
@@ -35,9 +34,6 @@ import no_feed from '../../assets/icons/no-feed.svg';
  * @author Haziel Magallanes
  */
 function FeedBox() {
-  // Re-Render on window resize
-  const windowSize = useWindowSize();
-  console.log("Window size:", windowSize);
   // State variables for job offers and notifications
   const [jobOffers, setJobOffers] = useState<ReactElement[] | undefined>(undefined);
   const [notifications, setNotifications] = useState<ReactElement[]>([]);

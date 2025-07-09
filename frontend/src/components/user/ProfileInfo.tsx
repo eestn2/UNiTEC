@@ -11,7 +11,6 @@ import { useParams } from 'react-router-dom';
 import AppWindow from '../UI/AppWindow';
 import ActionButton from '../UI/ActionButton';
 import TranslateFigmaCoords from '../../global/function/TranslateFigmaCoords';
-import { useWindowSize } from '../../hooks/responsive/useWindowSize';
 import reportIcon from '../../assets/icons/report.svg';
 import Logo from '../UI/unitec/Logo';
 import axios from 'axios';
@@ -41,9 +40,6 @@ const groupByLevel = <T extends { level?: Level }>(items: T[]): Record<Level, T[
 };
 
 const ProfileInfo: React.FC = () => {
-  // Re-render on window resize
-  const windowSize = useWindowSize();
-  console.log("Window size:", windowSize);
   const { id } = useParams<{ id: string }>();
   const [userData, setUserData] = useState<UserType & {
     tags?: tag[];

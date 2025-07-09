@@ -39,6 +39,7 @@ import ProfileInfo from './user/ProfileInfo';
 import { useEffect, useState } from 'react';
 import PublishOffer from './offers/PublishOffer';
 import SeeApplicants from './offers/SeeApplicants';
+import { useWindowSize } from '../hooks/responsive/useWindowSize';
 
 function App(): JSX.Element {
   // Axios configs
@@ -52,7 +53,8 @@ function App(): JSX.Element {
 
   const [session, setSession] = useState<Record<string, unknown> | null | undefined>(undefined);
   const [loading, setLoading] = useState(true);
-
+  const windowSize = useWindowSize();
+  console.log("Window size changed to: ", windowSize, ", re-rendering...");
   useEffect(() => {
     // Check session from server
     axios.get('/session/me.php')
@@ -69,7 +71,6 @@ function App(): JSX.Element {
   }, []);
 
   if (loading) return <div>Tenemos que hacer una pantallita de carga...</div>;
-
   // Browser routings
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>

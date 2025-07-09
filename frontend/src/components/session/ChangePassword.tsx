@@ -12,8 +12,6 @@ import AppWindow from "../UI/AppWindow";
 import Logo from "../UI/unitec/Logo";
 import ActionButton from "../UI/ActionButton";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import { useWindowSize } from "../../hooks/responsive/useWindowSize";
-
 /**
  * A React functional component that renders a password change form inside a responsive window.
  * Handles window resize for responsive design and displays input fields for new password and confirmation.
@@ -28,10 +26,6 @@ import { useWindowSize } from "../../hooks/responsive/useWindowSize";
  * @author Haziel Magallanes
  */
 const ChangePassword: React.FC = () => {
-    // Re-Render on window resize
-    const windowSize = useWindowSize();
-    console.log("Window size:", windowSize);
-
     return (
         <div>
             <Logo className="watermark"/>
