@@ -17,7 +17,6 @@ import { Link } from "react-router-dom";
 import LabelsSelection from "../UI/form/LabelsSelection";
 import LabelsContainer from "../UI/form/LabelsContainer";
 import Label from "../UI/form/Label";
-import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 import axios from "axios";
 import { ChangeEvent, useState } from "react";
 
@@ -35,9 +34,6 @@ import { ChangeEvent, useState } from "react";
  * @author Daviel Díaz Gonzáles
  */
 function RegisterUser() {
-  // Re-Render on window resize
-  const windowSize = useWindowSize();
-  console.log("Window size:", windowSize);
   const [error, setError] = useState("");
   const [form, setForm] = useState({
     name: "",
@@ -70,6 +66,7 @@ function RegisterUser() {
       }
     } catch (err) {
       setError("No se pudo registrar. Intente de nuevo más tarde.");
+      console.error("Registration error:", err);
     }
   };
   return (
