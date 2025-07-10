@@ -41,6 +41,7 @@ import PublishOffer from './offers/PublishOffer';
 import SeeApplicants from './offers/SeeApplicants';
 import { useWindowSize } from '../hooks/responsive/useWindowSize';
 import type { user } from '../types/user';
+import EditProfile from './user/EditProfile';
 
 function App(): JSX.Element {
   // Axios configs
@@ -84,6 +85,7 @@ function App(): JSX.Element {
             <Route path='/register-user' element={<RegisterUser />} />
             <Route path='/password-reset' element={<ForgotPassword />} />
             <Route path='/profile/:id' element={<ProfileInfo />} />
+            <Route path='/edit-profile' element={<EditProfile />} />
             {/*Add default admin-menu route to the approve users one. */}
             <Route path='/admin-menu/:panel' element={<AdminIndex />} />
             <Route path="/job-offer/:offerId" element={<JobOfferFV />} />

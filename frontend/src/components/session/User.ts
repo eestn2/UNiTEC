@@ -6,7 +6,12 @@
  * @date May 11, 2025
  */
 
-import type { user as UserType } from "../../types/user";
+import type { UserStatus, UserType, user } from "../../types/user";
+
+// Add mapping arrays for type and status
+const statusMap: UserStatus[] = ["Estudiando", "Buscando trabajo", "Trabajando", "Egresado"];
+const typeMap: UserType[] = ["Empresa", "Estudiante", "Egresado", "Administrador"];
+
 
 /**
  * A singleton class for managing user session data.
@@ -28,24 +33,33 @@ import type { user as UserType } from "../../types/user";
  * @author Haziel Magallanes
  */
 class User {
-    private user_data: UserType | null = null;
+    private user_data: user| null = null;
 
     /**
      * Sets the user session data.
-     * @param {UserType} user - The user data to store.
+     * @param {user} user - The user data to store.
      */
-    set(user: UserType) {
-        this.user_data = user;
+    set(user: user) {
+        // Convert numeric type/status to string if needed
+        const fixedUser = { ...user };
+
+        if (typeof fixedUser.status === "number") {
+            fixedUser.status = statusMap[fixedUser.status as number];
+        }
+        if (typeof fixedUser.type === "number") {
+            fixedUser.type = typeMap[fixedUser.type as number];
+        }
+        this.user_data = fixedUser;
     }
 
     /**
      * Returns a Proxy to access user session data properties directly.
-     * @returns {Proxy<UserType | null>}
+     * @returns {Proxy<user | null>}
      */
     get data() {
         // If user_data is null, return a Proxy with all properties undefined
-        return new Proxy(this.user_data ?? ({} as UserType), {
-            get: (target: UserType, prop: string) => target[prop as keyof UserType],
+        return new Proxy(this.user_data ?? ({} as user), {
+            get: (target: user, prop: string) => target[prop as keyof user],
         });
     }
 }

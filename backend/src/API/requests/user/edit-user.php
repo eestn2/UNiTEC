@@ -19,9 +19,8 @@
  */
 
 require_once __DIR__ . "/../cors-policy.php";
-require_once __DIR__ . "/../../../logic/database/connection.php";
-require_once __DIR__ . "/../../../logic/communications/return_response.php";
-require_once __DIR__ . "/../function/get-user-from-request.php";
+require_once __DIR__ . "/../../logic/database/connection.php";
+require_once __DIR__ . "/../../logic/communications/return_response.php";
 
 if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
     return_response("failed", "Method not allowed", null);
@@ -31,13 +30,13 @@ $data = json_decode(file_get_contents("php://input"));
 if (!$data) {
     return_response("failed", "No se recibieron datos", null);
 }
-
-$user = get_user_from_request($data);
-if (!$user || !isset($user['id'])) {
-    return_response("failed", "Usuario no encontrado", null);
+session_start();
+if (!isset($_SESSION['user']['id'])) {
+    return_response("failed", "No se ha iniciado sesión", null);
 }
+$user = $_SESSION['user'];
 
-$allowed_fields = ["name", "birth_date", "location", "email", "description", "profile_picture", "portfolio"];
+$allowed_fields = ["name", "birth_date", "user_type", "status", "location", "email", "description", "profile_picture", "portfolio"];
 $fields_to_update = [];
 $params = [];
 
