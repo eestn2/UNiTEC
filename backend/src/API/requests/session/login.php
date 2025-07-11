@@ -42,6 +42,12 @@ if (!password_verify($password, $user["password"])) {
     return_response("failed", "Contraseña incorrecta.", null);
 }
 
+// Cancelar eliminación si estaba programada
+if ($user["delete_requested_at"] !== null) {
+    $stmt = $connection->prepare("UPDATE users SET delete_requested_at = NULL WHERE id = ?");
+    $stmt->execute([$user["id"]]);
+}
+
 // Guardar datos de sesión (sin contraseña)
 $_SESSION['user'] = [
     "id" => $user["id"],
