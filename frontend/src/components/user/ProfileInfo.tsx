@@ -21,6 +21,7 @@ import { getTranslates } from '../../global/function/getTranslates';
 import getUserStatus from '../../global/function/getUserStatus';
 import getUserType from '../../global/function/getUserType';
 import TagList, { Tag } from '../UI/Tags/TagList';
+import { TypedResponse } from '../../types/Response';
 
 // Add types for tags and languages
 interface tag {
@@ -43,8 +44,11 @@ const ProfileInfo: React.FC = () => {
   useEffect(() => {
     if (!id) return;
     axios.get(`/user/user-info.php?id=${id}`)
-      .then(res => {
+      .then((res) => {
         if (res.data.status === "success") {
+          if(!res.data.data.user.portfolio.includes("http://") || !res.data.data.user.portfolio.includes("https://")) { 
+            res.data.data.user.portfolio = `http://${res.data.data.user.portfolio}`; 
+          }
           setUserData(res.data.data.user);
         }
       });
@@ -179,7 +183,13 @@ const handleLogout = async () => {
               border: `${translateX(4)}px solid #113893`,
               overflow: 'hidden',
             }}>
-              <img src={default_profile} alt={userData?.name} style={{width: '100%', height: '100%'}} />
+              <img src={userData?.profile_picture ? userData?.profile_picture : default_profile} alt={userData?.name} style={{width: '100%', height: '100%', 
+                textAlign: 'center', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                display: 'flex',
+                objectFit: 'cover',
+                }} />
             </div>
             <h1>{userData?.name}</h1>
           </div>
@@ -199,7 +209,7 @@ const handleLogout = async () => {
             className='user-info-item profile-field input-field'
             style={isPortrait ? { gridColumn: '2', gridRow: '3' } : { gridRow: 8 }}
           >
-            <div>Portfolio web: {userData?.portfolio}</div>
+            <div style={{textWrap: "nowrap", overflowInline: "clip", overflowX: "hidden", maxWidth: translateX(isPortrait ? 340 : 300)}}>Portfolio web: <a href={userData?.portfolio}>{userData?.portfolio}</a></div>
           </div>
           {/* Column 2: Type, Status, Description */}
           <div
@@ -235,6 +245,7 @@ const handleLogout = async () => {
           >
             <TagList
               tags={tags}
+              title="Etiquetas:"
               selectedTag={selectedTag}
               onSelectTag={setSelectedTag}
               isPortrait={isPortrait}
@@ -244,7 +255,7 @@ const handleLogout = async () => {
           </div>
           {/* Idiomas styled like Etiquetas */}
           <div
-            className='user-languages-section profile-field input-field flex-row'
+            className='user-languages-section input-field flex-row'
             style={{
                 ...(isPortrait ? { gridColumn: '1', gridRow: '9 / span 3', height: translateY(240) } : {}),
                 alignItems: 'flex-start',
@@ -254,6 +265,7 @@ const handleLogout = async () => {
           >
             <TagList
               tags={userData?.languages || []}
+              title="Idiomas:"
               selectedTag={null} // Languages are not selectable in this example
               isPortrait={isPortrait}
               translateX={translateX}

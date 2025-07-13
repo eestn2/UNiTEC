@@ -20,6 +20,7 @@ const groupByLevel = (tags: Tag[]): Record<Level, Tag[]> => {
 
 interface TagListProps {
   tags: Tag[];
+  title: string;
   selectedTag?: Tag | null;
   onSelectTag?: (tag: Tag | null) => void;
   isPortrait?: boolean;
@@ -29,6 +30,7 @@ interface TagListProps {
 
 const TagList: React.FC<TagListProps> = ({
   tags,
+  title,
   selectedTag,
   onSelectTag,
   isPortrait = false,
@@ -47,7 +49,7 @@ const TagList: React.FC<TagListProps> = ({
         gap: translateY(16),
         height: '96%',
       }}>
-        <span style={{ fontWeight: 600, fontSize: translateY(22), color: 'rgba(0, 49, 123, 0.8)'}}>Etiquetas:</span>
+        <span style={{ fontWeight: 600, fontSize: translateY(22), color: 'rgba(0, 49, 123, 0.8)'}}>{title}</span>
         {LEVELS.map(level => (
           <label key={level} style={{ display: 'flex', alignItems: 'center', fontWeight: 500}}>
             <input
@@ -79,7 +81,7 @@ const TagList: React.FC<TagListProps> = ({
       }}
       className='tag-display-profile'>
         {Object.values(tagsByLevel).flat().length === 0 ? (
-          <span style={{ color: '#888' }}>Sin habilidades</span>
+          <span style={{ color: 'rgba(0, 49, 123, 0.5)', textAlign: 'center' }}>Sin habilidades</span>
         ) : (
           Object.values(tagsByLevel).flat().map(tag => {
             const isSelected = selectedTag?.name === tag.name;

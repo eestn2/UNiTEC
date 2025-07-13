@@ -147,8 +147,8 @@ const EditProfile: React.FC = () => {
             {/* Description */}
             <TextBox 
             className='user-description-section input-field'
-            style={isPortrait ? { gridColumn: '2', gridRow: '6 / span 6' } : {}}
-            name="description" placeholder="Descripción" onChange={handleChange} width={300} height={100} value={form.description} />
+            style={isPortrait ? { gridColumn: '2', gridRow: '6 / span 9' } : {}}
+            name="description" placeholder="Descripción" onChange={handleChange} width={300} height={"100%"} value={form.description} />
             {/* Tags and Languages (editable) */}
             <div
                 className='user-skills-section input-field flex-row'
@@ -173,7 +173,10 @@ const EditProfile: React.FC = () => {
                 {/* Languages selection can go here */}
             </div>
             {/* Save/Cancel Buttons */}
-            <div className='user-button-section' style={{ fontSize: translateY(24) }}>
+            <div className='user-button-section' style={{ 
+                ...(isPortrait ? { gridColumn: '1 / span 2', gridRow: '6 / span 2' } : { gridRow: '7 / span 2' }),
+                fontSize: translateY(24) 
+            }}>
                 <ActionButton height={60} action={handleSave}>
                     Aceptar Cambios
                 </ActionButton>
