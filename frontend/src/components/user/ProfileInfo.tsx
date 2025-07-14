@@ -21,6 +21,7 @@ import { getTranslates } from '../../global/function/getTranslates';
 import getUserStatus from '../../global/function/getUserStatus';
 import getUserType from '../../global/function/getUserType';
 import TagList, { Tag } from '../UI/Tags/TagList';
+import useNotImplementedToast from '../../hooks/UI/useNotImplementedToast';
 
 // Add types for tags and languages
 interface tag {
@@ -40,6 +41,7 @@ const ProfileInfo: React.FC = () => {
     languages?: Language[];
   }>();
   const navigate = useNavigate();
+  const showNotImplementedToast = useNotImplementedToast();
   useEffect(() => {
     if (!id) return;
     axios.get(`/user/user-info.php?id=${id}`)
@@ -59,7 +61,7 @@ const ProfileInfo: React.FC = () => {
   };
 
   const handleChangePassword = () => {
-    console.log("Change password clicked");
+    showNotImplementedToast();
   };
 
 const handleLogout = async () => {
@@ -73,7 +75,7 @@ const handleLogout = async () => {
 };
 
   const handleDeleteAccount = () => {
-    console.log("Delete account clicked");
+    showNotImplementedToast();
   };
 
   const handleReport = () => {

@@ -20,6 +20,7 @@ import { JSX } from 'react';
 import JobOfferFV from './offers/JobOfferFV';
 import AdminIndex from './admin/AdminIndex';
 import ProfileInfo from './user/ProfileInfo';
+import { ToastManagerProvider } from './UI/ToastManager';
 
 /**
  * The main application component that handles routing and session management.
@@ -75,28 +76,30 @@ function App(): JSX.Element {
   if (loading) return <div>Tenemos que hacer una pantallita de carga...</div>;
   // Browser routings
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <div className="app-content">
-        <BrowserRouter basename="/">
-          <Routes>
-            <Route path='/' element={!session ? <Login /> : <FeedBox />} />
-            <Route path='/test' element={<FeedBox />} />
-            <Route path='/register-enterprise' element={<RegisterEnterprise />} />
-            <Route path='/register-user' element={<RegisterUser />} />
-            <Route path='/password-reset' element={<ForgotPassword />} />
-            <Route path='/profile/:id' element={<ProfileInfo />} />
-            <Route path='/edit-profile' element={<EditProfile />} />
-            {/*Add default admin-menu route to the approve users one. */}
-            <Route path='/admin-menu/:panel' element={<AdminIndex />} />
-            <Route path="/job-offer/:offerId" element={<JobOfferFV />} />
-            <Route path="/job-offer/:offerId/:message/:type" element={<JobOfferFV />} />
-            <Route path="/publish-offer" element={<PublishOffer />} />
-            <Route path="/see-applicants" element={<SeeApplicants />} />
-          </Routes>
-        </BrowserRouter>
+    <ToastManagerProvider>
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <div className="app-content">
+          <BrowserRouter basename="/">
+            <Routes>
+              <Route path='/' element={!session ? <Login /> : <FeedBox />} />
+              <Route path='/test' element={<FeedBox />} />
+              <Route path='/register-enterprise' element={<RegisterEnterprise />} />
+              <Route path='/register-user' element={<RegisterUser />} />
+              <Route path='/password-reset' element={<ForgotPassword />} />
+              <Route path='/profile/:id' element={<ProfileInfo />} />
+              <Route path='/edit-profile' element={<EditProfile />} />
+              {/*Add default admin-menu route to the approve users one. */}
+              <Route path='/admin-menu/:panel' element={<AdminIndex />} />
+              <Route path="/job-offer/:offerId" element={<JobOfferFV />} />
+              <Route path="/job-offer/:offerId/:message/:type" element={<JobOfferFV />} />
+              <Route path="/publish-offer" element={<PublishOffer />} />
+              <Route path="/see-applicants" element={<SeeApplicants />} />
+            </Routes>
+          </BrowserRouter>
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </ToastManagerProvider>
   );
 }
 
