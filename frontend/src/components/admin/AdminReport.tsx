@@ -52,16 +52,16 @@ const AdminReport: React.FC = () => {
         <div
           style={{
             display: "flex",
-            fontWeight: "bold",
-            margin: "10px 20px",
-            padding: "10px",
-            border: "2px solid #87a5f8",
-            borderRadius: "10px",
-            backgroundColor: "#d9e3ff",
+            fontWeight: "semibold",
+            margin: `${TranslateFigmaCoords.translateFigmaX(10)}px ${TranslateFigmaCoords.translateFigmaX(20)}px`,
+            padding: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
+            border: `${TranslateFigmaCoords.translateFigmaX(3)}px solid #5386FF`,
+            borderRadius: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
+            backgroundColor: "#DEE0EB",
           }}
         >
-          <div style={{ width: "50%", textAlign:"center" }}>Usuario reportado</div>
-          <div style={{ width: "50%", textAlign:"center" }}>Usuario que reporta</div>
+          <div style={{ width: "50%", textAlign:"center", color:"#6F88B3" }}>Usuario reportado</div>
+          <div style={{ width: "50%", textAlign:"center", color:"#6F88B3",}}>Usuario que reporta</div>
         </div>
         <ReportRow>
           

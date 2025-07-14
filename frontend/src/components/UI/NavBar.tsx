@@ -5,6 +5,7 @@
  * @date May 11, 2025
  */
 
+import admin_icon from "../../assets/icons/AdminMenuIcon.svg"
 import notification_icon from "../../assets/icons/bell.svg";
 import about_us_icon from "../../assets/navbar/bxs-info-circle.svg";
 import phone_icon from "../../assets/navbar/bxs-phone.svg";
@@ -52,7 +53,7 @@ const NavBar: React.FC = () => {
     } else if (user_type === 4) {
         if (!location.pathname.includes("admin-menu")){
             buttons.unshift(
-                <div className="admin" onClick={() => {navigate("/admin-menu/panel")}} style={{color: "#113893"}}>Admin menu</div>
+                <div className="admin" onClick={() => {navigate("/admin-menu/panel")}} style={{cursor:"pointer"}}><img src={admin_icon} alt="AdminMenu Icon"/></div>
             )
         }else{
             const amount: number = buttons.length;
@@ -67,7 +68,7 @@ const NavBar: React.FC = () => {
                     <div  onClick={() => {navigate("/admin-menu/inserts")}} style={{color: "#113893", cursor:"pointer"}}>Inserciones</div>
                     <div  onClick={() => {navigate("/admin-menu/designate")}} style={{color: "#113893", cursor:"pointer"}}>Designar Administradores</div>
                     <div  onClick={() => {navigate("/admin-menu/report")}} style={{color: "#113893", cursor:"pointer"}}>Reportes</div>
-                    <div  onClick={() => {navigate("/admin-menu/review")}} style={{color: "#113893", cursor:"pointer"}}>Resenias</div>
+                    <div  onClick={() => {navigate("/admin-menu/review")}} style={{color: "#113893", cursor:"pointer"}}>Reseñas</div>
                 </div>
             )
         }
