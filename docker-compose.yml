@@ -29,6 +29,8 @@ services:
       - EMAIL_PORT=${EMAIL_PORT}
       - EMAIL_USERNAME=${EMAIL_USERNAME}
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - VITE_API_URL_DEV=http://localhost:9090/src/API/requests
+      - VITE_API_URL_PROD=http://localhost:9090/src/API/requests
     depends_on:
       - mysql
     # In production, serve built PHP files. In dev, override with volume.
