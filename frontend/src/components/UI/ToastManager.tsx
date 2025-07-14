@@ -45,7 +45,6 @@ export const ToastManagerProvider: React.FC<{ children: ReactNode }> = ({ childr
             key={toast.id}
             show={true}
             duration={toast.duration}
-            message={toast.message}
             onClose={() => setToasts((prev) => prev.filter((t) => t.id !== toast.id))}
           />
         ))}

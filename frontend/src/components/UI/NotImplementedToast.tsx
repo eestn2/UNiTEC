@@ -4,12 +4,11 @@ interface NotImplementedToastProps {
   show: boolean;
   onClose?: () => void;
   duration?: number; // ms
-  message?: string;
 }
 
 const ANIMATION_DURATION = 350; // ms
 
-const NotImplementedToast: React.FC<NotImplementedToastProps> = ({ show, onClose, duration = 2500, message = 'Función no implementada aún.' }) => {
+const NotImplementedToast: React.FC<NotImplementedToastProps> = ({ show, onClose, duration = 2500 }) => {
   const [visible, setVisible] = useState(show);
   const [animate, setAnimate] = useState(false);
   const hideTimer = useRef<number | null>(null);
@@ -65,9 +64,8 @@ const NotImplementedToast: React.FC<NotImplementedToastProps> = ({ show, onClose
       transform: animate ? 'translateX(0)' : 'translateX(60px)',
       opacity: animate ? 1 : 0,
       pointerEvents: animate ? 'auto' : 'none',
-      marginBottom: 12,
     }}>
-      {message}
+      Función no implementada aún.
     </div>
   );
 };
