@@ -52,7 +52,7 @@ html::-webkit-scrollbar-track {
   background-color: var(--action-button);
 }
 html::-webkit-scrollbar-thumb {
-  border-radius: calc((8 / 1280) * var(--x-multiplier));
+  border-radius: 0;
   background-color: var(--icons-nav-bar);
 }
 html::-webkit-scrollbar-thumb:hover {

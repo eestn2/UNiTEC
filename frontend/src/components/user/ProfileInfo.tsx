@@ -123,7 +123,6 @@ const handleLogout = async () => {
           padding: translateY(10),
           paddingBottom: translateY(10),
           minHeight: translateY(isPortrait ? 680 : 620),
-          rowGap: translateY(16),
           height: 'fit-content',
         }}
       >

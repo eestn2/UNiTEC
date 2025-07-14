@@ -81,7 +81,7 @@ const TagList: React.FC<TagListProps> = ({
       }}
       className='tag-display-profile'>
         {Object.values(tagsByLevel).flat().length === 0 ? (
-          <span style={{ color: 'rgba(0, 49, 123, 0.5)', textAlign: 'center' }}>Sin habilidades</span>
+          <span style={{ color: 'rgba(0, 49, 123, 0.5)', textAlign: 'center' }}>No parece haber nada aquí.</span>
         ) : (
           Object.values(tagsByLevel).flat().map(tag => {
             const isSelected = selectedTag?.name === tag.name;
