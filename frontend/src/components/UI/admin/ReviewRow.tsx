@@ -1,12 +1,15 @@
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import ActionButton from "../ActionButton";
 import AppWindow from "../AppWindow";
+import ProfilePicture from "../user/ProfilePicture";
 
 
 interface ReviewRowProps {
   reviewerMail?: string;
   reviewedMail?: string;
-  reviewerUserId?: number;
+    reviewerUserId?: number;
+  reviewedUserId?: number;
+  reviewerUserType?: number;
   onClickSeeProfile?: (value: string) => void;
   style?: React.CSSProperties;
   buttonStyle?: React.CSSProperties;
@@ -18,7 +21,9 @@ interface ReviewRowProps {
 const ReviewRow: React.FC<ReviewRowProps> = ({
     reviewedMail = "default@gmail.com",
     reviewerMail = "default@gmail.com",
-    reviewerUserId = 3
+    reviewerUserId = 0,
+    reviewedUserId = 0,
+    reviewerUserType = 1,
 }) => {
 
 
@@ -41,7 +46,7 @@ return(
             paddingBottom: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
           }}
         >
-          {reviewerUserId==1 ?
+          {reviewerUserType==1 ?
           (<div style={{ width: "100%", textAlign:"center",fontWeight: "bold", color:"#113893" }}>Reseña de Empresa a Usuario</div>
           ):(
             <div style={{ width: "100%", textAlign:"center", fontWeight: "bold", color:"#113893" }}>Reseña de Usuario a Empresa</div>
@@ -80,7 +85,10 @@ return(
                 >
                     <p style={{margin:0}}>Reseña hecha por:</p>
                     <div style={{display: "flex", justifyContent:"space-between", alignItems: "center"}}>
-                    <p style={{textAlign:"center", color:"#839EDE"}}>{reviewerMail}</p>
+                    <span style={{display: "flex", alignItems: "center"}}>
+                        <ProfilePicture userId={reviewerUserId as number} size={30} vertical={window.innerWidth > window.innerHeight}></ProfilePicture>   
+                        <p style={{textAlign:"center", paddingLeft:`${TranslateFigmaCoords.translateFigmaX(5)}px`,color:"#839EDE"}}>{reviewerMail}</p>
+                    </span>
                     <ActionButton height={30} text="Ver Perfil"  style={{
                         backgroundColor: "#FFD64F",            
                         paddingRight: `${TranslateFigmaCoords.translateFigmaX(12)}px`,
@@ -106,7 +114,10 @@ return(
                 >
                     <p style={{margin:0}}>A quién se reseña:</p>
                     <div style={{display: "flex", justifyContent:"space-between", alignItems: "center"}}>
-                    <p style={{textAlign:"center", color:"#839EDE"}}>{reviewedMail}</p>
+                    <span style={{display: "flex", alignItems: "center"}}>
+                        <ProfilePicture userId={reviewedUserId as number} size={30} vertical={window.innerWidth > window.innerHeight}></ProfilePicture>   
+                        <p style={{textAlign:"center", paddingLeft:`${TranslateFigmaCoords.translateFigmaX(5)}px`,color:"#839EDE"}}>{reviewedMail}</p>
+                    </span>
                     <ActionButton height={30} text="Ver Perfil"  style={{
                         backgroundColor: "#FFD64F",            
                         paddingRight: `${TranslateFigmaCoords.translateFigmaX(12)}px`,

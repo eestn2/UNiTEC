@@ -5,6 +5,7 @@ import axios from "axios";
 import ActionButton from "../UI/ActionButton";
 import SearchBar from "../UI/admin/SearchBar";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
+import ProfilePicture from "../UI/user/ProfilePicture";
 
 const AdminDesignate: React.FC = () => {
     type Admin = {
@@ -124,7 +125,7 @@ const AdminDesignate: React.FC = () => {
               borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
             }}
           >
-            <span>{admin.name} ({admin.email})</span>
+            <span> <ProfilePicture userId={admin.id as number} size={30} vertical={window.innerWidth > window.innerHeight}></ProfilePicture> {admin.name} ({admin.email})</span>
             <ActionButton
               style={{
                 backgroundColor: "#D43D3D",

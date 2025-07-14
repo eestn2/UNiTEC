@@ -1,11 +1,13 @@
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import ActionButton from "../ActionButton";
 import AppWindow from "../AppWindow";
-
+import ProfilePicture from "../user/ProfilePicture";
 
 interface ReportRowProps {
   reporterMail?: string;
   reportedMail?: string;
+  reporterUserId?: number;
+  reportedUserId?: number;
   onClickSeeProfile?: (value: string) => void;
   onClickBan?: (value: string) => void;
   onClickDiscard?: (value: string) => void;
@@ -19,6 +21,8 @@ interface ReportRowProps {
 const ReportRow: React.FC<ReportRowProps> = ({
   reporterMail = "default@gmail.com",
   reportedMail = "default@gmail.com",
+  reporterUserId = 0,
+  reportedUserId = 0,
 /*   onClickSeeProfile,
   onClickBan,
   onClickDiscard, */
@@ -50,7 +54,10 @@ const ReportRow: React.FC<ReportRowProps> = ({
             ...style,
         }}
         >
-            <p style={{textAlign:"center"}} >{reportedMail}</p>
+          <span style={{display: "flex", alignItems: "center"}}>
+            <ProfilePicture userId={reportedUserId as number} size={30} vertical={window.innerWidth > window.innerHeight}></ProfilePicture>
+            <p style={{textAlign:"center", paddingLeft:`${TranslateFigmaCoords.translateFigmaX(5)}px`,}} >{reportedMail}</p> 
+            </span>
             <div
             style={{
             width: "35%",
@@ -112,7 +119,10 @@ const ReportRow: React.FC<ReportRowProps> = ({
             }}
         
         >
-            <p style={{textAlign:"center"}}>{reporterMail}</p>
+            <span style={{display: "flex", alignItems: "center"}}>
+              <ProfilePicture userId={reporterUserId as number} size={30} vertical={window.innerWidth > window.innerHeight}></ProfilePicture>
+              <p style={{textAlign:"center", paddingLeft:`${TranslateFigmaCoords.translateFigmaX(5)}px`,}} >{reporterMail}</p> 
+            </span>
             <ActionButton height={30} text="Ver Perfil"  style={{
               backgroundColor: "#FFD64F",            
               paddingRight: `${TranslateFigmaCoords.translateFigmaX(12)}px`,
