@@ -21,7 +21,6 @@ import { getTranslates } from '../../global/function/getTranslates';
 import getUserStatus from '../../global/function/getUserStatus';
 import getUserType from '../../global/function/getUserType';
 import TagList, { Tag } from '../UI/Tags/TagList';
-import { TypedResponse } from '../../types/Response';
 
 // Add types for tags and languages
 interface tag {
@@ -147,10 +146,6 @@ const handleLogout = async () => {
               <img src={reportIcon} width={translateY(25)} height={translateY(23)}/><span style={{ fontWeight: 600 }}>Reportar</span>
           </ActionButton>
         </div>
-        <div className="offer-fv-description-delimiter centered-x" style={{
-            width: `${translateX(windowWidth - 30)}px`,
-            top: translateY(68),
-        }} />
         {/* Responsive User Info Grid Container */}
         <div
           className='user-info-container'
@@ -167,6 +162,8 @@ const handleLogout = async () => {
             alignContent: 'center',
             gridTemplateRows: `repeat(8, ${translateY(55)}px)`,
             gap: `${translateX(12)}px ${translateY(16)}px`,
+            paddingTop: translateY(10),
+            borderTop: '4px solid var(--delimiters)',
           }}
         >
           {/* Column 1: Profile Photo and Contact Info */}
@@ -228,7 +225,9 @@ const handleLogout = async () => {
             className='user-description-section input-field'
             style={{...(isPortrait ? { gridColumn: '2', gridRow: '6 / span 6' } : {}),
             wordBreak: "break-all",
-            overflowWrap: "anywhere",}}
+            overflowWrap: "anywhere",
+            overflowY: "auto",
+          }}
 
           >
             <p>Descripción:<br/>{userData?.description}</p>

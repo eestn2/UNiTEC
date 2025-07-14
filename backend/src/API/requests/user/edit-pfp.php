@@ -9,10 +9,19 @@ require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
-include_once(__DIR__ . '/../../DotEnv.php');
 
-// Load environment variables from .env file
-(new DotEnv(__DIR__ . '/../../../../.env'))->load();
+// Load Composer's autoloader if available
+if (file_exists(__DIR__ . '/../../../../vendor/autoload.php')) {
+    require_once __DIR__ . '/../../../../vendor/autoload.php';
+} else {
+    throw new Exception('Composer autoloader not found. Please run "composer install" in the project root.');
+}
+
+use Dotenv\Dotenv;
+
+// Load environment variables from .env file if present
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../../../../');
+$dotenv->safeLoad();
 
 // Select configuration based on environment
 $env = getenv('ENVIRONMENT');
@@ -88,16 +97,18 @@ if (!$API_base_url) {
     return_response("failed", "Error de configuración del servidor.", null);
 }
 $picture_path = $API_base_url . "/uploads/profile-pictures/" . $unique_filename;
-
 // Actualizar base de datos
 try {
+    // Guardar imagen en el servidor
+    if (file_put_contents($target_path, $image_data) === false) {
+        return_response("failed", "Error al guardar la imagen.", null);
+    }
     $stmt = $connection->prepare("UPDATE users SET profile_picture = ? WHERE id = ?");
     $stmt->execute([$picture_path, $id]);
 
     if ($stmt->rowCount() === 0) {
         return_response("failed", "Usuario no encontrado o sin cambios.", null);
     }
-
     return_response("success", "Foto de perfil actualizada correctamente.", [
         "path" => $picture_path,
     ]);

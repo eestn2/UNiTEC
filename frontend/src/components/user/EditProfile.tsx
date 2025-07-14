@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppWindow from '../UI/AppWindow';
 import ActionButton from '../UI/ActionButton';
-import ProfilePicture from '../UI/user/ProfilePicture';
 import InputField from '../UI/form/InputField';
 import TextBox from '../UI/form/TextBox';
 import SelectionField from '../UI/form/SelectionField';
@@ -11,6 +10,8 @@ import User from '../session/User';
 import { getTranslates } from '../../global/function/getTranslates';
 import axios from 'axios';
 import Logo from '../UI/unitec/Logo';
+import upload_picture from '../../assets/icons/upload-picture.svg';
+import edit_profile from '../../assets/icons/edit-picture.svg';
 
 const STATUS_OPTIONS = [
     { value: '1', label: 'Estudiando' },
@@ -25,6 +26,10 @@ const TYPE_OPTIONS = [
 
 const EditProfile: React.FC = () => {
     const [form, setForm] = useState<UserType | null>(null);
+    const [uploading, setUploading] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [newPicturePath, setNewPicturePath] = useState<string | null>(null);
+    const [newPicture, setNewPicture] = useState<string | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -38,18 +43,70 @@ const EditProfile: React.FC = () => {
 
     const handleSave = async () => {
         try {
-            const response = await axios.put('/user/edit-user.php', { ...form });
+            const payload = { ...form };
+            // If not empty, use newPicturePath, else just use the existing profile picture
+            payload.profile_picture = newPicturePath ? newPicturePath : form?.profile_picture;
+            const response = await axios.put('/user/edit-user.php', payload);
             console.log(response.data);
             if (response.data.status !== 'success') {
                 throw new Error(response.data.message || 'Error al actualizar el perfil');
             } else {
                 alert('Perfil actualizado');
-                User.set({ ...User.data, ...form }); // Update User session data
+                User.set({ ...User.data, ...payload }); // Update User session data
+                setNewPicture(null);
+                setNewPicturePath(null);
                 navigate(-1);
             }
         } catch {
             alert('Error al actualizar el perfil');
         }
+    };
+
+    // Handle profile picture upload
+    const handlePictureClick = () => {
+        if (fileInputRef.current) fileInputRef.current.click();
+    };
+
+    const handlePictureChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file || !form) return;
+        if (!['image/jpeg', 'image/png'].includes(file.type)) {
+            alert('Solo se permiten imágenes JPG o PNG');
+            return;
+        }
+        if (file.size > 2 * 1024 * 1024) {
+            alert('La imagen es demasiado grande (máx 2MB)');
+            return;
+        }
+        setUploading(true);
+        const reader = new FileReader();
+        reader.onload = async () => {
+            try {
+                const base64 = reader.result as string;
+                setNewPicture(base64); // Preview
+                const response = await axios.post('/user/edit-pfp.php', {
+                    profile_picture: base64,
+                    filename: file.name,
+                    type: file.type,
+                });
+                if (response.data.status === 'success') {
+                    setNewPicturePath(response.data.data.path); // Store path for form
+                    console.log('Foto de perfil subida:', response.data.data.path);
+                    alert('Foto de perfil subida, recuerda guardar los cambios');
+                } else {
+                    alert(response.data.message || 'Error al subir la foto');
+                    setNewPicture(null);
+                    setNewPicturePath(null);
+                }
+            } catch {
+                alert('Error al subir la foto');
+                setNewPicture(null);
+                setNewPicturePath(null);
+            } finally {
+                setUploading(false);
+            }
+        };
+        reader.readAsDataURL(file);
     };
 
     if (!form) return null;
@@ -61,6 +118,13 @@ const EditProfile: React.FC = () => {
     return (
     <div>
     <Logo className='watermark' />
+    <input
+        type="file"
+        accept="image/jpeg,image/png"
+        style={{ display: 'none' }}
+        ref={fileInputRef}
+        onChange={handlePictureChange}
+    />
     <AppWindow
         width={windowWidth}
         height={isPortrait ? undefined : 680}
@@ -69,7 +133,6 @@ const EditProfile: React.FC = () => {
             padding: translateY(10),
             paddingBottom: translateY(10),
             minHeight: translateY(isPortrait ? 680 : 620),
-            rowGap: translateY(16),
             height: 'fit-content',
         }}
     >
@@ -80,10 +143,6 @@ const EditProfile: React.FC = () => {
               transform: 'translate(-50%, -50%)',
           }}>Editar detalles de Cuenta</h1>
         </div>
-        <div className="offer-fv-description-delimiter centered-x" style={{
-            width: `${translateX(windowWidth - 30)}px`,
-            top: translateY(68),
-        }} />
         {/* Responsive User Info Grid Container */}
         <div
           className='user-info-container'
@@ -98,8 +157,10 @@ const EditProfile: React.FC = () => {
             display: 'grid',
             width: '100%',
             alignContent: 'center',
+            paddingTop: translateY(10),
             gridTemplateRows: `repeat(8, ${translateY(55)}px)`,
             gap: `${translateX(12)}px ${translateY(16)}px`,
+            borderTop: '4px solid var(--delimiters)',
           }}
         >
             {/* Profile Photo */}
@@ -110,7 +171,25 @@ const EditProfile: React.FC = () => {
                     color: '#113893',
                 }}
             >
-                <ProfilePicture userId={form.id} size={isPortrait ? 200 : 160} />
+                <div className="user-photo-container edit" style={{ 
+                width: translateX(isPortrait ? 200 : 160),
+                height: translateX(isPortrait ? 200 : 160),
+                borderRadius: '50%',
+                border: `${translateX(4)}px solid #113893`,
+                overflow: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                }}>
+                <img src={newPicture ? newPicture : (form?.profile_picture ? form?.profile_picture : undefined)} style={{width: '100%', height: '100%', 
+                    backgroundColor: '#F0EFF5',
+                    }} />
+                    {form?.profile_picture || newPicture ? (
+                        <img className = 'edit-picture-overlay' src={edit_profile} onClick={handlePictureClick} style={{opacity: uploading ? 0.5 : undefined}}/>
+                    ) : (
+                        <img className= 'edit-picture-overlay' src={upload_picture} onClick={handlePictureClick} style={{opacity: uploading ? 0.5 : undefined}}/>
+                    )}
+                </div>
                 <h1>{form.name}</h1>
             </div>
             {/* Email */}
@@ -146,7 +225,7 @@ const EditProfile: React.FC = () => {
             </div>
             {/* Description */}
             <TextBox 
-            className='user-description-section input-field'
+            className='user-description-section edit input-field'
             style={isPortrait ? { gridColumn: '2', gridRow: '6 / span 9' } : {}}
             name="description" placeholder="Descripción" onChange={handleChange} width={300} height={"100%"} value={form.description} />
             {/* Tags and Languages (editable) */}
