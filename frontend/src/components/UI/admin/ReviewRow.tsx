@@ -2,6 +2,7 @@ import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords"
 import ActionButton from "../ActionButton";
 import AppWindow from "../AppWindow";
 import ProfilePicture from "../user/ProfilePicture";
+import ExpandableTextBox from "./ExpandableTextBox";
 
 
 interface ReviewRowProps {
@@ -10,6 +11,8 @@ interface ReviewRowProps {
     reviewerUserId?: number;
   reviewedUserId?: number;
   reviewerUserType?: number;
+  reviewTitle?: string;
+  reviewDescription?: string;
   onClickSeeProfile?: (value: string) => void;
   style?: React.CSSProperties;
   buttonStyle?: React.CSSProperties;
@@ -24,6 +27,8 @@ const ReviewRow: React.FC<ReviewRowProps> = ({
     reviewerUserId = 0,
     reviewedUserId = 0,
     reviewerUserType = 1,
+    reviewTitle = "Reseña:",
+    reviewDescription = "Hola soy daviel y merezco un 10, porque soy el mejor desarrollador del mundo mundial, y no me gusta que me digan lo contrario, porque si no me enojo y hago un fork de tu repo y te hago un pull request con un cambio que te va a gustar mucho, pero si no lo aceptas, entonces te voy a hacer un issue y te voy a decir que eres un mal desarrollador."
 }) => {
 
 
@@ -56,13 +61,13 @@ return(
         <div  style={{
             display: "flex",
             fontWeight: "semibold",
-            flexDirection: "row",
+            flexDirection: "column",
             borderBottomLeftRadius: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
             borderBottomRightRadius: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
             borderBottom: `${TranslateFigmaCoords.translateFigmaX(3)}px solid #5386FF`,
             borderLeft: `${TranslateFigmaCoords.translateFigmaX(3)}px solid #5386FF`,
             borderRight: `${TranslateFigmaCoords.translateFigmaX(3)}px solid #5386FF`,
-            width: "100%",
+            width: "99.5%",
           }}>
             <div style={{            
                 display: "flex",
@@ -126,8 +131,15 @@ return(
                     }}></ActionButton>
                     </div>
                 </AppWindow> 
-        </div>
-            <div></div>
+              </div>
+            <div style={{display: "flex", justifyContent:"center", alignItems: "center",}} > 
+                <ExpandableTextBox 
+                    title= {reviewTitle}
+                    description={reviewDescription}
+                    initialHeight={25}
+                    width={1120}
+                    ></ExpandableTextBox>
+            </div>
         </div>
 
     </div>
