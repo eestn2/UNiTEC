@@ -1,16 +1,21 @@
+import { useState } from "react";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import ActionButton from "../ActionButton";
 import AppWindow from "../AppWindow";
 import ProfilePicture from "../user/ProfilePicture";
+import Modal from "./Modal";
+import { Navigate, useNavigate } from "react-router-dom";
 
 interface ReportRowProps {
   reporterMail?: string;
   reportedMail?: string;
+  reportTitle?: string;
+  reportDescription?: string;
   reporterUserId?: number;
   reportedUserId?: number;
-  onClickSeeProfile?: (value: string) => void;
-  onClickBan?: (value: string) => void;
-  onClickDiscard?: (value: string) => void;
+  onClickSeeProfile?: (value: number) => void | undefined;
+  onClickBan?: (value: number) => void | undefined;
+  onClickDiscard?: (value: boolean)=> void | undefined;
   style?: React.CSSProperties;
   buttonStyle?: React.CSSProperties;
 
@@ -23,13 +28,16 @@ const ReportRow: React.FC<ReportRowProps> = ({
   reportedMail = "default@gmail.com",
   reporterUserId = 0,
   reportedUserId = 0,
-/*   onClickSeeProfile,
+  reportTitle = "Reporte:",
+  reportDescription = "Hola soy daviel y merezco un 10, porque soy el mejor desarrollador del mundo mundial, y no me gusta que me digan lo contrario, porque si no me enojo y hago un fork de tu repo y te hago un pull request con un cambio que te va a gustar mucho, pero si no lo aceptas, entonces te voy a hacer un issue y te voy a decir que eres un mal desarrollador.",
+  onClickSeeProfile,
   onClickBan,
-  onClickDiscard, */
+  onClickDiscard,
   style,
 /*   buttonStyle, */
 }) => {
-
+       const [modal, setModal ] = useState(false);
+       const navigate = useNavigate();
     return (
        <div style={{
         width: "100%",
@@ -69,19 +77,31 @@ const ReportRow: React.FC<ReportRowProps> = ({
 
             }}
             >
-                <ActionButton height={30} text="Ver Perfil"  style={{
+                <ActionButton height={30} text="Ver Perfil" action={() => {
+                  if (onClickSeeProfile) {
+                    onClickSeeProfile(reportedUserId);
+                  }
+                }} style={{
                   backgroundColor: "#FFD64F",            
                   paddingRight: `${TranslateFigmaCoords.translateFigmaX(12)}px`,
                   paddingLeft: `${TranslateFigmaCoords.translateFigmaX(12)}px`,
                   color:"#113893",
                 }}
                   ></ActionButton>
-                <ActionButton height={30} text="Banear" style={{
+                <ActionButton height={30} text="Banear" action={() => {
+                  if (onClickBan) {
+                    onClickBan(reportedUserId);
+                  }
+                }} style={{
                   backgroundColor: "#D43D3D",            
                   paddingRight: `${TranslateFigmaCoords.translateFigmaX(12)}px`,
                   paddingLeft: `${TranslateFigmaCoords.translateFigmaX(12)}px`,
                 }}></ActionButton>
-                <div style={{
+                <div onClick={() => {
+                  if (onClickDiscard) {
+                    onClickDiscard(true);
+                  } }
+                 } style={{
                   backgroundColor: "#D43D3D",
                   width:`${TranslateFigmaCoords.translateFigmaX(30)}px` ,
                   height: `${TranslateFigmaCoords.translateFigmaX(30)}px`,
@@ -123,12 +143,40 @@ const ReportRow: React.FC<ReportRowProps> = ({
               <ProfilePicture userId={reporterUserId as number} size={30} vertical={window.innerWidth > window.innerHeight}></ProfilePicture>
               <p style={{textAlign:"center", paddingLeft:`${TranslateFigmaCoords.translateFigmaX(5)}px`,}} >{reporterMail}</p> 
             </span>
-            <ActionButton height={30} text="Ver Perfil"  style={{
-              backgroundColor: "#FFD64F",            
-              paddingRight: `${TranslateFigmaCoords.translateFigmaX(12)}px`,
-              paddingLeft: `${TranslateFigmaCoords.translateFigmaX(12)}px`,
-              color:"#113893",
-            }}></ActionButton>
+            <div
+            style={{
+            width: "35%",
+            display: "flex",
+            justifyContent:"space-between",
+            alignItems: "center",
+            paddingRight: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
+            paddingLeft: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
+
+            }}
+            >
+                <ActionButton height={30} text="Ver Perfil" action={() => {
+                  if (onClickSeeProfile) {
+                    onClickSeeProfile(reporterUserId);
+                  }
+                }}  style={{
+                  backgroundColor: "#FFD64F",            
+                  paddingRight: `${TranslateFigmaCoords.translateFigmaX(12)}px`,
+                  paddingLeft: `${TranslateFigmaCoords.translateFigmaX(12)}px`,
+                  color:"#113893",
+                }}
+                  ></ActionButton>
+                <ActionButton height={30} text="Ver Reporte"action={() => setModal(true)} style={{
+                  backgroundColor: "#D43D3D",            
+                  paddingRight: `${TranslateFigmaCoords.translateFigmaX(12)}px`,
+                  paddingLeft: `${TranslateFigmaCoords.translateFigmaX(12)}px`,
+                }}></ActionButton>
+                 </div>
+                 {modal && (
+                    <Modal
+                      title={reportTitle}
+                      text={reportDescription}
+                      onClose={() => setModal(false)}
+                    />)}
         </AppWindow>
 
        </div>

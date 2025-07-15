@@ -21,7 +21,7 @@ try {
     ");
     $stmt->execute(['id' => $_SESSION['user']['id']]);
     $admins = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return_response("success", "Lista de administradores recuperada correctamente.", $admins);
+    return_response("success", "Lista de administradores recuperada correctamente.", ["admins" => $admins]);
 } catch (PDOException $e) {
     error_log("Error retrieving users: " . $e->getMessage());
     return_response("failed", "Error retrieving admins.", null);

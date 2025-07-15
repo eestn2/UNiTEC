@@ -29,6 +29,7 @@ const AdminDesignate: React.FC = () => {
             email: admin.email,
             name: admin.name,
           }));
+          console.log("Admins loaded successfully:", response.data.data.admins);
           setAdmins(adminsList);
         }
       } catch (error) {
@@ -47,7 +48,7 @@ const AdminDesignate: React.FC = () => {
 
     const handleRemove = async (id: number) => {
       const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.delete(`${apiUrl}/admin/delete_admin.php`, {
+      const response = await axios.delete(`${apiUrl}/admin/delete_user.php`, {
           data:{
             id:id,}
       }); 
@@ -112,7 +113,11 @@ const AdminDesignate: React.FC = () => {
           marginTop: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
           overflowY: "scroll",
           maxHeight: `${TranslateFigmaCoords.translateFigmaX(200)}px`}}>
-        {admins.map((admin) => (
+          {admins.length === 0 ? (
+            <p style={{ textAlign: 'center', color:"#305894" }}>No hay admins aparte de usted.</p>
+        ) : (
+
+        admins.map((admin) => (
           <div
             key={admin.id}
             style={{
@@ -141,7 +146,9 @@ const AdminDesignate: React.FC = () => {
               handleRemove(admin.id);}}>
             </ActionButton>
           </div>
-        ))}
+        ))
+      )}
+         
         </div>
       </AppWindow>
     </div>
