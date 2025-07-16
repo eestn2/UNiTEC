@@ -47,7 +47,7 @@ class User {
             fixedUser.status = statusMap[fixedUser.status as number];
         }
         if (typeof fixedUser.type === "number") {
-            fixedUser.type = typeMap[fixedUser.type as number];
+            fixedUser.type = typeMap[fixedUser.type - 1 as number];
         }
         this.user_data = fixedUser;
     }
