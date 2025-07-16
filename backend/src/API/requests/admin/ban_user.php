@@ -35,7 +35,7 @@ if (!is_admin($_SESSION['user']['id'], $connection)) {
 }
 
 $data->id = intval($data->id);
-$data->offerId = intval($data->offerId);
+$data->reportId = intval($data->reportId);
 
 try {
     $connection->beginTransaction();
@@ -46,7 +46,7 @@ try {
     $connection->commit();
     return_response("success", "Usuario eliminado con exito.", null);
     $connection->beginTransaction();
-    $query = "DELETE FROM offers WHERE id = :offerId";
+    $query = "DELETE FROM reports WHERE id = :reportId";
     $stmt = $connection->prepare($query);
     $stmt->bindParam(':offerId', $data->offerId, PDO::PARAM_INT);
     $stmt->execute();

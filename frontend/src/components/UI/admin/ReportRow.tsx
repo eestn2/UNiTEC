@@ -4,18 +4,18 @@ import ActionButton from "../ActionButton";
 import AppWindow from "../AppWindow";
 import ProfilePicture from "../user/ProfilePicture";
 import Modal from "./Modal";
-import { Navigate, useNavigate } from "react-router-dom";
 
 interface ReportRowProps {
-  reporterMail?: string;
-  reportedMail?: string;
+  id?:number;
+  reporterEmail?: string;
+  reportedEmail?: string;
   reportTitle?: string;
   reportDescription?: string;
   reporterUserId?: number;
   reportedUserId?: number;
   onClickSeeProfile?: (value: number) => void | undefined;
-  onClickBan?: (value: number) => void | undefined;
-  onClickDiscard?: (value: boolean)=> void | undefined;
+  onClickBan?: (reportedId: number, id :number) => void | undefined;
+  onClickDiscard?: (value: number)=> void | undefined;
   style?: React.CSSProperties;
   buttonStyle?: React.CSSProperties;
 
@@ -24,8 +24,9 @@ interface ReportRowProps {
 
     
 const ReportRow: React.FC<ReportRowProps> = ({
-  reporterMail = "default@gmail.com",
-  reportedMail = "default@gmail.com",
+  id = 0,
+  reporterEmail = "default@gmail.com",
+  reportedEmail = "default@gmail.com",
   reporterUserId = 0,
   reportedUserId = 0,
   reportTitle = "Reporte:",
@@ -37,9 +38,10 @@ const ReportRow: React.FC<ReportRowProps> = ({
 /*   buttonStyle, */
 }) => {
        const [modal, setModal ] = useState(false);
-       const navigate = useNavigate();
     return (
        <div style={{
+        marginTop: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
+        marginBottom: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
         width: "100%",
         display: "flex",
         justifyContent:"space-evenly",
@@ -64,7 +66,7 @@ const ReportRow: React.FC<ReportRowProps> = ({
         >
           <span style={{display: "flex", alignItems: "center"}}>
             <ProfilePicture userId={reportedUserId as number} size={30} vertical={window.innerWidth > window.innerHeight}></ProfilePicture>
-            <p style={{textAlign:"center", paddingLeft:`${TranslateFigmaCoords.translateFigmaX(5)}px`,}} >{reportedMail}</p> 
+            <p style={{textAlign:"center", paddingLeft:`${TranslateFigmaCoords.translateFigmaX(5)}px`,}} >{reportedEmail}</p> 
             </span>
             <div
             style={{
@@ -90,7 +92,7 @@ const ReportRow: React.FC<ReportRowProps> = ({
                   ></ActionButton>
                 <ActionButton height={30} text="Banear" action={() => {
                   if (onClickBan) {
-                    onClickBan(reportedUserId);
+                    onClickBan(reportedUserId, id);
                   }
                 }} style={{
                   backgroundColor: "#D43D3D",            
@@ -99,7 +101,7 @@ const ReportRow: React.FC<ReportRowProps> = ({
                 }}></ActionButton>
                 <div onClick={() => {
                   if (onClickDiscard) {
-                    onClickDiscard(true);
+                    onClickDiscard(id);
                   } }
                  } style={{
                   backgroundColor: "#D43D3D",
@@ -141,7 +143,7 @@ const ReportRow: React.FC<ReportRowProps> = ({
         >
             <span style={{display: "flex", alignItems: "center"}}>
               <ProfilePicture userId={reporterUserId as number} size={30} vertical={window.innerWidth > window.innerHeight}></ProfilePicture>
-              <p style={{textAlign:"center", paddingLeft:`${TranslateFigmaCoords.translateFigmaX(5)}px`,}} >{reporterMail}</p> 
+              <p style={{textAlign:"center", paddingLeft:`${TranslateFigmaCoords.translateFigmaX(5)}px`,}} >{reporterEmail}</p> 
             </span>
             <div
             style={{

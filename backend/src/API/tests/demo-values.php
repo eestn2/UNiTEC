@@ -140,6 +140,8 @@ try {
     $stmt = $connection->prepare("INSERT INTO `offers`(`creator_id`, `title`, `description`, `status`) VALUES (?, ?, ?, 1)");
     $stmt->execute([$sistemasJId, $title2, $desc2]);
 
+    
+
     $connection->commit();
     echo "Test users and job offers created successfully.";
     echo "<br>Admin ID: $adminId";

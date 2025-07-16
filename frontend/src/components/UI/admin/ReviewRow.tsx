@@ -1,4 +1,3 @@
-import { useRef, useState } from "react";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import ActionButton from "../ActionButton";
 import AppWindow from "../AppWindow";
@@ -6,8 +5,8 @@ import ProfilePicture from "../user/ProfilePicture";
 import ExpandableTextBox from "./ExpandableTextBox";
 
 interface ReviewRowProps {
-  reviewerMail?: string;
-  reviewedMail?: string;
+  reviewerEmail?: string;
+  reviewedEmail?: string;
   reviewerUserId?: number;
   reviewedUserId?: number;
   reviewerUserType?: number;
@@ -19,8 +18,8 @@ interface ReviewRowProps {
 }
 
 const ReviewRow: React.FC<ReviewRowProps> = ({
-    reviewedMail = "default@gmail.com",
-    reviewerMail = "default@gmail.com",
+    reviewedEmail = "default@gmail.com",
+    reviewerEmail = "default@gmail.com",
     reviewerUserId = 0,
     reviewedUserId = 0,
     reviewerUserType = 1,
@@ -84,7 +83,7 @@ const ReviewRow: React.FC<ReviewRowProps> = ({
                         <div style={{display: "flex", justifyContent:"space-between", alignItems: "center"}}>
                             <span style={{display: "flex", alignItems: "center"}}>
                                 <ProfilePicture userId={reviewerUserId as number} size={30} vertical={window.innerWidth > window.innerHeight}></ProfilePicture>   
-                                <p style={{textAlign:"center", paddingLeft:`${TranslateFigmaCoords.translateFigmaX(5)}px`,color:"#6F88B3"}}>{reviewerMail}</p>
+                                <p style={{textAlign:"center", paddingLeft:`${TranslateFigmaCoords.translateFigmaX(5)}px`,color:"#6F88B3"}}>{reviewerEmail}</p>
                             </span>
                             <ActionButton height={30} text="Ver Perfil"  action={() => {
                                 if (onClickSeeProfile) {
@@ -116,7 +115,7 @@ const ReviewRow: React.FC<ReviewRowProps> = ({
                         <div style={{display: "flex", justifyContent:"space-between", alignItems: "center"}}>
                             <span style={{display: "flex", alignItems: "center"}}>
                                 <ProfilePicture userId={reviewedUserId as number} size={30} vertical={window.innerWidth > window.innerHeight}></ProfilePicture>   
-                                <p style={{textAlign:"center", paddingLeft:`${TranslateFigmaCoords.translateFigmaX(5)}px`,color:"#6F88B3"}}>{reviewedMail}</p>
+                                <p style={{textAlign:"center", paddingLeft:`${TranslateFigmaCoords.translateFigmaX(5)}px`,color:"#6F88B3"}}>{reviewedEmail}</p>
                             </span>
                             <ActionButton height={30} text="Ver Perfil"  action={() => {
                                 if (onClickSeeProfile) {
@@ -138,7 +137,7 @@ const ReviewRow: React.FC<ReviewRowProps> = ({
                     description={reviewDescription}
                     initialHeight={25}
                     width={1120}
-                    ></ExpandableTextBox>
+                ></ExpandableTextBox>
             </div>
             </div>
         </div>

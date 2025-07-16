@@ -14,8 +14,17 @@ if (!is_admin($_SESSION['user']['id'], $connection)) {
 }
 
 try {
-    $stmt = $connection->query("SELECT * FROM reviews");
-    $reviews = $stmt->fetchAll();
+    $stmt = $connection->prepare("
+        SELECT r.*, 
+            user.email AS user_email, 
+            user.user_type AS user_type,
+            reviewed.email AS reviewed_email
+        FROM reviews r
+        JOIN users user ON r.user_id = user.id
+        JOIN users reviewed ON r.reviewed_id = reviewed.id
+    ");
+     $stmt->execute();
+    $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return_response("success", "reviews retrieved successfully.", ["reviews" => $reviews]);
 } catch (PDOException $e) {
     error_log("Error retrieving reviews: " . $e->getMessage());
