@@ -36,5 +36,9 @@ Shared Dictionary/
 *.njsproj
 *.sln
 *.sw?
+# Private files
 .env
+# PHP Libraries
 vendor
+# User uploads
+uploads

@@ -37,6 +37,17 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({ userId, size = 10, vert
             className="profile-picture"
             style={{ width: translateX(size), height: translateX(size), borderRadius: "50%", fill: "#aabac9", cursor: "pointer" }}
             onClick={handleProfileClick}
+            onMouseDown={(e) => {
+                e.preventDefault();
+                e.currentTarget.style.scale = '0.9';
+            }} onMouseUp={(e) => {
+                e.preventDefault(); 
+                e.currentTarget.style.scale = '1';
+            }}
+            onMouseLeave={(e) => {
+                e.preventDefault();
+                e.currentTarget.style.scale = '1';
+            }}
         />
     );
 };

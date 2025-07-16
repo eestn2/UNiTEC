@@ -52,7 +52,7 @@ html::-webkit-scrollbar-track {
   background-color: var(--action-button);
 }
 html::-webkit-scrollbar-thumb {
-  border-radius: calc((8 / 1280) * var(--x-multiplier));
+  border-radius: 0;
   background-color: var(--icons-nav-bar);
 }
 html::-webkit-scrollbar-thumb:hover {
@@ -727,6 +727,31 @@ footer{
   width: calc(100% - (18 / 1280) * var(--x-multiplier));
   margin-left: calc((18 / 1280) * var(--x-multiplier));
 }
+.user-description-section::-webkit-scrollbar {
+  width: calc((8 / 1280) * var(--x-multiplier));
+}
+.user-description-section::-webkit-scrollbar-track {
+  background-color: #dee0eb;
+  border-radius: calc((10 / 1280) * var(--x-multiplier));
+}
+.user-description-section::-webkit-scrollbar-thumb {
+  background-color: #305894;
+  border-radius: calc((10 / 1280) * var(--x-multiplier));
+  border: calc((2 / 1280) * var(--x-multiplier)) solid #dee0eb;
+}
+.user-description-section::-webkit-scrollbar-thumb:hover {
+  background-color: #1e3a6d;
+}
+
+/* Column 3 items, editing variant */
+.user-description-section.edit {
+  grid-column: 3;
+  grid-row: 1 / span 5;
+}
+.user-description-section.edit > * {
+  width: calc(100% - (18 / 1280) * var(--x-multiplier));
+  margin-left: calc((18 / 1280) * var(--x-multiplier));
+}
 
 .user-button-section {
   grid-column: 3;
@@ -754,17 +779,21 @@ footer{
   background-color: var(--feed-title-BG);
 }
 
-
-
 /* =========================
-  Register Styles
+  Edit profile styles
   ========================= */
-
-  @media
-
-.responsive-registers {
-
+.edit-picture-overlay {
+  position: absolute;
+  transition: all 0.3s ease-in-out;
+  opacity: 0.75;
 }
+.edit-picture-overlay:hover {
+  cursor: pointer;
+  scale: 1.10;
+  transition: all 0.3s ease-in-out;
+  opacity: 1;
+}
+
 
 /* =========================
   Register Enterprise Styles

@@ -29,13 +29,19 @@ export type user = {
     /** The user's location (e.g., city, country). */
     location: string;
     /** The user's current status (e.g., "active", "inactive"). */
-    status: string;
+    status: UserStatus;
     /** The user's description or bio. */
     description: string;
     /** The user's portfolio or website URL. */
     portfolio: string;
     /** The user's role (e.g., "student", "enterprise", "admin"). */
-    type: string;
+    type: UserType;
     /** Optional URL to the user's profile picture. */
     profile_picture?: string;
 };
+/** Enum de estados de usuario, 0 = Estudiando, 1 = Buscando trabajo, 2 = Trabajando, 3 = Egresado */
+export type UserStatus = "Estudiando" | "Buscando trabajo" | "Trabajando" | "Egresado";
+/** Enum de tipos de usuario 0 = Empresa, 1 = Estudiante, 2 = Egresado, 3 = Administrador. */
+export type UserType = "Empresa" | "Estudiante" | "Egresado"  | "Administrador";
+
+export default user;

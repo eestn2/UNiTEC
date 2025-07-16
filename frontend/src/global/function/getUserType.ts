@@ -1,4 +1,7 @@
-export function getUserType(type: number) :string {
+import { UserType } from "../../types/user";
+
+export function getUserType(type: number | UserType) :string {
+    if (typeof type === "string") return type;
     switch (type) {
         case 1:
             return "Empresa";
@@ -12,3 +15,5 @@ export function getUserType(type: number) :string {
             return "Error";
     }
 }
+
+export default getUserType;

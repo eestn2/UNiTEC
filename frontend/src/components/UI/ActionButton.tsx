@@ -63,8 +63,32 @@ const ActionButton: React.FC<ActionButtonProps> = ({ height = 10, vertical = fal
         width,
         vertical
     });
+    const animationDuration = 0.2; // seconds
+    const buttonStyle: React.CSSProperties = {
+        transition: `all ${animationDuration}s ease-in-out`,
+        cursor: "pointer",
+        alignItems: "center",
+        justifyContent: "center",
+        display: "flex",
+        flexDirection: "row",
+        width: finalWidth,
+        height: finalHeight,
+        columnGap: translateX(4),
+        ...style,
+    };
+
     return (
-        <button className={`action-button ${className || ''}`} style={{height: finalHeight, width: finalWidth, display: "flex", flexDirection: "row", columnGap: translateX(4), ...style}} onClick={action}>
+        <button className={`action-button ${className || ''}`} style={{...buttonStyle}} onClick={action} onMouseDown={(e) => {
+            e.preventDefault(); // Prevent default button behavior
+            e.currentTarget.style.scale = '0.9';
+        }} onMouseUp={(e) => {
+            e.preventDefault(); 
+            e.currentTarget.style.scale = '1';
+        }}
+        onMouseLeave={(e) => {
+            e.preventDefault();
+            e.currentTarget.style.scale = '1';
+        }}>
             {children || text}
         </button>
     );
