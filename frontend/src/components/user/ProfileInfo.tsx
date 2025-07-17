@@ -129,8 +129,8 @@ const handleLogout = async () => {
         }}
       >
         {/* Header */}
-        <div className="flex-row-reversed" style={{width: "100%", height: translateY(60), textAlign: 'center', alignItems: 'center', justifyContent: 'space-between'}}>
-          <h1 className='profile-title centered-x' style={{
+        <div className="flex-row" style={{width: "100%", height: translateY(60), textAlign: 'center', alignItems: 'center', justifyContent: 'space-between'}}>
+          <h1 className='profile-title centered-x relative' style={{
               top: translateY(14),
               transform: 'translate(-50%, -50%)',
           }}>Detalles de la Cuenta</h1>
