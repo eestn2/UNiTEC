@@ -1,0 +1,94 @@
+.user-card {
+  display: flex;
+  align-items: center;
+  border: calc((3/1280) * var(--x-multiplier)) solid #5787FA;
+  /* Azul */
+  border-radius: calc((40/1280) * var(--x-multiplier)) calc((20/1280) * var(--x-multiplier)) calc((20/1280) * var(--x-multiplier)) calc((40/1280) * var(--x-multiplier));
+  padding: calc((15/1280) * var(--x-multiplier));
+  width: calc((537/1280) * var(--x-multiplier));
+  gap: calc((12/1280) * var(--x-multiplier));
+  box-shadow: 0 calc((2/1280) * var(--x-multiplier)) calc((4/1280) * var(--x-multiplier)) rgba(0, 0, 0, 0.1);
+  height: calc((120 / 720) * var(--y-multiplier));
+}
+
+.user-image {
+  width: calc((70/1280) * var(--x-multiplier));
+  height: calc((70/1280) * var(--x-multiplier));
+  border: calc((3/1280) * var(--x-multiplier)) solid #5787FA;
+  /* Azul */
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: rgb(0, 42, 255);
+}
+ 
+.user-name {
+  flex: 1;
+  color: #6F88B3; 
+  font-weight: 500;
+  font-size: calc((23/1280) * var(--x-multiplier));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: calc((5/1280) * var(--x-multiplier));
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.Column {
+  display: flex;
+  flex-direction: column;
+}
+
+.button-group {
+  display: flex;
+  gap: calc((6/1280) * var(--x-multiplier));
+}
+
+.btn {
+  border: none;
+  border-radius: 9999px;
+  padding: calc((2/1280) * var(--x-multiplier)) 0px;
+  font-weight: 600;
+  font-size: calc((17/1280) * var(--x-multiplier));
+  width: calc((100/1280) * var(--x-multiplier));
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+/* Colores personalizados */
+.btn-yellow {
+  background-color: #FFD64F;
+  color: #113893;
+}
+
+.btn-yellow:hover {
+  background-color: #eab308;
+}
+
+.btn-green {
+  background-color: #1BD731;
+  color: white;
+}
+
+.btn-green:hover {
+  background-color: #16a34a;
+}
+
+.btn-orange {
+  background-color: #FF7553;
+  color: white;
+}
+
+.btn-orange:hover {
+  background-color: #e1684a;
+}
+
+.btn-red {
+  background-color: #FF5353;
+  color: white;
+}
+
+.btn-red:hover {
+  background-color: #dc2626;
+}

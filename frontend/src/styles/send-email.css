@@ -1,0 +1,61 @@
+* {
+  font-family: 'Archivo Narrow', sans-serif;
+  box-sizing: border-box;
+}
+
+.contactar-mail {
+  width: calc((550/1280) * var(--x-multiplier));
+  display: flex;
+  flex-direction: column;
+  border-radius: calc((20/1280) * var(--x-multiplier));
+  border: calc((3/1280) * var(--x-multiplier)) solid #5386ff;
+  height: calc((430/1280) * var(--x-multiplier));
+}
+
+.contactar-mail .titulo {
+  height: calc((60/1280) * var(--x-multiplier));
+  background: #5386ff;
+  color: white;
+  border-radius: calc((10/1280) * var(--x-multiplier)) calc((10/1280) * var(--x-multiplier)) 0 0;
+  text-align: center;
+}
+
+.contactar-mail .titulo h2 {
+  margin: calc((8/1280) * var(--x-multiplier));
+  font-weight: 400;
+  font-size: calc((25/1280) * var(--x-multiplier));
+}
+
+.contactar-contenidos {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 100%;
+}
+
+.btns {
+  width: 100%;
+  display: flex;
+  column-gap: calc((30/1280) * var(--x-multiplier));
+  justify-content: center;
+}
+
+.btn-enviar,
+.btn-deshacer {
+  height: calc((50/1280) * var(--x-multiplier));
+  width: calc((200/1280) * var(--x-multiplier));
+  color: white;
+  border: none;
+  border-radius: calc((50/1280) * var(--x-multiplier));
+  font-size: calc((19/1280) * var(--x-multiplier));
+  cursor: pointer;
+}
+
+.btn-enviar {
+  background: #5386ff;
+}
+
+.btn-deshacer {
+  background: #c02727;
+}
