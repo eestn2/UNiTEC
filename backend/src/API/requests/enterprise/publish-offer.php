@@ -9,7 +9,6 @@
  *
  * Usage:
  *   Send a POST request with JSON body containing:
- *     - creator_id: (int) ID of the enterprise user publishing the offer (must be an enterprise)
  *     - title: (string) Title of the job offer
  *     - description: (string) Description of the job offer
  *
@@ -19,30 +18,37 @@
  *   Response: { "status": "success", "message": "Oferta de trabajo publicada con exito.", "data": null }
  */
 
+session_start();
 require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
+// Validate session and user authentication
+if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id'])) {
+    return_response("failed", "Usuario no autenticado.", null);
+}
+$creator_id = $_SESSION['user']['id'];
 $data = json_decode(file_get_contents("php://input"));
 
-if (!isset($data->creator_id) || !isset($data->title) || !isset($data->description)) return_response("failed", "Faltan datos.", null);
+if ( !isset($data->title) || !isset($data->description) || !isset($data->languages) || !isset($data->tags) ) return_response("failed", "Faltan datos.", null);
 
-$creator_id = intval($data->creator_id);
 $title = trim($data->title);
 $description = trim($data->description);
 $date = date('Y-m-d H:i:s');
 $status = 1; // Oferta de trabajo abierta
+$user_languages = $data->languages ?? [];
+$user_tags = $data->tags ?? [];
 
 try{
-    $stmt = $connection->prepare("SELECT user_type_id FROM users WHERE id = :id");
+    $stmt = $connection->prepare("SELECT user_type FROM users WHERE id = :id");
     $stmt->bindParam(':id', $creator_id, PDO::PARAM_INT);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$user) {
         return_response("failed", "Usuario no encontrado.", null);
     }
-    if (intval($user['user_type_id']) !== 1){
+    if (intval($user['user_type']) !== 1){
         return_response("failed", "Solo las empresas pueden publicar ofertas de trabajo.", null);
     }
 }catch (PDOException $e) {
@@ -52,14 +58,15 @@ try{
 try {
     $connection->beginTransaction();
 
-    $query = "INSERT INTO applications (creator_id, title, date, description, status) VALUES (:creator_id, :title, :date, :description, :status)";
+    $query = "INSERT INTO offers (creator_id, title, date, description, status) VALUES (:id, :title, :date, :description, :status)";
     $stmt = $connection->prepare($query);
-    $stmt->bindParam(':creator_id', $creator_id, PDO::PARAM_INT);
+    $stmt->bindParam(':id', $creator_id, PDO::PARAM_INT);
     $stmt->bindParam(':title', $title, PDO::PARAM_STR);
     $stmt->bindParam(':date', $date, PDO::PARAM_STR);
     $stmt->bindParam(':description', $description, PDO::PARAM_STR);
     $stmt->bindParam(':status', $status, PDO::PARAM_INT);
     $stmt->execute();
+
 
     $connection->commit();
     return_response("success", "Oferta de trabajo publicada con exito.", null);

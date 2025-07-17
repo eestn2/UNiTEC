@@ -11,7 +11,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import FeedBox from './feed/FeedBox';
 import Login from './session/Login';
 import RegisterEnterprise from './session/RegisterEnterprise';
-import ForgotPassword from './session/ForgotPassword';
+import ForgotPasswordMail from './session/ForgotPasswordComponents/ForgotPasswordMailVerification';
+import ForgotPasswordCode from './session/ForgotPasswordComponents/ForgotPasswordCodeVerification';
+import ForgotPasswordNewPass from './session/ForgotPasswordComponents/ForgotPasswordNewPassword';
 import RegisterUser from './session/RegisterUser';
 import axios from 'axios';
 import User from './session/User';
@@ -40,7 +42,9 @@ import { ToastManagerProvider } from './UI/ToastManager';
 import { useEffect, useState } from 'react';
 import PublishOffer from './offers/PublishOffer';
 import SeeApplicants from './offers/SeeApplicants';
+import SendEmail from './offers/SendEmail';
 import { useWindowSize } from '../hooks/responsive/useWindowSize';
+import LoadingScreen from './UI/LoadingScreens/LoadingScreen';
 import type { user } from '../types/user';
 import EditProfile from './user/EditProfile';
 
@@ -71,35 +75,50 @@ function App(): JSX.Element {
       })
       .catch(() => setSession(false))
       .finally(() => setLoading(false));
+  }, []); 
+  
+  const [loadingReal, setLoadingReal] = useState(true);
+  const [minTimePassed, setMinTimePassed] = useState(false);
+
+  useEffect(() => { 
+    setTimeout(() => {
+      setLoadingReal(false);
+    }, 400); 
+
+    const timer = setTimeout(() => {
+      setMinTimePassed(true);
+    }, 1500);
+
+    return () => clearTimeout(timer);
   }, []);
 
-  if (loading) return <div>Tenemos que hacer una pantallita de carga...</div>;
+  if (loadingReal || !minTimePassed) {
+    return <LoadingScreen />;
+  }
+  
   // Browser routings
   return (
-    <ToastManagerProvider>
-      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <div className="app-content">
-          <BrowserRouter basename="/">
-            <Routes>
-              <Route path='/' element={!session ? <Login /> : <FeedBox />} />
-              <Route path='/test' element={<FeedBox />} />
-              <Route path='/register-enterprise' element={<RegisterEnterprise />} />
-              <Route path='/register-user' element={<RegisterUser />} />
-              <Route path='/password-reset' element={<ForgotPassword />} />
-              <Route path='/profile/:id' element={<ProfileInfo />} />
-              <Route path='/edit-profile' element={<EditProfile />} />
-              {/*Add default admin-menu route to the approve users one. */}
-              <Route path='/admin-menu/:panel' element={<AdminIndex />} />
-              <Route path="/job-offer/:offerId" element={<JobOfferFV />} />
-              <Route path="/job-offer/:offerId/:message/:type" element={<JobOfferFV />} />
-              <Route path="/publish-offer" element={<PublishOffer />} />
-              <Route path="/see-applicants" element={<SeeApplicants />} />
-            </Routes>
-          </BrowserRouter>
-        </div>
-        <Footer />
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <div className="app-content">
+        <BrowserRouter basename="/">
+          <Routes>
+            <Route path='/' element={!session ? <Login /> : <FeedBox />} />
+            <Route path='/test' element={<FeedBox />} />
+            <Route path='/register-enterprise' element={<RegisterEnterprise />} />
+            <Route path='/register-user' element={<RegisterUser />} />
+            <Route path='/password-reset' element={<ForgotPassword />} />
+            <Route path='/profile/:id' element={<ProfileInfo />} />
+            {/*Add default admin-menu route to the approve users one. */}
+            <Route path='/admin-menu/:panel' element={<AdminIndex />} />
+            <Route path="/job-offer/:offerId" element={<JobOfferFV />} />
+            <Route path="/job-offer/:offerId/:message/:type" element={<JobOfferFV />} />
+            <Route path="/publish-offer" element={<PublishOffer />} />
+            <Route path="/see-applicants" element={<SeeApplicants />} />
+          </Routes>
+        </BrowserRouter>
       </div>
-    </ToastManagerProvider>
+      <Footer />
+    </div>
   );
 }
 

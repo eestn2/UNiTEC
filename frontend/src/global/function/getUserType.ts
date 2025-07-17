@@ -1,6 +1,6 @@
 import { UserType } from "../../types/user";
 
-export function getUserType(type: number | UserType) :string {
+export function getUserType(type: 1 | 2 | 3 | 4 | UserType) :string {
     if (typeof type === "string") return type;
     switch (type) {
         case 1:

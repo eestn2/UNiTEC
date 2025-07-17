@@ -1,7 +1,7 @@
 import { UserStatus } from "../../types/user";
 
 
-function getUserStatus(status: number | UserStatus): string {
+function getUserStatus(status: 0 | 1 | 2 | 3 |  UserStatus): string {
     if (typeof status === "string") return status;
     switch (status) {
         case 0:
