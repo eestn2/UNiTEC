@@ -77,6 +77,17 @@ const PublishOffer: React.FC = () => {
     }
   };
 
+    function getId (array1: string[], array2: string[]): number[] {
+    const result: number[] = [];
+    const minLength = Math.min(array1.length, array2.length);
+    for (let i = 0; i < minLength; i++) {
+      if (array1[i] === array2[i]) {
+        result.push(i+1);
+      }
+    }
+    return result;
+  }
+
   const handleIdiomaSubmit = (valor: string) => {
     const valido = Languages.some((i) => i.toLowerCase() === valor.toLowerCase());
     if (!valido) {
@@ -90,7 +101,7 @@ const PublishOffer: React.FC = () => {
       setSelectLanguages([...selectLanguages, idiomaCorrecto]);
     }
   };
- const handleAddOffer = async (tit: string,desc: string,tags:string[],languages:string[]) => {
+ const handleAddOffer = async (tit: string,desc: string,tags:number[],languages:number[]) => {
     const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
     const response = await axios.post(`${apiUrl}/enterprise/publish-offer.php`, {
       title:tit,
@@ -216,7 +227,7 @@ const PublishOffer: React.FC = () => {
             </div>
           </div>
 
-          <button className="btn-publish" onClick={() => handleAddOffer(title,description,selectTags,selectLanguages)}>Publicar Oferta</button>
+          <button className="btn-publish" onClick={() => handleAddOffer(title,description,getId(Tags, selectTags),getId(Languages, selectLanguages))}>Publicar Oferta</button>
           <button className="btn-undo">Deshacer Oferta</button>
         </div>
       </AppWindow>
