@@ -135,7 +135,7 @@ src/
 - **Federico Nicolás Martínez** — Backend, API Endpoints, Revisiones y arreglos en seguridad.
 - **Daniel Alejandro Rivas** — Revisión e informe sobre antigua versión del proyecto, Ayuda en Responsiveness de la página, HTML Para correos.
 - **Francesco Sidotti** — Mantenimiento y reestructurado de antigua Database, Admin panel Frontend, API Endpoints, Backend, Subdirector del proyecto.
-- **Emiliano Matias Ezequiel Grecco** — Frontend de Empresas.
+- **Emiliano Matias Grecco** — Frontend de Empresas.
 
 
 ---
