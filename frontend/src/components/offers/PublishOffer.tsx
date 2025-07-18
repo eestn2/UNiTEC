@@ -155,11 +155,12 @@ const PublishOffer: React.FC = () => {
             <TextBox
               placeholder="Ingrese la descripción de la oferta"
               name='text-tarea'
+              width={500}
               onChange={(e) => setDescription(e.target.value)}
               style={{
                 border: 'none',
-                height: `${TranslateFigmaCoords.translateFigmaY(240)}px`,
-                width: `${TranslateFigmaCoords.translateFigmaY(500)}px`,
+                width: `${TranslateFigmaCoords.translateFigmaY(500)}px`, 
+                height: `${TranslateFigmaCoords.translateFigmaY(240)}px`, 
               }}
             />
             <div className='search'>
@@ -175,7 +176,7 @@ const PublishOffer: React.FC = () => {
                 }}
                 buttonStyle={{
                   height: `${TranslateFigmaCoords.translateFigmaY(25)}px`,
-                  marginBottom: '-5px'
+                  marginBottom:`${TranslateFigmaCoords.translateFigmaY(-5)}px`
                 }}
               />
 
@@ -191,7 +192,7 @@ const PublishOffer: React.FC = () => {
                 }}
                 buttonStyle={{
                   height: `${TranslateFigmaCoords.translateFigmaY(25)}px`,
-                  marginBottom: '-5px'
+                  marginBottom: `${TranslateFigmaCoords.translateFigmaY(-5)}px`
                 }}
               />
 

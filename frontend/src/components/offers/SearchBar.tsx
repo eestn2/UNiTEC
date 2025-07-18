@@ -143,8 +143,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       ref={containerRef} 
       style={{
         position: "relative", 
-        width: "100%",
-        margin: "0 auto",
+        width: "100%", 
         ...style,
       }}
     >

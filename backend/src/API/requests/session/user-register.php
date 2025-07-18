@@ -109,7 +109,7 @@ try {
     log_debug('Transaction committed');
 
     // Send confirmation email (server-side, secure)
-    require_once __DIR__ . '/../../logic/send_email.php';
+    require_once __DIR__ . '/../../logic/communications/send_email.php';
     $email_subject = 'Registro en espera';
     $email_message = '¡Hola!, tu registro se ha cargado con éxito, debe esperar a que un administrador acepte su solicitud para poder utilizar nuestro software. Ten paciencia.<br><br>Gracias por registrarte en UNITEC.';
     $send_result = send_email($user_email, $email_subject, $email_message);

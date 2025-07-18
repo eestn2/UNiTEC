@@ -85,6 +85,7 @@ const LabelsSelection: React.FC<LabelsSelectionProps> = ({
       <div className="slider-tabs">
         {blocks.map((block, index) => (
           <button
+            type="button"
             key={index}
             className={index === activeIndex ? "active-tab" : "tab"}
             onClick={() => {
@@ -127,7 +128,7 @@ const LabelsSelection: React.FC<LabelsSelectionProps> = ({
         )}
       </div>
 
-      <button className="add-block-button" onClick={handleAgregarEtiqueta}>
+      <button type="button" className="add-block-button" onClick={handleAgregarEtiqueta}>
         Añadir  <img src={Agregar} className="iconMas" alt="" />
       </button>
     </div>
