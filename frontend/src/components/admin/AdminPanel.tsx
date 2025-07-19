@@ -17,10 +17,11 @@ const AdminPanel: React.FC = () => {
     console.log(response);
     await loadUsers();
     };
-    const handleRejectUser = async ( id: number) => {
+    const handleRejectUser = async ( id: number, user_type: number) => {
       const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
       const response = await axios.put(`${apiUrl}/admin/reject-new-user.php`, {
           target_user_id:id,
+          target_user_type:user_type,
       });
     console.log(response);
     await loadUsers();
@@ -178,7 +179,7 @@ const AdminPanel: React.FC = () => {
                                 backgroundColor: "#F03D3D"}}
                                action={() => {
                                 alert(`Rechazaste a: ${user.name}`)
-                                handleRejectUser(user.id);}} 
+                                handleRejectUser(user.id, user.user_type);}} 
                             />
                             </div>
                         </div>
