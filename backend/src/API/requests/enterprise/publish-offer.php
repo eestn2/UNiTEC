@@ -31,7 +31,7 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id'])) {
 $creator_id = $_SESSION['user']['id'];
 $data = json_decode(file_get_contents("php://input"));
 
-if ( !isset($data->title) || !isset($data->description) || !isset($data->languages) || !isset($data->tags) ) return_response("failed", "Faltan datos.", null);
+if ( !isset($data->title) || !isset($data->description) ||  empty(trim($data -> title)) || empty(trim($data -> description)) ||!isset($data->languages) || !isset($data->tags) ) return_response("failed", "Faltan datos.", null);
 
 $title = trim($data->title);
 $description = trim($data->description);

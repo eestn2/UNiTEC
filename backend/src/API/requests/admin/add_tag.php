@@ -27,7 +27,7 @@ require_once __DIR__ . '/../../logic/security/is_admin.php';
 if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
 
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($data->name)) return_response("failed", "Faltan datos.", null);
+if (!isset($data->name) || empty(trim($data -> name))) return_response("failed", "Faltan datos.", null);
 
 if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
 if (!is_admin($_SESSION['user']['id'], $connection)) {
