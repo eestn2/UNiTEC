@@ -25,11 +25,11 @@ require_once __DIR__ . '/../../logic/security/security_functions.php';
 if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
 
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($data->email) || !isset($data->password)) return_response("failed", "Faltan datos.", null);
+if (!isset($data->email) || !isset($data->password) || empty(trim($data -> user_type)) || empty(trim($data -> status_id)))  return_response("failed", "Faltan datos.", null);
 
 // Assign request body values to variables
 $name = $data->name ?? null;
-$user_age = date('Y-m-d H:i:s');
+$user_age = $data->birth_date ?? date('Y-m-d H:i:s');
 $user_location = "notEnabledFunctionality";
 $user_email = $data->email;
 $user_password = password_hash($data->password, PASSWORD_DEFAULT);
@@ -80,7 +80,7 @@ try {
     if ($user_rol !== 1) {
         // Insert user languages
         if (!empty($user_languages) && !empty($knownLanguagesWithLevels)) {
-            $stmt = $connection->prepare("INSERT INTO user_languages (user_id, language_id, level_id) VALUES (?, ?, ?)");
+            $stmt = $connection->prepare("INSERT INTO user_languages (user_id, language_id, `level`) VALUES (?, ?, ?)");
             foreach ($user_languages as $i => $lang_id) {
                 $level_id = $knownLanguagesWithLevels[$i] ?? null;
                 if ($level_id !== null) {
@@ -92,7 +92,7 @@ try {
 
         // Insert user tags
         if (!empty($user_tags) && !empty($tags_levels)) {
-            $stmt = $connection->prepare("INSERT INTO user_tags (user_id, tag_id, level_id) VALUES (?, ?, ?)");
+            $stmt = $connection->prepare("INSERT INTO user_tags (user_id, tag_id, `level`) VALUES (?, ?, ?)");
             foreach ($user_tags as $i => $tag_id) {
                 $level_id = $tags_levels[$i] ?? null;
                 if ($level_id !== null) {
