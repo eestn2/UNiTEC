@@ -21,25 +21,11 @@ type EtiquetaSeleccionada = {
   valorCheckbox: string;
 };
 
-function getId(
+function getIdsAndLevels(
   array1: string[],
   array2: EtiquetaSeleccionada[],
   option: 1 | 2
-): number[] {
-  const bloqueFiltrado = option === 1 ? "Etiquetas" : "Idiomas";
-
-  // Para cada elemento en array2, si cumple bloque, buscá su índice en array1
-  return array2.map((item) => {
-    if (item.bloque !== bloqueFiltrado) return 0;
-    const indexInArray1 = array1.indexOf(item.etiqueta);
-    return indexInArray1 !== -1 ? indexInArray1 + 1 : 0;
-  });
-}
-function getOptions(
-  array1: string[],
-  array2: EtiquetaSeleccionada[],
-  option: 1 | 2
-): number[] {
+): { ids: number[]; levels: number[] } {
   const bloqueFiltrado = option === 1 ? "Etiquetas" : "Idiomas";
 
   const nivelMap: Record<string, number> = {
@@ -48,28 +34,27 @@ function getOptions(
     "Avanzado": 3,
   };
 
-  const outputArray: number[] = [];
+  const ids: number[] = [];
+  const levels: number[] = [];
 
   for (const etiqueta of array1) {
     const match = array2.find(
       (item) => item.bloque === bloqueFiltrado && item.etiqueta === etiqueta
     );
 
-    if (!match) {
-      outputArray.push(0); // Si no encontrás, pushea 0 para mantener orden y tamaño
-      continue;
-    }
+    if (!match) continue;
 
-    if (option === 1) {
-      outputArray.push(1); // solo indicar que está presente
-    } else {
+    const index = array1.indexOf(etiqueta);
+    ids.push(index + 1);
+
       const nivel = nivelMap[match.valorCheckbox];
-      outputArray.push(nivel ?? 0);
-    }
+      levels.push(nivel ?? 0);
+    
   }
 
-  return outputArray;
+  return { ids, levels };
 }
+
 
 type FormType = {
   name: string;
@@ -80,9 +65,7 @@ type FormType = {
   location: string;
   description: string;
   portfolio: string;
-  user_type: string;
-  user_state: string;
-  user_type_id: number;
+  user_type: number;
   status_id: number;
   languages: number[];
   tags: number[];
@@ -101,9 +84,7 @@ function RegisterUser() {
     location: "",
     description: "",
     portfolio: "",
-    user_type: "",
-    user_state: "",
-    user_type_id: 0,
+    user_type: 0,
     status_id: 0,
     languages:[],
     tags: [],
@@ -319,7 +300,7 @@ function RegisterUser() {
     width={292}
     height={55}
     className="input-field"
-    onChange={(e) => handleChange("user_state", (e.target as HTMLSelectElement).value)}
+    onChange={(e) => handleChange("status_id", (e.target as HTMLSelectElement).value)}
   />
   <InputField
     name="user-portfolio"
@@ -399,8 +380,11 @@ function RegisterUser() {
               Si has rellenado todos los campos necesarios solo queda:
             </span>
             <ActionButton height={60} text={"Registrarse"} width={100} action={() => {
+              const langs = getIdsAndLevels(Languages, labelsFromSelection, 2);
+              const tags = getIdsAndLevels(Tags, labelsFromSelection, 1);
+              handleSubmitLabels(langs.ids, tags.ids, langs.levels, tags.levels);
               handleSubmit; 
-              handleSubmitLabels(getId(Languages, labelsFromSelection, 2),getId(Tags, labelsFromSelection, 1), getOptions(Languages, labelsFromSelection, 2), getOptions(Tags, labelsFromSelection, 1) )}} />
+              }} />
             <div className="delimiter"></div>
             <span className="form-text" style={{ paddingBottom: `${TranslateFigmaCoords.translateFigmaY(17)}` }}>
               Registrarse como <Link to="/register-enterprise" className="golden-link">Empresa</Link><br />
