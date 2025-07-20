@@ -72,7 +72,22 @@ type FormType = {
   languages_levels: number[];
   tags_levels: number[];
 };
+
+
 function RegisterUser() {
+
+    const [fieldErrors, setFieldErrors] = useState({
+    name: "",
+    birth_date: "",
+    email: "",
+    password: "",
+    confirm_password: "",
+    location: "",
+    description: "",
+    user_type: 0,
+    status_id: 0
+  });
+
   const windowSize = useWindowSize();
   const [error, setError] = useState("");
   const [form, setForm] = useState<FormType>({
@@ -101,9 +116,6 @@ function RegisterUser() {
     );
   };
 
-  const handleChange = (field: string, value: string) => {
-    setForm(prev => ({ ...prev, [field]: value }));
-  };
   function handleSubmitLabels(languages: number[], tags:number[], languagesLevels: number[], tagsLevels: number[]) {
     setForm(prev => ({
       ...prev,
@@ -113,19 +125,80 @@ function RegisterUser() {
       tags_levels: tagsLevels,
     }));
   }
+
+ const validateField = (field: string, value: string) => {
+    let error = "";
+    switch (field) {
+      case "email":
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(value)) {
+          error = "Formato de email inválido";
+        }
+        break;
+      case "password":
+      case "confirm_password":
+        if (
+          (field === "confirm_password" && value !== form.password) ||
+          (field === "password" && form.confirm_password && value !== form.confirm_password)
+        ) {
+          error = "Las contraseñas no coinciden";
+        }
+        break;
+      default:
+        if (!value.trim() && field !== "portfolio") {
+          error = "Este campo es obligatorio";
+        }
+    }
+    setFieldErrors((prev) => ({ ...prev, [field]: error }));
+  };
+
+  const handleChange = (field: string, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+    validateField(field, value);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    if (form.password !== form.confirm_password) {
-      setError("Las contraseñas no coinciden.");
-      return;
+
+    const requiredFields = [
+      "name", "birth_date", "email",
+      "password", "confirm_password",
+      "description", "user_type", "user_state"
+    ];
+
+    let hasError = false;
+    const newErrors: any = {};
+    const camposInvalidos = ["user_type", "status_id"];
+
+    requiredFields.forEach((field) => {
+      const value = form[field as keyof typeof form];
+
+      if (
+        value === null ||
+        value === undefined ||
+        (typeof value === "string" && value.trim() === "") ||
+        (camposInvalidos.includes(field) && value === 0)
+      ) {
+        newErrors[field] = "Este campo es obligatorio";
+        hasError = true;
+      }
+    });
+
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) {
+      newErrors.email = "Formato de email inválido";
+      hasError = true;
     }
-    // Prepara los datos para enviar, ajustando los nombres si es necesario
-    const dataToSend = {
-      ...form,
-    };
+
+    if (form.password !== form.confirm_password) {
+      newErrors.confirm_password = "Las contraseñas no coinciden";
+      hasError = true;
+    }
+
+    setFieldErrors((prev) => ({ ...prev, ...newErrors }));
+    if (hasError) return;
+
     try {
-      const res = await axios.post("/session/user-register.php", dataToSend);
+      const res = await axios.post("/session/user-register.php", { ...form });
       if (res.data.status === "success") {
         window.location.reload();
       } else {
@@ -135,6 +208,8 @@ function RegisterUser() {
       setError("No se pudo registrar. Intente de nuevo más tarde.");
     }
   };
+
+
 
   const loadLanguages = async () => {
     try {
@@ -231,6 +306,7 @@ function RegisterUser() {
     value={form.name}
     onChange={(e) => handleChange("name", (e.target as HTMLInputElement).value)}
   />
+  {fieldErrors.name && <span style={{ color: "red" }}>{fieldErrors.name}</span>}
   <InputField
     name="birthday-user"
     type="date"
@@ -242,6 +318,7 @@ function RegisterUser() {
     value={form.birth_date}
     onChange={(e) => handleChange("birth_date", (e.target as HTMLInputElement).value)}
   />
+  {fieldErrors.birth_date && <span style={{ color: "red" }}>{fieldErrors.birth_date}</span>}
   <InputField
     name="mail-user"
     type="text"
@@ -251,6 +328,7 @@ function RegisterUser() {
     value={form.email}
     onChange={(e) => handleChange("email", (e.target as HTMLInputElement).value)}
   />
+  {fieldErrors.email && <span style={{ color: "red" }}>{fieldErrors.email}</span>}
   <InputField
     name="password-user"
     type="password"
@@ -260,6 +338,7 @@ function RegisterUser() {
     value={form.password}
     onChange={(e) => handleChange("password", (e.target as HTMLInputElement).value)}
   />
+  {fieldErrors.password && <span style={{ color: "red" }}>{fieldErrors.password}</span>}
   <InputField
     name="confirm-password-user"
     type="password"
@@ -269,6 +348,7 @@ function RegisterUser() {
     value={form.confirm_password}
     onChange={(e) => handleChange("confirm_password", (e.target as HTMLInputElement).value)}
   />
+  {fieldErrors.confirm_password && <span style={{ color: "red" }}>{fieldErrors.confirm_password}</span>}
   <SelectionField
     name="user-type"
     options={[
@@ -318,6 +398,7 @@ function RegisterUser() {
           <div className="vertical-sections" style={{ paddingInline: `${TranslateFigmaCoords.translateFigmaY(20)}`, borderLeft: "3px solid rgba(255, 193, 35, 1)" }}>
             <div className="corner-container">
               <TextBox name="user-description" placeholder="Ingrese una descripción personal" width={292} height={265} className="corner-visible" onChange={(e) => handleChange("description", e.target.value)} />
+                {fieldErrors.description && <span style={{ color: "red" }}>{fieldErrors.description}</span>}
               <p className="corner-down-right"></p>
             </div>
             <LabelsSelection
@@ -399,3 +480,4 @@ function RegisterUser() {
 }
 
 export default RegisterUser;
+
