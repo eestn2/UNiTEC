@@ -13,7 +13,7 @@ interface Report {
   reported_email: string;
   reporter_id: number;
   reporter_email: string;
-  reason: number;
+  reason: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 }
 
 const AdminReport: React.FC = () => {
