@@ -21,26 +21,23 @@ require_once __DIR__ . '/../../logic/communications/return_response.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no permitido.", null);
 
-// Validate session and user authentication
-if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id'])) {
-    return_response("failed", "Usuario no autenticado.", null);
-}
 
-if (!isset($_SESSION['user']['user_type']) || $_SESSION['user']['user_type'] != 3) {
-    return_response("failed", "Acceso no autorizado. Solo disponible para empresas.", null);
+if (!isset($_SESSION['user']['id'])) {
+    return_response("failed", "No se ha iniciado sesión", null);
 }
 
 try {
-    $stmt = $conn->prepare("
+    $stmt = $connection->prepare("
         SELECT 
-            o.id AS offer_id, o.title, o.description, o.company_id,
+            o.id AS offer_id, o.title, o.description, o.creator_id, o.status,
             a.user_id AS applicant_user_id,
             u.id AS user_id, u.name, u.profile_picture
         FROM offers o
         LEFT JOIN applicants a ON o.id = a.offer_id
         LEFT JOIN users u ON a.user_id = u.id
+        WHERE o.creator_id = :id
     ");
-    $stmt->execute();
+    $stmt->execute(['id' => $_SESSION['user']['id']]);
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $offers = [];
@@ -51,9 +48,10 @@ try {
         if (!isset($offers[$offerId])) {
             $offers[$offerId] = [
                 'id' => $offerId,
+                'creator_id' => $row['creator_id'],
                 'title' => $row['title'],
                 'description' => $row['description'],
-                'company_id' => $row['company_id'],
+                'status' => $row['status'],
                 'applicants' => []
             ];
         }
@@ -67,7 +65,8 @@ try {
         }
     }
 
-    echo json_encode(array_values($offers));
+    return_response("success", "offers retrieved successfully.", [ "offers" => array_values($offers) ]);
+
 } catch (PDOException $e) {
     echo json_encode(['error' => $e->getMessage()]);
 }

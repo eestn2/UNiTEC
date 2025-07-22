@@ -8,12 +8,14 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import AppWindow from "../UI/AppWindow";
 import cross_icon from "../../assets/icons/close.svg";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const ModalOverlay: React.FC<{
   title: string;
   postulantes?: { id: number; name: string; profileImage?: string }[];
   onClose: () => void;
 }> = ({ title, postulantes, onClose }) => {
+    const navigate = useNavigate();
   return createPortal(
     <div className="overlay" onClick={onClose}>
       <div className="popup-card" onClick={e => e.stopPropagation()}>
@@ -31,7 +33,7 @@ const ModalOverlay: React.FC<{
               key={postulante.id}
               name={postulante.name}
               profileImage={postulante.profileImage}
-              onViewProfile={() => alert(`Ver perfil de ${postulante.name}`)}
+              onViewProfile={() => navigate(`/profile/${postulante.id}`)}
               onAccept={() => alert(`Aceptaste a ${postulante.name}`)}
               onContact={() => alert(`Contactaste a ${postulante.name}`)}
               onReject={() => alert(`Rechazaste a ${postulante.name}`)}
@@ -48,17 +50,16 @@ const SeeApplicants: React.FC = () => {
   type Postulante = {
     id: number;
     name: string;
-    profileImage?: string;
+    profile_picture?: string;
   };
 
   type OfferWithApplicants = {
     id: number;
     creator_id: number;
     title: string;
-    date: string;
     description: string;
     status: number;
-    postulantes?: Postulante[];
+    applicants?: Postulante[];
   };
 
   const [offers, setOffers] = useState<OfferWithApplicants[]>([]);
@@ -94,7 +95,7 @@ const SeeApplicants: React.FC = () => {
       if (response.status !== 200 && response.data.status !== "success") {
         console.error("Failed to load tags:", response.data.message);
       } else {
-        setOffers(response.data.data.offers.map);
+        setOffers(response.data.data.offers);
         console.log(response.data.data.offers);
       }
     } catch (error) {
@@ -142,7 +143,7 @@ const SeeApplicants: React.FC = () => {
         return (
           <ModalOverlay
             title={ofertaActiva.title}
-            postulantes={ofertaActiva.postulantes}
+            postulantes={ofertaActiva.applicants}
             onClose={cerrarPopup}
           />
         );
