@@ -1,0 +1,124 @@
+/* =========================
+  Profile info Styles
+  ========================= */
+
+.user-info-container {
+  display: grid;
+}
+
+/* Column sections */
+.user-info-section {
+  width: 100%;
+}
+
+/* Profile photo section */
+.profile-photo-section {
+  grid-column: 1;
+  grid-row: 1 / span 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Column 1 individual items */
+.user-info-item {
+  grid-column: 1;
+  width: 100%;
+}
+
+/* Column 2 items */
+.user-labels-section {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.user-status-section {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.user-skills-section {
+  grid-column: 2;
+  grid-row: 3 / span 3;
+}
+
+.user-languages-section {
+  grid-column: 2;
+  grid-row: 6 / span 3;
+}
+
+/* Column 3 items */
+.user-description-section {
+  grid-column: 3;
+  grid-row: 1 / span 4;
+}
+.user-description-section > * {
+  width: calc(100% - (18 / 1280) * var(--x-multiplier));
+  margin-left: calc((18 / 1280) * var(--x-multiplier));
+}
+.user-description-section::-webkit-scrollbar {
+  width: calc((8 / 1280) * var(--x-multiplier));
+}
+.user-description-section::-webkit-scrollbar-track {
+  background-color: #dee0eb;
+  border-radius: calc((10 / 1280) * var(--x-multiplier));
+}
+.user-description-section::-webkit-scrollbar-thumb {
+  background-color: #305894;
+  border-radius: calc((10 / 1280) * var(--x-multiplier));
+  border: calc((2 / 1280) * var(--x-multiplier)) solid #dee0eb;
+}
+.user-description-section::-webkit-scrollbar-thumb:hover {
+  background-color: #1e3a6d;
+}
+
+/* Column 3 items, editing variant */
+.user-description-section.edit {
+  grid-column: 3;
+  grid-row: 1 / span 5;
+}
+.user-description-section.edit > * {
+  width: calc(100% - (18 / 1280) * var(--x-multiplier));
+  margin-left: calc((18 / 1280) * var(--x-multiplier));
+}
+
+.user-button-section {
+  grid-column: 3;
+  grid-row: 5 / span 4;
+  display: flex;
+  flex-direction: column;
+  gap: calc((12 / 1280) * var(--x-multiplier));
+}
+
+.tag-display-profile::-webkit-scrollbar {
+  width: calc((18 / 1280) * var(--x-multiplier));
+  left: 0;
+}
+.tag-display-profile::-webkit-scrollbar-track {
+  border-top-right-radius: calc((8 / 1280) * var(--x-multiplier));
+  border-bottom-right-radius: calc((8 / 1280) * var(--x-multiplier));
+  background-color: #3D8AF0;
+}
+.tag-display-profile::-webkit-scrollbar-thumb {
+  border-radius: calc((8 / 1280) * var(--x-multiplier));
+  background-color: var(--delimiters);
+  border: solid calc((4 / 1280) * var(--x-multiplier)) #3D8AF0;
+}
+.tag-display-profile::-webkit-scrollbar-thumb:hover {
+  background-color: var(--feed-title-BG);
+}
+
+/* =========================
+  Edit profile styles
+  ========================= */
+.edit-picture-overlay {
+  position: absolute;
+  transition: all 0.3s ease-in-out;
+  opacity: 0.75;
+}
+.edit-picture-overlay:hover {
+  cursor: pointer;
+  scale: 1.10;
+  transition: all 0.3s ease-in-out;
+  opacity: 1;
+}
