@@ -25,7 +25,7 @@ try{
         $connection->beginTransaction();
 
         $stmt = $connection -> prepare( 
-            "INSERT INTO applicants (user_id, offer_id, 'status') VALUES (?, ?, 0)");
+            "INSERT INTO applicants (user_id, offer_id, `status`) VALUES (?, ?, 0)");
         $stmt->execute([$user_id, $offer_id]);
 
         $connection->commit();

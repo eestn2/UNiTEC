@@ -20,8 +20,6 @@ const AdminTags: React.FC = () => {
         });
         // Remove the deleted tag from state
         setTags(prevTags => prevTags.filter(tag => tag.id !== id));
-        // Optionally, show user feedback
-        // alert("Tag deleted successfully.");
       } catch (error) {
         console.error("Failed to delete tag:", error);
         alert("Error deleting tag. Please try again.");
