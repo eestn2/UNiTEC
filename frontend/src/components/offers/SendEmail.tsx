@@ -5,10 +5,42 @@ import NavBar from '../UI/NavBar';
 import InputField from '../UI/form/InputField';
 import TextBox from '../UI/form/TextBox';
 import { useWindowSize } from '../../hooks/responsive/useWindowSize';
-const SendEmail: React.FC = () => {
+import axios from 'axios';
+import { use, useEffect, useState } from 'react';
+
+interface SendEmailProps {
+  id?: number;
+}
+const SendEmail: React.FC = ( {id}:SendEmailProps) => {
+
   // Re-Render on window resize
   const windowSize = useWindowSize();
+  const [userEmail, setUserEmail] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+   const handleGetUserEmail = async (id : number) => {
+    try {
+      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+      const response = await axios.get(`${apiUrl}/enterprise/get-user-email.php`, {
+        params: {userId: id},
+
+      });
+      if (response.status !== 200 && response.data.status !== "success") {
+        console.error("Failed to load tags:", response.data.message);
+      } else {
+        setUserEmail(response.data.data.email);
+        setUsername(response.data.data.name);
+        console.log(response.data.data.offers);
+      }
+    } catch (error) {
+      console.error("An error occurred while loading tags:", error);
+    }
+  };
   console.log("Window size:", windowSize);
+  useEffect(() => {
+    if (id) {
+      handleGetUserEmail(id);
+    }
+  }, []);
   return (
     <>
       <NavBar />
@@ -32,23 +64,31 @@ const SendEmail: React.FC = () => {
           <div className="titulo">
             <h2>Contacto vía correo electrónico</h2>
           </div>
-          <div className='contactar-contenidos'>
-            <InputField
-              type="text"
-              name="username"
-              placeholder="Destinatario: ElPanaMiguel , panamiguel54@hotmail.com"
-              style={{ height: `${TranslateFigmaCoords.translateFigmaY(55)}px`, width: `${TranslateFigmaCoords.translateFigmaY(620)}px`, }}
-            />
+          <div className='contactar-contenidos' 
+          >
+            <div className='input-field' style={{ height: `${TranslateFigmaCoords.translateFigmaY(55)}px`,
+           width:"95%", }}>
+              <div className="contactar-destinatario" >
+                <span>Destinatario: </span>
+                <span className="destinatario-email">{userEmail}</span>
+              </div>
+              <div className="contactar-username">
+                <span>Nombre: </span>
+                <span className="destinatario-username">{username}</span>
+              </div>
+            </div> 
             <InputField
               type="text"
               name="username"
               placeholder="Asunto del correo"
-              style={{ height: `${TranslateFigmaCoords.translateFigmaY(55)}px`, width: `${TranslateFigmaCoords.translateFigmaY(620)}px`, }}
+              width={"95%"}
+              height={`${TranslateFigmaCoords.translateFigmaY(55)}px`} 
             />
             <TextBox
               placeholder="Ingrese el cuerpo del correo"
               name='text-tarea'
-              style={{ height: `${TranslateFigmaCoords.translateFigmaY(235)}px`, width: `${TranslateFigmaCoords.translateFigmaY(620)}px`, }}
+              width={"95%"}
+              height={`${TranslateFigmaCoords.translateFigmaY(235)}px`}
             />
           </div>
         </div>
