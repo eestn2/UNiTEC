@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 const ModalOverlay: React.FC<{
   title: string;
-  postulantes?: { id: number; name: string; profileImage?: string }[];
+  postulantes?: { id: number; name: string; profileImage?: string; status:boolean }[];
   onClose: () => void;
 }> = ({ title, postulantes, onClose }) => {
     const navigate = useNavigate();
@@ -35,8 +35,9 @@ const ModalOverlay: React.FC<{
               profileImage={postulante.profileImage}
               onViewProfile={() => navigate(`/profile/${postulante.id}`)}
               onAccept={() => alert(`Aceptaste a ${postulante.name}`)}
-              onContact={() => alert(`Contactaste a ${postulante.name}`)}
+              onContact={() => navigate(`/send-email`)}
               onReject={() => alert(`Rechazaste a ${postulante.name}`)}
+              status={true}
             />
           ))}
         </div>
@@ -51,6 +52,7 @@ const SeeApplicants: React.FC = () => {
     id: number;
     name: string;
     profile_picture?: string;
+    status: boolean; 
   };
 
   type OfferWithApplicants = {

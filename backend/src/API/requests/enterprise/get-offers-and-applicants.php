@@ -31,7 +31,7 @@ try {
         SELECT 
             o.id AS offer_id, o.title, o.description, o.creator_id, o.status,
             a.user_id AS applicant_user_id,
-            u.id AS user_id, u.name, u.profile_picture
+            u.id AS user_id, u.name, u.profile_picture, u.status
         FROM offers o
         LEFT JOIN applicants a ON o.id = a.offer_id
         LEFT JOIN users u ON a.user_id = u.id
