@@ -1,5 +1,5 @@
 import React from 'react';
-import './applicants.css'; // Cambié el nombre para claridad
+import './applicants.css';
 
 interface UserCardProps {
   name?: string;
@@ -8,6 +8,7 @@ interface UserCardProps {
   onAccept?: () => void;
   onContact?: () => void;
   onReject?: () => void;
+  status: boolean; // NUEVA prop
 }
 
 const AplicantsCard: React.FC<UserCardProps> = ({
@@ -17,7 +18,13 @@ const AplicantsCard: React.FC<UserCardProps> = ({
   onAccept,
   onContact,
   onReject,
+  status, // la recibimos acá
 }) => {
+  // Lógica condicional según el estado
+  const buttonText = status ? 'Contactar' : 'Aceptar';
+  const buttonClass = status ? 'btn-orange' : 'btn-green'
+  const buttonFunction = status ? onContact : onAccept;
+
   return (
     <div className="user-card">
       <img
@@ -31,13 +38,15 @@ const AplicantsCard: React.FC<UserCardProps> = ({
       <div className="user-info">
         <div className="user-name">{name}</div>
         <div className="button-group">
-          <button className="btn btn-yellow" onClick={onViewProfile}>Ver Perfil</button>
-          <button className="btn btn-green" onClick={onAccept}>Aceptar</button>
-          <button className="btn btn-orange" onClick={onContact}>Contactar</button>
+          <button className="btn btn-yellow" onClick={onViewProfile}>Ver Perfil</button> 
+          <button className={`btn ${buttonClass}`} onClick={buttonFunction}>
+            {buttonText}
+          </button> 
           <button className="btn btn-red" onClick={onReject}>Rechazar</button>
         </div>
       </div>
     </div>
   );
 }; 
+
 export default AplicantsCard;

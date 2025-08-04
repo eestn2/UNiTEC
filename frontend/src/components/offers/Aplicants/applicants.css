@@ -5,7 +5,7 @@
   /* Azul */
   border-radius: calc((40/1280) * var(--x-multiplier)) calc((20/1280) * var(--x-multiplier)) calc((20/1280) * var(--x-multiplier)) calc((40/1280) * var(--x-multiplier));
   padding: calc((15/1280) * var(--x-multiplier));
-  width: calc((537/1280) * var(--x-multiplier));
+  width: calc((450/1280) * var(--x-multiplier));
   gap: calc((12/1280) * var(--x-multiplier));
   box-shadow: 0 calc((2/1280) * var(--x-multiplier)) calc((4/1280) * var(--x-multiplier)) rgba(0, 0, 0, 0.1);
   height: calc((120 / 720) * var(--y-multiplier));
