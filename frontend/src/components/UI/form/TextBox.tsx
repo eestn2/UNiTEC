@@ -75,7 +75,6 @@ const TextBox: React.FC<TextBoxProps> = ({ width = 50, height = 10, name, placeh
                 height: finalHeight,
                 paddingLeft: `${translateX(18)}px`,
                 paddingTop: `${translateX(14)}px`,
-                wordBreak: "break-all",
                 overflowWrap: "anywhere",
                 ...style,
             }}
