@@ -16,6 +16,7 @@ import User from "../../session/User";
 import apply_icon from "../../../assets/icons/apply.svg";
 import deapply_icon from "../../../assets/icons/deapply.svg";
 import StateButton from "../StateButton";
+import { UserTypeEnum } from "../../../types/user";
 
 /**
  * Props for the `JobOffer` component.
@@ -96,7 +97,7 @@ const JobOffer: React.FC<JobOfferProps> = ({
     } = useJobOffer({ height, width, authorId, description, vertical });
     const [placeholderApplyState, setPlaceholderApplyState] = useState(false);
     let extraButton: React.ReactNode = undefined;
-    if (![1, 4].includes(User.data.type as number)) {
+    if (![UserTypeEnum.Empresa, UserTypeEnum.Administrador].includes(User.data.type)) {
         extraButton = <StateButton 
         trueIcon={apply_icon}
         falseIcon={deapply_icon}
@@ -114,7 +115,7 @@ const JobOffer: React.FC<JobOfferProps> = ({
             console.log("Postularse clicked");
         }}
         />                    
-    } else if (User.data.type === 1 && User.data.id === authorId) {
+    } else if (User.data.type === UserTypeEnum.Empresa && User.data.id === authorId) {
         extraButton = <ActionButton text="Borrar" />;
     }
 

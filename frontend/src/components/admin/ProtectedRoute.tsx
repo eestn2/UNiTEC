@@ -1,10 +1,10 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import { UserType } from "../../types/user";
+import { UserTypeEnum } from "../../types/user";
 
 type ProtectedRouteProps = {
-  user_type: UserType;             
-  allowedType: UserType;      
+  user_type: UserTypeEnum;             
+  allowedType: UserTypeEnum;      
   children: ReactNode;      
 };
 

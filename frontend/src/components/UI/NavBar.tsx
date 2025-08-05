@@ -16,7 +16,7 @@ import User from "../session/User";
 import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 import { useLocation, useNavigate } from "react-router-dom";
 import ProfilePicture from "./user/ProfilePicture";
-import { UserType } from "../../types/user";
+import { UserTypeEnum } from "../../types/user";
 
 /**
  * A React functional component that renders the navigation bar with logo and icon buttons.
@@ -40,7 +40,7 @@ const NavBar: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     // Conditional Variables to NavBar changes
-    const user_type: UserType =  User.data.type;
+    const user_type: UserTypeEnum =  User.data.type;
     const buttons: React.ReactElement[] | undefined[] = [
         <img src={notification_icon} alt="Notification" className="bell" style={{ display: window.innerWidth > window.innerHeight ? "none" : "block"}} />,
         <a href="#footer"><img src={about_us_icon} alt="About Us" /></a>,
@@ -48,8 +48,8 @@ const NavBar: React.FC = () => {
     ];
     if (user_type === 'Empresa') {
         buttons.unshift(
-            <img src={chart_icon} alt="Chart" />,
-            <img src={add_offer_icon} alt="Add Offer" />,
+            <img src={chart_icon} onClick={() => {navigate("/see-applicants")}} style={{cursor:"pointer"}} alt="Chart" />,
+            <img src={add_offer_icon} onClick={() => {navigate("/publish-offer")}} style={{cursor:"pointer"}} alt="Add Offer" />,
         )
     } else if (user_type === 'Administrador') {
         if (!location.pathname.includes("admin-menu")){
