@@ -23,6 +23,8 @@ import getUserType from '../../global/function/getUserType';
 import TagList, { Tag } from '../UI/Tags/TagList';
 import useNotImplementedToast from '../../hooks/UI/useNotImplementedToast';
 
+import '../../styles/profile-info.css';
+
 // Add types for tags and languages
 interface tag {
   name: string;
@@ -225,7 +227,6 @@ const handleLogout = async () => {
           <div
             className='user-description-section input-field'
             style={{...(isPortrait ? { gridColumn: '2', gridRow: '6 / span 6' } : {}),
-            wordBreak: "break-all",
             overflowWrap: "anywhere",
             overflowY: "auto",
           }}

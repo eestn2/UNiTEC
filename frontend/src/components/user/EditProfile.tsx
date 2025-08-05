@@ -13,6 +13,8 @@ import Logo from '../UI/unitec/Logo';
 import upload_picture from '../../assets/icons/upload-picture.svg';
 import edit_profile from '../../assets/icons/edit-picture.svg';
 
+import '../../styles/profile-info.css';
+
 const STATUS_OPTIONS = [
     { value: '1', label: 'Estudiando' },
     { value: '2', label: 'Buscando trabajo' },
