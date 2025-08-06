@@ -6,7 +6,7 @@ import InputField from '../UI/form/InputField';
 import TextBox from '../UI/form/TextBox';
 import { useWindowSize } from '../../hooks/responsive/useWindowSize';
 import axios from 'axios';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface SendEmailProps {
   id?: number;
@@ -35,12 +35,12 @@ const SendEmail: React.FC = ( {id}:SendEmailProps) => {
       console.error("An error occurred while loading tags:", error);
     }
   };
-  console.log("Window size:", windowSize);
+  if(import.meta.env.DEV) console.log("Compiler stop crying please", windowSize)
   useEffect(() => {
     if (id) {
       handleGetUserEmail(id);
     }
-  }, []);
+  });
   return (
     <>
       <NavBar />

@@ -89,6 +89,7 @@ function RegisterUser() {
   });
 
   const windowSize = useWindowSize();
+  if(import.meta.env.DEV) console.log("Compiler stop crying please", windowSize)
   const [error, setError] = useState("");
   const [form, setForm] = useState<FormType>({
     name: "",
