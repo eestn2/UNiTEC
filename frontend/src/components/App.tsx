@@ -99,7 +99,7 @@ function App(): JSX.Element {
     <ToastManagerProvider>
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <div className="app-content">
-          <BrowserRouter basename="/">
+          <BrowserRouter basename="/UNiTEC/">
             <Routes>
               <Route path='/' element={!session ? <Login /> : <FeedBox />} />
               <Route path='/test' element={<FeedBox />} />
