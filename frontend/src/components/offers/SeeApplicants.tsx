@@ -68,7 +68,7 @@ const SeeApplicants: React.FC = () => {
   const [popupActivo, setPopupActivo] = useState<number | null>(null);
 
   const windowSize = useWindowSize();
-
+  if(import.meta.env.DEV) console.log("Compiler stop crying please", windowSize)
   const togglePopup = (offerId: number) => {
     setPopupActivo(popupActivo === offerId ? null : offerId);
   };
