@@ -121,7 +121,7 @@ src/
 
 ## 🚀 TOP CONTRIBUIDORES
 <a href="https://github.com/eestn2/UNiTEC/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=eestn2/UNiTEC" />
+  <img src="https://contrib.rocks/image?repo=eestn2/UNiTEC" alt="Imagen dinámica de los principales contribuyentes" />
 </a>
 
 Made with [contrib.rocks](https://contrib.rocks).
