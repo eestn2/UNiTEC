@@ -1,4 +1,4 @@
-# 🌟 UNiTEC - Plataforma Integral de Egresados Técnicos
+# 🌟 UNiTEC - La conexión entre Egresados Técnicos y Empresas
 
 Bienvenido a **UNiTEC**, una plataforma web moderna y responsiva que conecta egresados de escuelas técnicas con empresas y oportunidades laborales. UNITEC está diseñada para facilitar la inserción laboral, la gestión de perfiles profesionales y la interacción directa entre estudiantes, egresados y empresas.
 
@@ -6,16 +6,14 @@ Bienvenido a **UNiTEC**, una plataforma web moderna y responsiva que conecta egr
 
 ## 🚀 Características Principales
 
-- 👤 **Gestión de Perfiles:** Registro y edición de perfiles de egresados y empresas, incluyendo habilidades, idiomas, etiquetas, portafolio y más.
-- 🏢 **Portal Empresarial:** Empresas pueden publicar ofertas de empleo, gestionar postulaciones y buscar candidatos según criterios avanzados.
-- 🔍 **Buscador Inteligente:** Encuentra ofertas laborales filtrando por etiquetas, idiomas, nivel de experiencia y ubicación.
-- 📬 **Notificaciones y Mensajería:** Sistema de notificaciones en tiempo real y mensajería directa entre usuarios y empresas.
+- 👤 **Gestión de Perfiles:** Registro y edición de perfiles de egresados y empresas, incluyendo  idiomas, etiquetas y portfolio.
+- 🏢 **Portal Empresarial:** Empresas pueden publicar ofertas de empleo, gestionar postulaciones y buscar candidatos según requisitos definidos por ellos.
+- 📬 **Notificaciones y Mensajería:** Sistema de notificaciones en tiempo real y mensajería por email entre usuarios y empresas para mayor confidencialidad.
 - 🔐 **Seguridad y Privacidad:** Autenticación segura, gestión de sesiones, recuperación y cambio de contraseña.
-- 📄 **Carga de Documentos:** Adjunta CV, certificados y otros archivos relevantes a tu perfil.
-- 📊 **Panel de Administración:** Herramientas para la gestión de usuarios, ofertas y estadísticas del sistema.
+- 📊 **Panel de Administración:** Herramientas para la gestión de usuarios, reportes y manejo de permisos.
 
 ---
-
+## OUTDATED SECTION ------------ BEGINNING -------------
 ## 🖥️ Arquitectura Técnica
 
 ### Frontend (React + TypeScript)
@@ -118,24 +116,15 @@ src/
 - Validación de formularios en frontend y backend.
 
 ---
-
-## 📸 Capturas de Pantalla
-
-> *(Agrega aquí imágenes del sitio usando markdown)*  
-> `![Login](./screenshots/login.png)`  
-> `![Feed](./screenshots/feed.png)`  
-> `![Registro](./screenshots/register.png)`
-
+## OUTDATED SECTION ------------ END -------------
 ---
 
-## 👨‍💻 Autores
+## 🚀 TOP CONTRIBUIDORES
+<a href="https://github.com/eestn2/UNiTEC/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=eestn2/UNiTEC" />
+</a>
 
-- **Haziel Magallanes** — Frontend, Arquitectura, API Endpoints, UX, Documentación, Director del proyecto, Backend.
-- **Daviel Díaz Gonzáles** — Frontend, Diseño UI/UX en Figma, Creación de Assets.
-- **Federico Nicolás Martínez** — Backend, API Endpoints, Revisiones y arreglos en seguridad.
-- **Daniel Alejandro Rivas** — Revisión e informe sobre antigua versión del proyecto, Ayuda en Responsiveness de la página, HTML Para correos.
-- **Francesco Sidotti** — Mantenimiento y reestructurado de antigua Database, Admin panel Frontend, API Endpoints, Backend, Subdirector del proyecto.
-- **Emiliano Matias Grecco** — Frontend de Empresas.
+Made with [contrib.rocks](https://contrib.rocks).
 
 
 ---
