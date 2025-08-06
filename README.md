@@ -6,7 +6,7 @@ Bienvenido a **UNiTEC**, una plataforma web moderna y responsiva que conecta egr
 
 ## 🚀 Características Principales
 
-- 👤 **Gestión de Perfiles:** Registro y edición de perfiles de egresados y empresas, incluyendo  idiomas, etiquetas y portfolio.
+- 👤 **Gestión de Perfiles:** Registro y edición de perfiles de egresados y empresas, incluyendo idiomas, etiquetas y portfolio.
 - 🏢 **Portal Empresarial:** Empresas pueden publicar ofertas de empleo, gestionar postulaciones y buscar candidatos según requisitos definidos por ellos.
 - 📬 **Notificaciones y Mensajería:** Sistema de notificaciones en tiempo real y mensajería por email entre usuarios y empresas para mayor confidencialidad.
 - 🔐 **Seguridad y Privacidad:** Autenticación segura, gestión de sesiones, recuperación y cambio de contraseña.
