@@ -4,19 +4,7 @@ require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
-/* $connection->beginTransaction();
-$stmt = $connection -> prepare( 
-    "INSERT INTO applicants (user_id, offer_id, `status`) VALUES (1, 1, 0)");
-$stmt->execute();
-$connection->commit();
-exit;
 
-
-
-
-
-
- */
 if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
 $data = json_decode(file_get_contents("php://input"));
 

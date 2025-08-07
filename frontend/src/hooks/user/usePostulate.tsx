@@ -25,7 +25,7 @@ export  function usePostulate(offerID: number) {
     if (postulated) return; 
     try {
       await axios.post('/user/postulate.php', {
-        offerID: offerID,
+        offer_id: offerID,
       });
       setPostulated(true);
     } catch (error) {
@@ -37,9 +37,9 @@ export  function usePostulate(offerID: number) {
     if (!postulated) return;
     try {
     await axios.delete('/user/depostulate.php', {
-        data: {
-        offerID: offerID,
-        }
+      data: {
+      offerId: offerID, 
+      }
     });
         setPostulated(false);
     } catch (error) {
