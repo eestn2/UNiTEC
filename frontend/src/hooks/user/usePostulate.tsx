@@ -1,27 +1,42 @@
 import axios from 'axios';
 import { useState } from 'react';
 
-export  function usePostulate() {
-  const [postulated, setPostulated] = useState(false);
+export  function usePostulate(offerID: number) {
+  const [postulated, setPostulated] = useState<boolean>();
+  axios.get('/user/postulated.php', {
+    params: {
+      offer_id: offerID,
+    },
+  })
+    .then(response => {
+      console.log(response);
+      if (response.data.status === "success") {
+        setPostulated(response.data.data.postulated);
+      } else {
+        console.error("Failed to check postulation status:", response.data.message);
+      }
+    })
+    .catch(error => {
+      console.error("An error occurred while checking postulation status:", error);
+    });
+  
 
-  const postulate = async (offerID: number) => {
+  const postulate = async () => {
     if (postulated) return; 
     try {
-    const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-    await axios.post(`${apiUrl}/user/postulate.php`, {
-        offer_id: offerID,
-    });
-    setPostulated(true);
-        } catch (error) {
+      await axios.post('/user/postulate.php', {
+        offerID: offerID,
+      });
+      setPostulated(true);
+    } catch (error) {
     console.error("Failed to postulate:", error);
     }
   };
 
-  const depostulate = async (offerID: number) => {
+  const depostulate = async () => {
     if (!postulated) return;
     try {
-    const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-    await axios.delete(`${apiUrl}/user/depostulate.php`, {
+    await axios.delete('/user/depostulate.php', {
         data: {
         offerID: offerID,
         }
@@ -34,5 +49,5 @@ export  function usePostulate() {
 
   };
 
-  return { postulated, postulate, depostulate };
+  return { postulated, setPostulated, postulate, depostulate };
 }

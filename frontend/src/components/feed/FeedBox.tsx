@@ -52,6 +52,7 @@ function FeedBox() {
             authorId={offer.creator_id}
             title={offer.title}
             description={offer.description}
+            offerId={offer.id}
           />
         ));
         setJobOffers(offers);

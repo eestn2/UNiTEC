@@ -6,7 +6,7 @@
  * @date May 5, 2025
  */
 
-import React, { useState } from "react";
+import React from "react";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import AppWindow from "../AppWindow";
 import ActionButton from "../ActionButton";
@@ -17,6 +17,7 @@ import apply_icon from "../../../assets/icons/apply.svg";
 import deapply_icon from "../../../assets/icons/deapply.svg";
 import StateButton from "../StateButton";
 import { UserTypeEnum } from "../../../types/user";
+import { usePostulate } from "../../../hooks/user/usePostulate";
 
 /**
  * Props for the `JobOffer` component.
@@ -40,6 +41,8 @@ interface JobOfferProps extends ResponsiveComponent {
     title: string;
     /** The description of the job offer. */
     description: string;
+    /** The ID of the offer */
+    offerId: number;
 }
 
 /**
@@ -79,6 +82,7 @@ const JobOffer: React.FC<JobOfferProps> = ({
     title,
     description,
     style,
+    offerId,
     className,
     vertical = false,
 }) => {
@@ -95,24 +99,23 @@ const JobOffer: React.FC<JobOfferProps> = ({
         translateX,
         translateY,
     } = useJobOffer({ height, width, authorId, description, vertical });
-    const [placeholderApplyState, setPlaceholderApplyState] = useState(false);
+
     let extraButton: React.ReactNode = undefined;
+    const { postulated, setPostulated, postulate, depostulate } = usePostulate(offerId);
     if (![UserTypeEnum.Empresa, UserTypeEnum.Administrador].includes(User.data.type)) {
         extraButton = <StateButton 
         trueIcon={apply_icon}
         falseIcon={deapply_icon}
         trueText="Postularse"
         falseText="Despostularse"
-        state = {placeholderApplyState}
-        setState = {setPlaceholderApplyState}
+        state = {postulated ? postulated : false}
+        setState = {setPostulated}
         action={() => {
-            if (placeholderApplyState) {
-                // Logic to deapply
-                console.log("Despostularse clicked");
+            if (postulated) {
+                depostulate();
                 return;
             }
-            // Logic to apply
-            console.log("Postularse clicked");
+            postulate();
         }}
         />                    
     } else if (User.data.type === UserTypeEnum.Empresa && User.data.id === authorId) {
