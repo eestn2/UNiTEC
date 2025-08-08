@@ -27,8 +27,8 @@ $offer_id = intval($_GET['offer_id']);
 $stmt = $connection->prepare("SELECT EXISTS (SELECT 1 FROM applicants WHERE user_id = ? AND offer_id = ?)");
 $stmt->execute([$user_id, $offer_id]);
 
-//error_log("Checking postulation for user ID: $user_id, offer ID: $offer_id. Result: " . $stmt->rowCount());
-$is_postulated = $stmt->fetch(PDO::FETCH_ASSOC);
+$result = $stmt->fetch(PDO::FETCH_NUM);
+$is_postulated = $result && $result[0] == 1 ? true : false;
 return_response("success", "Estado de postulación obtenido.", ["postulated" => $is_postulated]);
 
 ?>

@@ -29,7 +29,7 @@ interface SelectionFieldProps extends ResponsiveComponent {
     /** The name attribute for the selection field, used for form submission. */
     name: string;
     /** An array of selectable options, each with a `value` and a `label`. */
-    options: { value: string; label: string }[];
+    options: { value: unknown; label: string }[];
     /** Optional event handler called when the selected value changes. */
     onChange?: ChangeEventHandler<HTMLSelectElement>;
     /** Default value for the selection field. */
