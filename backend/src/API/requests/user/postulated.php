@@ -20,15 +20,15 @@ require_once __DIR__ . '/../../logic/communications/return_response.php';
 if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no permitido.", null);
 
 if (!isset($_SESSION['user']['id'])) return_response("failed", "Usuario no autenticado.", null);
-
+if (!isset($_GET['offer_id'])) return_response("failed", "Falta el parametro offer_id", null);
 $user_id = $_SESSION['user']['id'];
-$offer_id = isset($_GET['offer_id']) ;
-if (!$offer_id) return_response("failed", "Falta el parámetro offer_id.", null);
+$offer_id = intval($_GET['offer_id']);
 
-$stmt = $connection->prepare("SELECT `status` FROM applicants WHERE user_id = ? AND offer_id = ?");
+$stmt = $connection->prepare("SELECT EXISTS (SELECT 1 FROM applicants WHERE user_id = ? AND offer_id = ?)");
 $stmt->execute([$user_id, $offer_id]);
+
 //error_log("Checking postulation for user ID: $user_id, offer ID: $offer_id. Result: " . $stmt->rowCount());
-$is_postulated = $stmt->rowCount() > 0;
+$is_postulated = $stmt->fetch(PDO::FETCH_ASSOC);
 return_response("success", "Estado de postulación obtenido.", ["postulated" => $is_postulated]);
 
 ?>

@@ -101,23 +101,36 @@ const JobOffer: React.FC<JobOfferProps> = ({
     } = useJobOffer({ height, width, authorId, description, vertical });
 
     let extraButton: React.ReactNode = undefined;
-    const { postulated, setPostulated, postulate, depostulate } = usePostulate(offerId);
+    const { postulated, setPostulated, postulate, depostulate, loading } = usePostulate(offerId);
     if (![UserTypeEnum.Empresa, UserTypeEnum.Administrador].includes(User.data.type)) {
-        extraButton = <StateButton 
-        trueIcon={apply_icon}
-        falseIcon={deapply_icon}
-        trueText="Postularse"
-        falseText="Despostularse"
-        state = {postulated ? postulated : false}
-        setState = {setPostulated}
-        action={() => {
-            if (postulated) {
-                depostulate();
-                return;
-            }
-            postulate();
-        }}
-        />                    
+        if (loading || typeof postulated === 'undefined') {
+            extraButton = (
+                <ActionButton
+                    text="Cargando..."
+                    height={45}
+                    width={140}
+                    style={{ fontWeight: 600, backgroundColor: 'white', color: '#888', border: '2px solid #ccc', cursor: 'not-allowed' }}
+                />
+            );
+        } else {
+            extraButton = (
+                <StateButton
+                    trueIcon={apply_icon}
+                    falseIcon={deapply_icon}
+                    trueText="Postularse"
+                    falseText="Despostularse"
+                    state={postulated}
+                    setState={setPostulated}
+                    action={() => {
+                        if (postulated) {
+                            depostulate();
+                            return;
+                        }
+                        postulate();
+                    }}
+                />
+            );
+        }
     } else if (User.data.type === UserTypeEnum.Empresa && User.data.id === authorId) {
         extraButton = <ActionButton text="Borrar" />;
     }
