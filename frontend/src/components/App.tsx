@@ -23,6 +23,14 @@ import JobOfferFV from './offers/JobOfferFV';
 import AdminIndex from './admin/AdminIndex';
 import ProfileInfo from './user/ProfileInfo';
 import { ToastManagerProvider } from './UI/ToastManager';
+import { useEffect, useState } from 'react';
+import PublishOffer from './offers/PublishOffer';
+import SeeApplicants from './offers/SeeApplicants';
+import SendEmail from './offers/SendEmail';
+import { useWindowSize } from '../hooks/responsive/useWindowSize';
+import LoadingScreen from './UI/LoadingScreens/LoadingScreen';
+import type { user } from '../types/user';
+import EditProfile from './user/EditProfile';
 
 /**
  * The main application component that handles routing and session management.
@@ -38,15 +46,6 @@ import { ToastManagerProvider } from './UI/ToastManager';
  * 
  * @Author: Haziel Magallanes
  */
-
-import { useEffect, useState } from 'react';
-import PublishOffer from './offers/PublishOffer';
-import SeeApplicants from './offers/SeeApplicants';
-import SendEmail from './offers/SendEmail';
-import { useWindowSize } from '../hooks/responsive/useWindowSize';
-import LoadingScreen from './UI/LoadingScreens/LoadingScreen';
-import type { user } from '../types/user';
-import EditProfile from './user/EditProfile';
 
 function App(): JSX.Element {
   // Axios configs
@@ -76,13 +75,12 @@ function App(): JSX.Element {
       .catch(() => setSession(false))
       .finally(() => setLoading(false));
   }, []); 
-  
-  const [loadingReal, setLoadingReal] = useState(true);
+
   const [minTimePassed, setMinTimePassed] = useState(false);
 
   useEffect(() => { 
     setTimeout(() => {
-      setLoadingReal(false);
+      setLoading(false);
     }, 400); 
 
     const timer = setTimeout(() => {
@@ -92,7 +90,7 @@ function App(): JSX.Element {
     return () => clearTimeout(timer);
   }, []);
 
-  if (loadingReal || !minTimePassed) {
+  if (loading || !minTimePassed) {
     return <LoadingScreen />;
   }
   
@@ -101,7 +99,7 @@ function App(): JSX.Element {
     <ToastManagerProvider>
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <div className="app-content">
-          <BrowserRouter basename="/">
+          <BrowserRouter basename="/UNiTEC/">
             <Routes>
               <Route path='/' element={!session ? <Login /> : <FeedBox />} />
               <Route path='/test' element={<FeedBox />} />

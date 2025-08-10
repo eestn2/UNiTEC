@@ -29,7 +29,7 @@ export type user = {
     /** The user's location (e.g., city, country). */
     location: string;
     /** The user's current status (e.g., "active", "inactive"). */
-    status: UserStatus;
+    status: UserStatusEnum
     /** The user's description or bio. */
     description: string;
     /** The user's portfolio or website URL. */
@@ -40,12 +40,19 @@ export type user = {
     profile_picture?: string;
 };
 /** Enum de estados de usuario, 0 = Estudiando, 1 = Buscando trabajo, 2 = Trabajando, 3 = Egresado */
-export type UserStatus = "Estudiando" | "Buscando trabajo" | "Trabajando" | "Egresado";
+export enum UserStatusEnum {
+    Estudiando = 1,
+    Buscando = 2,
+    Trabajando = 3,
+    Egresado = 4
+};
+
+
 /** Enum de tipos de usuario 0 = Empresa, 1 = Estudiante, 2 = Egresado, 3 = Administrador. */
 export enum UserTypeEnum {
-    Empresa = "Empresa",
-    Estudiante = "Estudiante",
-    Egresado = "Egresado",
-    Administrador = "Administrador"
+    Empresa = 1,
+    Estudiante = 2,
+    Egresado = 3,
+    Administrador = 4
 }
 export default user;

@@ -5,7 +5,7 @@ import ActionButton from '../UI/ActionButton';
 import InputField from '../UI/form/InputField';
 import TextBox from '../UI/form/TextBox';
 import SelectionField from '../UI/form/SelectionField';
-import { user as UserType } from '../../types/user';
+import { UserStatusEnum, user as UserType, UserTypeEnum } from '../../types/user';
 import User from '../session/User';
 import { getTranslates } from '../../global/function/getTranslates';
 import axios from 'axios';
@@ -13,17 +13,20 @@ import Logo from '../UI/unitec/Logo';
 import upload_picture from '../../assets/icons/upload-picture.svg';
 import edit_profile from '../../assets/icons/edit-picture.svg';
 
+
 import '../../styles/profile-info.css';
+import getUserStatus from '../../global/function/getUserStatus';
+import getUserType from '../../global/function/getUserType';
 
 const STATUS_OPTIONS = [
-    { value: '1', label: 'Estudiando' },
-    { value: '2', label: 'Buscando trabajo' },
-    { value: '3', label: 'Trabajando' },
-    { value: '4', label: 'Egresado' },
+    { value: UserStatusEnum.Estudiando, label: getUserStatus(UserStatusEnum.Estudiando) },
+    { value: UserStatusEnum.Buscando, label: getUserStatus(UserStatusEnum.Buscando) },
+    { value: UserStatusEnum.Trabajando, label: getUserStatus(UserStatusEnum.Trabajando) },
+    { value: UserStatusEnum.Egresado, label: getUserStatus(UserStatusEnum.Egresado) },
 ];
 const TYPE_OPTIONS = [
-    { value: '1', label: 'Estudiante' },
-    { value: '2', label: 'Egresado' },
+    { value: UserTypeEnum.Estudiante, label: getUserType(UserTypeEnum.Estudiante) },
+    { value: UserTypeEnum.Egresado, label: getUserType(UserTypeEnum.Egresado) },
 ];
 
 const EditProfile: React.FC = () => {
@@ -216,14 +219,14 @@ const EditProfile: React.FC = () => {
                 className='user-labels-section profile-field input-field'
                 style={isPortrait ? { gridColumn: '2', gridRow: '4' } : {}}
             >
-                <SelectionField name="type" options={TYPE_OPTIONS} onChange={handleChange} defaultValue={form.type} width={300} height={40} placeholder="Tipo de usuario" />
+                <SelectionField name="type" options={TYPE_OPTIONS} onChange={handleChange} defaultValue={getUserType(form.type)} width={300} height={40} placeholder="Tipo de usuario" />
             </div>
             {/* Status */}
             <div
                 className='user-status-section profile-field input-field'
                 style={isPortrait ? { gridColumn: '2', gridRow: '5' } : {}}
             >
-                <SelectionField name="status" options={STATUS_OPTIONS} onChange={handleChange} defaultValue={form.status} width={300} height={40} placeholder="Estado" />
+                <SelectionField name="status" options={STATUS_OPTIONS} onChange={handleChange} defaultValue={getUserStatus(form.status)} width={300} height={40} placeholder="Estado" />
             </div>
             {/* Description */}
             <TextBox 

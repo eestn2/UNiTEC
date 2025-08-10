@@ -32,7 +32,6 @@ const MinimalistSearchBar: React.FC<SearchBarProps> = ({
   onSuggestionClick,
   style,
   inputStyle,
-  buttonStyle,
   onFocus,
 }) => {
   const [showSuggestions, setShowSuggestions] = React.useState(false);

@@ -22,10 +22,6 @@ require_once __DIR__ . '/../../logic/communications/return_response.php';
 if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no permitido.", null);
 
 
-if (!isset($_SESSION['user']['id'])) {
-    return_response("failed", "No se ha iniciado sesión", null);
-}
-
 try {
     $stmt = $connection->prepare("
         SELECT 

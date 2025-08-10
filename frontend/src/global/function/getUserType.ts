@@ -1,7 +1,6 @@
 import { UserTypeEnum } from "../../types/user";
 
 export function getUserType(type: 1 | 2 | 3 | 4 | UserTypeEnum) :string {
-    if (typeof type === "string") return type;
     switch (type) {
         case 1:
             return "Empresa";
