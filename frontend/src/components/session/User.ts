@@ -6,11 +6,7 @@
  * @date May 11, 2025
  */
 
-import { UserStatus, UserTypeEnum, user } from "../../types/user";
-
-// Add mapping arrays for type and status
-const statusMap: UserStatus[] = ["Estudiando", "Buscando trabajo", "Trabajando", "Egresado"];
-const typeMap = {1: UserTypeEnum.Empresa, 2: UserTypeEnum.Estudiante, 3: UserTypeEnum.Egresado, 4: UserTypeEnum.Administrador};
+import type { user } from "../../types/user";
 
 
 /**
@@ -40,16 +36,7 @@ class User {
      * @param {user} user - The user data to store.
      */
     set(user: user) {
-        // Convert numeric type/status to string if needed
-        const fixedUser = { ...user };
-        const numericType = fixedUser.type as unknown as number
-        if (typeof fixedUser.status === "number") {
-            fixedUser.status = statusMap[fixedUser.status as number];
-        }
-        if (typeof fixedUser.type === "number") {
-            fixedUser.type = typeMap[numericType as keyof typeof typeMap];
-        }
-        this.user_data = fixedUser;
+        this.user_data = user;
     }
 
     /**

@@ -122,7 +122,7 @@ const SelectionField: React.FC<SelectionFieldProps> = ({
                     </option>
                 )}
                 {options.map((option) => (
-                    <option key={option.value} value={option.value}>
+                    <option key={option.value as string} value={option.value as string}>
                         {option.label}
                     </option>
                 ))}
