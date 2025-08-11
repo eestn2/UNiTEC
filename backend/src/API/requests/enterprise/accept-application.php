@@ -20,16 +20,18 @@
  *   Response: { "`status`": "success", "message": "Postulante aceptado con éxito.", "data": null }
  */
 
+session_start();
 require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "PUT") return_response("failed", "Metodo no permitido.", null);
+if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
+
+$creator_id = intval($_SESSION['user']['id']);
 $data = json_decode(file_get_contents("php://input"));
 
-if (!isset($data->creator_id) || !isset($data->user_id) || !isset($data->offer_id)) return_response("failed", "Faltan datos obligatorios.", null);
-
-$creator_id = intval($data->creator_id);
+if (!isset($data->user_id) || !isset($data->offer_id)) return_response("failed", "Faltan datos obligatorios.", null);
 $user_id = intval($data->user_id);
 $offer_id = intval($data->offer_id);
 
