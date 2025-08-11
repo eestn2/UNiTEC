@@ -26,7 +26,6 @@ const AplicantsCard: React.FC<UserCardProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-
   const handleAccept = async () => {
     setLoading(true);
     setError(null);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import AplicantsCard from './Aplicants/Applicants';
+import AplicantsCard from './Aplicants/ApplicantsCard';
 import "../offers/SeeApplicants.css";
 import NavBar from "../UI/NavBar";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
