@@ -24,7 +24,7 @@ const AplicantsCard: React.FC<UserCardProps> = ({
   const buttonText = status ? 'Contactar' : 'Aceptar';
   const buttonClass = status ? 'btn-orange' : 'btn-green'
   const buttonFunction = status ? onContact : onAccept;
-
+  const buttonRechazarClass = status ? 'None' :'';
   return (
     <div className="user-card">
       <img
@@ -42,7 +42,7 @@ const AplicantsCard: React.FC<UserCardProps> = ({
           <button className={`btn ${buttonClass}`} onClick={buttonFunction}>
             {buttonText}
           </button> 
-          <button className="btn btn-red" onClick={onReject}>Rechazar</button>
+          <button className={`btn btn-red ${buttonRechazarClass}`} onClick={onReject}>Rechazar</button>
         </div>
       </div>
     </div>
