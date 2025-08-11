@@ -22,12 +22,16 @@ require_once __DIR__ . '/../../logic/communications/return_response.php';
 if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no permitido.", null);
 
 
+if (!isset($_SESSION['user']['id'])) {
+    return_response("failed", "No se ha iniciado sesión", null);
+}
+
 try {
     $stmt = $connection->prepare("
         SELECT 
             o.id AS offer_id, o.title, o.description, o.creator_id, o.status,
-            a.user_id AS applicant_user_id,
-            u.id AS user_id, u.name, u.profile_picture, u.status
+            a.status AS applicant_status,
+            u.id AS user_id, u.name, u.profile_picture
         FROM offers o
         LEFT JOIN applicants a ON o.id = a.offer_id
         LEFT JOIN users u ON a.user_id = u.id
@@ -56,7 +60,8 @@ try {
             $offers[$offerId]['applicants'][] = [
                 'id' => $row['user_id'],
                 'name' => $row['name'],
-                'profile_picture' => $row['profile_picture']
+                'profile_picture' => $row['profile_picture'],
+                'status' => $row['applicant_status'] !== null ? intval($row['applicant_status']) : null
             ];
         }
     }

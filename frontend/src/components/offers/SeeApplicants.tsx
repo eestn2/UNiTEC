@@ -12,32 +12,32 @@ import { useNavigate } from "react-router-dom";
 
 const ModalOverlay: React.FC<{
   title: string;
-  postulantes?: { id: number; name: string; profileImage?: string; status:boolean }[];
+  postulantes?: { id: number; name: string; profile_picture?: string; status: boolean }[];
+  offerID: number;
   onClose: () => void;
-}> = ({ title, postulantes, onClose }) => {
-    const navigate = useNavigate();
+  onAccept: (applicantId: number) => void;
+  onEmail: (applicantId: number) => void;
+}> = ({ title, postulantes, offerID, onClose, onAccept, onEmail }) => {
+  const navigate = useNavigate();
   return createPortal(
     <div className="overlay" onClick={onClose}>
       <div className="popup-card" onClick={e => e.stopPropagation()}>
         <div className="Top">
           <div className="popup-title">{title}</div>
           <button className="cerrar" onClick={onClose}>
-
-            <img src={cross_icon} alt="wazaa" className="cross" />
+            <img src={cross_icon} alt="close" className="cross" />
           </button>
         </div>
-
         <div className="postulantes-container scroll padding">
           {postulantes?.map((postulante) => (
             <AplicantsCard
               key={postulante.id}
               name={postulante.name}
-              profileImage={postulante.profileImage}
+              profileImage={postulante.profile_picture}
+              status={postulante.status}
               onViewProfile={() => navigate(`/profile/${postulante.id}`)}
-              onAccept={() => alert(`Aceptaste a ${postulante.name}`)}
-              onContact={() => navigate(`/send-email`)}
-              onReject={() => alert(`Rechazaste a ${postulante.name}`)}
-              status={true}
+              onAccept={() => onAccept(postulante.id)}
+              onContact={() => onEmail(postulante.id)}
             />
           ))}
         </div>
@@ -47,12 +47,35 @@ const ModalOverlay: React.FC<{
   );
 };
 
+async function enviarCorreo(id?: number) {
+  try {
+    const apiUrl = import.meta.env.PROD
+      ? import.meta.env.VITE_API_URL_PROD
+      : import.meta.env.VITE_API_URL_DEV;
+
+    const response = await axios.get(`${apiUrl}/enterprise/get-user-email.php`, {
+      params: { userId: id },
+    });
+
+    if (response.status !== 200 || response.data.status !== "success") {
+      console.error("Failed to load email:", response.data.message);
+      return;
+    }
+
+    const userEmail = response.data.data.email;
+    const url = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(userEmail)}`;
+    window.open(url, '_blank');
+  } catch (error) {
+    console.error("An error occurred while loading email:", error);
+  }
+}
+
 const SeeApplicants: React.FC = () => {
   type Postulante = {
     id: number;
     name: string;
     profile_picture?: string;
-    status: boolean; 
+    status: boolean;
   };
 
   type OfferWithApplicants = {
@@ -66,9 +89,10 @@ const SeeApplicants: React.FC = () => {
 
   const [offers, setOffers] = useState<OfferWithApplicants[]>([]);
   const [popupActivo, setPopupActivo] = useState<number | null>(null);
-
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const windowSize = useWindowSize();
-  if(import.meta.env.DEV) console.log("Compiler stop crying please", windowSize)
+
   const togglePopup = (offerId: number) => {
     setPopupActivo(popupActivo === offerId ? null : offerId);
   };
@@ -76,37 +100,78 @@ const SeeApplicants: React.FC = () => {
   const cerrarPopup = () => {
     setPopupActivo(null);
   };
+
+  const handleAcceptApplicant = async (applicantId: number) => {
+    const offerIndex = offers.findIndex(o => o.id === popupActivo);
+    if (offerIndex === -1) return;
+
+    const creator_id = offers[offerIndex].creator_id;
+    const offer_id = offers[offerIndex].id;
+    const user_id = applicantId;
+
+    try {
+      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+      const response = await axios.put(`${apiUrl}/enterprise/accept-application.php`, {
+        creator_id,
+        user_id,
+        offer_id
+      });
+      if (response.status === 200 && response.data.status === "success") {
+        // Actualiza solo ese postulante
+        setOffers(prev =>
+          prev.map((offer, i) =>
+            i === offerIndex
+              ? {
+                  ...offer,
+                  applicants: offer.applicants?.map(app =>
+                    app.id === applicantId ? { ...app, status: true } : app
+                  )
+                }
+              : offer
+          )
+        );
+      } else {
+        alert(response.data.message || "No se pudo aceptar al postulante.");
+      }
+    } catch (error: any) {
+      alert(error?.response?.data?.message || "Error al aceptar postulante.");
+    }
+  };
+
   useEffect(() => {
     if (popupActivo !== null) {
-      // Desactiva el scroll del body
       document.body.style.overflow = 'hidden';
     } else {
-      // Restaura el scroll
       document.body.style.overflow = 'auto';
     }
-
-    // Cleanup por si el componente se desmonta
     return () => {
       document.body.style.overflow = 'auto';
     };
   }, [popupActivo]);
-    const loadOffersWithApplicants = async () => {
+
+  const loadOffersWithApplicants = async () => {
+    setLoading(true);
+    setError(null);
     try {
       const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
       const response = await axios.get(`${apiUrl}/enterprise/get-offers-and-applicants.php`);
-      if (response.status !== 200 && response.data.status !== "success") {
-        console.error("Failed to load tags:", response.data.message);
+      if (response.status !== 200 || response.data.status !== "success") {
+        setError("Error al cargar ofertas.");
       } else {
         setOffers(response.data.data.offers);
-        console.log(response.data.data.offers);
       }
     } catch (error) {
-      console.error("An error occurred while loading tags:", error);
+      setError("No se pudo conectar con el servidor.");
+    } finally {
+      setLoading(false);
     }
   };
+
   useEffect(() => {
     loadOffersWithApplicants();
   }, []);
+
+  const ofertaActiva = offers.find(o => o.id === popupActivo);
 
   return (
     <>
@@ -128,7 +193,9 @@ const SeeApplicants: React.FC = () => {
         }}
       >
         <div className="Contenedor scroll">
-          {offers.map((offer) => (
+          {loading && <p>Cargando ofertas...</p>}
+          {error && <p>{error}</p>}
+          {!loading && !error && offers.map((offer) => (
             <div key={offer.id} className="offer-block">
               <button className="offer-header" onClick={() => togglePopup(offer.id)}>
                 <span className="texto-truncado">{offer.title}</span>
@@ -138,18 +205,16 @@ const SeeApplicants: React.FC = () => {
         </div>
       </AppWindow>
 
-      {/* Renderizamos el overlay fuera del AppWindow con Portal */}
-      {popupActivo !== null && (() => {
-        const ofertaActiva = offers.find(o => o.id === popupActivo);
-        if (!ofertaActiva) return null;
-        return (
-          <ModalOverlay
-            title={ofertaActiva.title}
-            postulantes={ofertaActiva.applicants}
-            onClose={cerrarPopup}
-          />
-        );
-      })()}
+      {ofertaActiva && (
+        <ModalOverlay
+          title={ofertaActiva.title}
+          postulantes={ofertaActiva.applicants}
+          offerID={ofertaActiva.id}
+          onClose={cerrarPopup}
+          onAccept={handleAcceptApplicant}
+          onEmail={enviarCorreo}
+        />
+      )}
     </>
   );
 };

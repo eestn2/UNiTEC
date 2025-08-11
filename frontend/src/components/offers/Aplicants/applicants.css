@@ -92,3 +92,7 @@
 .btn-red:hover {
   background-color: #dc2626;
 }
+
+.None{
+  display: none!important;
+}
