@@ -8,7 +8,7 @@ interface UserCardProps {
   onAccept?: () => void;
   onContact?: () => void;
   onReject?: () => void;
-  status: boolean; // NUEVA prop
+  status: number; // NUEVA prop
 }
 
 const AplicantsCard: React.FC<UserCardProps> = ({

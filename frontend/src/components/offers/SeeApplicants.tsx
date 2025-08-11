@@ -12,12 +12,13 @@ import { useNavigate } from "react-router-dom";
 
 const ModalOverlay: React.FC<{
   title: string;
-  postulantes?: { id: number; name: string; profile_picture?: string; status: boolean }[];
+  postulantes?: { id: number; name: string; profile_picture?: string; status: number }[];
   offerID: number;
   onClose: () => void;
   onAccept: (applicantId: number) => void;
+  onReject: (applicantId: number) => void;
   onEmail: (applicantId: number) => void;
-}> = ({ title, postulantes, offerID, onClose, onAccept, onEmail }) => {
+}> = ({ title, postulantes, offerID, onClose, onAccept, onReject, onEmail }) => {
   const navigate = useNavigate();
   return createPortal(
     <div className="overlay" onClick={onClose}>
@@ -37,6 +38,7 @@ const ModalOverlay: React.FC<{
               status={postulante.status}
               onViewProfile={() => navigate(`/profile/${postulante.id}`)}
               onAccept={() => onAccept(postulante.id)}
+              onReject={() => onReject(postulante.id)}
               onContact={() => onEmail(postulante.id)}
             />
           ))}
@@ -75,7 +77,7 @@ const SeeApplicants: React.FC = () => {
     id: number;
     name: string;
     profile_picture?: string;
-    status: boolean;
+    status:number;
   };
 
   type OfferWithApplicants = {
@@ -116,25 +118,40 @@ const SeeApplicants: React.FC = () => {
         user_id,
         offer_id
       });
-      if (response.status === 200 && response.data.status === "success") {
-        // Actualiza solo ese postulante
-        setOffers(prev =>
-          prev.map((offer, i) =>
-            i === offerIndex
-              ? {
-                  ...offer,
-                  applicants: offer.applicants?.map(app =>
-                    app.id === applicantId ? { ...app, status: true } : app
-                  )
-                }
-              : offer
-          )
-        );
+      if (response.status === 200 && response.data.status === 1) {
+        // Recargar la lista de ofertas para reflejar el cambio
+        await loadOffersWithApplicants();
       } else {
         alert(response.data.message || "No se pudo aceptar al postulante.");
       }
     } catch (error: any) {
       alert(error?.response?.data?.message || "Error al aceptar postulante.");
+    }
+  };
+
+  const handleRejectApplicant = async (applicantId: number) => {
+    const offerIndex = offers.findIndex(o => o.id === popupActivo);
+    if (offerIndex === -1) return;
+
+    const creator_id = offers[offerIndex].creator_id;
+    const application_id = offers[offerIndex].id;
+    const user_id = applicantId;
+
+    try {
+      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+      const response = await axios.put(`${apiUrl}/enterprise/reject-application.php`, {
+        creator_id,
+        user_id,
+        application_id
+      });
+      if (response.status === 200 && response.data.status === "success") {
+        // Recargar la lista de ofertas para reflejar el cambio
+        await loadOffersWithApplicants();
+      } else {
+        alert(response.data.message || "No se pudo rechazar al postulante.");
+      }
+    } catch (error: any) {
+      alert(error?.response?.data?.message || "Error al rechazar postulante.");
     }
   };
 
@@ -212,6 +229,7 @@ const SeeApplicants: React.FC = () => {
           offerID={ofertaActiva.id}
           onClose={cerrarPopup}
           onAccept={handleAcceptApplicant}
+          onReject={handleRejectApplicant}
           onEmail={enviarCorreo}
         />
       )}

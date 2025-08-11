@@ -37,6 +37,7 @@ function FeedBox() {
   // State variables for job offers and notifications
   const [jobOffers, setJobOffers] = useState<ReactElement[] | undefined>(undefined);
   const [notifications, setNotifications] = useState<ReactElement[]>([]);
+  const [loading, setLoading] = useState<Boolean>(true);
   // Fetch job offers from the server
   const loadJobOffers = async () => {
     try {
@@ -56,9 +57,11 @@ function FeedBox() {
           />
         ));
         setJobOffers(offers);
+        setLoading(false);
       }
     } catch (error) {
       console.error("An error occurred while loading job offers:", error);
+      setLoading(false);
     }
   };
   // Fetch notifications from the server
