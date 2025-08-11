@@ -3,7 +3,7 @@ import React, {
   useState,
   useRef,
   useEffect,
-/*   KeyboardEvent, */
+  KeyboardEvent,
 } from "react";
 import InputField from "../UI/form/InputField";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
@@ -34,7 +34,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   style,
   inputStyle,
   buttonStyle,
-/*   onFocus, */
+  onFocus,
 }) => {
   const [value, setValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -88,7 +88,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     }
   };
 
-  /* const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "ArrowDown") {
       event.preventDefault();
       setHighlightIndex((prev) =>
@@ -114,7 +114,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
       setShowSuggestions(false);
     }
   };
- */
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -161,8 +160,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
         }}
         value={value}
         onChange={handleInputChange}
-        //onKeyDown={handleKeyDown}
-        //onFocus={onFocus}
+        onKeyDown={handleKeyDown}
+        onFocus={onFocus}
       />
 
       <div
