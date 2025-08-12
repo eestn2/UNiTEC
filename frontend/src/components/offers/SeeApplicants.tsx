@@ -1,67 +1,29 @@
+// SeeApplicants.tsx
 import React, { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
-import AplicantsCard from './Aplicants/ApplicantsCard';
-import "../offers/SeeApplicants.css";
+import axios from "axios";
 import NavBar from "../UI/NavBar";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import AppWindow from "../UI/AppWindow";
-import cross_icon from "../../assets/icons/close.svg";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import ModalOverlay from "./ModalOverlay";
+import "../offers/SeeApplicants.css";
 
-const ModalOverlay: React.FC<{
+type Postulante = {
+  id: number;
+  name: string;
+  profile_picture?: string;
+  status: number;
+};
+
+type OfferWithApplicants = {
+  id: number;
+  creator_id: number;
   title: string;
-  postulantes?: { id: number; name: string; profile_picture?: string; status: number }[];
-  offerID: number;
-  onClose: () => void;
-}> = ({ title, postulantes, offerID, onClose }) => {
-  const navigate = useNavigate();
-  return createPortal(
-    <div className="overlay" onClick={onClose}>
-      <div className="popup-card" onClick={e => e.stopPropagation()}>
-        <div className="Top">
-          <div className="popup-title">{title}</div>
-          <button className="cerrar" onClick={onClose}>
-            <img src={cross_icon} alt="close" className="cross" />
-          </button>
-        </div>
-        <div className="postulantes-container scroll padding">
-          {postulantes?.length === 0 && <p>No hay postulantes para esta oferta.</p>}
-          {postulantes?.map((postulante) => (
-            <AplicantsCard
-              key={postulante.id}
-              name={postulante.name}
-              profileImage={postulante.profile_picture}
-              status={postulante.status}
-              offerId={offerID}
-              userId={postulante.id}
-              onViewProfile={() => navigate(`/profile/${postulante.id}`)}
-            />
-          ))}
-        </div>
-      </div>
-    </div>,
-    document.body
-  );
+  description: string;
+  status: number;
+  applicants?: Postulante[];
 };
 
 const SeeApplicants: React.FC = () => {
-  type Postulante = {
-    id: number;
-    name: string;
-    profile_picture?: string;
-    status:number;
-  };
-
-  type OfferWithApplicants = {
-    id: number;
-    creator_id: number;
-    title: string;
-    description: string;
-    status: number;
-    applicants?: Postulante[];
-  };
-
   const [offers, setOffers] = useState<OfferWithApplicants[]>([]);
   const [popupActivo, setPopupActivo] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
@@ -75,15 +37,31 @@ const SeeApplicants: React.FC = () => {
     setPopupActivo(null);
   };
 
+  const changeInternalStatus = (
+    offerId: number,
+    postulanteId: number,
+    newStatus: number
+  ) => {
+    setOffers((prevOffers) =>
+      prevOffers.map((offer) =>
+        offer.id === offerId
+          ? {
+              ...offer,
+              applicants: offer.applicants?.map((postulante) =>
+                postulante.id === postulanteId
+                  ? { ...postulante, status: newStatus }
+                  : postulante
+              ),
+            }
+          : offer
+      )
+    );
+  };
 
   useEffect(() => {
-    if (popupActivo !== null) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
+    document.body.style.overflow = popupActivo !== null ? "hidden" : "auto";
     return () => {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = "auto";
     };
   }, [popupActivo]);
 
@@ -91,8 +69,12 @@ const SeeApplicants: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.get(`${apiUrl}/enterprise/get-offers-and-applicants.php`);
+      const apiUrl = import.meta.env.PROD
+        ? import.meta.env.VITE_API_URL_PROD
+        : import.meta.env.VITE_API_URL_DEV;
+      const response = await axios.get(
+        `${apiUrl}/enterprise/get-offers-and-applicants.php`
+      );
       if (response.status !== 200 || response.data.status !== "success") {
         setError("Error al cargar ofertas.");
       } else {
@@ -109,7 +91,7 @@ const SeeApplicants: React.FC = () => {
     loadOffersWithApplicants();
   }, []);
 
-  const ofertaActiva = offers.find(o => o.id === popupActivo);
+  const ofertaActiva = offers.find((o) => o.id === popupActivo);
 
   return (
     <>
@@ -123,23 +105,28 @@ const SeeApplicants: React.FC = () => {
           left: "50%",
           transform: "translate(-50%, 0%)",
           display: "flex",
-          flexDirection: 'column',
+          flexDirection: "column",
           alignItems: "center",
           gap: `${TranslateFigmaCoords.translateFigmaY(10)}px`,
-          overflow: 'hidden',
-          maxHeight: '1px'
+          overflow: "hidden",
+          maxHeight: "1px",
         }}
       >
         <div className="Contenedor scroll">
           {loading && <p>Cargando ofertas...</p>}
           {error && <p>{error}</p>}
-          {!loading && !error && offers.map((offer) => (
-            <div key={offer.id} className="offer-block">
-              <button className="offer-header" onClick={() => togglePopup(offer.id)}>
-                <span className="texto-truncado">{offer.title}</span>
-              </button>
-            </div>
-          ))}
+          {!loading &&
+            !error &&
+            offers.map((offer) => (
+              <div key={offer.id} className="offer-block">
+                <button
+                  className="offer-header"
+                  onClick={() => togglePopup(offer.id)}
+                >
+                  <span className="texto-truncado">{offer.title}</span>
+                </button>
+              </div>
+            ))}
         </div>
       </AppWindow>
 
@@ -149,6 +136,7 @@ const SeeApplicants: React.FC = () => {
           postulantes={ofertaActiva.applicants}
           offerID={ofertaActiva.id}
           onClose={cerrarPopup}
+          externalStatusChanger={changeInternalStatus}
         />
       )}
     </>

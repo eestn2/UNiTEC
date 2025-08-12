@@ -2,12 +2,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './applicants.css';
+import defaultProfileImage from '../../../assets/defaults/profile-picture/1.svg';
 
 interface UserCardProps {
   name?: string;
   profileImage?: string;
   onViewProfile?: () => void;
   status: number;
+  externalStatusChanger: (newStatus: number) => void;
   offerId: number;
   userId: number;
 }
@@ -18,6 +20,7 @@ const AplicantsCard: React.FC<UserCardProps> = ({
   profileImage,
   onViewProfile,
   status: initialStatus,
+  externalStatusChanger,
   offerId,
   userId,
 }) => {
@@ -36,6 +39,7 @@ const AplicantsCard: React.FC<UserCardProps> = ({
       });
       if (response.status === 200 && response.data.status === "success") {
         setStatus(1);
+        externalStatusChanger(1); // Notify parent component of status change
       } else {
         setError(response.data.message || "No se pudo aceptar al postulante.");
       }
@@ -55,7 +59,8 @@ const AplicantsCard: React.FC<UserCardProps> = ({
         application_id: offerId
       });
       if (response.status === 200 && response.data.status === "success") {
-        setStatus(2); // Or remove card, or show as rejected
+        setStatus(2);
+        externalStatusChanger(2); // Notify parent component of status change
       } else {
         setError(response.data.message || "No se pudo rechazar al postulante.");
       }
@@ -97,12 +102,13 @@ const AplicantsCard: React.FC<UserCardProps> = ({
   return (
     <div className="user-card">
       <img
-        src={profileImage || 'ruta/a/default.jpg'}
+        src={profileImage || defaultProfileImage}
         alt="Perfil"
         className="user-image"
         onError={(e) => {
-          (e.target as HTMLImageElement).src = 'ruta/a/default.jpg';
+          (e.target as HTMLImageElement).src = defaultProfileImage;
         }}
+        style={{ backgroundColor: '#ffff'}}
       />
       <div className="user-info">
         <div className="user-name">{name}{status === 2 ? ' (Rechazado).' : ''}</div>

@@ -6,7 +6,7 @@
  * @date May 5, 2025
  */
 
-import React from "react";
+import React, { useState } from "react";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import AppWindow from "../AppWindow";
 import ActionButton from "../ActionButton";
@@ -18,6 +18,7 @@ import deapply_icon from "../../../assets/icons/deapply.svg";
 import StateButton from "../StateButton";
 import { UserTypeEnum } from "../../../types/user";
 import { usePostulate } from "../../../hooks/user/usePostulate";
+import ConfirmModal from "../Modals/ConfirmModal";
 
 /**
  * Props for the `JobOffer` component.
@@ -100,6 +101,14 @@ const JobOffer: React.FC<JobOfferProps> = ({
         translateY,
     } = useJobOffer({ height, width, authorId, description, vertical });
 
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const handleDelete = () => {
+        // TODO: Replace with actual deletion logic
+        console.log(`Deleting offer ${offerId}`);
+        setShowDeleteConfirm(false);
+    };
+
+
     let extraButton: React.ReactNode = undefined;
     const { postulated, setPostulated, postulate, depostulate, loading } = usePostulate(offerId);
     if (![UserTypeEnum.Empresa, UserTypeEnum.Administrador].includes(User.data.type)) {
@@ -132,10 +141,20 @@ const JobOffer: React.FC<JobOfferProps> = ({
             );
         }
     } else if (User.data.type === UserTypeEnum.Empresa && User.data.id === authorId) {
-        extraButton = <ActionButton text="Borrar" />;
+        extraButton = <ActionButton
+                height={40}
+                style={{
+                    backgroundColor: "var(--danger)",
+                    fontWeight: 500,
+                    marginRight: 10,
+                }}
+                text="Borrar"
+                action={() => setShowDeleteConfirm(true)}
+            />
     }
 
     return (
+        <>
         <div
             className={`job-offer ${className || ""}`}
             style={{
@@ -216,7 +235,18 @@ const JobOffer: React.FC<JobOfferProps> = ({
                 ) : null}
             </AppWindow>
         </div>
-    );
+        {showDeleteConfirm && (
+        <ConfirmModal
+            title="Confirmar eliminación"
+            message="¿Estás seguro de que deseas eliminar esta oferta?"
+            onAccept={handleDelete}
+            onReject={() => setShowDeleteConfirm(false)}
+            onClose={() => setShowDeleteConfirm(false)}
+        />
+        )}
+    </>
+    )
 };
+
 
 export default JobOffer;

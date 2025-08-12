@@ -3,11 +3,16 @@ import React from "react";
 interface ModalProps {
   title: string;
   text: string;
+  children?: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+  
   onClose: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ title, text, onClose }) => (
+const Modal: React.FC<ModalProps> = ({ title, text, style, children, className, onClose }) => (
   <div
+    className={className}
     style={{
       position: "fixed",
       top: 0, left: 0, right: 0, bottom: 0,
@@ -17,8 +22,9 @@ const Modal: React.FC<ModalProps> = ({ title, text, onClose }) => (
       alignItems: "center",
       zIndex: 1000,
       width: "100%",
+      ...style,
     }}
-    onClick={onClose} // Cierra al hacer clic en el fondo
+    onClick={onClose}
   >
     <div
       style={{
@@ -30,7 +36,7 @@ const Modal: React.FC<ModalProps> = ({ title, text, onClose }) => (
         position: "relative",
         boxShadow: "0 2px 16px rgba(0,0,0,0.2)"
       }}
-      onClick={e => e.stopPropagation()} // Evita que el clic en el modal cierre
+      onClick={e => e.stopPropagation()}
     >
       <button
         onClick={onClose}
@@ -49,7 +55,8 @@ const Modal: React.FC<ModalProps> = ({ title, text, onClose }) => (
         </svg>
       </button>
       <h2 style={{marginTop: 0, color: "#113893"}}>{title}</h2>
-      <p style={{color:"black"}}>{text}</p>
+      {text ? <p style={{color:"black"}}>{text}</p> : children}
+      {text && children}
     </div>
   </div>
 );
