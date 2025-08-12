@@ -370,10 +370,10 @@ function RegisterUser() {
       { value: "3", label: getStates(3) },
       { value: "4", label: getStates(4) },
       { value: "5", label: getStates(5) },
-      { value: "6", label:  getStates(6) },
+      { value: "6", label: getStates(6) },
       { value: "7", label: getStates(7) },
-      { value: "8", label:  getStates(8) },
-      { value: "9", label:  getStates(9) },
+      { value: "8", label: getStates(8) },
+      { value: "9", label: getStates(9) },
       { value: "10", label: getStates(10) },
 
     ]}

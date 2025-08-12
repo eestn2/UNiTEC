@@ -6,6 +6,8 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import AppWindow from "../UI/AppWindow";
 import ModalOverlay from "./ModalOverlay";
 import "../offers/SeeApplicants.css";
+import ActionButton from "../UI/ActionButton";
+import ConfirmModal from "../UI/Modals/ConfirmModal";
 
 type Postulante = {
   id: number;
@@ -26,6 +28,7 @@ type OfferWithApplicants = {
 const SeeApplicants: React.FC = () => {
   const [offers, setOffers] = useState<OfferWithApplicants[]>([]);
   const [popupActivo, setPopupActivo] = useState<number | null>(null);
+  const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,6 +39,27 @@ const SeeApplicants: React.FC = () => {
   const cerrarPopup = () => {
     setPopupActivo(null);
   };
+
+  const handleDisable = async (offerId: number) => {
+    try {
+      const response = await axios.put('/enterprise/end-job-offer.php', {
+        offer_id: offerId
+      });
+      if (response.data.status === "success") {
+        console.log("Estado de la oferta actualizado con exito.");
+        setOffers((prevOffers) =>
+          prevOffers.map((offer) =>
+            offer.id === offerId ? { ...offer, status: 0 } : offer
+        ));
+        setShowConfirmationModal(false);
+      } else {
+        console.error("Ocurrio un error.")
+      }
+    } catch (e) {
+      console.error("Error al actualizar el estado de la oferta:", e);
+    }
+
+  }
 
   const changeInternalStatus = (
     offerId: number,
@@ -69,11 +93,8 @@ const SeeApplicants: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const apiUrl = import.meta.env.PROD
-        ? import.meta.env.VITE_API_URL_PROD
-        : import.meta.env.VITE_API_URL_DEV;
       const response = await axios.get(
-        `${apiUrl}/enterprise/get-offers-and-applicants.php`
+        '/enterprise/get-offers-and-applicants.php'
       );
       if (response.status !== 200 || response.data.status !== "success") {
         setError("Error al cargar ofertas.");
@@ -122,21 +143,36 @@ const SeeApplicants: React.FC = () => {
                 <button
                   className="offer-header"
                   onClick={() => togglePopup(offer.id)}
+                  style={offer.status === 0 ? {backgroundColor: "#c9c9c9"} : {}}
                 >
                   <span className="texto-truncado">{offer.title}</span>
+                  {offer.status !== 0 && (
+                    <ActionButton text="Cerrar" height={"80%"} style={{backgroundColor: "var(--danger)"}} action={() => {
+                      setShowConfirmationModal(true);
+                    }}/>
+                  )}
                 </button>
               </div>
             ))}
         </div>
       </AppWindow>
 
-      {ofertaActiva && (
+      {ofertaActiva && !showConfirmationModal && (
         <ModalOverlay
           title={ofertaActiva.title}
           postulantes={ofertaActiva.applicants}
           offerID={ofertaActiva.id}
           onClose={cerrarPopup}
           externalStatusChanger={changeInternalStatus}
+        />
+      )}
+      {ofertaActiva && showConfirmationModal && (
+        <ConfirmModal
+            title="Confirmar eliminación"
+            message="¿Estás seguro de que deseas eliminar esta oferta?"
+            onAccept={() => handleDisable(ofertaActiva.id)}
+            onReject={() => setShowConfirmationModal(false)}
+            onClose={() => setShowConfirmationModal(false)}
         />
       )}
     </>
