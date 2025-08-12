@@ -2,7 +2,7 @@
  * @file InputField.tsx
  * @description A reusable React component for creating responsive input fields in the app.
  * Converts width and height from pixels to responsive units based on screen size.
- * @author Haziel Magallanes, Daviel Díaz Gonzáles
+ * @author Haziel Magallanes, Daviel Díaz Gonzáles, Matias Emiliano Grecco
  * @date May 11, 2025
  */
 
