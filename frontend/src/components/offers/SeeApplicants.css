@@ -158,7 +158,10 @@
    overflow-y: auto;
    overflow-x: hidden;
    height: auto;
+   min-height: 100px;
+   min-width: 200px;
    flex: 1;
+   color: var(--bold);
  }
 
  .postulantes-container::-webkit-scrollbar-track {

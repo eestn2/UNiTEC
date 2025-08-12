@@ -87,7 +87,7 @@ const AplicantsCard: React.FC<UserCardProps> = ({
     }
   };
 
-  if (status === 2) return null; // Optionally hide rejected
+  //if (status === 2) return null; // Optionally hide rejected
 
   const buttonText = status === 1 ? 'Contactar' : 'Aceptar';
   const buttonClass = status === 1 ? 'btn-orange' : 'btn-green';
@@ -105,15 +105,15 @@ const AplicantsCard: React.FC<UserCardProps> = ({
         }}
       />
       <div className="user-info">
-        <div className="user-name">{name}</div>
+        <div className="user-name">{name}{status === 2 ? ' (Rechazado).' : ''}</div>
         <div className="button-group">
           <button className="btn btn-yellow" onClick={onViewProfile}>Ver Perfil</button>
-          <button className={`btn ${buttonClass}`} onClick={buttonFunction} disabled={loading}>
+          <button className={`btn ${buttonClass}`} style={status === 2 ? {display: 'none'} : {}} onClick={buttonFunction} disabled={loading}>
             {loading ? 'Procesando...' : buttonText}
           </button>
-          <button className={`btn btn-red ${buttonRechazarClass}`} onClick={handleReject} disabled={loading}>Rechazar</button>
+          <button className={`btn btn-red ${buttonRechazarClass}`} style={status === 2 ? {display: 'none'} : {}}  onClick={handleReject} disabled={loading}>Rechazar</button>
         </div>
-        {error && <div className="error-message">{error}</div>}
+        {error && <div className="error">{error}</div>}
       </div>
     </div>
   );

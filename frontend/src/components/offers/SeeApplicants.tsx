@@ -26,6 +26,7 @@ const ModalOverlay: React.FC<{
           </button>
         </div>
         <div className="postulantes-container scroll padding">
+          {postulantes?.length === 0 && <p>No hay postulantes para esta oferta.</p>}
           {postulantes?.map((postulante) => (
             <AplicantsCard
               key={postulante.id}
