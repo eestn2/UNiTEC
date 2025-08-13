@@ -5,7 +5,7 @@ import Logo from "../UI/unitec/Logo";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import InputField from "../UI/form/InputField";
 import TextBox from "../UI/form/TextBox";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LabelsSelection from "../UI/form/LabelsSelectionEdit";
 import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 import axios from "axios";
@@ -87,7 +87,7 @@ function RegisterUser() {
     user_type: 0,
     status_id: 0
   });
-
+  const navigate = useNavigate();
   const windowSize = useWindowSize();
   if (import.meta.env.DEV) console.log("Compiler stop crying please", windowSize)
   const [error, setError] = useState("");
@@ -201,7 +201,7 @@ function RegisterUser() {
     try {
       const res = await axios.post("/session/user-register.php", { ...form });
       if (res.data.status === "success") {
-        window.location.reload();
+        navigate("/")
       } else {
         setError(res.data.message || "Error en el registro");
       }
