@@ -232,7 +232,7 @@ const EditProfile: React.FC = () => {
     const isPortrait = window.innerHeight > window.innerWidth;
     const windowWidth = window.innerWidth > window.innerHeight ? 980 : 1280;
     const [translateX, translateY] = getTranslates(isPortrait);
-    const isEmpresa = form.type === UserTypeEnum.Empresa;
+   const isEmpresaOrAdmin = form.type === UserTypeEnum.Empresa||UserTypeEnum.Administrador;
     return (
         <div>
             <Logo className='watermark' />
@@ -244,11 +244,11 @@ const EditProfile: React.FC = () => {
                 onChange={handlePictureChange}
             />
             <AppWindow
-                width={ isEmpresa ? 600 :windowWidth }
+                width={ isEmpresaOrAdmin ? 600 :windowWidth }
                 height={isPortrait ? undefined : 680}
                 className='centered-w-wm flex-column' 
                 style={{
-                    ...isEmpresa ? { transform: 'translate(20%, -50%)'}:{},
+                    ...isEmpresaOrAdmin ? { transform: 'translate(20%, -50%)'}:{},
                     padding: translateY(10),
                     paddingBottom: translateY(10),
                     minHeight: translateY(isPortrait ? 680 : 620),
@@ -273,7 +273,7 @@ const EditProfile: React.FC = () => {
                                 gridTemplateColumns: '1fr 1fr',
                             }
                             : {
-                                ...(isEmpresa ? {
+                                ...(isEmpresaOrAdmin ? {
                                     gridTemplateColumns: `repeat(2, 1fr)`,
                                 }
                                     : {
@@ -341,7 +341,7 @@ const EditProfile: React.FC = () => {
                     <div
                         className='user-labels-section profile-field input-field'
                         style={ 
-                             isEmpresa ? { display:'none',
+                             isEmpresaOrAdmin ? { display:'none',
                          }:{
                             ...(isPortrait ? { 
                                 gridColumn: '2', gridRow: '4' 
@@ -357,7 +357,7 @@ const EditProfile: React.FC = () => {
                     {/* Status */}
                     <div
                         className='user-status-section profile-field input-field'
-                        style={ isEmpresa ? { display:'none',
+                        style={ isEmpresaOrAdmin ? { display:'none',
                          }:{
                             ...(isPortrait ? { gridColumn: '2', gridRow: '5' } : {
 
@@ -369,7 +369,7 @@ const EditProfile: React.FC = () => {
                     </div>
 
                     {/* Etiquetas y lenguajes (después de estado) */}
-                    <div style={ isEmpresa ? { display:'none',
+                    <div style={ isEmpresaOrAdmin ? { display:'none',
                          }:{ gridColumn: isPortrait ? '2 / 3' : '2 / 3', gridRow: isPortrait ? '0 / span 6' : '3 / span 6', display: 'flex', flexDirection: 'column' }}>
 
                         {/* Área para añadir etiquetas/idiomas */}
@@ -412,14 +412,14 @@ const EditProfile: React.FC = () => {
                     {/* Description */}
                     <TextBox
                         className='user-description-section edit input-field'
-                        style={ isEmpresa ? { gridColumn: '2', gridRow: '1 / span 6' 
+                        style={ isEmpresaOrAdmin ? { gridColumn: '2', gridRow: '1 / span 6' 
                          }:{ gridColumn: '3', gridRow: '1 / span 6' }}
                         name="description" placeholder="Descripción" onChange={handleChange} width={'100%'} height={"100%"} value={form.description} />
 
                     {/* Save/Cancel Buttons */}
                     <div className='user-button-section' style={{
                         ...(isPortrait ? { gridColumn: '1 / span 2', gridRow: '6 / span 2' } :
-                             (isEmpresa ? { gridColumn: '2', gridRow: '7 / 9'}:{gridColumn: '2', gridRow: '7 / span 2' })),
+                             (isEmpresaOrAdmin ? { gridColumn: '2', gridRow: '7 / 9'}:{gridColumn: '2', gridRow: '7 / span 2' })),
                         fontSize: translateY(24)
                     }}>
                         <ActionButton height={'100%'} action={handleSave}>

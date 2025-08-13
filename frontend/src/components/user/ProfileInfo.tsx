@@ -101,7 +101,7 @@ const ProfileInfo: React.FC = () => {
 
   // Get translate functions based on orientation
   const [translateX, translateY] = getTranslates(isPortrait);
-  const isEmpresa = userData?.type === UserTypeEnum.Empresa;
+  const isEmpresaOrAdmin = userData?.type === UserTypeEnum.Empresa||UserTypeEnum.Administrador;
 
   // State for selected language
   /*   const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null);
@@ -115,11 +115,11 @@ const ProfileInfo: React.FC = () => {
     <div>
       <Logo className='watermark' />
       <AppWindow
-        width={isEmpresa ? 600 : windowWidth}
+        width={isEmpresaOrAdmin ? 600 : windowWidth}
         height={isPortrait ? undefined : 680}
         className='centered-w-wm flex-column'
         style={{
-          ...isEmpresa ? { transform: 'translate(20%, -50%)' } : {},
+          ...isEmpresaOrAdmin ? { transform: 'translate(20%, -50%)' } : {},
           padding: translateY(10),
           paddingBottom: translateY(10),
           minHeight: translateY(isPortrait ? 680 : 620),
@@ -153,7 +153,7 @@ const ProfileInfo: React.FC = () => {
           style={{
             ...(isPortrait ?
               { gridTemplateColumns: '1fr 1fr' } : {
-                ...(isEmpresa ?
+                ...(isEmpresaOrAdmin ?
                   { gridTemplateColumns: 'repeat(2, 1fr)' } : { gridTemplateColumns: `repeat(3, 1fr)` }
                 )
               }
@@ -216,7 +216,7 @@ const ProfileInfo: React.FC = () => {
           {/* Column 2: Type, Status, Description */}
           <div
             className='user-labels-section profile-field input-field'
-            style={isEmpresa ? { display: 'none' } : {
+            style={isEmpresaOrAdmin ? { display: 'none' } : {
               ...(isPortrait ? { gridColumn: '2', gridRow: '4' } : {})
             }}
           >
@@ -224,7 +224,7 @@ const ProfileInfo: React.FC = () => {
           </div>
           <div
             className='user-status-section profile-field input-field'
-            style={isEmpresa ? { display: 'none' } : {
+            style={isEmpresaOrAdmin ? { display: 'none' } : {
               ...(isPortrait ? { gridColumn: '2', gridRow: '5' } : {})
             }
             }
@@ -235,7 +235,7 @@ const ProfileInfo: React.FC = () => {
             className='user-description-section input-field'
             style={{
               ...(isPortrait ? { gridColumn: '2', gridRow: '6 / span 6' } : {
-                ...(isEmpresa ? {
+                ...(isEmpresaOrAdmin ? {
                   gridColumn: '2', gridRow: '1 / span 4'
                 } : { gridColumn: '3', gridRow: '1 / span 4' })
               }),
@@ -250,7 +250,7 @@ const ProfileInfo: React.FC = () => {
           <div
             className='user-skills-section input-field flex-row'
             style={{
-              ...(isEmpresa ? { display: 'none' } : {
+              ...(isEmpresaOrAdmin ? { display: 'none' } : {
                 ...(isPortrait ? { gridColumn: '1', gridRow: '5 / span 3' } : { gridRow: '3 / span 3' })
               }
               ),
@@ -273,7 +273,7 @@ const ProfileInfo: React.FC = () => {
           <div
             className='user-languages-section input-field flex-row'
             style={{
-              ...(isEmpresa ? { display: 'none' } : {
+              ...(isEmpresaOrAdmin ? { display: 'none' } : {
                 ...(isPortrait ? { gridColumn: '1', gridRow: '9 / span 3' } : { gridRow: '6 / span 3' })
               }),
               alignItems: 'flex-start',
@@ -319,7 +319,7 @@ const ProfileInfo: React.FC = () => {
               </div>
             ) : (
               <div className='user-button-section' style={{
-                fontSize: translateY(24), ...(isEmpresa ? {
+                fontSize: translateY(24), ...(isEmpresaOrAdmin ? {
                   gridColumn: '2',
                   gridRow: '5/9',
                   overflow: 'hidden',

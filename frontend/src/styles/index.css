@@ -37,8 +37,8 @@
 body {
   font-family: var(--app-font-family);
   margin: 0;
-  font-size: calc((18 / 720) * var(--y-multiplier) * var(--font-multiplier));
-  overflow-y: scroll;
+  font-size: calc((18 / 720) * var(--y-multiplier) * var(--font-multiplier)); 
+  overflow-y: auto;
 }
 html {
   scroll-behavior: smooth;

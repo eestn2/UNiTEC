@@ -49,6 +49,8 @@ import EditProfile from './user/EditProfile';
 
 function App(): JSX.Element {
   // Axios configs
+  window.scrollTo(0, 0);
+
   axios.defaults.baseURL = import.meta.env.DEV ? import.meta.env.VITE_API_URL_DEV : import.meta.env.VITE_API_URL_PROD;
   axios.defaults.headers.common['Content-Type'] = 'application/json';
   axios.defaults.withCredentials = true;
@@ -105,7 +107,7 @@ function App(): JSX.Element {
           </Routes>
           </BrowserRouter>
         </div>
-        <Footer />
+        <Footer/>
       </div>
     </ToastManagerProvider>
   );
