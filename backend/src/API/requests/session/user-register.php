@@ -53,7 +53,6 @@ function log_debug($msg) {
 }
 
 log_debug('Request received: ' . json_encode($data));
-
 try {
     $connection->beginTransaction();
     log_debug('Transaction started');
@@ -147,8 +146,9 @@ try {
 
     return_response("success", "Usuario registrado correctamente. Debe esperar aprobación.", null);
 } catch (Exception $e) {
-    $connection->rollBack();
-    log_debug('Exception: ' . $e->getMessage());
-    return_response("failed", "Ocurrió un error: " . $e->getMessage(), null);
+/*     $connection->rollBack();
+    log_debug('Transaction rolled back'); */
+    error_log('Exception: ' . $e->getMessage());
+    return_response("failed", "Ocurrió un error: No se pudo registrar al usuario" );
 }
 ?>

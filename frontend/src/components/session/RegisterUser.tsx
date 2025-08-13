@@ -164,7 +164,7 @@ function RegisterUser() {
     const requiredFields = [
       "name", "birth_date", "email",
       "password", "confirm_password",
-      "description", "user_type", "user_state"
+      "description", "user_type", "status_id"
     ];
 
     let hasError = false;
@@ -458,11 +458,11 @@ function RegisterUser() {
             <span className="form-text" style={{ borderTop: "3px solid rgba(255, 193, 35, 1)", paddingTop: `${TranslateFigmaCoords.translateFigmaY(20)}` }}>
               Si has rellenado todos los campos necesarios solo queda:
             </span>
-            <ActionButton height={60} text={"Registrarse"} width={100} action={() => {
+            <ActionButton height={60} text={"Registrarse"} width={100} action={(e) => {
               const langs = getIdsAndLevels(Languages, labelsFromSelection, 2);
               const tags = getIdsAndLevels(Tags, labelsFromSelection, 1);
               handleSubmitLabels(langs.ids, tags.ids, langs.levels, tags.levels);
-              handleSubmit;
+              handleSubmit(e);
             }} />
             <div className="delimiter"></div>
             <span className="form-text" style={{ paddingBottom: `${TranslateFigmaCoords.translateFigmaY(17)}` }}>
