@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 interface SendEmailProps {
   id?: number;
 }
-const SendEmail: React.FC = ( {id}:SendEmailProps) => {
+const SendEmail: React.FC<SendEmailProps> = ({id}) => {
 
   // Re-Render on window resize
   const windowSize = useWindowSize();
@@ -19,8 +19,7 @@ const SendEmail: React.FC = ( {id}:SendEmailProps) => {
   const [username, setUsername] = useState<string>('');
    const handleGetUserEmail = async (id : number) => {
     try {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.get(`${apiUrl}/enterprise/get-user-email.php`, {
+      const response = await axios.get('/enterprise/get-user-email.php', {
         params: {userId: id},
 
       });
@@ -35,12 +34,12 @@ const SendEmail: React.FC = ( {id}:SendEmailProps) => {
       console.error("An error occurred while loading tags:", error);
     }
   };
-  if(import.meta.env.DEV) console.log("Compiler stop crying please", windowSize)
+  console.log("Window size:", windowSize);
   useEffect(() => {
     if (id) {
       handleGetUserEmail(id);
     }
-  });
+  }, []);
   return (
     <>
       <NavBar />

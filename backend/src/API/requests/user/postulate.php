@@ -20,10 +20,16 @@ $offer_id = intval($data->offer_id);
 if ($user_id <= 0 || $offer_id <= 0) {
     return_response("failed", "Datos invalidos.", null);
 }
-
 try {
     $connection->beginTransaction();
 
+    $stmt = $connection->prepare("SELECT `status` FROM offers WHERE id = ?");
+    $stmt->execute([$offer_id]);
+    $offer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$offer) return_response("failed", "La oferta no existe.", null);
+    if ($offer['status'] == 0) return_response("failed", "La oferta ya cerro.", null);
+    
     $stmt = $connection -> prepare( 
         "INSERT INTO applicants (user_id, offer_id, `status`) VALUES (?, ?, 0)");
     $stmt->execute([$user_id, $offer_id]);

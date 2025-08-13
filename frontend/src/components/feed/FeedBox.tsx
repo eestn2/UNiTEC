@@ -19,6 +19,7 @@ import type { offer } from '../../types/JobOfferTypes';
 import type { notification } from '../../types/notification';
 import no_notifications from '../../assets/icons/no-notis.svg';
 import no_feed from '../../assets/icons/no-feed.svg';
+import LoadingScreen from '../UI/LoadingScreens/LoadingScreen';
 
 /**
  * A React functional component that renders the main feed with job offers and notifications.
@@ -37,6 +38,7 @@ function FeedBox() {
   // State variables for job offers and notifications
   const [jobOffers, setJobOffers] = useState<ReactElement[] | undefined>(undefined);
   const [notifications, setNotifications] = useState<ReactElement[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   // Fetch job offers from the server
   const loadJobOffers = async () => {
     try {
@@ -56,9 +58,11 @@ function FeedBox() {
           />
         ));
         setJobOffers(offers);
+        setLoading(false);
       }
     } catch (error) {
       console.error("An error occurred while loading job offers:", error);
+      setLoading(false);
     }
   };
   // Fetch notifications from the server
@@ -84,7 +88,7 @@ function FeedBox() {
     loadJobOffers();
     loadNotifications();
   }, []);
-
+  if (loading) return <LoadingScreen />;
   return (
     <div>
       <NavBar />

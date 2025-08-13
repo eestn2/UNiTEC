@@ -58,7 +58,7 @@ function App(): JSX.Element {
   });
 
   const [session, setSession] = useState<boolean>(false);
-  const [loading, setLoading] = useState(true);
+  const [gettingSession, setGettingSession] = useState(true);
   const windowSize = useWindowSize();
   if (import.meta.env.DEV) {
     console.log("Window size changed to: ", windowSize, ", re-rendering...");
@@ -73,27 +73,12 @@ function App(): JSX.Element {
         }
       })
       .catch(() => setSession(false))
-      .finally(() => setLoading(false));
+      .finally(() => setGettingSession(false));
   }, []); 
 
-  const [minTimePassed, setMinTimePassed] = useState(false);
-
-  useEffect(() => { 
-    setTimeout(() => {
-      setLoading(false);
-    }, 400); 
-
-    const timer = setTimeout(() => {
-      setMinTimePassed(true);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading || !minTimePassed) {
-    return <div className="app-content"><LoadingScreen /></div>;
+  if (gettingSession ) {
+    return <LoadingScreen />;
   }
-  
   // Browser routings
   return (
     <ToastManagerProvider>
@@ -106,8 +91,8 @@ function App(): JSX.Element {
               <Route path='/register-enterprise' element={<RegisterEnterprise />} />
               <Route path='/register-user' element={<RegisterUser />} />
               <Route path='/password-reset' element={<ForgotPasswordMail />} />
-            <Route path='/password-reset-code' element={<ForgotPasswordCode />} />
-            <Route path='/password-reset-new' element={<ForgotPasswordNewPass />} />
+              <Route path='/password-reset-code' element={<ForgotPasswordCode />} />
+              <Route path='/password-reset-new' element={<ForgotPasswordNewPass />} />
               <Route path='/profile/:id' element={<ProfileInfo />} />
               <Route path='/edit-profile' element={<EditProfile />} />
               {/*Add default admin-menu route to the approve users one. */}

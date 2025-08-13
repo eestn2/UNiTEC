@@ -15,6 +15,14 @@ $data->offerId = intval($data->offerId);
 
 try {
     $connection->beginTransaction();
+
+    $stmt = $connection->prepare("SELECT `status` FROM offers WHERE id = ?");
+    $stmt->execute([$offer_id]);
+    $offer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$offer) return_response("failed", "La oferta no existe.", null);
+    if ($offer['status'] == 0) return_response("failed", "La oferta ya cerro.", null);
+    
     $query = "DELETE FROM applicants WHERE user_id = :id AND offer_id = :offerId";
     $stmt = $connection->prepare($query);
     $stmt->bindParam(':id', $_SESSION['user']['id'], PDO::PARAM_INT);

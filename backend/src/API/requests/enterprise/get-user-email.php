@@ -19,7 +19,7 @@ try {
     if ($user === false) {
         return_response("failed", "Usuario no encontrado.", null);
     } else {
-        return_response("success", "Datos encontrados.", ["email" => $user['email'], "name" => $user['name']]);
+        return_response("success", "Datos encontrados.", ["email" => $user['email']]);
     }
 } catch (PDOException $e) {
     error_log("Error retrieving user email: " . $e->getMessage());

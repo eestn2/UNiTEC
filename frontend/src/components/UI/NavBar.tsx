@@ -46,12 +46,12 @@ const NavBar: React.FC = () => {
         <a href="#footer"><img src={about_us_icon} alt="About Us" /></a>,
         <a href="#footer"><img src={phone_icon} alt="Phone" /></a>
     ];
-    if (user_type === 'Empresa') {
+    if (user_type === UserTypeEnum.Empresa) {
         buttons.unshift(
             <img src={chart_icon} onClick={() => {navigate("/see-applicants")}} style={{cursor:"pointer"}} alt="Chart" />,
             <img src={add_offer_icon} onClick={() => {navigate("/publish-offer")}} style={{cursor:"pointer"}} alt="Add Offer" />,
         )
-    } else if (user_type === 'Administrador') {
+    } else if (user_type === UserTypeEnum.Administrador) {
         if (!location.pathname.includes("admin-menu")){
             buttons.unshift(
                 <div className="admin" onClick={() => {navigate("/admin-menu/panel")}} style={{cursor:"pointer"}}><img src={admin_icon} alt="AdminMenu Icon"/></div>
@@ -77,7 +77,21 @@ const NavBar: React.FC = () => {
 
     return (
             <div className="nav-bar">
-                <div className="logo-section">
+                <div className="logo-section" style={{scale: 1, transition: "all 0.3s ease-in-out"}} onClick={() => {
+                    navigate("/"); // Navigate to home page on click
+                }}
+                onMouseDown={(e) => {
+                    e.preventDefault();
+                    e.currentTarget.style.scale = "0.9";
+                }}
+                onMouseUp = {(e) => {
+                    e.preventDefault();
+                    e.currentTarget.style.scale = "1";
+                }}
+                onMouseLeave={(e) => {
+                    e.preventDefault(); // Prevent default button behavior
+                    e.currentTarget.style.scale = '1';
+                }}>
                     <img src={unitec_text} alt="Unitec Text" className="unitec-text" />
                 </div>
                 <div className={!location.pathname.includes("admin-menu") ? "icons-section" : "icons-section admin"}>

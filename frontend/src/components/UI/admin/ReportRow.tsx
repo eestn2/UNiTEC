@@ -3,7 +3,7 @@ import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords"
 import ActionButton from "../ActionButton";
 import AppWindow from "../AppWindow";
 import ProfilePicture from "../user/ProfilePicture";
-import Modal from "./Modal";
+import Modal from "../Modals/Modal";
 
 interface ReportRowProps {
   id?:number;

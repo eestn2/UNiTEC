@@ -17,8 +17,7 @@ const AdminDesignate: React.FC = () => {
     const [suggestions, setSuggestions] = useState<string[]>([]);
     const loadAdmins = async () => {
       try {
-        const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-        const response = await axios.get(`${apiUrl}/admin/get-admins.php`,
+        const response = await axios.get('/admin/get-admins.php',
           {withCredentials: true,});
 
         if (response.status !== 200 || response.data.status !== "success") {
@@ -37,8 +36,7 @@ const AdminDesignate: React.FC = () => {
       }
     };
     const handleAdd = async (attribute: string) => {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.post(`${apiUrl}/admin/add_admin.php`, {
+      const response = await axios.post('/admin/add_admin.php', {
           admin_email:attribute,
           withCredentials: true,
       });
@@ -47,8 +45,7 @@ const AdminDesignate: React.FC = () => {
    };
 
     const handleRemove = async (id: number) => {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.delete(`${apiUrl}/admin/delete_user.php`, {
+      const response = await axios.delete('/admin/delete_user.php', {
           data:{
             id:id,}
       }); 
@@ -61,8 +58,7 @@ const AdminDesignate: React.FC = () => {
         return;
       }
       try {
-        const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-        const response = await axios.get(`${apiUrl}/admin/get-users-by-email.php`, {
+        const response = await axios.get('/admin/get-users-by-email.php', {
           params: { email: input },
           withCredentials: true,
         });

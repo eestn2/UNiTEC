@@ -26,7 +26,9 @@ require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "PUT") return_response("failed", "Metodo no permitido.", null);
-$data = json_decode(file_get_contents("php://input"));
+if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
+
+$creator_id = intval($_SESSION['user']['id']);
 
 $data = json_decode(file_get_contents("php://input"));
 if (!isset($data->user_id) || !isset($data->application_id)) return_response("failed", "Faltan datos obligatorios.", null);
@@ -39,17 +41,8 @@ $accepted_status_id = 2; // REJECTED
 
 try{
     $connection->beginTransaction();
-    // Verificar que el creator_id es una empresa
-    $stmt = $connection->prepare("SELECT user_type_id FROM users WHERE id = :id");
-    $stmt->bindParam(':id', $creator_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$user || intval($user['user_type_id']) !== 1){
-        return_response("failed", "El usuario no tiene permisos para aceptar postulantes.", null);
-    }
-
     // Verificar que esa oferta fue creada por esa empresa
-    $stmt = $connection->prepare("SELECT * FROM applications WHERE id = :application_id AND creator_id = :creator_id");
+    $stmt = $connection->prepare("SELECT * FROM offers WHERE id = :application_id AND creator_id = :creator_id");
     $stmt->bindParam(':application_id', $application_id, PDO::PARAM_INT);
     $stmt->bindParam(':creator_id', $creator_id, PDO::PARAM_INT);
     $stmt->execute();
@@ -59,8 +52,7 @@ try{
     }
 
     // Actualizar estado del postulante
-    $stmt = $connection->prepare("UPDATE applicants SET status_id = :status_id WHERE user_id = :user_id AND application_id = :application_id");
-    $stmt->bindParam(':status_id', $accepted_status_id, PDO::PARAM_INT);
+    $stmt = $connection->prepare("UPDATE applicants SET `status` = 2 WHERE user_id = :user_id AND offer_id = :application_id");
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->bindParam(':application_id', $application_id, PDO::PARAM_INT);
     $stmt->execute();
