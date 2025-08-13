@@ -4,21 +4,16 @@ import AppWindow from '../UI/AppWindow';
 import NavBar from '../UI/NavBar';
 import InputField from '../UI/form/InputField';
 import TextBox from '../UI/form/TextBox';
-import { useWindowSize } from '../../hooks/responsive/useWindowSize';
 import SearchBar from './SearchBar';
 import { useEffect, useState } from 'react';
 import Tag from '../UI/Tag';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import ActionButton from '../UI/ActionButton';
 
 
 const PublishOffer: React.FC = () => {
-  const windowSize = useWindowSize();
-  console.log("Window size:", windowSize);
-
-
-    const navigate = useNavigate();
-
+  const navigate = useNavigate();
 
   const [Languages, setLanguages] = useState<string[]>([]);
   const [Tags, setTags] = useState<string[]>([]);
@@ -101,17 +96,18 @@ const PublishOffer: React.FC = () => {
       setSelectLanguages([...selectLanguages, idiomaCorrecto]);
     }
   };
- const handleAddOffer = async (tit: string,desc: string,tags:number[],languages:number[]) => {
+ const handleAddOffer = async (tit: string, desc: string, tags: number[], languages:number[]) => {
     const response = await axios.post('/enterprise/publish-offer.php', {
-      title:tit,
-      description:desc,
-      tags:tags,
-      languages:languages
+      title: tit,
+      description: desc,
+      tags: tags,
+      languages: languages
     });
-    if(response.statusText="OK"){
+    if(response.data.status === "success"){
       navigate('/')
+    } else {
+      alert("Debes rellenar obligatoriamente el título y descripción de la oferta.");
     }
-    console.log(response);
   };
 
   useEffect(() => {
@@ -200,7 +196,6 @@ const PublishOffer: React.FC = () => {
                   marginBottom: `${TranslateFigmaCoords.translateFigmaY(-5)}px`
                 }}
               />
-
             </div>
           </div>
         </div>
@@ -216,7 +211,6 @@ const PublishOffer: React.FC = () => {
                   <Tag key={index} texto={tag} onDelete={() => deleteTag(tag, 'lenguaje')} />
                 ))}
               </div>
-
             </div>
           </div>
 
@@ -233,8 +227,8 @@ const PublishOffer: React.FC = () => {
             </div>
           </div>
 
-          <button className="btn-publish" onClick={() => handleAddOffer(title,description,getId(Tags, selectTags),getId(Languages, selectLanguages))}>Publicar Oferta</button>
-          <button className="btn-undo">Deshacer Oferta</button>
+          <ActionButton height={50} action={() => handleAddOffer(title, description, getId(Tags, selectTags), getId(Languages, selectLanguages))}>Publicar Oferta</ActionButton>
+          <ActionButton height={50} style={{backgroundColor: "var(--danger)"}} action={() => navigate(-1)}>Deshacer Oferta</ActionButton>
         </div>
       </AppWindow>
     </>
