@@ -48,6 +48,10 @@ interface InputFieldProps extends ResponsiveComponent {
     style?: React.CSSProperties;
     /** Optional custom CSS classes to apply to the input field. */
     className?: string;
+    /** Optional key down event handler. */
+    onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
+    /** Optional focus event handler. */
+    onFocus?: React.FocusEventHandler<HTMLInputElement>;
 }
 
 /**
@@ -96,6 +100,8 @@ const InputField: React.FC<InputFieldProps> = ({
     children,
     max,
     min,
+    onKeyDown,
+    onFocus,
 }) => {
     const { finalHeight, finalWidth, translateX } = useResponsiveDimensions({
         height,
@@ -119,6 +125,8 @@ const InputField: React.FC<InputFieldProps> = ({
             value={value}
             max={type === "date" ? max : undefined}
             min={type === "date" ? min : undefined}
+            onKeyDown={onKeyDown}
+            onFocus={onFocus}
         >{children}</input>
     );
 };
