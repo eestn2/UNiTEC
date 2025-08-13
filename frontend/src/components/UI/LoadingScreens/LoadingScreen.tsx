@@ -2,7 +2,7 @@
 import Player from 'lottie-react';
 import throbber from '../../../assets/animated/loading_square.json';
 import whiteBriefcase from '../../../assets/unitec/white.svg';
-
+import './blockFooter.css'
 export default function LoadingScreen() {
   return (
     <div style={styles.container}>
@@ -51,7 +51,7 @@ const styles = {
     flexDirection: 'column' as const,
     justifyContent: 'center',
     alignItems: 'center',
-    color: '#fff',
+    color: '#fff', 
   },
   maskWrapper: {
     position: 'relative' as const,

@@ -8,9 +8,11 @@
 import admin_icon from "../../assets/icons/AdminMenuIcon.svg"
 import notification_icon from "../../assets/icons/bell.svg";
 import about_us_icon from "../../assets/navbar/bxs-info-circle.svg";
-import phone_icon from "../../assets/navbar/bxs-phone.svg";
+import phone_icon from "../../assets/navbar/bxs-phone.svg"; 
 import chart_icon from "../../assets/navbar/bxs-bar-chart-alt-2.svg";
+import chart_icon_active from "../../assets/navbar/bxs-bar-chart-alt-2-activate.svg";
 import add_offer_icon from "../../assets/navbar/bxs-edit.svg";
+import add_offer_icon_activate from "../../assets/navbar/bxs-edit-active.svg";
 import unitec_text from "../../assets/unitec/unitec-text.svg";
 import User from "../session/User";
 import { useWindowSize } from "../../hooks/responsive/useWindowSize";
@@ -33,9 +35,6 @@ import { UserTypeEnum } from "../../types/user";
 
 
 const NavBar: React.FC = () => {
-    // Re-Render on window resize
-    const windowSize = useWindowSize();
-    console.log(windowSize);
     // Router states
     const navigate = useNavigate();
     const location = useLocation();
@@ -48,8 +47,8 @@ const NavBar: React.FC = () => {
     ];
     if (user_type === UserTypeEnum.Empresa) {
         buttons.unshift(
-            <img src={chart_icon} onClick={() => {navigate("/see-applicants")}} style={{cursor:"pointer"}} alt="Chart" />,
-            <img src={add_offer_icon} onClick={() => {navigate("/publish-offer")}} style={{cursor:"pointer"}} alt="Add Offer" />,
+            <img src={location.pathname.includes("see-applicants") ? chart_icon_active : chart_icon} onClick={() => {navigate("/see-applicants")}} style={{cursor:"pointer"}} alt="Chart" />,
+            <img src={location.pathname.includes("publish-offer") ? add_offer_icon_activate:add_offer_icon} onClick={() => {navigate("/publish-offer")}} style={{cursor:"pointer"}} alt="Add Offer" />,
         )
     } else if (user_type === UserTypeEnum.Administrador) {
         if (!location.pathname.includes("admin-menu")){
@@ -63,7 +62,7 @@ const NavBar: React.FC = () => {
             }
             buttons.push(
                 <div className="admin">
-                    <div  onClick={() => {navigate("/admin-menu/panel")}} style={{color: "#113893", cursor:"pointer"}}>Solicitudes de registro</div>
+                    <div  onClick={() => {navigate("/admin-menu/panel")}} style={{color:"#113893" , cursor:"pointer"}}>Solicitudes de registro</div>
                     <div  onClick={() => {navigate("/admin-menu/tags")}} style={{color: "#113893", cursor:"pointer"}}>Etiquetas</div>
                     <div  onClick={() => {navigate("/admin-menu/languages")}} style={{color: "#113893", cursor:"pointer"}}>Idiomas</div>
                     <div  onClick={() => {navigate("/admin-menu/inserts")}} style={{color: "#113893", cursor:"pointer"}}>Inserciones</div>

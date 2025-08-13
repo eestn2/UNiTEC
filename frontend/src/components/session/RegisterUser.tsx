@@ -7,7 +7,6 @@ import InputField from "../UI/form/InputField";
 import TextBox from "../UI/form/TextBox";
 import { Link, useNavigate } from "react-router-dom";
 import LabelsSelection from "../UI/form/LabelsSelectionEdit";
-import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import '../../styles/SeeEtiquetas.css';
@@ -87,9 +86,6 @@ function RegisterUser() {
     user_type: 0,
     status_id: 0
   });
-  const navigate = useNavigate();
-  const windowSize = useWindowSize();
-  if (import.meta.env.DEV) console.log("Compiler stop crying please", windowSize)
   const [error, setError] = useState("");
   const [form, setForm] = useState<FormType>({
     name: "",
@@ -216,8 +212,7 @@ function RegisterUser() {
 
   const loadLanguages = async () => {
     try {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.get(`${apiUrl}/function/get-languages.php`);
+      const response = await axios.get('/function/get-languages.php');
       if (response.status !== 200 || response.data.status !== "success") {
         console.error("Failed to load languages:", response.data.message);
       } else {
@@ -231,8 +226,7 @@ function RegisterUser() {
 
   const loadTags = async () => {
     try {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.get(`${apiUrl}/function/get-tags.php`);
+      const response = await axios.get('/function/get-tags.php');
       if (response.status !== 200 || response.data.status !== "success") {
         console.error("Failed to load tags:", response.data.message);
       } else {

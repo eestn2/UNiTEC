@@ -2,18 +2,18 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - "5173:80"
+      - "10000:80"
     environment:
       - NODE_ENV=production
       - VITE_API_URL_DEV=http://localhost:9090/src/API/requests
-      - VITE_API_URL_PROD=http://localhost:9090/src/API/requests
+      - VITE_API_URL_PROD=http://eestn2.ghostix.com.ar:9090/UNiTEC-API/src/API/requests
     restart: unless-stopped
     # In production, serve built files. In dev, override with volume and npm run dev.
 
   backend:
     build: ./backend
     ports:
-      - "9090:80"
+      - "10001:80"
     restart: unless-stopped
     environment:
       - ENVIRONMENT=production
@@ -46,7 +46,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "3308:3306"
+      - "10002:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./backend/src/API/database/database.sql:/docker-entrypoint-initdb.d/database.sql:ro

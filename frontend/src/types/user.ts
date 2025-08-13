@@ -41,10 +41,16 @@ export type user = {
 };
 /** Enum de estados de usuario, 0 = Estudiando, 1 = Buscando trabajo, 2 = Trabajando, 3 = Egresado */
 export enum UserStatusEnum {
-    Estudiando = 1,
-    Buscando = 2,
-    Trabajando = 3,
-    Egresado = 4
+    BuscandoBeca = 1,
+    TrabajandoNoDisponible = 2,
+    TrabajandoDisponible = 3,
+    NoDisponible = 4,
+    Disponible = 5,
+    EstudiandoDisponible = 6,
+    EstudiandoNoDisponible = 7,
+    EstudiandoBuscandoBeca = 8,
+    TrabajandoBuscandoBeca = 9,
+    Otro = 10
 };
 
 

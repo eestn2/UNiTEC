@@ -13,6 +13,7 @@ import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords"
 import { useWindowSize } from "../../../hooks/responsive/useWindowSize";
 import '../../../styles/ForgotPassword/ForgotPasswordVerificationMail.css'
 import ActionButton from "../../UI/ActionButton";
+import { useNavigate } from "react-router-dom";
 /**
  * A React functional component that renders a password recovery form inside a responsive window.
  * Handles window resize for responsive design and displays input fields for verification code and new password.
@@ -28,6 +29,7 @@ import ActionButton from "../../UI/ActionButton";
  */
 const ForgotPasswordMailVerification: React.FC = () => {
     // Re-Render on window resize 
+    const navigate = useNavigate();
     const windowSize = useWindowSize();
     console.log("Window size:", windowSize);
     return (
@@ -49,7 +51,7 @@ const ForgotPasswordMailVerification: React.FC = () => {
                     <InputField name="userMail" type="mail" placeholder="Ingrese su correo electrónico" width={300} height={50} />
                     <div className="Botones">
                         <ActionButton className="ActionButton cancelar" vertical={true} height={60} text={"Cancelar"} width={120} />
-                        <ActionButton className="ActionButton" vertical={true} height={60} text={"Confirmar"} width={120} />
+                        <ActionButton className="ActionButton" action={() => navigate('/password-reset-code')} vertical={true} height={60} text={"Confirmar"} width={120} />
                     </div>
 
                 </div>

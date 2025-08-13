@@ -10,9 +10,8 @@ import React from "react";
 import AppWindow from "../../UI/AppWindow";
 import Logo from "../../UI/unitec/Logo";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
-import { useWindowSize } from "../../../hooks/responsive/useWindowSize";
 import CodeVerication from "../../UI/form/CodeVerification";
-import '../../../styles/ForgotPassword/ForgotPasswordCodeVerification.css'
+import '../../../styles/ForgotPassword/ForgotPasswordCodeVerification.css';
 /**
  * A React functional component that renders a password recovery form inside a responsive window.
  * Handles window resize for responsive design and displays input fields for verification code and new password.
@@ -27,10 +26,6 @@ import '../../../styles/ForgotPassword/ForgotPasswordCodeVerification.css'
  * @author Haziel Magallanes
  */
 const ForgotPasswordCodeVerification: React.FC = () => {
-    // Re-Render on window resize
-    const windowSize = useWindowSize();
-    console.log("Window size:", windowSize);
- 
         const initialText = "Volver a enviar";
         const countdownSeconds = 15; // Cambiá el tiempo que quieras
 

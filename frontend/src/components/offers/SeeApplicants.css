@@ -40,7 +40,8 @@
 white-space: nowrap;
 overflow: hidden;
 text-overflow: ellipsis; 
-min-width: 0; /* 👈 muy importante para que flex funcione con ellipsis */
+min-width: 0; 
+max-width: 90%;
 }
 
 .Top {
