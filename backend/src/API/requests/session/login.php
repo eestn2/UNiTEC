@@ -36,7 +36,9 @@ $user = $stmt->fetch();
 
 if (!$user) return_response("failed", "Dirección de correo electronico no registrada.", null);
 
+
 if (!password_verify($password, $user["password"])) return_response("failed", "Contraseña incorrecta.", null);
+if ($user["enabled"] == 0) return_response("failed", "Usuario no habilitado.", null);
 
 // Store user data in session (do not include password)
 $_SESSION['user'] = [
