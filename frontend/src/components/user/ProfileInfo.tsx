@@ -14,7 +14,7 @@ import reportIcon from '../../assets/icons/report.svg';
 import Logo from '../UI/unitec/Logo';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { UserStatusEnum, user as UserType } from '../../types/user';
+import { user as UserType } from '../../types/user';
 import default_profile from '../../assets/defaults/profile-picture/1.svg';
 import User from '../session/User';
 import { getTranslates } from '../../global/function/getTranslates';

@@ -52,12 +52,12 @@ import '../../styles/profile-info.css';
 import getUserStatus from '../../global/function/getUserStatus';
 import getUserType from '../../global/function/getUserType';
 
-const STATUS_OPTIONS = [
-    { value: UserStatusEnum.Estudiando, label: getUserStatus(UserStatusEnum.Estudiando) },
-    { value: UserStatusEnum.Buscando, label: getUserStatus(UserStatusEnum.Buscando) },
-    { value: UserStatusEnum.Trabajando, label: getUserStatus(UserStatusEnum.Trabajando) },
-    { value: UserStatusEnum.Egresado, label: getUserStatus(UserStatusEnum.Egresado) },
-];
+const STATUS_OPTIONS = Object.values(UserStatusEnum)
+    .filter((v) => typeof v === "number")
+    .map((value) => ({
+        value: value as UserStatusEnum,
+        label: getUserStatus(value as UserStatusEnum),
+    }));
 const TYPE_OPTIONS = [
     { value: UserTypeEnum.Estudiante, label: getUserType(UserTypeEnum.Estudiante) },
     { value: UserTypeEnum.Egresado, label: getUserType(UserTypeEnum.Egresado) },
