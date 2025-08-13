@@ -23,8 +23,7 @@ const AdminReview: React.FC = () => {
     
   const loadReviews = async () => {
     try {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.get(`${apiUrl}/admin/get-reviews.php`);
+      const response = await axios.get('/admin/get-reviews.php');
         if (response.status !== 200 || response.data.status !== "success") {
           console.error("Failed to load reports:", response.data.message);
         } else {

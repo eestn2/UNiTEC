@@ -28,12 +28,11 @@ const AplicantsCard: React.FC<UserCardProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
   const handleAccept = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.put(`${apiUrl}/enterprise/accept-application.php`, {
+      const response = await axios.put('/enterprise/accept-application.php', {
         user_id: userId,
         offer_id: offerId
       });
@@ -54,7 +53,7 @@ const AplicantsCard: React.FC<UserCardProps> = ({
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.put(`${apiUrl}/enterprise/reject-application.php`, {
+      const response = await axios.put('/enterprise/reject-application.php', {
         user_id: userId,
         application_id: offerId
       });
@@ -75,7 +74,7 @@ const AplicantsCard: React.FC<UserCardProps> = ({
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`${apiUrl}/enterprise/get-user-email.php`, {
+      const response = await axios.get('/enterprise/get-user-email.php', {
         params: { userId }
       });
       if (response.status !== 200 || response.data.status !== "success") {

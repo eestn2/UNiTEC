@@ -12,8 +12,7 @@ const AdminTags: React.FC = () => {
   const [tags, setTags] = useState<any[]>([]);
   const handleDeleteAttribute = async (id: number) => {
       try {
-        const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-        await axios.delete(`${apiUrl}/admin/delete_tag.php`, {
+        await axios.delete('/admin/delete_tag.php', {
           data: {
             id: id,
           }
@@ -26,8 +25,7 @@ const AdminTags: React.FC = () => {
       }
     };
       const handleChangeAttribute = async (attribute: string, id: number) => {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.put(`${apiUrl}/admin/edit_tag.php`, {
+      const response = await axios.put('/admin/edit_tag.php', {
           id:id,
           name:attribute
       });
@@ -35,8 +33,7 @@ const AdminTags: React.FC = () => {
     };
     const loadAttributes = async () => {
       try {
-        const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-        const response = await axios.get(`${apiUrl}/function/get-tags.php`);
+        const response = await axios.get('/function/get-tags.php');
         if (response.status !== 200 && response.data.status !== "success") {
           console.error("Failed to load tags:", response.data.message);
         } else {

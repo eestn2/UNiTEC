@@ -23,8 +23,7 @@ const AdminReport: React.FC = () => {
     
   const loadReports = async () => {
     try {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.get(`${apiUrl}/admin/get-reports.php`);
+      const response = await axios.get('/admin/get-reports.php');
         if (response.status !== 200 || response.data.status !== "success") {
           console.error("Failed to load reports:", response.data.message);
         } else {
@@ -44,8 +43,7 @@ const AdminReport: React.FC = () => {
   };
 
   const handleDiscardReport = async (id: number) => {
-        const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.delete(`${apiUrl}/admin/delete_report.php`, {
+      const response = await axios.delete('/admin/delete_report.php', {
         data :{id :id  }
       })
       if (response.status !== 200 || response.data.status !== "success") {
@@ -58,8 +56,7 @@ const AdminReport: React.FC = () => {
   }
 
   const handleBanUser = async ( reportedId: number ,id: number) => {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.delete(`${apiUrl}/admin/ban_user.php`, {
+      const response = await axios.delete('/admin/ban_user.php', {
         data :{
           reportId: id,
           id :reportedId  }
