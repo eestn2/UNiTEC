@@ -91,7 +91,7 @@ function App(): JSX.Element {
   }, []);
 
   if (loading || !minTimePassed) {
-    return <LoadingScreen />;
+    return <div className="app-content"><LoadingScreen /></div>;
   }
   
   // Browser routings

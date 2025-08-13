@@ -65,7 +65,9 @@ h1 {
 .app-content{
   background-color: var(--BG);
   width: 100%;
-  height: 100vh;
+  height: auto;
+  min-height: 100vh;
+  padding-bottom: 5vh;
   background-image: url(../assets/unitec/bg-repeat-icons.svg);
   background-repeat: repeat;
   background-size: calc((100 / 720) * var(--y-multiplier));
@@ -568,7 +570,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 footer{
   background-color: var(--footer);
   width: 100%;
-  height: calc((260 / 720) * var(--y-multiplier));
+  height: calc((260 / 720) * var(--y-multiplier)); 
   top: 100%;
 }
 

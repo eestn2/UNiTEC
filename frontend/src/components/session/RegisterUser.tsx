@@ -6,7 +6,7 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import InputField from "../UI/form/InputField";
 import TextBox from "../UI/form/TextBox";
 import { Link } from "react-router-dom";
-import LabelsSelection from "../UI/form/LabelsSelectionEdit"; 
+import LabelsSelection from "../UI/form/LabelsSelectionEdit";
 import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -47,9 +47,9 @@ function getIdsAndLevels(
     const index = array1.indexOf(etiqueta);
     ids.push(index + 1);
 
-      const nivel = nivelMap[match.valorCheckbox];
-      levels.push(nivel ?? 0);
-    
+    const nivel = nivelMap[match.valorCheckbox];
+    levels.push(nivel ?? 0);
+
   }
 
   return { ids, levels };
@@ -76,7 +76,7 @@ type FormType = {
 
 function RegisterUser() {
 
-    const [fieldErrors, setFieldErrors] = useState({
+  const [fieldErrors, setFieldErrors] = useState({
     name: "",
     birth_date: "",
     email: "",
@@ -89,7 +89,7 @@ function RegisterUser() {
   });
 
   const windowSize = useWindowSize();
-  if(import.meta.env.DEV) console.log("Compiler stop crying please", windowSize)
+  if (import.meta.env.DEV) console.log("Compiler stop crying please", windowSize)
   const [error, setError] = useState("");
   const [form, setForm] = useState<FormType>({
     name: "",
@@ -102,7 +102,7 @@ function RegisterUser() {
     portfolio: "",
     user_type: 0,
     status_id: 0,
-    languages:[],
+    languages: [],
     tags: [],
     languages_levels: [],
     tags_levels: [],
@@ -117,7 +117,7 @@ function RegisterUser() {
     );
   };
 
-  function handleSubmitLabels(languages: number[], tags:number[], languagesLevels: number[], tagsLevels: number[]) {
+  function handleSubmitLabels(languages: number[], tags: number[], languagesLevels: number[], tagsLevels: number[]) {
     setForm(prev => ({
       ...prev,
       languages: languages,
@@ -127,7 +127,7 @@ function RegisterUser() {
     }));
   }
 
- const validateField = (field: string, value: string) => {
+  const validateField = (field: string, value: string) => {
     let error = "";
     switch (field) {
       case "email":
@@ -214,9 +214,9 @@ function RegisterUser() {
 
   const loadLanguages = async () => {
     try {
-    const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-    const response = await axios.get(`${apiUrl}/function/get-languages.php`);
-    if (response.status !== 200 || response.data.status !== "success") {
+      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+      const response = await axios.get(`${apiUrl}/function/get-languages.php`);
+      if (response.status !== 200 || response.data.status !== "success") {
         console.error("Failed to load languages:", response.data.message);
       } else {
         const languageNames = response.data.data.languages.map((lang: any) => lang.name);
@@ -229,9 +229,9 @@ function RegisterUser() {
 
   const loadTags = async () => {
     try {
-    const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-    const response = await axios.get(`${apiUrl}/function/get-tags.php`);
-    if (response.status !== 200 || response.data.status !== "success") {
+      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+      const response = await axios.get(`${apiUrl}/function/get-tags.php`);
+      if (response.status !== 200 || response.data.status !== "success") {
         console.error("Failed to load tags:", response.data.message);
       } else {
         const tagsNames = response.data.data.tags.map((lang: any) => lang.name);
@@ -261,10 +261,10 @@ function RegisterUser() {
 
   const [filtroBloque, setFiltroBloque] = useState(blocks[0].titulo);
 
-   useEffect(() => {
-     loadLanguages();
-     loadTags();
-   }, []);
+  useEffect(() => {
+    loadLanguages();
+    loadTags();
+  }, []);
   return (
     <>
       <Logo className="watermark" />
@@ -278,10 +278,10 @@ function RegisterUser() {
           rowGap: `${TranslateFigmaCoords.translateFigmaY(20)}`,
           padding: `${TranslateFigmaCoords.translateFigmaY(20)}px`,
           flexDirection: "column",
-          position: "absolute",
-          top: "50%",
+          position: "relative",
           left: "50%",
-          translate: "-40% -50%",
+          marginTop:'5vh',
+          translate: "-40% 0",
           overflow: 'hidden',
         }}
       >
@@ -297,109 +297,106 @@ function RegisterUser() {
           Registro del Estudiante
         </span>
         <form onSubmit={handleSubmit} className="horizontal-display">
-<div className="vertical-sections" style={{ paddingRight: `${TranslateFigmaCoords.translateFigmaY(20)}` }}>
-  <InputField
-    name="name-user"
-    type="text"
-    placeholder="Nombre y Apellido"
-    width={292}
-    height={55}
-    value={form.name}
-    onChange={(e) => handleChange("name", (e.target as HTMLInputElement).value)}
-  />
-  {fieldErrors.name && <span style={{ color: "red" }}>{fieldErrors.name}</span>}
-  <InputField
-    name="birthday-user"
-    type="date"
-    min="1925-01-01"
-    max={new Date().toISOString().split("T")[0]}
-    placeholder="Fecha de nacimiento:"
-    width={292}
-    height={55}
-    value={form.birth_date}
-    onChange={(e) => handleChange("birth_date", (e.target as HTMLInputElement).value)}
-  />
-  {fieldErrors.birth_date && <span style={{ color: "red" }}>{fieldErrors.birth_date}</span>}
-  <InputField
-    name="mail-user"
-    type="text"
-    placeholder="Correo Electrónico"
-    width={292}
-    height={55}
-    value={form.email}
-    onChange={(e) => handleChange("email", (e.target as HTMLInputElement).value)}
-  />
-  {fieldErrors.email && <span style={{ color: "red" }}>{fieldErrors.email}</span>}
-  <InputField
-    name="password-user"
-    type="password"
-    placeholder="Contraseña"
-    width={292}
-    height={55}
-    value={form.password}
-    onChange={(e) => handleChange("password", (e.target as HTMLInputElement).value)}
-  />
-  {fieldErrors.password && <span style={{ color: "red" }}>{fieldErrors.password}</span>}
-  <InputField
-    name="confirm-password-user"
-    type="password"
-    placeholder="Confirmar Contraseña"
-    width={292}
-    height={55}
-    value={form.confirm_password}
-    onChange={(e) => handleChange("confirm_password", (e.target as HTMLInputElement).value)}
-  />
-  {fieldErrors.confirm_password && <span style={{ color: "red" }}>{fieldErrors.confirm_password}</span>}
-  <SelectionField
-    name="user-type"
-    options={[
-      { value: "2", label: "Estudiante" },
-      { value: "3", label: "Egresado" },
-    ]}
-    placeholder="Tipo de Usuario"
-    width={292}
-    height={55}
-    className="input-field"
-    onChange={(e) => handleChange("user_type", (e.target as HTMLSelectElement).value)}
-  />
-  <SelectionField
-    name="user-state"
-    options={[
-      { value: "1", label: getStates(1) },
-      { value: "2", label: getStates(2) },
-      { value: "3", label: getStates(3) },
-      { value: "4", label: getStates(4) },
-      { value: "5", label: getStates(5) },
-      { value: "6", label:  getStates(6) },
-      { value: "7", label: getStates(7) },
-      { value: "8", label:  getStates(8) },
-      { value: "9", label:  getStates(9) },
-      { value: "10", label: getStates(10) },
+          <div className="vertical-sections" style={{ paddingRight: `${TranslateFigmaCoords.translateFigmaY(20)}` }}>
+            <InputField
+              name="name-user"
+              type="text"
+              placeholder="Nombre y Apellido"
+              width={292}
+              height={55}
+              value={form.name}
+              onChange={(e) => handleChange("name", (e.target as HTMLInputElement).value)}
+            />
+            {fieldErrors.name && <span style={{ color: "red" }}>{fieldErrors.name}</span>}
+            <InputField
+              name="birthday-user"
+              type="date"
+              min="1925-01-01"
+              max={new Date().toISOString().split("T")[0]}
+              placeholder="Fecha de nacimiento:"
+              width={292}
+              height={55}
+              value={form.birth_date}
+              onChange={(e) => handleChange("birth_date", (e.target as HTMLInputElement).value)}
+            />
+            {fieldErrors.birth_date && <span style={{ color: "red" }}>{fieldErrors.birth_date}</span>}
+            <InputField
+              name="mail-user"
+              type="text"
+              placeholder="Correo Electrónico"
+              width={292}
+              height={55}
+              value={form.email}
+              onChange={(e) => handleChange("email", (e.target as HTMLInputElement).value)}
+            />
+            {fieldErrors.email && <span style={{ color: "red" }}>{fieldErrors.email}</span>}
+            <InputField
+              name="password-user"
+              type="password"
+              placeholder="Contraseña"
+              width={292}
+              height={55}
+              value={form.password}
+              onChange={(e) => handleChange("password", (e.target as HTMLInputElement).value)}
+            />
+            {fieldErrors.password && <span style={{ color: "red" }}>{fieldErrors.password}</span>}
+            <InputField
+              name="confirm-password-user"
+              type="password"
+              placeholder="Confirmar Contraseña"
+              width={292}
+              height={55}
+              value={form.confirm_password}
+              onChange={(e) => handleChange("confirm_password", (e.target as HTMLInputElement).value)}
+            />
+            {fieldErrors.confirm_password && <span style={{ color: "red" }}>{fieldErrors.confirm_password}</span>}
+            <SelectionField
+              name="user-type"
+              options={[
+                { value: "2", label: "Estudiante" },
+                { value: "3", label: "Egresado" },
+              ]}
+              placeholder="Tipo de Usuario"
+              width={292}
+              height={55}
+              className="input-field"
+              onChange={(e) => handleChange("user_type", (e.target as HTMLSelectElement).value)}
+            />
+            <SelectionField
+              name="user-state"
+              options={[
+                { value: "1", label: getStates(1) },
+                { value: "2", label: getStates(2) },
+                { value: "3", label: getStates(3) },
+                { value: "4", label: getStates(4) },
+                { value: "5", label: getStates(5) },
+                { value: "6", label: getStates(6) },
+                { value: "7", label: getStates(7) },
+                { value: "8", label: getStates(8) },
+                { value: "9", label: getStates(9) },
+                { value: "10", label: getStates(10) },
 
-    ]}
-    placeholder="Estado"
-    width={292}
-    height={55}
-    className="input-field"
-    onChange={(e) => handleChange("status_id", (e.target as HTMLSelectElement).value)}
-  />
-  <InputField
-    name="user-portfolio"
-    type="text"
-    placeholder="Enlace a su Portfolio (Opcional)"
-    width={292}
-    height={55}
-    value={form.portfolio}
-    onChange={(e) => handleChange("portfolio", (e.target as HTMLInputElement).value)}
-  />
-</div>
-
-
-
+              ]}
+              placeholder="Estado"
+              width={292}
+              height={55}
+              className="input-field"
+              onChange={(e) => handleChange("status_id", (e.target as HTMLSelectElement).value)}
+            />
+            <InputField
+              name="user-portfolio"
+              type="text"
+              placeholder="Enlace a su Portfolio (Opcional)"
+              width={292}
+              height={55}
+              value={form.portfolio}
+              onChange={(e) => handleChange("portfolio", (e.target as HTMLInputElement).value)}
+            />
+          </div>
           <div className="vertical-sections" style={{ paddingInline: `${TranslateFigmaCoords.translateFigmaY(20)}`, borderLeft: "3px solid rgba(255, 193, 35, 1)" }}>
             <div className="corner-container">
               <TextBox name="user-description" placeholder="Ingrese una descripción personal" width={292} height={265} className="corner-visible" onChange={(e) => handleChange("description", e.target.value)} />
-                {fieldErrors.description && <span style={{ color: "red" }}>{fieldErrors.description}</span>}
+              {fieldErrors.description && <span style={{ color: "red" }}>{fieldErrors.description}</span>}
               <p className="corner-down-right"></p>
             </div>
             <LabelsSelection
@@ -417,7 +414,7 @@ function RegisterUser() {
               <div className="view-tabs">
                 {blocks.map((block, index) => (
                   <button
-                  type="button"
+                    type="button"
                     key={index}
                     className={block.titulo === filtroBloque ? "active-view-tab" : "view-tab"}
                     onClick={() => setFiltroBloque(block.titulo)}
@@ -465,8 +462,8 @@ function RegisterUser() {
               const langs = getIdsAndLevels(Languages, labelsFromSelection, 2);
               const tags = getIdsAndLevels(Tags, labelsFromSelection, 1);
               handleSubmitLabels(langs.ids, tags.ids, langs.levels, tags.levels);
-              handleSubmit; 
-              }} />
+              handleSubmit;
+            }} />
             <div className="delimiter"></div>
             <span className="form-text" style={{ paddingBottom: `${TranslateFigmaCoords.translateFigmaY(17)}` }}>
               Registrarse como <Link to="/register-enterprise" className="golden-link">Empresa</Link><br />

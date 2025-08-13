@@ -3,6 +3,8 @@ import MinimalistSearchBar from "../../UI/form/MinimalSearchBar";
 import "../../../styles/Label.css";
 import Agregar from "../../../assets/icons/add.svg";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
+import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
+import EditProfile from "../../user/EditProfile";
 interface Bloque {
   titulo: string;
   etiquetas: string[];
@@ -15,24 +17,35 @@ export interface EtiquetaSeleccionada {
   valorCheckbox: string;
 }
 
-interface LabelsSelectionProps {
-  width?: number;
-  height?: number;
+interface LabelsSelectionProps extends ResponsiveComponent {
   blocks: Bloque[];
   searchData: Record<string, string[]>;
   etiquetasSeleccionadas: EtiquetaSeleccionada[];
   setEtiquetasSeleccionadas: (etiquetas: EtiquetaSeleccionada[]) => void;
+  activeTab?: string;
+  onTabChange?: (tab: string) => void;
+  editProfile?: boolean;
 }
 
 const LabelsSelection: React.FC<LabelsSelectionProps> = ({
-  width = 100,
-  height = 50,
+  width,
+  height,
   blocks,
   searchData,
   etiquetasSeleccionadas,
   setEtiquetasSeleccionadas,
+  activeTab,
+  onTabChange,
+  editProfile = false,
 }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const getInitialIndex = () => {
+    if (typeof activeTab === 'string') {
+      const idx = blocks.findIndex(b => b.titulo === activeTab);
+      return idx >= 0 ? idx : 0;
+    }
+    return 0;
+  };
+  const [activeIndex, setActiveIndex] = useState(getInitialIndex());
   const [checkboxSeleccionado, setCheckboxSeleccionado] = useState<string | null>(null);
   const [valorActual, setValorActual] = useState<string>("");
 
@@ -74,12 +87,28 @@ const LabelsSelection: React.FC<LabelsSelectionProps> = ({
     setCheckboxSeleccionado(null);
   };
 
+  // Sincroniza el tab activo con el prop externo
+  React.useEffect(() => {
+    if (typeof activeTab === 'string') {
+      const idx = blocks.findIndex(b => b.titulo === activeTab);
+      if (idx >= 0 && idx !== activeIndex) setActiveIndex(idx);
+    }
+    // eslint-disable-next-line
+  }, [activeTab, blocks]);
+
+  const handleTabClick = (index: number) => {
+    setActiveIndex(index);
+    LimpiarInputs();
+    if (onTabChange) onTabChange(blocks[index].titulo);
+  };
+
   return (
     <div
       className="labels-selection"
       style={{
-        width: `${TranslateFigmaCoords.translateFigmaX(width)}px`,
-        height: `${TranslateFigmaCoords.translateFigmaX(height)}px`,
+        ...(editProfile ? { borderBottomRightRadius: 0, borderBottomLeftRadius: 0 } : {}),
+        width: width,
+        height: height,
       }}
     >
       <div className="slider-tabs">
@@ -88,17 +117,14 @@ const LabelsSelection: React.FC<LabelsSelectionProps> = ({
             type="button"
             key={index}
             className={index === activeIndex ? "active-tab" : "tab"}
-            onClick={() => {
-              setActiveIndex(index);
-              LimpiarInputs();
-            }}
+            onClick={() => handleTabClick(index)}
           >
             {block.titulo || "Sin Título"}
           </button>
         ))}
       </div>
 
-      <div className="slider-content">
+      <div className="slider-content" >
         <MinimalistSearchBar
           placeholder={blocks[activeIndex].placeholder}
           suggestions={searchData[blocks[activeIndex].titulo] || []}
@@ -109,8 +135,8 @@ const LabelsSelection: React.FC<LabelsSelectionProps> = ({
         />
 
         {blocks.length > 0 && (
-          <div className="column">
-            <div className="checkbox-group">
+          <div className="column" >
+            <div className="checkbox-group" style={editProfile ? { flexDirection: 'row', justifyContent: 'space-between' } : { flexDirection: 'column' }}>
               {blocks[activeIndex].etiquetas.map((opt, i) => (
                 <label key={i} className="checkbox-label">
                   <input

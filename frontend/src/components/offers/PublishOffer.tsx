@@ -9,6 +9,7 @@ import SearchBar from './SearchBar';
 import { useEffect, useState } from 'react';
 import Tag from '../UI/Tag';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 const PublishOffer: React.FC = () => {
@@ -16,6 +17,7 @@ const PublishOffer: React.FC = () => {
   console.log("Window size:", windowSize);
 
 
+    const navigate = useNavigate();
 
 
   const [Languages, setLanguages] = useState<string[]>([]);
@@ -109,6 +111,9 @@ const PublishOffer: React.FC = () => {
       tags:tags,
       languages:languages
     });
+    if(response.statusText="OK"){
+      navigate('/')
+    }
     console.log(response);
   };
 
@@ -163,8 +168,11 @@ const PublishOffer: React.FC = () => {
                 height: `${TranslateFigmaCoords.translateFigmaY(240)}px`, 
               }}
             />
-            <div className='search'>
-              <SearchBar
+            <div className='search' 
+            style={
+              {width: `${TranslateFigmaCoords.translateFigmaY(500)}px`}
+            }>
+              <SearchBar 
                 placeholder="Añadir etiqueta"
                 suggestions={Tags}
                 selectedItems={selectTags}

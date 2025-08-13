@@ -82,7 +82,7 @@ const NavBar: React.FC = () => {
                 </div>
                 <div className={!location.pathname.includes("admin-menu") ? "icons-section" : "icons-section admin"}>
                     {buttons}
-                    <ProfilePicture userId={User.data.id as number} size={40} vertical={window.innerWidth > window.innerHeight} />
+                    <ProfilePicture userId={User.data.id as number} size={33} vertical={window.innerWidth > window.innerHeight} />
                 </div>
                 
             </div>

@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import LabelsSelection from '../UI/form/LabelsSelectionEdit';
+import Tag2 from '../UI/Tag2';
 import { useNavigate } from 'react-router-dom';
 import AppWindow from '../UI/AppWindow';
 import ActionButton from '../UI/ActionButton';
@@ -6,6 +8,38 @@ import InputField from '../UI/form/InputField';
 import TextBox from '../UI/form/TextBox';
 import SelectionField from '../UI/form/SelectionField';
 import { UserStatusEnum, user as UserType, UserTypeEnum } from '../../types/user';
+// --- Etiquetas y niveles ---
+type EtiquetaSeleccionada = {
+    etiqueta: string;
+    bloque: string;
+    valorCheckbox: string;
+};
+
+function getIdsAndLevels(
+    array1: string[],
+    array2: EtiquetaSeleccionada[],
+    option: 1 | 2
+): { ids: number[]; levels: number[] } {
+    const bloqueFiltrado = option === 1 ? "Etiquetas" : "Idiomas";
+    const nivelMap: Record<string, number> = {
+        "Básico": 1,
+        "Intermedio": 2,
+        "Avanzado": 3,
+    };
+    const ids: number[] = [];
+    const levels: number[] = [];
+    for (const etiqueta of array1) {
+        const match = array2.find(
+            (item) => item.bloque === bloqueFiltrado && item.etiqueta === etiqueta
+        );
+        if (!match) continue;
+        const index = array1.indexOf(etiqueta);
+        ids.push(index + 1);
+        const nivel = nivelMap[match.valorCheckbox];
+        levels.push(nivel ?? 0);
+    }
+    return { ids, levels };
+}
 import User from '../session/User';
 import { getTranslates } from '../../global/function/getTranslates';
 import axios from 'axios';
@@ -29,8 +63,78 @@ const TYPE_OPTIONS = [
     { value: UserTypeEnum.Egresado, label: getUserType(UserTypeEnum.Egresado) },
 ];
 
+type FormType = UserType & {
+    languages?: number[];
+    tags?: number[];
+    languages_levels?: number[];
+    tags_levels?: number[];
+};
+
 const EditProfile: React.FC = () => {
-    const [form, setForm] = useState<UserType | null>(null);
+    const [form, setForm] = useState<FormType | null>(null);
+    // Etiquetas y lenguajes
+    const [labelsFromSelection, setLabelsFromSelection] = useState<EtiquetaSeleccionada[]>([]);
+    const [Languages, setLanguages] = useState<string[]>([]);
+    const [Tags, setTags] = useState<string[]>([]);
+    const [filtroBloque, setFiltroBloque] = useState('Etiquetas');
+    // Cargar idiomas y etiquetas
+    useEffect(() => {
+        loadLanguages();
+        loadTags();
+    }, []);
+
+    const loadLanguages = async () => {
+        try {
+            const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+            const response = await axios.get(`${apiUrl}/function/get-languages.php`);
+            if (response.status !== 200 || response.data.status !== "success") {
+                console.error("Failed to load languages:", response.data.message);
+            } else {
+                const languageNames = response.data.data.languages.map((lang: any) => lang.name);
+                setLanguages(languageNames);
+            }
+        } catch (error) {
+            console.error("An error occurred while loading languages:", error);
+        }
+    };
+
+    const loadTags = async () => {
+        try {
+            const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
+            const response = await axios.get(`${apiUrl}/function/get-tags.php`);
+            if (response.status !== 200 || response.data.status !== "success") {
+                console.error("Failed to load tags:", response.data.message);
+            } else {
+                const tagsNames = response.data.data.tags.map((lang: any) => lang.name);
+                setTags(tagsNames);
+            }
+        } catch (error) {
+            console.error("An error occurred while loading tags:", error);
+        }
+    };
+
+    const blocks = [
+        {
+            titulo: "Etiquetas",
+            etiquetas: ["Básico", "Intermedio", "Avanzado"],
+            placeholder: "Añadir una etiqueta",
+        },
+        {
+            titulo: "Idiomas",
+            etiquetas: ["Básico", "Intermedio", "Avanzado"],
+            placeholder: "Añadir un Idioma",
+        },
+    ];
+    const searchData = {
+        Etiquetas: Tags,
+        Idiomas: Languages,
+    };
+
+    const handleDeleteEtiqueta = (etiqueta: string, bloque: string) => {
+        setLabelsFromSelection(prev =>
+            prev.filter(item => !(item.etiqueta === etiqueta && item.bloque === bloque))
+        );
+    };
     const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [newPicturePath, setNewPicturePath] = useState<string | null>(null);
@@ -38,7 +142,7 @@ const EditProfile: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setForm(User.data as UserType);
+        setForm(User.data as FormType);
     }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -48,9 +152,17 @@ const EditProfile: React.FC = () => {
 
     const handleSave = async () => {
         try {
-            const payload = { ...form };
+            if (!form) return;
+            const payload: FormType = { ...form };
             // If not empty, use newPicturePath, else just use the existing profile picture
             payload.profile_picture = newPicturePath ? newPicturePath : form?.profile_picture;
+            // Agregar etiquetas y niveles
+            const langs = getIdsAndLevels(Languages, labelsFromSelection, 2);
+            const tags = getIdsAndLevels(Tags, labelsFromSelection, 1);
+            payload.languages = langs.ids;
+            payload.tags = tags.ids;
+            payload.languages_levels = langs.levels;
+            payload.tags_levels = tags.levels;
             const response = await axios.put('/user/edit-user.php', payload);
             console.log(response.data);
             if (response.data.status !== 'success') {
@@ -114,166 +226,216 @@ const EditProfile: React.FC = () => {
         reader.readAsDataURL(file);
     };
 
+    // --- RETURN PRINCIPAL DEL COMPONENTE ---
     if (!form) return null;
 
     const isPortrait = window.innerHeight > window.innerWidth;
     const windowWidth = window.innerWidth > window.innerHeight ? 980 : 1280;
     const [translateX, translateY] = getTranslates(isPortrait);
-
+    const isEmpresa = form.type === UserTypeEnum.Empresa;
     return (
-    <div>
-    <Logo className='watermark' />
-    <input
-        type="file"
-        accept="image/jpeg,image/png"
-        style={{ display: 'none' }}
-        ref={fileInputRef}
-        onChange={handlePictureChange}
-    />
-    <AppWindow
-        width={windowWidth}
-        height={isPortrait ? undefined : 680}
-        className='centered-w-wm flex-column'
-        style={{
-            padding: translateY(10),
-            paddingBottom: translateY(10),
-            minHeight: translateY(isPortrait ? 680 : 620),
-            height: 'fit-content',
-        }}
-    >
-         {/* Header */}
-        <div className="flex-row-reversed" style={{width: "100%", height: translateY(60), textAlign: 'center', alignItems: 'center', justifyContent: 'space-between'}}>
-          <h1 className='profile-title centered-x' style={{
-              top: translateY(14),
-              transform: 'translate(-50%, -50%)',
-          }}>Editar detalles de Cuenta</h1>
-        </div>
-        {/* Responsive User Info Grid Container */}
-        <div
-          className='user-info-container'
-          style={{
-            ...( isPortrait ? 
-                {
-                  gridTemplateColumns: '1fr 1fr',
-                }
-              : {
-                  gridTemplateColumns: `repeat(3, 1fr)`,
-                }),
-            display: 'grid',
-            width: '100%',
-            alignContent: 'center',
-            paddingTop: translateY(10),
-            gridTemplateRows: `repeat(8, ${translateY(55)}px)`,
-            gap: `${translateX(12)}px ${translateY(16)}px`,
-            borderTop: '4px solid var(--delimiters)',
-          }}
-        >
-            {/* Profile Photo */}
-            <div
-                className='profile-photo-section input-field'
+        <div>
+            <Logo className='watermark' />
+            <input
+                type="file"
+                accept="image/jpeg,image/png"
+                style={{ display: 'none' }}
+                ref={fileInputRef}
+                onChange={handlePictureChange}
+            />
+            <AppWindow
+                width={ isEmpresa ? 600 :windowWidth }
+                height={isPortrait ? undefined : 680}
+                className='centered-w-wm flex-column' 
                 style={{
-                    ...(isPortrait ? { gridColumn: '1', gridRow: '1 / span 4', padding: translateY(20) } : { padding: translateY(20) }),
-                    color: '#113893',
+                    ...isEmpresa ? { transform: 'translate(20%, -50%)'}:{},
+                    padding: translateY(10),
+                    paddingBottom: translateY(10),
+                    minHeight: translateY(isPortrait ? 680 : 620),
+                    height: 'fit-content',
+                   
                 }}
             >
-                <div className="user-photo-container edit" style={{ 
-                width: translateX(isPortrait ? 200 : 160),
-                height: translateX(isPortrait ? 200 : 160),
-                borderRadius: '50%',
-                border: `${translateX(4)}px solid #113893`,
-                overflow: 'hidden',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                }}>
-                <img src={newPicture ? newPicture : (form?.profile_picture ? form?.profile_picture : undefined)} style={{width: '100%', height: '100%', 
-                    backgroundColor: '#F0EFF5',
-                    }} />
-                    {form?.profile_picture || newPicture ? (
-                        <img className = 'edit-picture-overlay' src={edit_profile} onClick={handlePictureClick} style={{opacity: uploading ? 0.5 : undefined}}/>
-                    ) : (
-                        <img className= 'edit-picture-overlay' src={upload_picture} onClick={handlePictureClick} style={{opacity: uploading ? 0.5 : undefined}}/>
-                    )}
+                {/* Header */}
+                <div className="flex-row-reversed" style={{ width: "100%", height: translateY(60), 
+                textAlign: 'center', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <h1 className='profile-title centered-x' style={{
+                        top: translateY(14),
+                        transform: 'translate(-50%, -50%)',
+                    }}>Editar detalles de Cuenta</h1>
                 </div>
-                <h1>{form.name}</h1>
-            </div>
-            {/* Email */}
-            <div
-                className='user-info-item profile-field input-field'
-                style={{...(isPortrait ? { gridColumn: '2', gridRow: '1' } : { gridRow: 6 }), height: 'auto'}}
-            >
-                <div>Email: {form?.email}</div>
-            </div>
-            {/* Location */}
-            <InputField 
-            className='user-info-item'
-            style={isPortrait ? { gridColumn: '2', gridRow: '2' } : { gridRow: 7 }}
-            type="text" name="location" placeholder="Localidad" value={form.location} onChange={handleChange} width={300} height={'auto'} />
-            {/* Portfolio */}
-            <InputField 
-            className='user-info-item'
-            style={isPortrait ? { gridColumn: '2', gridRow: '3' } : { gridRow: 8 }}
-            type="text" name="portfolio" placeholder="Portfolio web" value={form.portfolio} onChange={handleChange} width={300} height={'auto'} />
-            {/* Type */}
-            <div
-                className='user-labels-section profile-field input-field'
-                style={isPortrait ? { gridColumn: '2', gridRow: '4' } : {}}
-            >
-                <SelectionField name="type" options={TYPE_OPTIONS} onChange={handleChange} defaultValue={getUserType(form.type)} width={300} height={40} placeholder="Tipo de usuario" />
-            </div>
-            {/* Status */}
-            <div
-                className='user-status-section profile-field input-field'
-                style={isPortrait ? { gridColumn: '2', gridRow: '5' } : {}}
-            >
-                <SelectionField name="status" options={STATUS_OPTIONS} onChange={handleChange} defaultValue={getUserStatus(form.status)} width={300} height={40} placeholder="Estado" />
-            </div>
-            {/* Description */}
-            <TextBox 
-            className='user-description-section edit input-field'
-            style={isPortrait ? { gridColumn: '2', gridRow: '6 / span 9' } : {}}
-            name="description" placeholder="Descripción" onChange={handleChange} width={300} height={"100%"} value={form.description} />
-            {/* Tags and Languages (editable) */}
-            <div
-                className='user-skills-section input-field flex-row'
-                style={{
-                    ...(isPortrait ? { gridColumn: '1', gridRow: '5 / span 3', height: translateY(240) } : {}),
-                    alignItems: 'flex-start',
-                    justifyContent: 'flex-start',
-                    color: 'rgba(0, 49, 123, 0.5)',
-                }}
-            >
-            </div>
-            {/* Languages (placeholder for now) */}
-            <div
-                className='user-languages-section profile-field input-field flex-row'
-                style={{
-                    ...(isPortrait ? { gridColumn: '1', gridRow: '9 / span 3', height: translateY(240) } : {}),
-                    alignItems: 'flex-start',
-                    justifyContent: 'flex-start',
-                    color: 'rgba(0, 49, 123, 0.5)',
-                }}
-            >
-                {/* Languages selection can go here */}
-            </div>
-            {/* Save/Cancel Buttons */}
-            <div className='user-button-section' style={{ 
-                ...(isPortrait ? { gridColumn: '1 / span 2', gridRow: '6 / span 2' } : { gridRow: '7 / span 2' }),
-                fontSize: translateY(24) 
-            }}>
-                <ActionButton height={60} action={handleSave}>
-                    Aceptar Cambios
-                </ActionButton>
-                <ActionButton height={60} action={() => {
-                    navigate(-1);
-                }} style={{ backgroundColor: 'var(--danger)'}}>
-                    Cancelar
-                </ActionButton>
-            </div>
+                {/* Responsive User Info Grid Container */}
+                <div
+                    className='user-info-container'
+                    style={{
+                        ...(isPortrait ?
+                            {
+                                gridTemplateColumns: '1fr 1fr',
+                            }
+                            : {
+                                ...(isEmpresa ? {
+                                    gridTemplateColumns: `repeat(2, 1fr)`,
+                                }
+                                    : {
+                                        gridTemplateColumns: `repeat(3, 1fr)`,
+                                    }),
+
+                            }),
+                        display: 'grid',
+                        width: '100%',
+                        alignContent: 'center',
+                        paddingTop: translateY(10),
+                        gridTemplateRows: `repeat(8, ${translateY(55)}px)`,
+                        gap: `${translateX(12)}px ${translateY(16)}px`,
+                        borderTop: '4px solid var(--delimiters)',
+                    }}
+                >
+                    {/* Profile Photo */}
+                    <div
+                        className='profile-photo-section input-field'
+                        style={{
+                            ...(isPortrait ? { gridColumn: '1/2', gridRow: '1 / 2', padding: translateY(20) } : { paddingTop: translateY(20) }),
+                            color: '#113893',
+                        }}
+                    >
+                        <div className="user-photo-container edit" style={{
+                            width: translateX(isPortrait ? 200 : 160),
+                            height: translateX(isPortrait ? 200 : 160),
+                            borderRadius: '50%',
+                            border: `${translateX(4)}px solid #113893`,
+                            overflow: 'hidden',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}>
+                            <img src={newPicture ? newPicture : (form?.profile_picture ? form?.profile_picture : undefined)} style={{
+                                width: '100%', height: '100%',
+                                backgroundColor: '#F0EFF5',
+                            }} />
+                            {form?.profile_picture || newPicture ? (
+                                <img className='edit-picture-overlay' src={edit_profile} onClick={handlePictureClick} style={{ opacity: uploading ? 0.5 : undefined }} />
+                            ) : (
+                                <img className='edit-picture-overlay' src={upload_picture} onClick={handlePictureClick} style={{ opacity: uploading ? 0.5 : undefined }} />
+                            )}
+                        </div>
+                        <h1>{form.name}</h1>
+                    </div>
+                    {/* Email */}
+                    <div
+                        className='user-info-item profile-field input-field'
+                        style={{ ...(isPortrait ? { gridColumn: '2', gridRow: '1' } : { gridColumn:'1',gridRow: '6' }) }}
+                    >
+                        <div>Email: {form?.email}</div>
+                    </div>
+                    {/* Location */}
+                    <InputField
+                        className='user-info-item'
+                        style={isPortrait ? { gridColumn: '2', gridRow: '2' } : {  gridColumn:'1',gridRow: '7' }}
+                        type="text" name="location" placeholder="Localidad" value={form.location} onChange={handleChange} width={'100%'} height={'100%'} />
+                    {/* Portfolio */}
+                    <InputField
+                        className='user-info-item'
+                        style={isPortrait ? { gridColumn: '2', gridRow: '3' } : {  gridColumn:'1',gridRow: '8' }}
+                        type="text" name="portfolio" placeholder="Portfolio web" value={form.portfolio} onChange={handleChange} width={'100%'} height={'100%'}  />
+                    {/* Type */}
+                    <div
+                        className='user-labels-section profile-field input-field'
+                        style={ 
+                             isEmpresa ? { display:'none',
+                         }:{
+                            ...(isPortrait ? { 
+                                gridColumn: '2', gridRow: '4' 
+                            } : 
+                            {
+
+                            }
+                        )}
+                        }
+                    >
+                        <SelectionField name="type" options={TYPE_OPTIONS} onChange={handleChange} defaultValue={getUserType(form.type)} width={300} height={40} placeholder="Tipo de usuario" />
+                    </div>
+                    {/* Status */}
+                    <div
+                        className='user-status-section profile-field input-field'
+                        style={ isEmpresa ? { display:'none',
+                         }:{
+                            ...(isPortrait ? { gridColumn: '2', gridRow: '5' } : {
+
+                            })
+                        }
+                    }
+                    >
+                        <SelectionField name="status" options={STATUS_OPTIONS} onChange={handleChange} defaultValue={getUserStatus(form.status)} width={300} height={40} placeholder="Estado" />
+                    </div>
+
+                    {/* Etiquetas y lenguajes (después de estado) */}
+                    <div style={ isEmpresa ? { display:'none',
+                         }:{ gridColumn: isPortrait ? '2 / 3' : '2 / 3', gridRow: isPortrait ? '0 / span 6' : '3 / span 6', display: 'flex', flexDirection: 'column' }}>
+
+                        {/* Área para añadir etiquetas/idiomas */}
+                        <LabelsSelection
+                            height={'auto'}
+                            width={'100%'}
+                            blocks={blocks}
+                            searchData={searchData}
+                            etiquetasSeleccionadas={labelsFromSelection}
+                            setEtiquetasSeleccionadas={setLabelsFromSelection}
+                            activeTab={filtroBloque}
+                            onTabChange={setFiltroBloque}
+                            style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}
+                            editProfile={true}  // Pass editProfie prop to adjust layout
+                        />
+                        {/* Visualización de etiquetas/idiomas seleccionadas */}
+                        <div className="labels-view" style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0, margin: 'none', width: '100%', height: '100%' }}>
+                            <div className="view-content">
+                                {labelsFromSelection.filter(item => item.bloque === filtroBloque).length > 0 ? (
+                                    <div className="tags-container" style={{ height: '100%' }}>
+                                        {labelsFromSelection.filter(item => item.bloque === filtroBloque).map((item) => (
+                                            <Tag2
+                                                key={`${item.etiqueta}-${item.bloque}`}
+                                                texto={item.etiqueta}
+                                                checkBox={item.valorCheckbox}
+                                                onDelete={() => handleDeleteEtiqueta(item.etiqueta, item.bloque)}
+                                            />
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="view-empty-message">
+                                        Todavía no se han cargado <strong>{filtroBloque}</strong>
+                                    </div>
+                                )}
+                            </div>
+
+                        </div>
+                    </div>
+
+                    {/* Description */}
+                    <TextBox
+                        className='user-description-section edit input-field'
+                        style={ isEmpresa ? { gridColumn: '2', gridRow: '1 / span 6' 
+                         }:{ gridColumn: '3', gridRow: '1 / span 6' }}
+                        name="description" placeholder="Descripción" onChange={handleChange} width={'100%'} height={"100%"} value={form.description} />
+
+                    {/* Save/Cancel Buttons */}
+                    <div className='user-button-section' style={{
+                        ...(isPortrait ? { gridColumn: '1 / span 2', gridRow: '6 / span 2' } :
+                             (isEmpresa ? { gridColumn: '2', gridRow: '7 / 9'}:{gridColumn: '2', gridRow: '7 / span 2' })),
+                        fontSize: translateY(24)
+                    }}>
+                        <ActionButton height={'100%'} action={handleSave}>
+                            Aceptar Cambios
+                        </ActionButton>
+                        <ActionButton height={'100%'} action={() => {
+                            navigate(-1);
+                        }} style={{ backgroundColor: 'var(--danger)' }}>
+                            Cancelar
+                        </ActionButton>
+                    </div>
+                </div>
+            </AppWindow>
         </div>
-    </AppWindow>
-    </div>
     );
-};
+}
+
 
 export default EditProfile;

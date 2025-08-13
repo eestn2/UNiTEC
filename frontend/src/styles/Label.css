@@ -7,6 +7,7 @@
   padding: calc((10/1280) * var(--x-multiplier)); 
   font-family: sans-serif;
   justify-content: space-between;
+  row-gap: calc((10/1280) * var(--x-multiplier)); 
 }
 
 /* Tabs */
@@ -46,20 +47,20 @@
  
 .slider-content{
     width: 100%;
-    display: flex;
-    flex-direction: column;
+    display: flex; 
     gap: calc((5/1280) * var(--x-multiplier));
     justify-content: space-between;
-}
- 
+    flex-direction: column;
+} 
 
 /* Checkboxes */
 .checkbox-group {
   display: flex;
   flex-direction: column;
   gap: calc((10/1280) * var(--x-multiplier));
-  width: 100%;
+  width: 100%; 
   margin-left: calc((20/1280) * var(--x-multiplier));
+  margin-right: calc((20/1280) * var(--x-multiplier));
 }
 
 .checkbox-label { 
