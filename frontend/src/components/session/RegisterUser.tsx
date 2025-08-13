@@ -117,15 +117,6 @@ function RegisterUser() {
     );
   };
 
-  function handleSubmitLabels(languages: number[], tags: number[], languagesLevels: number[], tagsLevels: number[]) {
-    setForm(prev => ({
-      ...prev,
-      languages: languages,
-      tags: tags,
-      languages_levels: languagesLevels,
-      tags_levels: tagsLevels,
-    }));
-  }
 
   const validateField = (field: string, value: string) => {
     let error = "";
@@ -158,57 +149,68 @@ function RegisterUser() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
+  e.preventDefault();
+  setError("");
 
-    const requiredFields = [
-      "name", "birth_date", "email",
-      "password", "confirm_password",
-      "description", "user_type", "status_id"
-    ];
+  const langs = getIdsAndLevels(Languages, labelsFromSelection, 2);
+  const tags = getIdsAndLevels(Tags, labelsFromSelection, 1);
 
-    let hasError = false;
-    const newErrors: any = {};
-    const camposInvalidos = ["user_type", "status_id"];
-
-    requiredFields.forEach((field) => {
-      const value = form[field as keyof typeof form];
-
-      if (
-        value === null ||
-        value === undefined ||
-        (typeof value === "string" && value.trim() === "") ||
-        (camposInvalidos.includes(field) && value === 0)
-      ) {
-        newErrors[field] = "Este campo es obligatorio";
-        hasError = true;
-      }
-    });
-
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) {
-      newErrors.email = "Formato de email inválido";
-      hasError = true;
-    }
-
-    if (form.password !== form.confirm_password) {
-      newErrors.confirm_password = "Las contraseñas no coinciden";
-      hasError = true;
-    }
-
-    setFieldErrors((prev) => ({ ...prev, ...newErrors }));
-    if (hasError) return;
-
-    try {
-      const res = await axios.post("/session/user-register.php", { ...form });
-      if (res.data.status === "success") {
-        navigate("/")
-      } else {
-        setError(res.data.message || "Error en el registro");
-      }
-    } catch (err) {
-      setError("No se pudo registrar. Intente de nuevo más tarde.");
-    }
+  const formToSend = {
+    ...form,
+    languages: langs.ids,
+    tags: tags.ids,
+    languages_levels: langs.levels,
+    tags_levels: tags.levels
   };
+
+  // Validation using formToSend instead of form
+  const requiredFields = [
+    "name", "birth_date", "email",
+    "password", "confirm_password",
+    "description", "user_type", "status_id"
+  ];
+  const newErrors: any = {};
+  let hasError = false;
+  const camposInvalidos = ["user_type", "status_id"];
+
+  requiredFields.forEach((field) => {
+    const value = formToSend[field as keyof typeof formToSend];
+    if (
+      value === null ||
+      value === undefined ||
+      (typeof value === "string" && value.trim() === "") ||
+      (camposInvalidos.includes(field) && value === 0)
+    ) {
+      newErrors[field] = "Este campo es obligatorio";
+      hasError = true;
+    }
+  });
+
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formToSend.email)) {
+    newErrors.email = "Formato de email inválido";
+    hasError = true;
+  }
+
+  if (formToSend.password !== formToSend.confirm_password) {
+    newErrors.confirm_password = "Las contraseñas no coinciden";
+    hasError = true;
+  }
+
+  setFieldErrors((prev) => ({ ...prev, ...newErrors }));
+  if (hasError) return;
+
+  try {
+    const res = await axios.post("/session/user-register.php", formToSend);
+    if (res.data.status === "success") {
+      navigate("/");
+    } else {
+      setError(res.data.message || "Error en el registro");
+    }
+  } catch {
+    setError("No se pudo registrar. Intente de nuevo más tarde.");
+  }
+};
+
 
 
 
@@ -459,9 +461,6 @@ function RegisterUser() {
               Si has rellenado todos los campos necesarios solo queda:
             </span>
             <ActionButton height={60} text={"Registrarse"} width={100} action={(e) => {
-              const langs = getIdsAndLevels(Languages, labelsFromSelection, 2);
-              const tags = getIdsAndLevels(Tags, labelsFromSelection, 1);
-              handleSubmitLabels(langs.ids, tags.ids, langs.levels, tags.levels);
               handleSubmit(e);
             }} />
             <div className="delimiter"></div>

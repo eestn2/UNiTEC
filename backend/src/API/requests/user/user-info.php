@@ -33,7 +33,23 @@ try {
     $stmt = $connection->prepare("SELECT * FROM users WHERE id = ?");
     $stmt->execute([$id]);
     $user = $stmt->fetch();
-
+    $stmt = $connection->prepare("
+    SELECT l.name, ul.level
+    FROM user_languages ul
+    INNER JOIN languages l ON ul.language_id = l.id
+    WHERE ul.user_id = ?
+");
+    $stmt->execute([$id]);
+    $languages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $connection->prepare("
+    SELECT t.name, ut.level
+    FROM user_tags ut
+    INNER JOIN tags t ON ut.tag_id = t.id
+    WHERE ut.user_id = ?
+");
+    $stmt->execute([$id]);
+    $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
     if (!$user) return_response("failed", "Usuario no encontrado.", null);
     return_response("success", "Datos del usuario devueltos correctamente.", [
         "user" => [
@@ -45,7 +61,9 @@ try {
             "description" => $user["description"],
             "portfolio" => $user["portfolio"],
             "type" => $user["user_type"],
-            "profile_picture" => $user["profile_picture"] ?? null
+            "profile_picture" => $user["profile_picture"] ?? null,
+            "languages" => $languages ?? null,
+            "tags" => $tags ?? null
         ]
     ]);
 } catch (PDOException $e) {
