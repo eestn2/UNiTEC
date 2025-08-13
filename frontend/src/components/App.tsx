@@ -77,7 +77,7 @@ function App(): JSX.Element {
   }, []); 
 
   if (gettingSession ) {
-    return <LoadingScreen />;
+    return <div className='app-content'><LoadingScreen /></div>;
   }
   // Browser routings
   return (
