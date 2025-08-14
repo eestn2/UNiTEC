@@ -7,6 +7,7 @@
  */
 
 import React, { useState } from "react";
+import axios from "axios";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import AppWindow from "../AppWindow";
 import ActionButton from "../ActionButton";
@@ -28,6 +29,8 @@ import ConfirmModal from "../Modals/ConfirmModal";
  * @property {number} authorId - The ID of the author (enterprise user) whose details are displayed.
  * @property {string} title - The title of the job offer.
  * @property {string} description - The description of the job offer.
+ * @property {number} offerId - The ID of the offer
+ * @property {function} [onDelete] - Callback function to be called after successful deletion of the offer.
  * @property {number} [width=10] - The width of the job offer window in Figma coordinates.
  * @property {number} [height=10] - The height of the job offer window in Figma coordinates.
  * @property {React.CSSProperties} [style] - Additional inline styles for the window.
@@ -44,6 +47,8 @@ interface JobOfferProps extends ResponsiveComponent {
     description: string;
     /** The ID of the offer */
     offerId: number;
+    /** Callback for updating states onDelete */
+    onDelete?: (id: number) => void;
 }
 
 /**
@@ -84,6 +89,7 @@ const JobOffer: React.FC<JobOfferProps> = ({
     description,
     style,
     offerId,
+    onDelete,
     className,
     vertical = false,
 }) => {
@@ -102,11 +108,27 @@ const JobOffer: React.FC<JobOfferProps> = ({
     } = useJobOffer({ height, width, authorId, description, vertical });
 
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const handleDelete = () => {
-        // TODO: Replace with actual deletion logic
-        console.log(`Deleting offer ${offerId}`);
-        setShowDeleteConfirm(false);
+    const handleDelete = async () => {
+        try {
+            const response = await axios.delete("/enterprise/delete-offer.php", {
+                data: { id: offerId },
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const result = response.data;
+            if (result.status === "success") {
+                alert("Oferta eliminada con éxito.");
+                if (onDelete) onDelete(offerId);
+                setShowDeleteConfirm(false);
+            } else {
+                alert(result.message);
+            }
+        } catch {
+            alert("Error de red al eliminar la oferta.");
+        }
     };
+
 
 
     let extraButton: React.ReactNode = undefined;

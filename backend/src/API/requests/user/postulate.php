@@ -3,6 +3,7 @@ session_start();
 require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
+require_once __DIR__ . '/../../logic/notifications/send_notification.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
@@ -35,7 +36,25 @@ try {
     $stmt->execute([$user_id, $offer_id]);
 
     $connection->commit();
-    error_log("User ID: $user_id successfully postulated to offer ID: $offer_id");
+    // Notify applicant
+    send_notification(
+        $connection,
+        NotificationType::APPLICATION_RECEIVED,
+        $user_id,
+        ['offer_id' => $offer_id]
+    );
+    // Notify enterprise (offer creator)
+    $stmt = $connection->prepare("SELECT creator_id FROM offers WHERE id = ?");
+    $stmt->execute([$offer_id]);
+    $offer = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($offer && isset($offer['creator_id'])) {
+        send_notification(
+            $connection,
+            NotificationType::ENTERPRISE_RECEIVED_APPLICATION,
+            intval($offer['creator_id']),
+            ['offer_id' => $offer_id, 'applicant_id' => $user_id]
+        );
+    }
     return_response("success", "Usuario postulado con exito.", null);
 } catch (PDOException $e) {
     error_log("Error inserting postulation for user ID: $user_id, offer ID: $offer_id. Error: " . $e->getMessage());

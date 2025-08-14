@@ -3,7 +3,7 @@
  * @file delete-offer.php
  * @description API endpoint for deleting a job offer by its creator (enterprise) or an administrator.
  * Handles DELETE requests, verifies user permissions, checks offer ownership, and deletes the offer if authorized.
- * Only enterprise users (user_type_id = 1) and administrators (user_type_id = 4) can delete job offers.
+ * Only enterprise users (user_type = 1) and administrators (user_type = 4) can delete job offers.
  * Returns a standardized JSON response indicating success or failure.
  * @author Federico Nicolás Martínez
  * @date May 17, 2025
@@ -34,15 +34,15 @@ $creator_id = intval($_SESSION['user']['id']);
 $id = intval($data->id);
 
 try{
-    $stmt = $connection->prepare("SELECT user_type_id FROM users WHERE id = :id");
+    $stmt = $connection->prepare("SELECT user_type FROM users WHERE id = :id");
     $stmt->bindParam(':id', $creator_id, PDO::PARAM_INT);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$user) {
         return_response("failed", "Usuario no encontrado.", null);
     }
-    $isAdmin = intval($user['user_type_id']) === 4;
-    if (!in_array(intval($user['user_type_id']), [1, 4])){
+    $isAdmin = intval($user['user_type']) === 4;
+    if (!in_array(intval($user['user_type']), [1, 4])){
         return_response("failed", "Solo las empresas o el administrador pueden eliminar ofertas de trabajo.", null);
     }
 }catch (PDOException $e) {
@@ -51,10 +51,10 @@ try{
 
 try{
     if ($isAdmin) {
-        $stmt = $connection->prepare("SELECT * FROM applications WHERE id = :id");
+        $stmt = $connection->prepare("SELECT * FROM offers WHERE id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     } else {
-        $stmt = $connection->prepare("SELECT * FROM applications WHERE id = :id AND creator_id = :creator_id");
+        $stmt = $connection->prepare("SELECT * FROM offers WHERE id = :id AND creator_id = :creator_id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':creator_id', $creator_id, PDO::PARAM_INT);
     }
@@ -65,7 +65,13 @@ try{
     }
 
     $connection->beginTransaction();
-    $stmt = $connection->prepare("DELETE FROM applications WHERE id = :id");
+    // Delete all applicants for this offer first
+    $stmt = $connection->prepare("DELETE FROM applicants WHERE offer_id = :id");
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    // Now delete the offer itself
+    $stmt = $connection->prepare("DELETE FROM offers WHERE id = :id");
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
 
@@ -75,6 +81,7 @@ try{
     if ($connection->inTransaction()) {
         $connection->rollBack();
     }
-    return_response("failed", "Error al eliminar la oferta de trabajo: " . $e->getMessage(), null);
+    error_log("Error al eliminar la oferta de trabajo: " . $e->getMessage());
+    return_response("failed", "Error al eliminar la oferta de trabajo. ", null);
 }
 ?>
