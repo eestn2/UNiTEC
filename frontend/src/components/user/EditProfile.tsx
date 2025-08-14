@@ -85,8 +85,7 @@ const EditProfile: React.FC = () => {
 
     const loadLanguages = async () => {
         try {
-            const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-            const response = await axios.get(`${apiUrl}/function/get-languages.php`);
+            const response = await axios.get('/function/get-languages.php');
             if (response.status !== 200 || response.data.status !== "success") {
                 console.error("Failed to load languages:", response.data.message);
             } else {
@@ -100,8 +99,7 @@ const EditProfile: React.FC = () => {
 
     const loadTags = async () => {
         try {
-            const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-            const response = await axios.get(`${apiUrl}/function/get-tags.php`);
+            const response = await axios.get('/function/get-tags.php');
             if (response.status !== 200 || response.data.status !== "success") {
                 console.error("Failed to load tags:", response.data.message);
             } else {

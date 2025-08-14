@@ -5,7 +5,7 @@ import Logo from "../UI/unitec/Logo";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import InputField from "../UI/form/InputField";
 import TextBox from "../UI/form/TextBox";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LabelsSelection from "../UI/form/LabelsSelectionEdit";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -106,6 +106,7 @@ function RegisterUser() {
   const [labelsFromSelection, setLabelsFromSelection] = useState<EtiquetaSeleccionada[]>([]);
   const [Languages, setLanguages] = useState<string[]>([]);
   const [Tags, setTags] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   const handleDeleteEtiqueta = (etiqueta: string, bloque: string) => {
     setLabelsFromSelection(prev =>
@@ -113,15 +114,6 @@ function RegisterUser() {
     );
   };
 
-  function handleSubmitLabels(languages: number[], tags: number[], languagesLevels: number[], tagsLevels: number[]) {
-    setForm(prev => ({
-      ...prev,
-      languages: languages,
-      tags: tags,
-      languages_levels: languagesLevels,
-      tags_levels: tagsLevels,
-    }));
-  }
 
   const validateField = (field: string, value: string) => {
     let error = "";
@@ -154,57 +146,68 @@ function RegisterUser() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
+  e.preventDefault();
+  setError("");
 
-    const requiredFields = [
-      "name", "birth_date", "email",
-      "password", "confirm_password",
-      "description", "user_type", "user_state"
-    ];
+  const langs = getIdsAndLevels(Languages, labelsFromSelection, 2);
+  const tags = getIdsAndLevels(Tags, labelsFromSelection, 1);
 
-    let hasError = false;
-    const newErrors: any = {};
-    const camposInvalidos = ["user_type", "status_id"];
-
-    requiredFields.forEach((field) => {
-      const value = form[field as keyof typeof form];
-
-      if (
-        value === null ||
-        value === undefined ||
-        (typeof value === "string" && value.trim() === "") ||
-        (camposInvalidos.includes(field) && value === 0)
-      ) {
-        newErrors[field] = "Este campo es obligatorio";
-        hasError = true;
-      }
-    });
-
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) {
-      newErrors.email = "Formato de email inválido";
-      hasError = true;
-    }
-
-    if (form.password !== form.confirm_password) {
-      newErrors.confirm_password = "Las contraseñas no coinciden";
-      hasError = true;
-    }
-
-    setFieldErrors((prev) => ({ ...prev, ...newErrors }));
-    if (hasError) return;
-
-    try {
-      const res = await axios.post("/session/user-register.php", { ...form });
-      if (res.data.status === "success") {
-        window.location.reload();
-      } else {
-        setError(res.data.message || "Error en el registro");
-      }
-    } catch (err) {
-      setError("No se pudo registrar. Intente de nuevo más tarde.");
-    }
+  const formToSend = {
+    ...form,
+    languages: langs.ids,
+    tags: tags.ids,
+    languages_levels: langs.levels,
+    tags_levels: tags.levels
   };
+
+  // Validation using formToSend instead of form
+  const requiredFields = [
+    "name", "birth_date", "email",
+    "password", "confirm_password",
+    "description", "user_type", "status_id"
+  ];
+  const newErrors: any = {};
+  let hasError = false;
+  const camposInvalidos = ["user_type", "status_id"];
+
+  requiredFields.forEach((field) => {
+    const value = formToSend[field as keyof typeof formToSend];
+    if (
+      value === null ||
+      value === undefined ||
+      (typeof value === "string" && value.trim() === "") ||
+      (camposInvalidos.includes(field) && value === 0)
+    ) {
+      newErrors[field] = "Este campo es obligatorio";
+      hasError = true;
+    }
+  });
+
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formToSend.email)) {
+    newErrors.email = "Formato de email inválido";
+    hasError = true;
+  }
+
+  if (formToSend.password !== formToSend.confirm_password) {
+    newErrors.confirm_password = "Las contraseñas no coinciden";
+    hasError = true;
+  }
+
+  setFieldErrors((prev) => ({ ...prev, ...newErrors }));
+  if (hasError) return;
+
+  try {
+    const res = await axios.post("/session/user-register.php", formToSend);
+    if (res.data.status === "success") {
+      navigate("/");
+    } else {
+      setError(res.data.message || "Error en el registro");
+    }
+  } catch {
+    setError("No se pudo registrar. Intente de nuevo más tarde.");
+  }
+};
+
 
 
 
@@ -466,11 +469,8 @@ function RegisterUser() {
             }}>
               Si has rellenado todos los campos necesarios solo queda:
             </span>
-            <ActionButton height={60} text={"Registrarse"} width={100} action={(event) => {
-              const langs = getIdsAndLevels(Languages, labelsFromSelection, 2);
-              const tags = getIdsAndLevels(Tags, labelsFromSelection, 1);
-              handleSubmitLabels(langs.ids, tags.ids, langs.levels, tags.levels);
-              handleSubmit(event);
+            <ActionButton height={60} text={"Registrarse"} width={100} action={(e) => {
+              handleSubmit(e);
             }} />
             <div className="delimiter"></div>
             <span className="form-text" style={{ paddingBottom: `${TranslateFigmaCoords.translateFigmaY(17)}` }}>

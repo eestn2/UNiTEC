@@ -18,13 +18,18 @@ try {
     $stmt->execute([$adminName, $adminEmail, $adminPassword, $enabled]);
     $adminId = $connection->lastInsertId();
     // Insert student account
-    $studentEmail = 'estudiante@estudiante.com';
+    $studentEmail = 'estudiante@estudiante2.com';
     $studentName = 'Estudiante Raul';
     $studentPassword = encryption('estudiante');
     $enabled = 1;
     $stmt = $connection->prepare("INSERT INTO `users`(`name`, `birth_date`, `location`, `email`, `password`, `description`, `last_active_date`, `profile_picture`, `portfolio`, `enabled`, `user_type`, `status`) VALUES (?, '1990-01-01', 'Ciudad', ?, ?, '', CURDATE(), '', '', ?, 2, 3)");
     $stmt->execute([$studentName, $studentEmail, $studentPassword, $enabled]);
     $studentId = $connection->lastInsertId();
+    $stmt = $connection->prepare("INSERT INTO `user_languages`(`user_id`, `language_id`, `level`) VALUES (?, 1, 3), (?, 2, 3)");
+    $stmt->execute([$studentId, $studentId]);
+    $stmt = $connection->prepare("INSERT INTO `user_tags`(`user_id`, `tag_id`, `level`) VALUES (?, 1, 3), (?, 2, 3)");
+    $stmt->execute([$studentId, $studentId]);
+
     // Insert graduate account
     $graduateEmail = 'egresado@egresado.com';
     $graduateName = 'Egresado Juan';
