@@ -21,6 +21,7 @@ if (file_exists(__DIR__ . '/../../../../vendor/autoload.php')) {
 } else {
     throw new Exception('Composer autoloader not found. Please run "composer install" in the project root.');
 }
+
 /**
  * Sends an email using PHPMailer with secure settings.
  *
@@ -30,8 +31,11 @@ if (file_exists(__DIR__ . '/../../../../vendor/autoload.php')) {
  * @return bool           True if sent, false otherwise.
  */
 function send_email($to, $subject, $body) {
+
+
+    // Load environment variables from .env file if present
     $dotenv = Dotenv::createImmutable(__DIR__ . '/../../../../');
-    $dotenv->load();
+    $dotenv->safeLoad();
     // SMTP configuration
     $mail_host = getenv('EMAIL_HOST');
     $mail_username = getenv('EMAIL_USERNAME');

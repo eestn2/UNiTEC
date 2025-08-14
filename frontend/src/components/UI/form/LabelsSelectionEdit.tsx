@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import MinimalistSearchBar from "../../UI/form/MinimalSearchBar";
 import "../../../styles/Label.css";
 import Agregar from "../../../assets/icons/add.svg";
-import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
-import EditProfile from "../../user/EditProfile";
 interface Bloque {
   titulo: string;
   etiquetas: string[];

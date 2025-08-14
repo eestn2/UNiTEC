@@ -35,7 +35,7 @@ $user_email = $data->email;
 $user_password = password_hash($data->password, PASSWORD_DEFAULT);
 $user_description = $data->description ?? null;
 $user_last_update_date = date('Y-m-d H:i:s');
-$user_profile_picture = " ";
+$user_profile_picture = '';
 $user_portfolio = $data->portfolio ?? null;
 $user_is_enabled = 0; // Default to disabled until approved
 $user_rol = isset($data->user_type) ? intval($data->user_type) : 2; // Default to student
@@ -53,7 +53,6 @@ function log_debug($msg) {
 }
 
 log_debug('Request received: ' . json_encode($data));
-
 try {
     $connection->beginTransaction();
     log_debug('Transaction started');
@@ -147,8 +146,9 @@ try {
 
     return_response("success", "Usuario registrado correctamente. Debe esperar aprobación.", null);
 } catch (Exception $e) {
-    $connection->rollBack();
-    log_debug('Exception: ' . $e->getMessage());
-    return_response("failed", "Ocurrió un error: " . $e->getMessage(), null);
+/*     $connection->rollBack();
+    log_debug('Transaction rolled back'); */
+    error_log('Exception: ' . $e->getMessage());
+    return_response("failed", "Ocurrió un error: No se pudo registrar al usuario" );
 }
 ?>
