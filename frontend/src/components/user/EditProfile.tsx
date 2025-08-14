@@ -73,46 +73,106 @@ type FormType = UserType & {
 const EditProfile: React.FC = () => {
     const [form, setForm] = useState<FormType | null>(null);
     // Etiquetas y lenguajes
+    type LoadedTag = { id: number; level: number };
+    type LoadedLanguage = { id: number; level: number };
+    type Tag = { id: number; name: string };
+    type Language = { id: number; name: string };
     const [labelsFromSelection, setLabelsFromSelection] = useState<EtiquetaSeleccionada[]>([]);
     const [Languages, setLanguages] = useState<string[]>([]);
     const [Tags, setTags] = useState<string[]>([]);
     const [filtroBloque, setFiltroBloque] = useState('Etiquetas');
     // Cargar idiomas y etiquetas
     useEffect(() => {
-        loadLanguages();
-        loadTags();
+        handleLoadLabels();
     }, []);
+        useEffect(() => {
+        console.log(labelsFromSelection);
+    }, [labelsFromSelection]);
 
-    const loadLanguages = async () => {
-        try {
-            const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-            const response = await axios.get(`${apiUrl}/function/get-languages.php`);
-            if (response.status !== 200 || response.data.status !== "success") {
-                console.error("Failed to load languages:", response.data.message);
-            } else {
-                const languageNames = response.data.data.languages.map((lang: any) => lang.name);
-                setLanguages(languageNames);
-            }
-        } catch (error) {
-            console.error("An error occurred while loading languages:", error);
+const handleLoadLabels = async () => {
+    try {
+
+        const response = await axios.get('/user/get-languages-and-tags-edit.php');
+        if (response.data.status !== 'success') {
+            console.error('Error al cargar etiquetas y lenguajes:', response.data.message);
+            alert('Error al cargar etiquetas y lenguajes');
+            return;
         }
-    };
+        console.log('Etiquetas y lenguajes cargados:', response.data.data.tags);
+        const tags: Tag[] = response.data.data.tags || [];
+        const languages: Language[] = response.data.data.languages || [];
 
-    const loadTags = async () => {
-        try {
-            const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-            const response = await axios.get(`${apiUrl}/function/get-tags.php`);
-            if (response.status !== 200 || response.data.status !== "success") {
-                console.error("Failed to load tags:", response.data.message);
-            } else {
-                const tagsNames = response.data.data.tags.map((lang: any) => lang.name);
-                setTags(tagsNames);
-            }
-        } catch (error) {
-            console.error("An error occurred while loading tags:", error);
-        }
-    };
+        const loadedTagsRaw = response.data.data.loadedTags || []; 
+        const loadedLanguagesRaw = response.data.data.loadedLanguages || [];
 
+        // Convertir a la forma {id, level} que espera el frontend
+        const loadedTags: LoadedTag[] = loadedTagsRaw.map((t: { tag_id: number | string; level: number | string }) => ({
+            id: Number(t.tag_id),
+            level: Number(t.level)
+        }));
+
+        const loadedLanguages: LoadedLanguage[] = loadedLanguagesRaw.map((l: { language_id: number | string; level: number | string }) => ({
+            id: Number(l.language_id),
+            level: Number(l.level)
+        }));
+
+        // Mapas para acceso rápido por id
+        const loadedTagsMap = new Map(loadedTags.map(t => [t.id, t.level]));
+        const loadedLanguagesMap = new Map(loadedLanguages.map(l => [l.id, l.level]));
+
+        // Función para convertir level a texto
+        const levelToText = (level: number) =>
+            level === 1 ? 'Básico' : level === 2 ? 'Intermedio' : 'Avanzado';
+
+        // Reducir tags
+        const { filtered: filteredTags, selected: selectedTagLabels } = tags.reduce(
+            (acc, tag) => {
+                const level = loadedTagsMap.get(tag.id);
+                if (level !== undefined) {
+                    acc.selected.push({
+                        etiqueta: tag.name,
+                        bloque: 'Etiquetas',
+                        valorCheckbox: levelToText(level)
+                    });
+                } else {
+                    acc.filtered.push(tag.name);
+                }
+                return acc;
+            },
+            { filtered: [] as string[], selected: [] as EtiquetaSeleccionada[] }
+        );
+
+        // Reducir languages
+        const { filtered: filteredLanguages, selected: selectedLanguageLabels } = languages.reduce(
+            (acc, lang) => {
+                const level = loadedLanguagesMap.get(lang.id);
+                if (level !== undefined) {
+                    acc.selected.push({
+                        etiqueta: lang.name,
+                        bloque: 'Idiomas',
+                        valorCheckbox: levelToText(level)
+                    });
+                } else {
+                    acc.filtered.push(lang.name);
+                }
+                return acc;
+            },
+            { filtered: [] as string[], selected: [] as EtiquetaSeleccionada[] }
+        );
+
+        // Guardar en estados
+        setTags(filteredTags);
+        setLanguages(filteredLanguages);
+        setLabelsFromSelection([...selectedTagLabels, ...selectedLanguageLabels]);
+
+        console.log('Etiquetas filtradas:', filteredTags);
+        console.log('Lenguajes filtrados:', filteredLanguages);
+        console.log('Labels ya cargados:', [...selectedTagLabels, ...selectedLanguageLabels]);
+    } catch (error) {
+        console.error('Error al cargar etiquetas y lenguajes:', error);
+        alert('Error al cargar etiquetas y lenguajes');
+    }
+};
     const blocks = [
         {
             titulo: "Etiquetas",

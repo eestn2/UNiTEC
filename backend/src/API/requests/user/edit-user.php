@@ -36,7 +36,7 @@ if (!isset($_SESSION['user']['id'])) {
 }
 $user = $_SESSION['user'];
 
-$allowed_fields = ["name", "birth_date", "user_type", "status", "location", "email", "description", "profile_picture", "portfolio"];
+$allowed_fields = ["name", "birth_date", "user_type", "status", "location", "email", "description", "profile_picture", "portfolio", "languages", "tags", "languages_levels", "tags_levels"];
 $fields_to_update = [];
 $params = [];
 

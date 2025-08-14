@@ -11,33 +11,37 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ActionButton from '../UI/ActionButton';
 
+type LoadedLabel = {
+  id: number;
+  name: string;
+};
 
 const PublishOffer: React.FC = () => {
   const navigate = useNavigate();
 
-  const [Languages, setLanguages] = useState<string[]>([]);
-  const [Tags, setTags] = useState<string[]>([]);
-  const [selectLanguages, setSelectLanguages] = useState<string[]>([]);
-  const [selectTags, setSelectTags] = useState<string[]>([]);
+  const [Languages, setLanguages] = useState<LoadedLabel[]>([]);
+  const [Tags, setTags] = useState<LoadedLabel[]>([]);
+  const [selectLanguages, setSelectLanguages] = useState<LoadedLabel[]>([]);
+  const [selectTags, setSelectTags] = useState<LoadedLabel[]>([]);
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const deleteTag = (valor: string, tipo: 'lenguaje' | 'idioma') => {
+
+  const deleteTag = (id: number, tipo: 'lenguaje' | 'idioma') => {
     if (tipo === 'lenguaje') {
-      setSelectLanguages(prev => prev.filter(t => t !== valor));
+      setSelectTags(prev => prev.filter(t => t.id !== id));
     } else if (tipo === 'idioma') {
-      setSelectLanguages(prev => prev.filter(i => i !== valor));
+      setSelectLanguages(prev => prev.filter(i => i.id !== id));
     }
   };
 
   const loadLanguages = async () => {
     try {
       const response = await axios.get("/function/get-languages.php");
-      if (response.status !== 200 && response.data.status !== "success") {
-        console.error("Failed to load languages:", response.data.message);
+      if (response.status === 200 && response.data.status === "success") {
+        setLanguages(response.data.data.languages);
       } else {
-        const languageNames = response.data.data.languages.map((lang: any) => lang.name);
-        setLanguages(languageNames);
+        console.error("Failed to load languages:", response.data.message);
       }
     } catch (error) {
       console.error("An error occurred while loading languages:", error);
@@ -47,66 +51,50 @@ const PublishOffer: React.FC = () => {
   const loadTags = async () => {
     try {
       const response = await axios.get('/function/get-tags.php');
-      if (response.status !== 200 && response.data.status !== "success") {
-        console.error("Failed to load tags:", response.data.message);
+      if (response.status === 200 && response.data.status === "success") {
+        setTags(response.data.data.tags);
       } else {
-        const tagsNames = response.data.data.tags.map((lang: any) => lang.name);
-        setTags(tagsNames);
+        console.error("Failed to load tags:", response.data.message);
       }
     } catch (error) {
       console.error("An error occurred while loading tags:", error);
     }
   };
 
-  const handleLenguajeSubmit = (valor: string) => {
-    const valido = Tags.some((l) => l.toLowerCase() === valor.toLowerCase());
-    if (!valido) {
-      alert(`"${valor}" no es un lenguaje válido.`);
-      return;
-    }
-    const lenguajeCorrecto = Tags.find(
-      (l) => l.toLowerCase() === valor.toLowerCase()
-    );
-    if (lenguajeCorrecto && !selectTags.includes(lenguajeCorrecto)) {
-      setSelectTags([...selectTags, lenguajeCorrecto]);
-    }
-  };
+ const handleLenguajeSubmit = (item: LoadedLabel) => {
+  setSelectTags(prev => 
+    prev.some(t => t.id === item.id) ? prev : [...prev, item]
+  );
+};
 
-    function getId (array1: string[], array2: string[]): number[] {
-    const result: number[] = [];
-    const minLength = Math.min(array1.length, array2.length);
-    for (let i = 0; i < minLength; i++) {
-      if (array1[i] === array2[i]) {
-        result.push(i+1);
-      }
-    }
-    return result;
-  }
+const handleIdiomaSubmit = (item: LoadedLabel) => {
+  setSelectLanguages(prev => 
+    prev.some(l => l.id === item.id) ? prev : [...prev, item]
+  );
+};
 
-  const handleIdiomaSubmit = (valor: string) => {
-    const valido = Languages.some((i) => i.toLowerCase() === valor.toLowerCase());
-    if (!valido) {
-      alert(`"${valor}" no es un idioma válido.`);
-      return;
-    }
-    const idiomaCorrecto = Languages.find(
-      (i) => i.toLowerCase() === valor.toLowerCase()
-    );
-    if (idiomaCorrecto && !selectLanguages.includes(idiomaCorrecto)) {
-      setSelectLanguages([...selectLanguages, idiomaCorrecto]);
-    }
-  };
- const handleAddOffer = async (tit: string, desc: string, tags: number[], languages:number[]) => {
-    const response = await axios.post('/enterprise/publish-offer.php', {
-      title: tit,
-      description: desc,
-      tags: tags,
-      languages: languages
-    });
-    if(response.data.status === "success"){
-      navigate('/')
-    } else {
+  const handleAddOffer = async (tit: string, desc: string, tags: number[], languages: number[]) => {
+    if (!tit.trim() || !desc.trim()) {
       alert("Debes rellenar obligatoriamente el título y descripción de la oferta.");
+      return;
+    }
+
+    try {
+      const response = await axios.post('/enterprise/publish-offer.php', {
+        title: tit,
+        description: desc,
+        tags: tags,
+        languages: languages
+      });
+      
+      if (response.data.status === "success") {
+        navigate('/');
+      } else {
+        alert("Error al publicar la oferta: " + (response.data.message || "Error desconocido"));
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Ocurrió un error al publicar la oferta");
     }
   };
 
@@ -114,6 +102,7 @@ const PublishOffer: React.FC = () => {
     loadLanguages();
     loadTags();
   }, []);
+
   return (
     <>
       <NavBar />
@@ -162,22 +151,20 @@ const PublishOffer: React.FC = () => {
               }}
             />
             <div className='search' 
-            style={
-              {width: `${TranslateFigmaCoords.translateFigmaY(500)}px`}
-            }>
+              style={{ width: `${TranslateFigmaCoords.translateFigmaY(500)}px` }}>
               <SearchBar 
                 placeholder="Añadir etiqueta"
                 suggestions={Tags}
                 selectedItems={selectTags}
                 onSubmit={handleLenguajeSubmit}
-                onSuggestionClick={(Lenguaje) => handleLenguajeSubmit(Lenguaje)}
+                onSuggestionClick={handleLenguajeSubmit}
                 style={{
                   height: `${TranslateFigmaCoords.translateFigmaY(50)}px`,
                   width: `${TranslateFigmaCoords.translateFigmaY(230)}px`,
                 }}
                 buttonStyle={{
                   height: `${TranslateFigmaCoords.translateFigmaY(25)}px`,
-                  marginBottom:`${TranslateFigmaCoords.translateFigmaY(-5)}px`
+                  marginBottom: `${TranslateFigmaCoords.translateFigmaY(-5)}px`
                 }}
               />
 
@@ -186,7 +173,7 @@ const PublishOffer: React.FC = () => {
                 suggestions={Languages}
                 selectedItems={selectLanguages}
                 onSubmit={handleIdiomaSubmit}
-                onSuggestionClick={(Idioma) => handleIdiomaSubmit(Idioma)}
+                onSuggestionClick={handleIdiomaSubmit}
                 style={{
                   height: `${TranslateFigmaCoords.translateFigmaY(50)}px`,
                   width: `${TranslateFigmaCoords.translateFigmaY(230)}px`,
@@ -207,8 +194,12 @@ const PublishOffer: React.FC = () => {
             </div>
             <div className="tags-list">
               <div className="tags-list-scroll">
-                {selectTags.map((tag, index) => (
-                  <Tag key={index} texto={tag} onDelete={() => deleteTag(tag, 'lenguaje')} />
+                {selectTags.map((tag) => (
+                  <Tag 
+                    key={tag.id} 
+                    texto={tag.name} 
+                    onDelete={() => deleteTag(tag.id, 'lenguaje')} 
+                  />
                 ))}
               </div>
             </div>
@@ -220,15 +211,34 @@ const PublishOffer: React.FC = () => {
             </div>
             <div className="tags-list">
               <div className="tags-list-scroll">
-                {selectLanguages.map((idioma, index) => (
-                  <Tag key={index} texto={idioma} onDelete={() => deleteTag(idioma, 'idioma')} />
+                {selectLanguages.map((language) => (
+                  <Tag 
+                    key={language.id} 
+                    texto={language.name} 
+                    onDelete={() => deleteTag(language.id, 'idioma')} 
+                  />
                 ))}
               </div>
             </div>
           </div>
 
-          <ActionButton height={50} action={() => handleAddOffer(title, description, getId(Tags, selectTags), getId(Languages, selectLanguages))}>Publicar Oferta</ActionButton>
-          <ActionButton height={50} style={{backgroundColor: "var(--danger)"}} action={() => navigate(-1)}>Deshacer Oferta</ActionButton>
+          <ActionButton 
+            height={50} 
+            action={() => handleAddOffer(
+              title, 
+              description, 
+              selectTags.map(t => t.id), 
+              selectLanguages.map(l => l.id)
+            )}>
+            Publicar Oferta
+          </ActionButton>
+          <ActionButton 
+            height={50} 
+            style={{backgroundColor: "var(--danger)"}} 
+            action={() => navigate(-1)}
+          >
+            Deshacer Oferta
+          </ActionButton>
         </div>
       </AppWindow>
     </>
