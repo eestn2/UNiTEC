@@ -106,6 +106,7 @@ function RegisterUser() {
   const [labelsFromSelection, setLabelsFromSelection] = useState<EtiquetaSeleccionada[]>([]);
   const [Languages, setLanguages] = useState<string[]>([]);
   const [Tags, setTags] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   const handleDeleteEtiqueta = (etiqueta: string, bloque: string) => {
     setLabelsFromSelection(prev =>
