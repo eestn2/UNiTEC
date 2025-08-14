@@ -50,7 +50,7 @@ export function usePostulate(offerID: number) {
     try {
       await axios.delete('/user/depostulate.php', {
         data: {
-          offerId: offerID,
+          offer_id: offerID,
         },
       });
       setPostulated(false);

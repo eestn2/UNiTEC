@@ -20,6 +20,7 @@ import StateButton from "../StateButton";
 import { UserTypeEnum } from "../../../types/user";
 import { usePostulate } from "../../../hooks/user/usePostulate";
 import ConfirmModal from "../Modals/ConfirmModal";
+import ProfilePicture from "../user/ProfilePicture";
 
 /**
  * Props for the `JobOffer` component.
@@ -209,7 +210,7 @@ const JobOffer: React.FC<JobOfferProps> = ({
                         alignItems: "center",
                     }}
                 >
-                    <div className="profile-pic"></div>
+                    <ProfilePicture userId={authorId} size={35} />
                     {author.name}
                     <div className="job-offer-buttons" style={{position: "absolute", right: translateX(2)}}>
                         {extraButton ? extraButton : null}

@@ -147,6 +147,7 @@ function FeedBox() {
           position: "absolute",
           right: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
           top: `${TranslateFigmaCoords.translateFigmaY(100)}px`,
+          height: `${TranslateFigmaCoords.translateFigmaY(600)}px`,
           overflowX: "hidden",
           overflowY: "auto",
           display: "flex", 

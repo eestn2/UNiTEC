@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "DELETE") return_response("failed", "Metodo n
 $data = json_decode(file_get_contents("php://input"));
 if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
 
-$data->offerId = intval($data->offerId);
+$offer_id = $data->offer_id = intval($data->offer_id);
 
 try {
     $connection->beginTransaction();
@@ -23,15 +23,15 @@ try {
     if (!$offer) return_response("failed", "La oferta no existe.", null);
     if ($offer['status'] == 0) return_response("failed", "La oferta ya cerro.", null);
     
-    $query = "DELETE FROM applicants WHERE user_id = :id AND offer_id = :offerId";
+    $query = "DELETE FROM applicants WHERE user_id = :id AND offer_id = :offer_id";
     $stmt = $connection->prepare($query);
     $stmt->bindParam(':id', $_SESSION['user']['id'], PDO::PARAM_INT);
-    $stmt->bindParam(':offerId', $data->offerId, PDO::PARAM_INT);
+    $stmt->bindParam(':offer_id', $data->offer_id, PDO::PARAM_INT);
     $stmt->execute();
     $connection->commit();
     return_response("success", "Usuario eliminado con exito.", null);
 
 } catch(PDOException $e) {
-    return_response("failed", "Error al eliminar el usuario: " . $e->getMessage(), null);
+    return_response("failed", "Error al eliminar el usuario.", null);
 }
 ?>

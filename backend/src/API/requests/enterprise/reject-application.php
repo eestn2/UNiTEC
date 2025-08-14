@@ -60,6 +60,7 @@ try{
 
     if ($stmt->rowCount() > 0) {
         $connection->commit();
+        $offer_id = $application_id;
         send_notification(
             $connection,
             NotificationType::APPLICATION_REJECTED,

@@ -46,7 +46,7 @@ try{
         return_response("failed", "Solo las empresas o el administrador pueden eliminar ofertas de trabajo.", null);
     }
 }catch (PDOException $e) {
-    return_response("failed", "Error al verificar el tipo de usuario:" . $e->getMessage(), null);
+    return_response("failed", "Error al verificar el tipo de usuario.", null);
 }
 
 try{
