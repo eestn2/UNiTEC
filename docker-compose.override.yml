@@ -1,5 +1,8 @@
 services:
   frontend:
+    build:
+      context: ./frontend
+      target: development
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -10,14 +13,13 @@ services:
       - VITE_API_URL_DEV=http://localhost:9090/src/API/requests
       - VITE_API_URL_PROD=http://localhost:9090/src/API/requests
     ports:
-      - "5174:5173"
-    # Ensures Vite dev server is accessible from host
+      - "10000:5173"
+    profiles: ["dev"]
 
   backend:
     volumes:
       - ./backend:/var/www/html
     working_dir: /var/www/html
-    # For PHP, use the built-in server for dev (adjust as needed)
     command: ["php", "-S", "0.0.0.0:80", "-t", "/var/www/html"]
     environment:
       - ENVIRONMENT=development
@@ -27,4 +29,5 @@ services:
       - DB_PASS_DEV=${DB_PASS_DEV}
       - DB_PORT_DEV=${DB_PORT_DEV}
     ports:
-      - "9090:80"
+      - "10001:80"
+    profiles: ["dev"]
