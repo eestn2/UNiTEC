@@ -24,7 +24,7 @@ const PublishOffer: React.FC = () => {
   const [description, setDescription] = useState<string>("");
   const deleteTag = (valor: string, tipo: 'lenguaje' | 'idioma') => {
     if (tipo === 'lenguaje') {
-      setSelectLanguages(prev => prev.filter(t => t !== valor));
+      setSelectTags(prev => prev.filter(t => t !== valor));
     } else if (tipo === 'idioma') {
       setSelectLanguages(prev => prev.filter(i => i !== valor));
     }
