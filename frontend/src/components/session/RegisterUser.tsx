@@ -264,7 +264,6 @@ function RegisterUser() {
       <Logo className="watermark" />
       <AppWindow
         width={980}
-        height={580}
         style={{
           display: "flex",
           alignItems: "center",
@@ -273,9 +272,8 @@ function RegisterUser() {
           padding: `${TranslateFigmaCoords.translateFigmaY(20)}px`,
           flexDirection: "column",
           position: "relative",
-          left: "50%",
-          marginTop:'5vh',
-          translate: "-40% 0",
+          margin: '5vh auto',
+          left: '7%',
           overflow: 'hidden',
         }}
       >
@@ -291,12 +289,12 @@ function RegisterUser() {
           Registro del Estudiante
         </span>
         <form onSubmit={handleSubmit} className="horizontal-display">
-          <div className="vertical-sections" style={{ paddingRight: `${TranslateFigmaCoords.translateFigmaY(20)}` }}>
+          <div className="vertical-sections">
             <InputField
               name="name-user"
               type="text"
               placeholder="Nombre y Apellido"
-              width={292}
+              width={'100%'}
               height={55}
               value={form.name}
               onChange={(e) => handleChange("name", (e.target as HTMLInputElement).value)}
@@ -308,7 +306,7 @@ function RegisterUser() {
               min="1925-01-01"
               max={new Date().toISOString().split("T")[0]}
               placeholder="Fecha de nacimiento:"
-              width={292}
+              width={'100%'}
               height={55}
               value={form.birth_date}
               onChange={(e) => handleChange("birth_date", (e.target as HTMLInputElement).value)}
@@ -318,7 +316,7 @@ function RegisterUser() {
               name="mail-user"
               type="text"
               placeholder="Correo Electrónico"
-              width={292}
+              width={'100%'}
               height={55}
               value={form.email}
               onChange={(e) => handleChange("email", (e.target as HTMLInputElement).value)}
@@ -328,7 +326,7 @@ function RegisterUser() {
               name="password-user"
               type="password"
               placeholder="Contraseña"
-              width={292}
+              width={'100%'}
               height={55}
               value={form.password}
               onChange={(e) => handleChange("password", (e.target as HTMLInputElement).value)}
@@ -338,7 +336,7 @@ function RegisterUser() {
               name="confirm-password-user"
               type="password"
               placeholder="Confirmar Contraseña"
-              width={292}
+              width={'100%'}
               height={55}
               value={form.confirm_password}
               onChange={(e) => handleChange("confirm_password", (e.target as HTMLInputElement).value)}
@@ -351,7 +349,7 @@ function RegisterUser() {
                 { value: "3", label: "Egresado" },
               ]}
               placeholder="Tipo de Usuario"
-              width={292}
+              width={'100%'}
               height={55}
               className="input-field"
               onChange={(e) => handleChange("user_type", (e.target as HTMLSelectElement).value)}
@@ -372,7 +370,7 @@ function RegisterUser() {
 
               ]}
               placeholder="Estado"
-              width={292}
+              width={'100%'}
               height={55}
               className="input-field"
               onChange={(e) => handleChange("status_id", (e.target as HTMLSelectElement).value)}
@@ -381,30 +379,43 @@ function RegisterUser() {
               name="user-portfolio"
               type="text"
               placeholder="Enlace a su Portfolio (Opcional)"
-              width={292}
+              width={'100%'}
               height={55}
               value={form.portfolio}
               onChange={(e) => handleChange("portfolio", (e.target as HTMLInputElement).value)}
             />
           </div>
-          <div className="vertical-sections" style={{ paddingInline: `${TranslateFigmaCoords.translateFigmaY(20)}`, borderLeft: "3px solid rgba(255, 193, 35, 1)" }}>
-            <div className="corner-container">
-              <TextBox name="user-description" placeholder="Ingrese una descripción personal" width={292} height={265} className="corner-visible" onChange={(e) => handleChange("description", e.target.value)} />
-              {fieldErrors.description && <span style={{ color: "red" }}>{fieldErrors.description}</span>}
-              <p className="corner-down-right"></p>
+          <div className="vertical-sections" style={{
+            alignItems: 'center',
+            borderLeft: "3px solid rgba(255, 193, 35, 1)", borderRight: "3px solid rgba(255, 193, 35, 1)",
+            paddingLeft: `${TranslateFigmaCoords.translateFigmaX(25)}`,
+            paddingRight: `${TranslateFigmaCoords.translateFigmaX(25)}`,
+          }}>
+            <div style={{ height: 'auto',display:'flex',flexDirection:'column' }}>
+              <div>
+                <div className="corner-container">
+                  <TextBox name="user-description" placeholder="Ingrese una descripción personal" width={292} height={265} className="corner-visible" onChange={(e) => handleChange("description", e.target.value)} />
+                  <p className="corner-down-right"></p>
+
+                </div>
+                {fieldErrors.description && <span style={{ color: "red" }}>{fieldErrors.description}</span>}
+              </div>
+
+              <LabelsSelection
+                width={292}
+                height={215}
+                blocks={blocks}
+                searchData={searchData}
+                etiquetasSeleccionadas={labelsFromSelection}
+                setEtiquetasSeleccionadas={setLabelsFromSelection} 
+                className="labels-selection"
+              />
             </div>
-            <LabelsSelection
-              width={292}
-              height={215}
-              blocks={blocks}
-              searchData={searchData}
-              etiquetasSeleccionadas={labelsFromSelection}
-              setEtiquetasSeleccionadas={setLabelsFromSelection}
-            />
+
           </div>
 
-          <div className="vertical-sections" style={{ borderLeft: "3px solid rgba(255, 193, 35, 1)", paddingLeft: `${TranslateFigmaCoords.translateFigmaY(20)}` }}>
-            <div className="labels-view">
+          <div className="vertical-sections" >
+            <div className="labels-view" >
               <div className="view-tabs">
                 {blocks.map((block, index) => (
                   <button
@@ -449,7 +460,10 @@ function RegisterUser() {
                 </button>
               ))}
             </div>
-            <span className="form-text" style={{ borderTop: "3px solid rgba(255, 193, 35, 1)", paddingTop: `${TranslateFigmaCoords.translateFigmaY(20)}` }}>
+            <span className="form-text" style={{
+              borderTop: "3px solid rgba(255, 193, 35, 1)",
+              paddingTop: `${TranslateFigmaCoords.translateFigmaY(20)}`
+            }}>
               Si has rellenado todos los campos necesarios solo queda:
             </span>
             <ActionButton height={60} text={"Registrarse"} width={100} action={(event) => {

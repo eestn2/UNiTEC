@@ -50,7 +50,7 @@ const ForgotPasswordMailVerification: React.FC = () => {
                 <div className="contenedor"> 
                     <InputField name="userMail" type="mail" placeholder="Ingrese su correo electrónico" width={300} height={50} />
                     <div className="Botones">
-                        <ActionButton className="ActionButton cancelar" vertical={true} height={60} text={"Cancelar"} width={120} />
+                        <ActionButton className="ActionButton cancelar" action={() => navigate(-1)} vertical={true} height={60} text={"Cancelar"} width={120} />
                         <ActionButton className="ActionButton" action={() => navigate('/password-reset-code')} vertical={true} height={60} text={"Confirmar"} width={120} />
                     </div>
 

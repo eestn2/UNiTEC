@@ -1,7 +1,8 @@
 .labels-view { 
     position: relative;
-    height: calc((180/1280) * var(--x-multiplier)); 
-    width: calc((292/1280) * var(--x-multiplier)); 
+    height: calc((190/1280) * var(--x-multiplier)); 
+    width: 100%; 
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     background-color: #dee0eb;
@@ -91,7 +92,7 @@
 .buttons-container-delete{
     display: flex;
     align-items: center;
-    margin: auto;
+    margin: 0 auto;
     gap: calc((5/1280) * var(--x-multiplier));
 }
 
@@ -115,6 +116,10 @@
 
 .vertical-sections .corner-container{
     position: relative;  
+}
+
+.labels-selection{
+    margin-top: calc((5 / 1280) * var(--x-multiplier)); ;
 }
 
 .corner-down-right{

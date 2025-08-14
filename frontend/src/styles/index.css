@@ -284,13 +284,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   flex-direction: row;
   width: 100%;
   height: 100%;
+  max-height: max-content;
+  padding-top: calc((15 / 720) * var(--y-multiplier));
+  justify-content: space-between;
+  column-gap:  calc((10 / 720) * var(--y-multiplier));
 }
 .vertical-sections {
   display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: calc((640 / 1280) * var(--x-multiplier));
-  row-gap: calc((15 / 720) * var(--y-multiplier));
+  flex-direction: column; 
+  min-height: 100%; 
+  width: 100%;
+  row-gap: calc((15 / 720) * var(--y-multiplier)); 
 }
 .left-section {
   border-right: solid var(--delimiters) calc((3 / 1280) * var(--x-multiplier));

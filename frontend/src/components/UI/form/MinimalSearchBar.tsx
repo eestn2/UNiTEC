@@ -66,10 +66,11 @@ const MinimalistSearchBar: React.FC<SearchBarProps> = ({
 
   const handleSuggestionSelect = (suggestion: string) => {
     onInputChange(suggestion);
-    setShowSuggestions(false);
     setHighlightIndex(-1);
     if (onSubmit) onSubmit(suggestion);
     if (onSuggestionClick) onSuggestionClick(suggestion);
+    // Esperar a que el padre actualice selectedItems antes de ocultar sugerencias
+    setTimeout(() => setShowSuggestions(false), 100);
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {

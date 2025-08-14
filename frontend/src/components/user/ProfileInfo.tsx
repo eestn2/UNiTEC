@@ -65,7 +65,7 @@ const ProfileInfo: React.FC = () => {
   };
 
   const handleChangePassword = () => {
-    showNotImplementedToast();
+    navigate('/password-reset');
   };
 
   const handleLogout = async () => {
@@ -101,7 +101,7 @@ const ProfileInfo: React.FC = () => {
 
   // Get translate functions based on orientation
   const [translateX, translateY] = getTranslates(isPortrait);
-  const isEmpresaOrAdmin = userData?.type === UserTypeEnum.Empresa||UserTypeEnum.Administrador;
+  const isEmpresaOrAdmin = userData?.type === UserTypeEnum.Empresa || userData?.type === UserTypeEnum.Administrador;
 
   // State for selected language
   /*   const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null);

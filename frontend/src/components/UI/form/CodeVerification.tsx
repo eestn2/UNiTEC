@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import "../../../styles/CodeVerification.css"
 
@@ -11,7 +10,6 @@ interface CodeInputProps {
 const CodeVerification: React.FC<CodeInputProps> = ({ length = 6, onChange }) => {
     const [values, setValues] = useState<string[]>(Array(length).fill(""));
     const inputsRefs = Array.from({ length }, () => React.createRef<HTMLInputElement>());
-    const navigate = useNavigate();
 
     const getCodeValue = () => values.join("");
 
@@ -26,11 +24,6 @@ const CodeVerification: React.FC<CodeInputProps> = ({ length = 6, onChange }) =>
         }
 
         onChange?.(newValues.join(""));
-
-        // Si todos los dígitos están completos, navega automáticamente
-        if (newValues.every((v) => v !== "")) {
-            navigate("/password-reset-new"); // Cambia la ruta según tu flujo
-        }
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {

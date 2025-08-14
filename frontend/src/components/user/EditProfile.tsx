@@ -232,7 +232,7 @@ const EditProfile: React.FC = () => {
     const isPortrait = window.innerHeight > window.innerWidth;
     const windowWidth = window.innerWidth > window.innerHeight ? 980 : 1280;
     const [translateX, translateY] = getTranslates(isPortrait);
-   const isEmpresaOrAdmin = form.type === UserTypeEnum.Empresa||UserTypeEnum.Administrador;
+   const isEmpresaOrAdmin = form.type === UserTypeEnum.Empresa || form.type === UserTypeEnum.Administrador;
     return (
         <div>
             <Logo className='watermark' />
@@ -419,7 +419,7 @@ const EditProfile: React.FC = () => {
                     {/* Save/Cancel Buttons */}
                     <div className='user-button-section' style={{
                         ...(isPortrait ? { gridColumn: '1 / span 2', gridRow: '6 / span 2' } :
-                             (isEmpresaOrAdmin ? { gridColumn: '2', gridRow: '7 / 9'}:{gridColumn: '2', gridRow: '7 / span 2' })),
+                             (isEmpresaOrAdmin ? { gridColumn: '2', gridRow: '7 / 9'}:{gridColumn: '3', gridRow: '7 / span 2' })),
                         fontSize: translateY(24)
                     }}>
                         <ActionButton height={'100%'} action={handleSave}>
