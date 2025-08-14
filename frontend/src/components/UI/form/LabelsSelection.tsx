@@ -1,184 +1,162 @@
-/**
- * @file LabelsSelection.tsx
- * @description A reusable React component for selecting languages and labels with checkboxes in a responsive layout.
- * Converts width and height from pixels to responsive units based on screen size.
- * @author Daviel Díaz Gonzáles
- * @date May 11, 2025
- */
-
-import React from "react";
-import useResponsiveDimensions from "../../../hooks/responsive/useResponsiveDimensions";
-import { ResponsiveUnit } from "../../../global/interface/ResponsiveComponent";
-
-/**
- * Props for the `LabelsSelection` component.
- *
- * @property {number | string} [width=100] - The width of the selection container.
- * @property {number | string} [height=50] - The height of the selection container.
- * 
- * @author Daviel Díaz Gonzáles
- */
-interface LabelsSelectionProps {
-    /** The width of the selection container. */
-    width?: number | ResponsiveUnit;
-    /** The height of the selection container. */
-    height?: number | ResponsiveUnit;
-    /** Decides which TranslateFigmaCoords function to use (Default: false). */
-    vertical?: boolean;
+import React, { useState } from "react";
+import MinimalistSearchBar from "./MinimalSearchBar";
+import "../../../styles/Label.css";
+import Agregar from "../../../assets/icons/add.svg";
+import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
+interface Bloque {
+  titulo: string;
+  etiquetas: string[];
+  placeholder: string;
 }
 
+export interface EtiquetaSeleccionada {
+  etiqueta: string;
+  bloque: string;
+  valorCheckbox: string;
+}
 
-/**
- * Checkbox component renders a labeled checkbox input.
- *
- * @param label - The text label displayed next to the checkbox.
- * @param name - The name attribute for the checkbox input.
- * @param onChange - Optional event handler called when the checkbox value changes.
- * 
- * @returns A JSX element representing a labeled checkbox.
- */
-const Checkbox: React.FC<{ label: string; name: string; onChange?: React.ChangeEventHandler<HTMLInputElement> }> = ({ label, name, onChange }) => (
-    <label className="checkbox-label">
-        <input type="checkbox" name={name} onChange={onChange} />
-        {label}
-    </label>
-);
+interface LabelsSelectionProps extends ResponsiveComponent {
+  blocks: Bloque[];
+  searchData: Record<string, string[]>;
+  etiquetasSeleccionadas: EtiquetaSeleccionada[];
+  setEtiquetasSeleccionadas: (etiquetas: EtiquetaSeleccionada[]) => void;
+  activeTab?: string;
+  onTabChange?: (tab: string) => void;
+  editProfile?: boolean;
+}
 
-/**
- * A React functional component that renders two columns for selecting languages and labels,
- * each with a dropdown and a group of checkboxes, inside a responsive container.
- *
- * @component
- * @param {LabelsSelectionProps} props - The properties for the LabelsSelection component.
- * @param {number} [props.width=100] - The width of the selection container in Figma coordinates.
- * @param {number} [props.height=50] - The height of the selection container in Figma coordinates.
- *
- * @returns {JSX.Element} A styled container with dropdowns and checkboxes for language and label selection.
- *
- * @example
- * ```tsx
- * <LabelsSelection width={120} height={60} />
- * ```
- * @author Daviel Díaz Gonzáles
- */
-const LabelsSelection: React.FC<LabelsSelectionProps> = ({ width = 100, height = 50, vertical = false }) => {
-    const { finalHeight, finalWidth, translateX } = useResponsiveDimensions({
-        height: height,
-        width: width,
-        vertical
-    });
+const LabelsSelection: React.FC<LabelsSelectionProps> = ({
+  width,
+  height,
+  blocks,
+  searchData,
+  etiquetasSeleccionadas,
+  setEtiquetasSeleccionadas,
+  activeTab,
+  onTabChange,
+  editProfile = false,
+}) => {
+  const getInitialIndex = () => {
+    if (typeof activeTab === 'string') {
+      const idx = blocks.findIndex(b => b.titulo === activeTab);
+      return idx >= 0 ? idx : 0;
+    }
+    return 0;
+  };
+  const [activeIndex, setActiveIndex] = useState(getInitialIndex());
+  const [checkboxSeleccionado, setCheckboxSeleccionado] = useState<string | null>(null);
+  const [valorActual, setValorActual] = useState<string>("");
 
-    return (
-        <div
-            className="row-layout input-field"
-            style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: `${translateX(20)}px`,
-                width: finalWidth,
-                height: finalHeight,
-            }}
-        >
-            {/* Left Section */}
-            <div
-                className="column"
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: `${translateX(10)}px`,
-                    width: "40%",
-                }}
-            >
-                <select
-                    className="selection-input input-field"
-                    style={{
-                        display: "flex",
-                        textAlign: "center",
-                        backgroundColor: "transparent",
-                        border: "none",
-                        color: "#00317B",
-                        outline: "none",
-                        textDecoration: "underline",
-                        width: "100%",
-                    }}
-                >
-                    <option className="form-text" value="0" selected={true} disabled hidden>
-                        Idiomas
-                    </option>
-                    <option value="1">Selection 1</option>
-                    <option value="2">Selection 2</option>
-                    <option value="3">Selection 3</option>
-                    <option value="4">Selection 4</option>
-                    <option value="5">Selection 5</option>
-                    <option value="6">Selection 6</option>
-                    <option value="7">Selection 7</option>
-                    <option value="8">Selection 8</option>
-                    <option value="9">Selection 9</option>
-                    <option value="10">Selection 10</option>
-                    <option value="11">Selection 11</option>
-                    <option value="12">Selection 12</option>
-                    <option value="13">Selection 13</option>
-                </select>
-                <div
-                    className="checkbox-group"
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: `${translateX(10)}px`,
-                    }}
-                >
-                    <Checkbox label="Básico" name="basic-label" />
-                    <Checkbox label="Intermedio" name="intermediate-label" />
-                    <Checkbox label="Avanzado" name="advanced-label" />
-                </div>
-            </div>
+  const handleAgregarEtiqueta = () => {
+    if (!valorActual.trim() || !checkboxSeleccionado) {
+      alert("Selecciona un valor del checkbox y escribe o elige una etiqueta.");
+      return;
+    }
 
-            {/* Right Section */}
-            <div
-                className="column"
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: `${translateX(10)}px`,
-                    width: "40%",
-                }}
-            >
-                <select
-                    className="selection-input input-field"
-                    style={{
-                        display: "flex",
-                        textAlign: "center",
-                        backgroundColor: "transparent",
-                        border: "none",
-                        color: "#00317B",
-                        outline: "none",
-                        textDecoration: "underline",
-                        width: "100%",
-                    }}
-                >
-                    <option className="form-text" value="0" selected={true} disabled hidden>
-                        Etiquetas
-                    </option>
-                    <option value="1">Selection 1</option>
-                    <option value="2">Selection 2</option>
-                    <option value="3">Selection 3</option>
-                </select>
-                <div
-                    className="checkbox-group"
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: `${translateX(10)}px`,
-                    }}
-                >
-                    <Checkbox label="Básico" name="basic-label" />
-                    <Checkbox label="Intermedio" name="intermediate-label" />
-                    <Checkbox label="Avanzado" name="advanced-label" />
-                </div>
-            </div>
-        </div>
+    const bloqueActual = blocks[activeIndex].titulo;
+
+    // Verifica que no esté duplicada
+    const yaExiste = etiquetasSeleccionadas.some(
+      (etq) =>
+        etq.etiqueta.toLowerCase() === valorActual.trim().toLowerCase() &&
+        etq.bloque === bloqueActual
     );
+
+    if (yaExiste) {
+      alert("Esa etiqueta ya está añadida.");
+      return;
+    }
+
+    const nuevasEtiquetas = [
+      ...etiquetasSeleccionadas,
+      {
+        etiqueta: valorActual.trim(),
+        bloque: bloqueActual,
+        valorCheckbox: checkboxSeleccionado,
+      },
+    ];
+
+    setEtiquetasSeleccionadas(nuevasEtiquetas);
+    LimpiarInputs();
+  };
+
+  const LimpiarInputs = () => {
+    setValorActual("");
+    setCheckboxSeleccionado(null);
+  };
+
+  // Sincroniza el tab activo con el prop externo
+  React.useEffect(() => {
+    if (typeof activeTab === 'string') {
+      const idx = blocks.findIndex(b => b.titulo === activeTab);
+      if (idx >= 0 && idx !== activeIndex) setActiveIndex(idx);
+    }
+    // eslint-disable-next-line
+  }, [activeTab, blocks]);
+
+  const handleTabClick = (index: number) => {
+    setActiveIndex(index);
+    LimpiarInputs();
+    if (onTabChange) onTabChange(blocks[index].titulo);
+  };
+
+  return (
+    <div
+      className="labels-selection"
+      style={{
+        ...(editProfile ? { borderBottomRightRadius: 0, borderBottomLeftRadius: 0 } : {}),
+        width: width,
+        height: height,
+      }}
+    >
+      <div className="slider-tabs">
+        {blocks.map((block, index) => (
+          <button
+            type="button"
+            key={index}
+            className={index === activeIndex ? "active-tab" : "tab"}
+            onClick={() => handleTabClick(index)}
+          >
+            {block.titulo || "Sin Título"}
+          </button>
+        ))}
+      </div>
+
+      <div className="slider-content" >
+        <MinimalistSearchBar
+          placeholder={blocks[activeIndex].placeholder}
+          suggestions={searchData[blocks[activeIndex].titulo] || []}
+          selectedItems={etiquetasSeleccionadas.map((e) => e.etiqueta)}
+          value={valorActual}
+          onInputChange={(val) => setValorActual(val)}
+          onSuggestionClick={(val) => setValorActual(val)}
+        />
+
+        {blocks.length > 0 && (
+          <div className="column" >
+            <div className="checkbox-group" style={editProfile ? { flexDirection: 'row', justifyContent: 'space-between' } : { flexDirection: 'column' }}>
+              {blocks[activeIndex].etiquetas.map((opt, i) => (
+                <label key={i} className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={checkboxSeleccionado === opt}
+                    onChange={() =>
+                      setCheckboxSeleccionado(checkboxSeleccionado === opt ? null : opt)
+                    }
+                  />{" "}
+                  {opt}
+                </label>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <button type="button" className="add-block-button" onClick={handleAgregarEtiqueta}>
+        Añadir  <img src={Agregar} className="iconMas" alt="" />
+      </button>
+    </div>
+  );
 };
 
 export default LabelsSelection;

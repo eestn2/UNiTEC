@@ -10,7 +10,6 @@ import React from "react";
 import AppWindow from "../../UI/AppWindow";
 import Logo from "../../UI/unitec/Logo";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
-import { useWindowSize } from "../../../hooks/responsive/useWindowSize";
 import '../../../styles/ForgotPassword/ForgotPasswordVerificationMail.css'
 import ActionButton from "../../UI/ActionButton";
 import { useNavigate } from "react-router-dom";
@@ -28,10 +27,7 @@ import { useNavigate } from "react-router-dom";
  * @author Haziel Magallanes
  */
 const ForgotPasswordMailVerification: React.FC = () => {
-    // Re-Render on window resize 
     const navigate = useNavigate();
-    const windowSize = useWindowSize();
-    console.log("Window size:", windowSize);
     return (
         <div className="ForgotPassword ForgotPasswordMail">
             <Logo className="watermark" />

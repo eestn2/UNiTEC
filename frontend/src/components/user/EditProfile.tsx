@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import LabelsSelection from '../UI/form/LabelsSelectionEdit';
+import LabelsSelection from '../UI/form/LabelsSelection';
 import Tag2 from '../UI/Tag2';
 import { useNavigate } from 'react-router-dom';
 import AppWindow from '../UI/AppWindow';
