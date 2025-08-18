@@ -138,6 +138,7 @@ const languages: Tag[] = normalize(userData?.languages || []);
     const selectedLanguageLevel = selectedLanguage?.level; */
   // State for selected tag
   const [selectedTag, setSelectedTag] = useState<tag | null>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null);
   if (!userData) {
     return <LoadingScreen />;
   }
@@ -315,7 +316,8 @@ const languages: Tag[] = normalize(userData?.languages || []);
             <TagList
               tags={languages}
               title="Idiomas:"
-              selectedTag={null}
+              selectedTag={selectedLanguage}
+              onSelectTag={setSelectedLanguage}
               isPortrait={isPortrait}
               translateX={translateX}
               translateY={translateY}
