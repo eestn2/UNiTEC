@@ -56,7 +56,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
     setHighlightIndex(-1);
 
     const trimmedVal = val.trim().toLowerCase();
-
     const filtered = trimmedVal
       ? suggestions.filter(
           (s) =>
@@ -131,6 +130,20 @@ const SearchBar: React.FC<SearchBarProps> = ({
     };
   }, []);
 
+  // Actualiza sugerencias si cambian las props y hay texto en el input
+  useEffect(() => {
+    const trimmedVal = value.trim().toLowerCase();
+    const filtered = trimmedVal
+      ? suggestions.filter(
+          (s) =>
+            s.toLowerCase().includes(trimmedVal) &&
+            !selectedItems.some((item) => item.toLowerCase() === s.toLowerCase())
+        )
+      : [];
+    setFilteredSuggestions(filtered);
+    setShowSuggestions(filtered.length > 0);
+  }, [suggestions, selectedItems]);
+
   useEffect(() => {
     if (
       highlightIndex >= 0 &&
@@ -166,7 +179,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
         value={value}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
-        onFocus={onFocus}
+        onFocus={(e) => {
+          if (value.trim() !== "") setShowSuggestions(filteredSuggestions.length > 0);
+          if (onFocus) onFocus(e);
+        }}
       />
 
       <div

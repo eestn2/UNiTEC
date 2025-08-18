@@ -6,7 +6,7 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import InputField from "../UI/form/InputField";
 import TextBox from "../UI/form/TextBox";
 import { Link, useNavigate } from "react-router-dom";
-import LabelsSelection from "../UI/form/LabelsSelectionEdit";
+import LabelsSelection from "../UI/form/LabelsSelection";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import '../../styles/SeeEtiquetas.css';

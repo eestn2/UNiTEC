@@ -21,7 +21,7 @@ const AdminLanguages: React.FC = () => {
   };
 
   const handleChangeAttribute = async (attribute: string, id: number) => {
-    const response = await axios.put('admin/edit_language.php', {
+    const response = await axios.put('/admin/edit_language.php', {
       id: id,
       name: attribute,
     });

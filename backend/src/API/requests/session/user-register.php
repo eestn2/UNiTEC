@@ -30,7 +30,7 @@ if (!isset($data->email) || !isset($data->password) || $data -> user_type===0 ||
 // Assign request body values to variables
 $name = $data->name ?? null;
 $user_age = $data->birth_date ?? date('Y-m-d H:i:s');
-$user_location = "notEnabledFunctionality";
+$user_location = "" . ($data->location ?? null);
 $user_email = $data->email;
 $user_password = password_hash($data->password, PASSWORD_DEFAULT);
 $user_description = $data->description ?? null;

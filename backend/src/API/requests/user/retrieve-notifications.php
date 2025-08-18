@@ -14,19 +14,19 @@
  *   Response: { "status": "success", "message": "...", "notifications": [ ... ] }
  */
 
+session_start();
 require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no permitido.", null);
-
-// Validate and retrieve user_id parameter
-if (!isset($_GET['user_id'])) return_response("failed", "Falta el parámetro user_id.", null);
-
-$user_id = intval($_GET['user_id']);
+if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id'])) {
+    return_response("failed", "Usuario no autenticado.", null);
+}
+$user_id = intval($_SESSION['user']['id']);
 // Query notifications for the given user_id in reverse order (latest first)
 try {
-    $stmt = $connection->prepare("SELECT id FROM notifications WHERE receiver_id = ? ORDER BY id DESC");
+    $stmt = $connection->prepare("SELECT id, `type`, `message` FROM notifications WHERE receiver_id = ? ORDER BY id DESC");
     $stmt->execute([$user_id]);
     $notifications = $stmt->fetchAll();
     return_response("success", "Notificaciones recuperadas correctamente.", ["notifications" => $notifications]);

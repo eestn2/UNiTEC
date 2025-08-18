@@ -136,6 +136,14 @@ const SeeApplicants: React.FC = () => {
         <div className="Contenedor scroll">
           {loading && <p>Cargando ofertas...</p>}
           {error && <p>{error}</p>}
+          {!loading && !error && offers.length === 0 && (
+            <div style={{width: "100%", textAlign: "center", height: "100%", display: "flex", alignItems: "center", justifyContent: "center"}}>
+              <p style={{
+                color: "var(--regular)",
+                fontSize: TranslateFigmaCoords.translateFigmaY(20),
+              }}>No hay ofertas publicadas.</p>
+            </div>
+          )}
           {!loading &&
             !error &&
             offers.map((offer) => (

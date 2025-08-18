@@ -15,7 +15,6 @@ import add_offer_icon from "../../assets/navbar/bxs-edit.svg";
 import add_offer_icon_activate from "../../assets/navbar/bxs-edit-active.svg";
 import unitec_text from "../../assets/unitec/unitec-text.svg";
 import User from "../session/User";
-import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 import { useLocation, useNavigate } from "react-router-dom";
 import ProfilePicture from "./user/ProfilePicture";
 import { UserTypeEnum } from "../../types/user";

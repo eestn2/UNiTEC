@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import type { offer } from "../../types/JobOfferTypes";
 import type { TypedResponse } from "../../types/Response";
-import placeholder from "../../assets/defaults/profile-picture/1.svg";
 import close_icon from "../../assets/icons/close.svg";
 import NavBar from "../UI/NavBar";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
@@ -12,6 +11,7 @@ import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 import ActionButton from "../UI/ActionButton";
 import { user } from "../../types/user";
 import TextWithBreaks from "../UI/TextWithBreaks";
+import ProfilePicture from "../UI/user/ProfilePicture";
 
 const JobOfferFV: React.FC = () => {
     // Re-Render on window resize
@@ -90,11 +90,17 @@ const JobOfferFV: React.FC = () => {
                         columnGap: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
                         alignItems: "center",
                     }}>
-                    <img className="profile-pic" src={placeholder}
-                        style={{
-                            marginLeft: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
-                        }} />
-                    {author ? author.name : null}
+                    {author ? (
+                        <div style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            columnGap: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
+                        }}>    
+                            <ProfilePicture userId={author.id} size={40} style={{marginLeft: `${TranslateFigmaCoords.translateFigmaX(10)}px`}}/>
+                            <span style={{ fontSize: `${TranslateFigmaCoords.translateFigmaX(24)}px`, fontWeight: 600 }}>{author.name}</span>
+                        </div>
+                    ) : (<p>Cargando...</p>)}
                     <img src={close_icon} alt="close" style={{
                         marginRight: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
                         cursor: "pointer",
