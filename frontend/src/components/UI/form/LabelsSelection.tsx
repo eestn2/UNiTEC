@@ -1,25 +1,31 @@
 import React, { useState } from "react";
-import MinimalistSearchBar from "./MinimalSearchBar";
+import MinimalistSearchBar from "../../UI/form/MinimalSearchBar";
 import "../../../styles/Label.css";
 import Agregar from "../../../assets/icons/add.svg";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
+
 interface Bloque {
   titulo: string;
   etiquetas: string[];
   placeholder: string;
 }
 
-export interface EtiquetaSeleccionada {
-  etiqueta: string;
-  bloque: string;
-  valorCheckbox: string;
+export interface SelectedItem {
+  id: number;
+  name: string;
+  block: "Etiquetas" | "Idiomas";
+  level: number;
+}
+
+interface SearchData {
+  [key: string]: Array<{ id: number; name: string }>;
 }
 
 interface LabelsSelectionProps extends ResponsiveComponent {
   blocks: Bloque[];
-  searchData: Record<string, string[]>;
-  etiquetasSeleccionadas: EtiquetaSeleccionada[];
-  setEtiquetasSeleccionadas: (etiquetas: EtiquetaSeleccionada[]) => void;
+  searchData: SearchData;
+  selectedItems: SelectedItem[];
+  setSelectedItems: (items: SelectedItem[]) => void;
   activeTab?: string;
   onTabChange?: (tab: string) => void;
   editProfile?: boolean;
@@ -30,8 +36,8 @@ const LabelsSelection: React.FC<LabelsSelectionProps> = ({
   height,
   blocks,
   searchData,
-  etiquetasSeleccionadas,
-  setEtiquetasSeleccionadas,
+  selectedItems,
+  setSelectedItems,
   activeTab,
   onTabChange,
   editProfile = false,
@@ -43,49 +49,59 @@ const LabelsSelection: React.FC<LabelsSelectionProps> = ({
     }
     return 0;
   };
-  const [activeIndex, setActiveIndex] = useState(getInitialIndex());
-  const [checkboxSeleccionado, setCheckboxSeleccionado] = useState<string | null>(null);
-  const [valorActual, setValorActual] = useState<string>("");
 
-  const handleAgregarEtiqueta = () => {
-    if (!valorActual.trim() || !checkboxSeleccionado) {
-      alert("Selecciona un valor del checkbox y escribe o elige una etiqueta.");
+  const [activeIndex, setActiveIndex] = useState(getInitialIndex());
+  const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
+  const [currentValue, setCurrentValue] = useState<string>("");
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+  if (import.meta.env.DEV) console.log(selectedItemId);
+  const handleAddItem = () => {
+    if (!currentValue.trim() || selectedLevel === null) {
+      alert("Selecciona un nivel y escribe o elige un item de la lista.");
       return;
     }
 
-    const bloqueActual = blocks[activeIndex].titulo;
-
-    // Verifica que no esté duplicada
-    const yaExiste = etiquetasSeleccionadas.some(
-      (etq) =>
-        etq.etiqueta.toLowerCase() === valorActual.trim().toLowerCase() &&
-        etq.bloque === bloqueActual
+    const currentBlock = blocks[activeIndex].titulo as "Etiquetas" | "Idiomas";
+    const selectedData = searchData[currentBlock].find(item => 
+      item.name.toLowerCase() === currentValue.toLowerCase()
     );
 
-    if (yaExiste) {
-      alert("Esa etiqueta ya está añadida.");
+    if (!selectedData) {
+      alert("El item seleccionado no es válido.");
       return;
     }
 
-    const nuevasEtiquetas = [
-      ...etiquetasSeleccionadas,
+    // Check if item already exists in this block
+    const alreadyExists = selectedItems.some(
+      item => item.id === selectedData.id && item.block === currentBlock
+    );
+
+    if (alreadyExists) {
+      alert("Este item ya está añadido.");
+      return;
+    }
+
+    const newItems = [
+      ...selectedItems,
       {
-        etiqueta: valorActual.trim(),
-        bloque: bloqueActual,
-        valorCheckbox: checkboxSeleccionado,
+        id: selectedData.id,
+        name: selectedData.name,
+        block: currentBlock,
+        level: selectedLevel,
       },
     ];
 
-    setEtiquetasSeleccionadas(nuevasEtiquetas);
-    LimpiarInputs();
+    setSelectedItems(newItems);
+    clearInputs();
   };
 
-  const LimpiarInputs = () => {
-    setValorActual("");
-    setCheckboxSeleccionado(null);
+  const clearInputs = () => {
+    setCurrentValue("");
+    setSelectedLevel(null);
+    setSelectedItemId(null);
   };
 
-  // Sincroniza el tab activo con el prop externo
+  // Sync active tab with external prop
   React.useEffect(() => {
     if (typeof activeTab === 'string') {
       const idx = blocks.findIndex(b => b.titulo === activeTab);
@@ -96,9 +112,20 @@ const LabelsSelection: React.FC<LabelsSelectionProps> = ({
 
   const handleTabClick = (index: number) => {
     setActiveIndex(index);
-    LimpiarInputs();
+    clearInputs();
     if (onTabChange) onTabChange(blocks[index].titulo);
   };
+
+  const handleSuggestionClick = (name: string) => {
+    const currentBlock = blocks[activeIndex].titulo;
+    const item = searchData[currentBlock].find(item => item.name === name);
+    if (item) {
+      setCurrentValue(name);
+      setSelectedItemId(item.id);
+    }
+  };
+
+  const levelOptions = ["Básico", "Intermedio", "Avanzado"];
 
   return (
     <div
@@ -122,26 +149,26 @@ const LabelsSelection: React.FC<LabelsSelectionProps> = ({
         ))}
       </div>
 
-      <div className="slider-content" >
+      <div className="slider-content">
         <MinimalistSearchBar
           placeholder={blocks[activeIndex].placeholder}
-          suggestions={searchData[blocks[activeIndex].titulo] || []}
-          selectedItems={etiquetasSeleccionadas.map((e) => e.etiqueta)}
-          value={valorActual}
-          onInputChange={(val) => setValorActual(val)}
-          onSuggestionClick={(val) => setValorActual(val)}
+          suggestions={searchData[blocks[activeIndex].titulo]?.map(item => item.name) || []}
+          selectedItems={selectedItems.map(item => item.name)}
+          value={currentValue}
+          onInputChange={(val) => setCurrentValue(val)}
+          onSuggestionClick={handleSuggestionClick}
         />
 
         {blocks.length > 0 && (
-          <div className="column" >
+          <div className="column">
             <div className="checkbox-group" style={editProfile ? { flexDirection: 'row', justifyContent: 'space-between' } : { flexDirection: 'column' }}>
-              {blocks[activeIndex].etiquetas.map((opt, i) => (
+              {levelOptions.map((opt, i) => (
                 <label key={i} className="checkbox-label">
                   <input
                     type="checkbox"
-                    checked={checkboxSeleccionado === opt}
+                    checked={selectedLevel === i + 1}
                     onChange={() =>
-                      setCheckboxSeleccionado(checkboxSeleccionado === opt ? null : opt)
+                      setSelectedLevel(selectedLevel === i + 1 ? null : i + 1)
                     }
                   />{" "}
                   {opt}
@@ -152,8 +179,8 @@ const LabelsSelection: React.FC<LabelsSelectionProps> = ({
         )}
       </div>
 
-      <button type="button" className="add-block-button" onClick={handleAgregarEtiqueta}>
-        Añadir  <img src={Agregar} className="iconMas" alt="" />
+      <button type="button" className="add-block-button" onClick={handleAddItem}>
+        Añadir <img src={Agregar} className="iconMas" alt="" />
       </button>
     </div>
   );
