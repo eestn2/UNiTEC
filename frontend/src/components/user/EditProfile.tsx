@@ -9,37 +9,19 @@ import TextBox from '../UI/form/TextBox';
 import SelectionField from '../UI/form/SelectionField';
 import { UserStatusEnum, user as UserType, UserTypeEnum } from '../../types/user';
 // --- Etiquetas y niveles ---
-type EtiquetaSeleccionada = {
-    etiqueta: string;
-    bloque: string;
-    valorCheckbox: string;
+type SelectedItem = {
+  id: number;
+  name: string;
+  block: "Etiquetas" | "Idiomas";
+  level: number;
 };
 
-function getIdsAndLevels(
-    array1: string[],
-    array2: EtiquetaSeleccionada[],
-    option: 1 | 2
-): { ids: number[]; levels: number[] } {
-    const bloqueFiltrado = option === 1 ? "Etiquetas" : "Idiomas";
-    const nivelMap: Record<string, number> = {
-        "Básico": 1,
-        "Intermedio": 2,
-        "Avanzado": 3,
-    };
-    const ids: number[] = [];
-    const levels: number[] = [];
-    for (const etiqueta of array1) {
-        const match = array2.find(
-            (item) => item.bloque === bloqueFiltrado && item.etiqueta === etiqueta
-        );
-        if (!match) continue;
-        const index = array1.indexOf(etiqueta);
-        ids.push(index + 1);
-        const nivel = nivelMap[match.valorCheckbox];
-        levels.push(nivel ?? 0);
-    }
-    return { ids, levels };
-}
+type OptionItem = {
+  id: number;
+  name: string;
+};
+
+
 import User from '../session/User';
 import { getTranslates } from '../../global/function/getTranslates';
 import axios from 'axios';
@@ -51,6 +33,7 @@ import edit_profile from '../../assets/icons/edit-picture.svg';
 import '../../styles/profile-info.css';
 import getUserStatus from '../../global/function/getUserStatus';
 import getUserType from '../../global/function/getUserType';
+import { sortByName } from '../../global/function/sortByName';
 
 const STATUS_OPTIONS = Object.values(UserStatusEnum)
     .filter((v) => typeof v === "number")
@@ -73,44 +56,80 @@ type FormType = UserType & {
 const EditProfile: React.FC = () => {
     const [form, setForm] = useState<FormType | null>(null);
     // Etiquetas y lenguajes
-    const [labelsFromSelection, setLabelsFromSelection] = useState<EtiquetaSeleccionada[]>([]);
-    const [Languages, setLanguages] = useState<string[]>([]);
-    const [Tags, setTags] = useState<string[]>([]);
+    type LoadedTag = { id: number; level: number };
+    type LoadedLanguage = { id: number; level: number };
+    const [labelsFromSelection, setLabelsFromSelection] = useState<SelectedItem[]>([]);
+    const [Languages, setLanguages] = useState<OptionItem[]>([]);
+    const [Tags, setTags] = useState<OptionItem[]>([]);
     const [filtroBloque, setFiltroBloque] = useState('Etiquetas');
     // Cargar idiomas y etiquetas
     useEffect(() => {
-        loadLanguages();
-        loadTags();
+        handleLoadLabels();
     }, []);
+        useEffect(() => {
+        console.log(labelsFromSelection);
+    }, [labelsFromSelection]);
 
-    const loadLanguages = async () => {
-        try {
-            const response = await axios.get('/function/get-languages.php');
-            if (response.status !== 200 || response.data.status !== "success") {
-                console.error("Failed to load languages:", response.data.message);
-            } else {
-                const languageNames = response.data.data.languages.map((lang: any) => lang.name);
-                setLanguages(languageNames);
-            }
-        } catch (error) {
-            console.error("An error occurred while loading languages:", error);
+const handleLoadLabels = async () => {
+    try {
+        const response = await axios.get('/user/get-languages-and-tags-edit.php');
+        if (response.data.status !== 'success') {
+            console.error('Error al cargar etiquetas y lenguajes:', response.data.message);
+            alert('Error al cargar etiquetas y lenguajes');
+            return;
         }
-    };
 
-    const loadTags = async () => {
-        try {
-            const response = await axios.get('/function/get-tags.php');
-            if (response.status !== 200 || response.data.status !== "success") {
-                console.error("Failed to load tags:", response.data.message);
-            } else {
-                const tagsNames = response.data.data.tags.map((lang: any) => lang.name);
-                setTags(tagsNames);
-            }
-        } catch (error) {
-            console.error("An error occurred while loading tags:", error);
-        }
-    };
+        // Get and sort all available options
+        const allTags : OptionItem[] = sortByName(response.data.data.tags || []);
+        const allLanguages : OptionItem[] = sortByName(response.data.data.languages || []);
 
+        const loadedTagsRaw = response.data.data.loadedTags || []; 
+        const loadedLanguagesRaw = response.data.data.loadedLanguages || [];
+
+        // Convert loaded items to proper format
+        const loadedTags: LoadedTag[] = loadedTagsRaw.map((t: { tag_id: number | string; level: number | string }) => ({
+            id: Number(t.tag_id),
+            level: Number(t.level)
+        }));
+
+        const loadedLanguages: LoadedLanguage[] = loadedLanguagesRaw.map((l: { language_id: number | string; level: number | string }) => ({
+            id: Number(l.language_id),
+            level: Number(l.level)
+        }));
+
+
+        // Create selected items for the UI 
+        const selectedItems: SelectedItem[] = [
+            ...loadedTags.map(t => {
+                const tag = allTags.find(tag => tag.id === t.id);
+                return {
+                    id: t.id,
+                    name: tag?.name || `Tag ${t.id}`,
+                    block: "Etiquetas" as const,
+                    level: t.level
+                };
+            }),
+            ...loadedLanguages.map(l => {
+                const lang = allLanguages.find(lang => lang.id === l.id);
+                return {
+                    id: l.id,
+                    name: lang?.name || `Language ${l.id}`,
+                    block: "Idiomas" as const,
+                    level: l.level
+                };
+            })
+        ];
+
+        // Save to state
+        setLabelsFromSelection(selectedItems);
+        setTags(allTags);
+        setLanguages(allLanguages);
+        console.log('Items seleccionados:', selectedItems);
+    } catch (error) {
+        console.error('Error al cargar etiquetas y lenguajes:', error);
+        alert('Error al cargar etiquetas y lenguajes');
+    }
+};
     const blocks = [
         {
             titulo: "Etiquetas",
@@ -128,11 +147,12 @@ const EditProfile: React.FC = () => {
         Idiomas: Languages,
     };
 
-    const handleDeleteEtiqueta = (etiqueta: string, bloque: string) => {
-        setLabelsFromSelection(prev =>
-            prev.filter(item => !(item.etiqueta === etiqueta && item.bloque === bloque))
-        );
-    };
+   
+  const handleDeleteItem = (id: number, block: "Etiquetas" | "Idiomas") => {
+    setLabelsFromSelection(prev =>
+      prev.filter(item => !(item.id === id && item.block === block))
+    );
+  };
     const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [newPicturePath, setNewPicturePath] = useState<string | null>(null);
@@ -155,12 +175,26 @@ const EditProfile: React.FC = () => {
             // If not empty, use newPicturePath, else just use the existing profile picture
             payload.profile_picture = newPicturePath ? newPicturePath : form?.profile_picture;
             // Agregar etiquetas y niveles
-            const langs = getIdsAndLevels(Languages, labelsFromSelection, 2);
-            const tags = getIdsAndLevels(Tags, labelsFromSelection, 1);
-            payload.languages = langs.ids;
-            payload.tags = tags.ids;
-            payload.languages_levels = langs.levels;
-            payload.tags_levels = tags.levels;
+                const languagesData = labelsFromSelection
+                .filter(item => item.block === "Idiomas")
+                .reduce((acc, item) => {
+                    acc.ids.push(item.id);
+                    acc.levels.push(item.level);
+                    return acc;
+                }, { ids: [] as number[], levels: [] as number[] });
+
+                const tagsData = labelsFromSelection
+                .filter(item => item.block === "Etiquetas")
+                .reduce((acc, item) => {
+                    acc.ids.push(item.id);
+                    acc.levels.push(item.level);
+                    return acc;
+                }, { ids: [] as number[], levels: [] as number[] });
+            payload.languages = languagesData.ids;
+            payload.languages_levels = languagesData.levels;
+            payload.tags = tagsData.ids;
+            payload.tags_levels = tagsData.levels;
+
             const response = await axios.put('/user/edit-user.php', payload);
             console.log(response.data);
             if (response.data.status !== 'success') {
@@ -376,8 +410,8 @@ const EditProfile: React.FC = () => {
                             width={'100%'}
                             blocks={blocks}
                             searchData={searchData}
-                            etiquetasSeleccionadas={labelsFromSelection}
-                            setEtiquetasSeleccionadas={setLabelsFromSelection}
+                            selectedItems={labelsFromSelection}
+                            setSelectedItems={setLabelsFromSelection}
                             activeTab={filtroBloque}
                             onTabChange={setFiltroBloque}
                             style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}
@@ -386,14 +420,14 @@ const EditProfile: React.FC = () => {
                         {/* Visualización de etiquetas/idiomas seleccionadas */}
                         <div className="labels-view" style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0, margin: 'none', width: '100%', height: '100%' }}>
                             <div className="view-content">
-                                {labelsFromSelection.filter(item => item.bloque === filtroBloque).length > 0 ? (
+                                {labelsFromSelection.filter(item => item.block === filtroBloque).length > 0 ? (
                                     <div className="tags-container" style={{ height: '100%' }}>
-                                        {labelsFromSelection.filter(item => item.bloque === filtroBloque).map((item) => (
+                                        {labelsFromSelection.filter(item => item.block === filtroBloque).map((item) => (
                                             <Tag2
-                                                key={`${item.etiqueta}-${item.bloque}`}
-                                                texto={item.etiqueta}
-                                                checkBox={item.valorCheckbox}
-                                                onDelete={() => handleDeleteEtiqueta(item.etiqueta, item.bloque)}
+                                                key={`${item.id}-${item.block}`}
+                                                texto={item.name}
+                                                checkBox={["Básico", "Intermedio", "Avanzado"][item.level - 1]}
+                                                onDelete={() => handleDeleteItem(item.id, item.block)}
                                             />
                                         ))}
                                     </div>

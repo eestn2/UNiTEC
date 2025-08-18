@@ -36,6 +36,10 @@ if (!is_admin($_SESSION['user']['id'], $connection)) {
 $data->id = intval($data->id);
 
 try {
+    $query = "DELETE FROM user_tags WHERE tag_id = :id";
+    $stmt = $connection->prepare($query);
+    $stmt->bindParam(':id', $data->id, PDO::PARAM_INT);
+    $stmt->execute();
     $query = "DELETE FROM tags WHERE id = :id";
     $stmt = $connection->prepare($query);
     $stmt->bindParam(':id', $data->id, PDO::PARAM_INT);

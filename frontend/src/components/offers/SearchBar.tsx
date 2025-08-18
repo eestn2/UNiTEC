@@ -9,18 +9,23 @@ import InputField from "../UI/form/InputField";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import edit_icon from "../../assets/icons/add.svg";
 
+interface SearchItem {
+  id: number;
+  name: string;
+}
+
 interface SearchBarProps {
   placeholder?: string;
-  onSubmit?: (value: string) => void;
+  onSubmit?: (value: SearchItem) => void;
   onInputChange?: (value: string) => void;
-  suggestions?: string[];
-  onSuggestionClick?: (suggestion: string) => void;
+  suggestions?: SearchItem[];
+  onSuggestionClick?: (suggestion: SearchItem) => void;
   icon?: string;
   style?: React.CSSProperties;
   inputStyle?: React.CSSProperties;
   buttonStyle?: React.CSSProperties;
   onFocus?: React.FocusEventHandler<HTMLInputElement>;
-  selectedItems: string[]; 
+  selectedItems: SearchItem[]; 
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
@@ -39,7 +44,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const [value, setValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [highlightIndex, setHighlightIndex] = useState<number>(-1);
-  const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
+  const [filteredSuggestions, setFilteredSuggestions] = useState<SearchItem[]>([]);
 
   const suggestionsRef = useRef<HTMLUListElement>(null);
   const suggestionItemsRef = useRef<(HTMLLIElement | null)[]>([]);
@@ -54,17 +59,20 @@ const SearchBar: React.FC<SearchBarProps> = ({
     const filtered = trimmedVal
       ? suggestions.filter(
           (s) =>
-            s.toLowerCase().includes(trimmedVal) &&
-            !selectedItems.some((item) => item.toLowerCase() === s.toLowerCase())
+            s.name.toLowerCase().includes(trimmedVal) &&
+            !selectedItems.some((item) => item.id === s.id)
         )
-      : [];
+      : suggestions.filter(
+          (s) => !selectedItems.some((item) => item.id === s.id)
+        );
+
     setFilteredSuggestions(filtered);
     setShowSuggestions(filtered.length > 0);
 
     if (onInputChange) onInputChange(val);
   };
 
-  const handleSuggestionSelect = (suggestion: string) => {
+  const handleSuggestionSelect = (suggestion: SearchItem) => {
     setValue("");
     setShowSuggestions(false);
     setHighlightIndex(-1);
@@ -74,7 +82,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   const handleSubmit = () => {
     const found = suggestions.find(
-      (s) => s.toLowerCase() === value.trim().toLowerCase()
+      (s) => s.name.toLowerCase() === value.trim().toLowerCase()
     );
     if (value.trim() !== "" && found) {
       handleSuggestionSelect(found);
@@ -109,6 +117,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       setShowSuggestions(false);
     }
   };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -225,7 +234,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         >
           {filteredSuggestions.map((s, i) => (
             <li
-              key={i}
+              key={s.id}
               ref={(el) => {
                 suggestionItemsRef.current[i] = el;
               }}
@@ -241,7 +250,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
               onMouseEnter={() => setHighlightIndex(i)}
               onClick={() => handleSuggestionSelect(s)}
             >
-              {s}
+              {s.name}
             </li>
           ))}
         </ul>

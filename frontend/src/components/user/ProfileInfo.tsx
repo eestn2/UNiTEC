@@ -28,13 +28,25 @@ import '../../styles/profile-info.css';
 import LoadingScreen from '../UI/LoadingScreens/LoadingScreen';
 
 // Add types for tags and languages
+
+export enum levelEnum {
+  Basico = 1,
+  Intermedio = 2,
+  Avanzado = 3
+}
+
+const levels: { [key in levelEnum]: string } = {
+  [levelEnum.Basico]: "Básico",
+  [levelEnum.Intermedio]: "Intermedio",
+  [levelEnum.Avanzado]: "Avanzado"
+};
 interface tag {
   name: string;
-  level?: 'Básico' | 'Intermedio' | 'Avanzado';
+  level?: levelEnum;
 }
 interface Language {
   name: string;
-  level?: 'Básico' | 'Intermedio' | 'Avanzado';
+  level?: levelEnum;
 }
 
 const ProfileInfo: React.FC = () => {
@@ -47,18 +59,42 @@ const ProfileInfo: React.FC = () => {
   const navigate = useNavigate();
   const showNotImplementedToast = useNotImplementedToast();
   useEffect(() => {
-    if (!id) return;
-    axios.get(`/user/user-info.php?id=${id}`)
-      .then((res) => {
-        if (res.data.status === "success") {
-          if (!res.data.data.user.portfolio.includes("http://") || !res.data.data.user.portfolio.includes("https://")) {
-            res.data.data.user.portfolio = `http://${res.data.data.user.portfolio}`;
-          }
-          setUserData(res.data.data.user);
-        }
-      });
-  }, [id]);
+  if (!id) return;
+  axios.get(`/user/user-info.php?id=${id}`)
+    .then((res) => {
+      const user = res?.data?.data?.user;
+      if (!user) return;
 
+      // Prefix portfolio only if present and missing protocol
+      if (typeof user.portfolio === 'string' && user.portfolio.length > 0 && !/^https?:\/\//i.test(user.portfolio)) {
+        user.portfolio = `http://${user.portfolio}`;
+      }
+
+      setUserData(user);
+    })
+    .catch((err) => {
+      console.error("Failed to load user-info", err);
+    });
+
+  }, [id]);
+const normalize = (arr: unknown): Tag[] => {
+  if (!Array.isArray(arr)) return [];
+  return arr
+    .map((item: any) => {
+      if (Array.isArray(item)) {
+        const [name, level] = item;
+        return {
+          name: String(name ?? ""),
+          level: level != null ? (Number(level) as 1 | 2 | 3) : undefined,
+        };
+      }
+      return {
+        name: String(item?.name ?? ""),
+        level: item?.level != null ? (Number(item.level) as 1 | 2 | 3) : undefined,
+      };
+    })
+    .filter((t) => t.name.length > 0);
+};
   // Example handlers
   const handleEditProfile = () => {
     navigate('/edit-profile');
@@ -87,14 +123,8 @@ const ProfileInfo: React.FC = () => {
   };
 
   // Group tags and languages by level
-  const tags: Tag[] = userData?.tags || [
-    { name: "Ejemplo 1", level: 'Básico' },
-    { name: "Ejemplo 2", level: 'Básico' },
-    { name: "Lore", level: 'Intermedio' },
-    { name: "rem", level: 'Básico' },
-
-    { name: "Lor", level: 'Avanzado' }
-  ];
+ const tags: Tag[] = normalize(userData?.tags || []);
+const languages: Tag[] = normalize(userData?.languages || []);
   // For demonstration, using static languages if userData is not available
   const isPortrait = window.innerHeight > window.innerWidth;
   const windowWidth = window.innerWidth > window.innerHeight ? 980 : 1280;
@@ -108,6 +138,7 @@ const ProfileInfo: React.FC = () => {
     const selectedLanguageLevel = selectedLanguage?.level; */
   // State for selected tag
   const [selectedTag, setSelectedTag] = useState<tag | null>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null);
   if (!userData) {
     return <LoadingScreen />;
   }
@@ -268,6 +299,7 @@ const ProfileInfo: React.FC = () => {
               translateX={translateX}
               translateY={translateY}
             />
+
           </div>
           {/* Idiomas styled like Etiquetas */}
           <div
@@ -282,9 +314,10 @@ const ProfileInfo: React.FC = () => {
             }}
           >
             <TagList
-              tags={userData?.languages || []}
+              tags={languages}
               title="Idiomas:"
-              selectedTag={null} // Languages are not selectable in this example
+              selectedTag={selectedLanguage}
+              onSelectTag={setSelectedLanguage}
               isPortrait={isPortrait}
               translateX={translateX}
               translateY={translateY}

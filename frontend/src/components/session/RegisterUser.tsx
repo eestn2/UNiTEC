@@ -12,48 +12,18 @@ import { useEffect, useState } from "react";
 import '../../styles/SeeEtiquetas.css';
 import Tag2 from "../UI/Tag2";
 import { getStates } from "../../global/function/getStates";
-
-
-type EtiquetaSeleccionada = {
-  etiqueta: string;
-  bloque: string;
-  valorCheckbox: string;
+import {sortByName} from "../../global/function/sortByName";
+type SelectedItem = {
+  id: number;
+  name: string;
+  block: "Etiquetas" | "Idiomas";
+  level: number;
 };
 
-function getIdsAndLevels(
-  array1: string[],
-  array2: EtiquetaSeleccionada[],
-  option: 1 | 2
-): { ids: number[]; levels: number[] } {
-  const bloqueFiltrado = option === 1 ? "Etiquetas" : "Idiomas";
-
-  const nivelMap: Record<string, number> = {
-    "Básico": 1,
-    "Intermedio": 2,
-    "Avanzado": 3,
-  };
-
-  const ids: number[] = [];
-  const levels: number[] = [];
-
-  for (const etiqueta of array1) {
-    const match = array2.find(
-      (item) => item.bloque === bloqueFiltrado && item.etiqueta === etiqueta
-    );
-
-    if (!match) continue;
-
-    const index = array1.indexOf(etiqueta);
-    ids.push(index + 1);
-
-    const nivel = nivelMap[match.valorCheckbox];
-    levels.push(nivel ?? 0);
-
-  }
-
-  return { ids, levels };
-}
-
+type OptionItem = {
+  id: number;
+  name: string;
+};
 
 type FormType = {
   name: string;
@@ -72,9 +42,7 @@ type FormType = {
   tags_levels: number[];
 };
 
-
 function RegisterUser() {
-
   const [fieldErrors, setFieldErrors] = useState({
     name: "",
     birth_date: "",
@@ -103,17 +71,16 @@ function RegisterUser() {
     languages_levels: [],
     tags_levels: [],
   });
-  const [labelsFromSelection, setLabelsFromSelection] = useState<EtiquetaSeleccionada[]>([]);
-  const [Languages, setLanguages] = useState<string[]>([]);
-  const [Tags, setTags] = useState<string[]>([]);
+  const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
+  const [languages, setLanguages] = useState<OptionItem[]>([]);
+  const [tags, setTags] = useState<OptionItem[]>([]);
   const navigate = useNavigate();
 
-  const handleDeleteEtiqueta = (etiqueta: string, bloque: string) => {
-    setLabelsFromSelection(prev =>
-      prev.filter(item => !(item.etiqueta === etiqueta && item.bloque === bloque))
+  const handleDeleteItem = (id: number, block: "Etiquetas" | "Idiomas") => {
+    setSelectedItems(prev =>
+      prev.filter(item => !(item.id === id && item.block === block))
     );
   };
-
 
   const validateField = (field: string, value: string) => {
     let error = "";
@@ -146,96 +113,103 @@ function RegisterUser() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setError("");
+    e.preventDefault();
+    setError("");
 
-  const langs = getIdsAndLevels(Languages, labelsFromSelection, 2);
-  const tags = getIdsAndLevels(Tags, labelsFromSelection, 1);
+    // Prepare languages and tags data from selected items
+    const languagesData = selectedItems
+      .filter(item => item.block === "Idiomas")
+      .reduce((acc, item) => {
+        acc.ids.push(item.id);
+        acc.levels.push(item.level);
+        return acc;
+      }, { ids: [] as number[], levels: [] as number[] });
 
-  const formToSend = {
-    ...form,
-    languages: langs.ids,
-    tags: tags.ids,
-    languages_levels: langs.levels,
-    tags_levels: tags.levels
-  };
+    const tagsData = selectedItems
+      .filter(item => item.block === "Etiquetas")
+      .reduce((acc, item) => {
+        acc.ids.push(item.id);
+        acc.levels.push(item.level);
+        return acc;
+      }, { ids: [] as number[], levels: [] as number[] });
 
-  // Validation using formToSend instead of form
-  const requiredFields = [
-    "name", "birth_date", "email",
-    "password", "confirm_password",
-    "description", "user_type", "status_id"
-  ];
-  const newErrors: any = {};
-  let hasError = false;
-  const camposInvalidos = ["user_type", "status_id"];
+    const formToSend = {
+      ...form,
+      languages: languagesData.ids,
+      tags: tagsData.ids,
+      languages_levels: languagesData.levels,
+      tags_levels: tagsData.levels
+    };
 
-  requiredFields.forEach((field) => {
-    const value = formToSend[field as keyof typeof formToSend];
-    if (
-      value === null ||
-      value === undefined ||
-      (typeof value === "string" && value.trim() === "") ||
-      (camposInvalidos.includes(field) && value === 0)
-    ) {
-      newErrors[field] = "Este campo es obligatorio";
+
+    // Validation
+    const requiredFields = [
+      "name", "birth_date", "email",
+      "password", "confirm_password",
+      "description", "user_type", "status_id"
+    ];
+    const newErrors: any = {};
+    let hasError = false;
+    const camposInvalidos = ["user_type", "status_id"];
+
+    requiredFields.forEach((field) => {
+      const value = formToSend[field as keyof typeof formToSend];
+      if (
+        value === null ||
+        value === undefined ||
+        (typeof value === "string" && value.trim() === "") ||
+        (camposInvalidos.includes(field) && value === 0)
+      ) {
+        newErrors[field] = "Este campo es obligatorio";
+        hasError = true;
+      }
+    });
+
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formToSend.email)) {
+      newErrors.email = "Formato de email inválido";
       hasError = true;
     }
-  });
 
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formToSend.email)) {
-    newErrors.email = "Formato de email inválido";
-    hasError = true;
-  }
-
-  if (formToSend.password !== formToSend.confirm_password) {
-    newErrors.confirm_password = "Las contraseñas no coinciden";
-    hasError = true;
-  }
-
-  setFieldErrors((prev) => ({ ...prev, ...newErrors }));
-  if (hasError) return;
-
-  try {
-    const res = await axios.post("/session/user-register.php", formToSend);
-    if (res.data.status === "success") {
-      navigate("/");
-    } else {
-      setError(res.data.message || "Error en el registro");
+    if (formToSend.password !== formToSend.confirm_password) {
+      newErrors.confirm_password = "Las contraseñas no coinciden";
+      hasError = true;
     }
-  } catch {
-    setError("No se pudo registrar. Intente de nuevo más tarde.");
-  }
-};
 
+    setFieldErrors((prev) => ({ ...prev, ...newErrors }));
+    if (hasError) return;
 
-
+    try {
+      const res = await axios.post("/session/user-register.php", formToSend);
+      if (res.data.status === "success") {
+        navigate("/");
+      } else {
+        setError(res.data.message || "Error en el registro");
+      }
+    } catch {
+      setError("No se pudo registrar. Intente de nuevo más tarde.");
+    }
+  };
 
   const loadLanguages = async () => {
     try {
       const response = await axios.get('/function/get-languages.php');
-      if (response.status !== 200 || response.data.status !== "success") {
-        console.error("Failed to load languages:", response.data.message);
-      } else {
-        const languageNames = response.data.data.languages.map((lang: any) => lang.name);
-        setLanguages(languageNames);
+      if (response.status === 200 && response.data.status === "success") {
+        setLanguages(sortByName(response.data.data.languages));
+        
       }
     } catch (error) {
-      console.error("An error occurred while loading languages:", error);
+      console.error("Error loading languages:", error);
     }
   };
 
   const loadTags = async () => {
     try {
       const response = await axios.get('/function/get-tags.php');
-      if (response.status !== 200 || response.data.status !== "success") {
-        console.error("Failed to load tags:", response.data.message);
-      } else {
-        const tagsNames = response.data.data.tags.map((lang: any) => lang.name);
-        setTags(tagsNames);
+      if (response.status === 200 && response.data.status === "success") {
+        setTags(sortByName(response.data.data.tags));
       }
     } catch (error) {
-      console.error("An error occurred while loading tags:", error);
+      console.error("Error loading tags:", error);
     }
   };
 
@@ -251,17 +225,19 @@ function RegisterUser() {
       placeholder: "Añadir un Idioma",
     },
   ];
+
   const searchData = {
-    Etiquetas: Tags,
-    Idiomas: Languages,
+    Etiquetas: tags,
+    Idiomas: languages,
   };
 
-  const [filtroBloque, setFiltroBloque] = useState(blocks[0].titulo);
+  const [filterBlock, setFilterBlock] = useState<"Etiquetas" | "Idiomas">("Etiquetas");
 
   useEffect(() => {
     loadLanguages();
     loadTags();
   }, []);
+
   return (
     <>
       <Logo className="watermark" />
@@ -370,7 +346,6 @@ function RegisterUser() {
                 { value: "8", label: getStates(8) },
                 { value: "9", label: getStates(9) },
                 { value: "10", label: getStates(10) },
-
               ]}
               placeholder="Estado"
               width={'100%'}
@@ -390,16 +365,23 @@ function RegisterUser() {
           </div>
           <div className="vertical-sections" style={{
             alignItems: 'center',
-            borderLeft: "3px solid rgba(255, 193, 35, 1)", borderRight: "3px solid rgba(255, 193, 35, 1)",
+            borderLeft: "3px solid rgba(255, 193, 35, 1)", 
+            borderRight: "3px solid rgba(255, 193, 35, 1)",
             paddingLeft: `${TranslateFigmaCoords.translateFigmaX(25)}`,
             paddingRight: `${TranslateFigmaCoords.translateFigmaX(25)}`,
           }}>
-            <div style={{ height: 'auto',display:'flex',flexDirection:'column' }}>
+            <div style={{ height: 'auto', display: 'flex', flexDirection: 'column' }}>
               <div>
                 <div className="corner-container">
-                  <TextBox name="user-description" placeholder="Ingrese una descripción personal" width={292} height={265} className="corner-visible" onChange={(e) => handleChange("description", e.target.value)} />
+                  <TextBox 
+                    name="user-description" 
+                    placeholder="Ingrese una descripción personal" 
+                    width={292} 
+                    height={265} 
+                    className="corner-visible" 
+                    onChange={(e) => handleChange("description", e.target.value)} 
+                  />
                   <p className="corner-down-right"></p>
-
                 </div>
                 {fieldErrors.description && <span style={{ color: "red" }}>{fieldErrors.description}</span>}
               </div>
@@ -409,43 +391,44 @@ function RegisterUser() {
                 height={215}
                 blocks={blocks}
                 searchData={searchData}
-                etiquetasSeleccionadas={labelsFromSelection}
-                setEtiquetasSeleccionadas={setLabelsFromSelection} 
+                selectedItems={selectedItems}
+                setSelectedItems={setSelectedItems}
                 className="labels-selection"
               />
             </div>
-
           </div>
 
-          <div className="vertical-sections" >
-            <div className="labels-view" >
+          <div className="vertical-sections">
+            <div className="labels-view">
               <div className="view-tabs">
                 {blocks.map((block, index) => (
                   <button
                     type="button"
                     key={index}
-                    className={block.titulo === filtroBloque ? "active-view-tab" : "view-tab"}
-                    onClick={() => setFiltroBloque(block.titulo)}
+                    className={block.titulo === filterBlock ? "active-view-tab" : "view-tab"}
+                    onClick={() => setFilterBlock(block.titulo as "Etiquetas" | "Idiomas")}
                   >
-                    {block.titulo || "Sin Título"}
+                    {block.titulo}
                   </button>
                 ))}
               </div>
               <div className="view-content">
-                {labelsFromSelection.filter(item => item.bloque === filtroBloque).length > 0 ? (
+                {selectedItems.filter(item => item.block === filterBlock).length > 0 ? (
                   <div className="tags-container">
-                    {labelsFromSelection.filter(item => item.bloque === filtroBloque).map((item) => (
-                      <Tag2
-                        key={`${item.etiqueta}-${item.bloque}`}
-                        texto={item.etiqueta}
-                        checkBox={item.valorCheckbox}
-                        onDelete={() => handleDeleteEtiqueta(item.etiqueta, item.bloque)}
-                      />
-                    ))}
+                    {selectedItems
+                      .filter(item => item.block === filterBlock)
+                      .map((item) => (
+                        <Tag2
+                          key={`${item.id}-${item.block}`}
+                          texto={item.name}
+                          checkBox={["Básico", "Intermedio", "Avanzado"][item.level - 1]}
+                          onDelete={() => handleDeleteItem(item.id, item.block)}
+                        />
+                      ))}
                   </div>
                 ) : (
                   <div className="view-empty-message">
-                    Todavía no se han cargado <strong>{filtroBloque}</strong>
+                    Todavía no se han cargado <strong>{filterBlock}</strong>
                   </div>
                 )}
               </div>
@@ -455,7 +438,9 @@ function RegisterUser() {
                 <button
                   type="button"
                   key={`clear-${block.titulo}`}
-                  onClick={() => setLabelsFromSelection(prev => prev.filter(item => item.bloque !== block.titulo))}
+                  onClick={() => setSelectedItems(prev => 
+                    prev.filter(item => item.block !== block.titulo)
+                  )}
                   className="buttons-delete"
                   title={`Eliminar todas las etiquetas de ${block.titulo}`}
                 >
@@ -469,9 +454,12 @@ function RegisterUser() {
             }}>
               Si has rellenado todos los campos necesarios solo queda:
             </span>
-            <ActionButton height={60} text={"Registrarse"} width={100} action={(e) => {
-              handleSubmit(e);
-            }} />
+            <ActionButton 
+              height={60} 
+              text={"Registrarse"} 
+              width={100} 
+              action={handleSubmit} 
+            />
             <div className="delimiter"></div>
             <span className="form-text" style={{ paddingBottom: `${TranslateFigmaCoords.translateFigmaY(17)}` }}>
               Registrarse como <Link to="/register-enterprise" className="golden-link">Empresa</Link><br />
@@ -486,4 +474,3 @@ function RegisterUser() {
 }
 
 export default RegisterUser;
-
