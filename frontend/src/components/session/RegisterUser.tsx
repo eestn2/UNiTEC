@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import '../../styles/SeeEtiquetas.css';
 import Tag2 from "../UI/Tag2";
 import { getStates } from "../../global/function/getStates";
-
+import {sortByName} from "../../global/function/sortByName";
 type SelectedItem = {
   id: number;
   name: string;
@@ -141,6 +141,7 @@ function RegisterUser() {
       tags_levels: tagsData.levels
     };
 
+
     // Validation
     const requiredFields = [
       "name", "birth_date", "email",
@@ -193,7 +194,8 @@ function RegisterUser() {
     try {
       const response = await axios.get('/function/get-languages.php');
       if (response.status === 200 && response.data.status === "success") {
-        setLanguages(response.data.data.languages);
+        setLanguages(sortByName(response.data.data.languages));
+        
       }
     } catch (error) {
       console.error("Error loading languages:", error);
@@ -204,7 +206,7 @@ function RegisterUser() {
     try {
       const response = await axios.get('/function/get-tags.php');
       if (response.status === 200 && response.data.status === "success") {
-        setTags(response.data.data.tags);
+        setTags(sortByName(response.data.data.tags));
       }
     } catch (error) {
       console.error("Error loading tags:", error);

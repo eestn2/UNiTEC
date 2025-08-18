@@ -13,7 +13,7 @@ interface Bloque {
 export interface SelectedItem {
   id: number;
   name: string;
-  block: string;
+  block: "Etiquetas" | "Idiomas";
   level: number;
 }
 
@@ -56,13 +56,15 @@ const LabelsSelection: React.FC<LabelsSelectionProps> = ({
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
 
   const handleAddItem = () => {
-    if (!currentValue.trim() || selectedLevel === null || selectedItemId === null) {
-      alert("Selecciona un nivel, escribe o elige un item de la lista.");
+    if (!currentValue.trim() || selectedLevel === null) {
+      alert("Selecciona un nivel y escribe o elige un item de la lista.");
       return;
     }
 
-    const currentBlock = blocks[activeIndex].titulo;
-    const selectedData = searchData[currentBlock].find(item => item.id === selectedItemId);
+    const currentBlock = blocks[activeIndex].titulo as "Etiquetas" | "Idiomas";
+    const selectedData = searchData[currentBlock].find(item => 
+      item.name.toLowerCase() === currentValue.toLowerCase()
+    );
 
     if (!selectedData) {
       alert("El item seleccionado no es válido.");
@@ -71,7 +73,7 @@ const LabelsSelection: React.FC<LabelsSelectionProps> = ({
 
     // Check if item already exists in this block
     const alreadyExists = selectedItems.some(
-      item => item.id === selectedItemId && item.block === currentBlock
+      item => item.id === selectedData.id && item.block === currentBlock
     );
 
     if (alreadyExists) {
@@ -82,7 +84,7 @@ const LabelsSelection: React.FC<LabelsSelectionProps> = ({
     const newItems = [
       ...selectedItems,
       {
-        id: selectedItemId,
+        id: selectedData.id,
         name: selectedData.name,
         block: currentBlock,
         level: selectedLevel,
