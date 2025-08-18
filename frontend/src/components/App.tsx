@@ -23,6 +23,7 @@ import JobOfferFV from './offers/JobOfferFV';
 import AdminIndex from './admin/AdminIndex';
 import ProfileInfo from './user/ProfileInfo';
 import { ToastManagerProvider } from './UI/ToastManager';
+import PageNotFound from './misc/PageNotFound';
 
 /**
  * The main application component that handles routing and session management.
@@ -108,6 +109,7 @@ function App(): JSX.Element {
               <Route path='/register-enterprise' element={<RegisterEnterprise />} />
               <Route path='/register-user' element={<RegisterUser />} />
               <Route path='/password-reset' element={<ForgotPasswordMail />} />
+              <Route path='*' element={<PageNotFound />} />
             <Route path='/password-reset-code' element={<ForgotPasswordCode />} />
             <Route path='/password-reset-new' element={<ForgotPasswordNewPass />} />
               <Route path='/profile/:id' element={<ProfileInfo />} />
