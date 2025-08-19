@@ -35,11 +35,6 @@ export enum levelEnum {
   Avanzado = 3
 }
 
-const levels: { [key in levelEnum]: string } = {
-  [levelEnum.Basico]: "Básico",
-  [levelEnum.Intermedio]: "Intermedio",
-  [levelEnum.Avanzado]: "Avanzado"
-};
 interface tag {
   name: string;
   level?: levelEnum;
