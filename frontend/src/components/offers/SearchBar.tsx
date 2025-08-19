@@ -58,12 +58,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
     const trimmedVal = val.trim().toLowerCase();
     const filtered = trimmedVal
       ? suggestions.filter(
-          (s) =>
+          (s: SearchItem) =>
             s.name.toLowerCase().includes(trimmedVal) &&
-            !selectedItems.some((item) => item.id === s.id)
+            !selectedItems.some((item: SearchItem) => item.id === s.id)
         )
       : suggestions.filter(
-          (s) => !selectedItems.some((item) => item.id === s.id)
+          (s: SearchItem) => !selectedItems.some((item: SearchItem) => item.id === s.id)
         );
 
     setFilteredSuggestions(filtered);
@@ -135,14 +135,14 @@ const SearchBar: React.FC<SearchBarProps> = ({
     const trimmedVal = value.trim().toLowerCase();
     const filtered = trimmedVal
       ? suggestions.filter(
-          (s) =>
-            s.toLowerCase().includes(trimmedVal) &&
-            !selectedItems.some((item) => item.toLowerCase() === s.toLowerCase())
+          (s: SearchItem) =>
+            s.name.toLowerCase().includes(trimmedVal) &&
+            !selectedItems.some((item: SearchItem) => item.name.toLowerCase() === s.name.toLowerCase())
         )
       : [];
     setFilteredSuggestions(filtered);
     setShowSuggestions(filtered.length > 0);
-  }, [suggestions, selectedItems]);
+  }, [suggestions, selectedItems, value]);
 
   useEffect(() => {
     if (
