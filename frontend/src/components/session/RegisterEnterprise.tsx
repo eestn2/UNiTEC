@@ -203,7 +203,7 @@ const RegisterEnterprise: React.FC = () => {
                         event.preventDefault();
                         const form = document.getElementById("register-enterprise") as HTMLFormElement;
                         if (form) form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
-                        navigate('/');
+
                     }}/>
                     {error}
                     <div className="delimiter"></div>
