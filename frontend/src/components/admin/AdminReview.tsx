@@ -1,137 +1,93 @@
 import { useEffect, useState } from "react";
 import NavBar from "../UI/NavBar";
 import AppWindow from "../UI/AppWindow";
-import ActionButton from "../UI/ActionButton";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
+import ReviewRow from "../UI/admin/ReviewRow";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-type Resenia = {
-  id: string;
-  autorEmail: string;
-  texto: string;
-  tipo: "usuario-a-oferta" | "empresa-a-usuario";
-  empresaEmail?: string;
-  usuarioEmail?: string;
-  tituloOferta?: string;
+type Review = {
+  id: number;
+  reviewed_id: number;
+  user_id: number;
+  user_type: number;
+  user_email?: string;
+  reviewed_email?: string;
+  text?: string;
 };
 
 const AdminReview: React.FC = () => {
-  const [resenias, setResenias] = useState<Resenia[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
+  const navigate = useNavigate();
+    
+  const loadReviews = async () => {
+    try {
+      const response = await axios.get('/admin/get-reviews.php');
+        if (response.status !== 200 || response.data.status !== "success") {
+          console.error("Failed to load reports:", response.data.message);
+        } else {
+          const reviewsList = response.data.data.reviews.map((review: any) => ({
+            id: review.id,
+            reviewed_id: review.reviewed_id,
+            user_id: review.user_id,
+            user_type: review.user_type,
+            user_email: review.user_email,
+            reviewed_email: review.reviewed_email,
+            text: review.text,
+          }));
+          setReviews(reviewsList);
+        }
+    } catch (error) {
+      console.error("An error occurred while loading reports:", error);
+    }
+  };
   useEffect(() => {
-    // Simulación de carga de reseñas
-    const mockResenias: Resenia[] = [
-      {
-        id: "1",
-        autorEmail: "whenHagoUnaReseña@gmail.com",
-        texto: "Lorem ipsum dolor sit amet consectetur. Nulla lorem nec eget vitae feugiat.ghasgdihasGHdghsagdhjgsjhagdjhagsdjhagvsdjhgavsdjhgvasdgvadgvasgdvashvdahgsdvahgvdaghsvdgahsvdghasvdhgvasdghvasghdvaghsvdhgavdgasd",
-        tipo: "usuario-a-oferta",
-        empresaEmail: "empresa@trabajo.si",
-        tituloOferta: "Soy el Título de la Oferta específica",
-      },
-      {
-        id: "2",
-        autorEmail: "empresaReview@gmail.com",
-        texto: "Muy buen candidato, puntual y responsable.",
-        tipo: "empresa-a-usuario",
-        usuarioEmail: "usuarioCandidato@correo.com",
-      },
-            {
-        id: "3",
-        autorEmail: "empresaReview@gmail.com",
-        texto: "Muy buen candidato, puntual y responsable.",
-        tipo: "empresa-a-usuario",
-        usuarioEmail: "usuarioCandidato@correo.com",
-      },
-    ];
-    setResenias(mockResenias);
+    loadReviews();
   }, []);
 
   return (
     <>
       <NavBar />
       <AppWindow
-        height={500}
-        width={1234}
+        height={600}
+        width={1240}
         style={{
           position: "absolute",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
           left: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
           top: `${TranslateFigmaCoords.translateFigmaY(100)}px`,
-          overflowY: "scroll",
         }}
       >
-        <div style={{ padding: 20 }}>
-          <h2 style={{ textAlign: "center", color: "#305894" }}>
-            Reseñas
-          </h2>
-
-          {resenias.map((res) => (
-            <div
-              key={res.id}
-              style={{
-                background: "#fff",
-                margin: "16px 0",
-                borderRadius: 20,
-                padding: 16,
-                display: "flex",
-                justifyContent: "space-between",
-                border: "2px solid #5386FF",
-              }}
-            >
-              {/* Columna: Reseña dejada por */}
-              <div
-                style={{
-                  flex: 1,
-                  marginRight: 16,
-                  background: "#DEE0EB",
-                  borderRadius: 20,
-                  padding: 16,
-                  border: "2px solid #305894",
+        <AppWindow
+          height={487}
+          width={1200}
+          style={{
+            marginTop: `${TranslateFigmaCoords.translateFigmaY(10)}px`,
+            border: `${TranslateFigmaCoords.translateFigmaX(3)}px solid #5386FF`,
+            borderRadius: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
+          }}  > 
+          <div  style={{
+            overflowY: "scroll",
+            height : `${TranslateFigmaCoords.translateFigmaX(487)}px`,
+          }} >
+            {reviews.map((review) => (
+              <ReviewRow
+                key={review.id}
+                reviewerUserId={review.user_id}
+                reviewedUserId={review.reviewed_id}
+                reviewerEmail={review.user_email }
+                reviewedEmail={review.reviewed_email}
+                reviewerUserType ={review.user_type}
+                reviewDescription={review.text}
+                onClickSeeProfile={(userId) => {
+                  navigate(`/profile/${userId}`);
                 }}
-              >
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <p style={{ fontWeight: "bold", margin: 0 }}>{res.autorEmail}</p>
-                  <div style={{ display: "flex", gap: 8 }}>
-                    <ActionButton text="Ver Perfil" />
-                    <ActionButton text="🗑️"  />
-                  </div>
-                </div>
-                <div style={{ marginTop: 10 }}>
-                  <p style={{ margin: 0 }}>{res.texto.slice(0, 100)}...</p>
-                  <ActionButton text="Ver más" style={{ marginTop: 10 }} />
-                </div>
+              />))}
               </div>
-
-              {/* Columna: Oferta o Usuario reseñado */}
-              <div
-                style={{
-                  flex: 1,
-                  background: "#F7F7F7",
-                  borderRadius: 20,
-                  padding: 16,
-                  border: "2px solid #305894",
-                }}
-              >
-                {res.tipo === "usuario-a-oferta" ? (
-                  <>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <p style={{ fontWeight: "bold", margin: 0 }}>{res.empresaEmail}</p>
-                      <ActionButton text="Ver Perfil" />
-                    </div>
-                    <div style={{ marginTop: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <p style={{ margin: 0 }}>{res.tituloOferta}</p>
-                      <ActionButton text="Ver Oferta" />
-                    </div>
-                  </>
-                ) : (
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <p style={{ fontWeight: "bold", margin: 0 }}>{res.usuarioEmail}</p>
-                    <ActionButton text="Ver Perfil" />
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+          </AppWindow>
       </AppWindow>
     </>
   );

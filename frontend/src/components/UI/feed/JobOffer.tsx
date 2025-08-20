@@ -7,6 +7,7 @@
  */
 
 import React, { useState } from "react";
+import axios from "axios";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import AppWindow from "../AppWindow";
 import ActionButton from "../ActionButton";
@@ -16,6 +17,10 @@ import User from "../../session/User";
 import apply_icon from "../../../assets/icons/apply.svg";
 import deapply_icon from "../../../assets/icons/deapply.svg";
 import StateButton from "../StateButton";
+import { UserTypeEnum } from "../../../types/user";
+import { usePostulate } from "../../../hooks/user/usePostulate";
+import ConfirmModal from "../Modals/ConfirmModal";
+import ProfilePicture from "../user/ProfilePicture";
 
 /**
  * Props for the `JobOffer` component.
@@ -25,6 +30,8 @@ import StateButton from "../StateButton";
  * @property {number} authorId - The ID of the author (enterprise user) whose details are displayed.
  * @property {string} title - The title of the job offer.
  * @property {string} description - The description of the job offer.
+ * @property {number} offerId - The ID of the offer
+ * @property {function} [onDelete] - Callback function to be called after successful deletion of the offer.
  * @property {number} [width=10] - The width of the job offer window in Figma coordinates.
  * @property {number} [height=10] - The height of the job offer window in Figma coordinates.
  * @property {React.CSSProperties} [style] - Additional inline styles for the window.
@@ -39,6 +46,10 @@ interface JobOfferProps extends ResponsiveComponent {
     title: string;
     /** The description of the job offer. */
     description: string;
+    /** The ID of the offer */
+    offerId: number;
+    /** Callback for updating states onDelete */
+    onDelete?: (id: number) => void;
 }
 
 /**
@@ -78,6 +89,8 @@ const JobOffer: React.FC<JobOfferProps> = ({
     title,
     description,
     style,
+    offerId,
+    onDelete,
     className,
     vertical = false,
 }) => {
@@ -94,31 +107,77 @@ const JobOffer: React.FC<JobOfferProps> = ({
         translateX,
         translateY,
     } = useJobOffer({ height, width, authorId, description, vertical });
-    const [placeholderApplyState, setPlaceholderApplyState] = useState(false);
-    let extraButton: React.ReactNode = undefined;
-    if (![1, 4].includes(User.data.type as number)) {
-        extraButton = <StateButton 
-        trueIcon={apply_icon}
-        falseIcon={deapply_icon}
-        trueText="Postularse"
-        falseText="Despostularse"
-        state = {placeholderApplyState}
-        setState = {setPlaceholderApplyState}
-        action={() => {
-            if (placeholderApplyState) {
-                // Logic to deapply
-                console.log("Despostularse clicked");
-                return;
+
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const handleDelete = async () => {
+        try {
+            const response = await axios.delete("/enterprise/delete-offer.php", {
+                data: { id: offerId },
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const result = response.data;
+            if (result.status === "success") {
+                alert("Oferta eliminada con éxito.");
+                if (onDelete) onDelete(offerId);
+                setShowDeleteConfirm(false);
+            } else {
+                alert(result.message);
             }
-            // Logic to apply
-            console.log("Postularse clicked");
-        }}
-        />                    
-    } else if (User.data.type === 1 && User.data.id === authorId) {
-        extraButton = <ActionButton text="Borrar" />;
+        } catch {
+            alert("Error de red al eliminar la oferta.");
+        }
+    };
+
+
+
+    let extraButton: React.ReactNode = undefined;
+    const { postulated, setPostulated, postulate, depostulate, loading } = usePostulate(offerId);
+    if (![UserTypeEnum.Empresa, UserTypeEnum.Administrador].includes(User.data.type)) {
+        if (loading || typeof postulated === 'undefined') {
+            extraButton = (
+                <ActionButton
+                    text="Cargando..."
+                    height={45}
+                    width={140}
+                    style={{ fontWeight: 600, backgroundColor: 'white', color: '#888', border: '2px solid #ccc', cursor: 'not-allowed' }}
+                />
+            );
+        } else {
+            extraButton = (
+                <StateButton
+                    trueIcon={apply_icon}
+                    falseIcon={deapply_icon}
+                    trueText="Postularse"
+                    falseText="Despostularse"
+                    state={postulated}
+                    setState={setPostulated}
+                    action={() => {
+                        if (postulated) {
+                            depostulate();
+                            return;
+                        }
+                        postulate();
+                    }}
+                />
+            );
+        }
+    } else if (User.data.type === UserTypeEnum.Empresa && User.data.id === authorId) {
+        extraButton = <ActionButton
+                height={40}
+                style={{
+                    backgroundColor: "var(--danger)",
+                    fontWeight: 500,
+                    marginRight: 10,
+                }}
+                text="Borrar"
+                action={() => setShowDeleteConfirm(true)}
+            />
     }
 
     return (
+        <>
         <div
             className={`job-offer ${className || ""}`}
             style={{
@@ -151,7 +210,7 @@ const JobOffer: React.FC<JobOfferProps> = ({
                         alignItems: "center",
                     }}
                 >
-                    <div className="profile-pic"></div>
+                    <ProfilePicture userId={authorId} size={35} />
                     {author.name}
                     <div className="job-offer-buttons" style={{position: "absolute", right: translateX(2)}}>
                         {extraButton ? extraButton : null}
@@ -199,7 +258,18 @@ const JobOffer: React.FC<JobOfferProps> = ({
                 ) : null}
             </AppWindow>
         </div>
-    );
+        {showDeleteConfirm && (
+        <ConfirmModal
+            title="Confirmar eliminación"
+            message="¿Estás seguro de que deseas eliminar esta oferta?"
+            onAccept={handleDelete}
+            onReject={() => setShowDeleteConfirm(false)}
+            onClose={() => setShowDeleteConfirm(false)}
+        />
+        )}
+    </>
+    )
 };
+
 
 export default JobOffer;

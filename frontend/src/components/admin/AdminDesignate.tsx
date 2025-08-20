@@ -5,6 +5,7 @@ import axios from "axios";
 import ActionButton from "../UI/ActionButton";
 import SearchBar from "../UI/admin/SearchBar";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
+import ProfilePicture from "../UI/user/ProfilePicture";
 
 const AdminDesignate: React.FC = () => {
     type Admin = {
@@ -16,8 +17,7 @@ const AdminDesignate: React.FC = () => {
     const [suggestions, setSuggestions] = useState<string[]>([]);
     const loadAdmins = async () => {
       try {
-        const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-        const response = await axios.get(`${apiUrl}/admin/get-admins.php`,
+        const response = await axios.get('/admin/get-admins.php',
           {withCredentials: true,});
 
         if (response.status !== 200 || response.data.status !== "success") {
@@ -28,6 +28,7 @@ const AdminDesignate: React.FC = () => {
             email: admin.email,
             name: admin.name,
           }));
+          console.log("Admins loaded successfully:", response.data.data.admins);
           setAdmins(adminsList);
         }
       } catch (error) {
@@ -35,8 +36,7 @@ const AdminDesignate: React.FC = () => {
       }
     };
     const handleAdd = async (attribute: string) => {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.post(`${apiUrl}/admin/add_admin.php`, {
+      const response = await axios.post('/admin/add_admin.php', {
           admin_email:attribute,
           withCredentials: true,
       });
@@ -45,8 +45,7 @@ const AdminDesignate: React.FC = () => {
    };
 
     const handleRemove = async (id: number) => {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.delete(`${apiUrl}/admin/delete_admin.php`, {
+      const response = await axios.delete('/admin/delete_user.php', {
           data:{
             id:id,}
       }); 
@@ -59,8 +58,7 @@ const AdminDesignate: React.FC = () => {
         return;
       }
       try {
-        const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-        const response = await axios.get(`${apiUrl}/admin/get-users-by-email.php`, {
+        const response = await axios.get('/admin/get-users-by-email.php', {
           params: { email: input },
           withCredentials: true,
         });
@@ -111,7 +109,11 @@ const AdminDesignate: React.FC = () => {
           marginTop: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
           overflowY: "scroll",
           maxHeight: `${TranslateFigmaCoords.translateFigmaX(200)}px`}}>
-        {admins.map((admin) => (
+          {admins.length === 0 ? (
+            <p style={{ textAlign: 'center', color:"#305894" }}>No hay admins aparte de usted.</p>
+        ) : (
+
+        admins.map((admin) => (
           <div
             key={admin.id}
             style={{
@@ -124,7 +126,7 @@ const AdminDesignate: React.FC = () => {
               borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
             }}
           >
-            <span>{admin.name} ({admin.email})</span>
+            <span> <ProfilePicture userId={admin.id as number} size={30} vertical={window.innerWidth > window.innerHeight}></ProfilePicture> {admin.name} ({admin.email})</span>
             <ActionButton
               style={{
                 backgroundColor: "#D43D3D",
@@ -140,7 +142,9 @@ const AdminDesignate: React.FC = () => {
               handleRemove(admin.id);}}>
             </ActionButton>
           </div>
-        ))}
+        ))
+      )}
+         
         </div>
       </AppWindow>
     </div>

@@ -11,7 +11,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import FeedBox from './feed/FeedBox';
 import Login from './session/Login';
 import RegisterEnterprise from './session/RegisterEnterprise';
-import ForgotPassword from './session/ForgotPassword';
+import ForgotPasswordMail from './session/ForgotPasswordComponents/ForgotPasswordMailVerification';
+import ForgotPasswordCode from './session/ForgotPasswordComponents/ForgotPasswordCodeVerification';
+import ForgotPasswordNewPass from './session/ForgotPasswordComponents/ForgotPasswordNewPassword';
 import RegisterUser from './session/RegisterUser';
 import axios from 'axios';
 import User from './session/User';
@@ -20,6 +22,15 @@ import { JSX } from 'react';
 import JobOfferFV from './offers/JobOfferFV';
 import AdminIndex from './admin/AdminIndex';
 import ProfileInfo from './user/ProfileInfo';
+import { ToastManagerProvider } from './UI/ToastManager';
+import { useEffect, useState } from 'react';
+import PublishOffer from './offers/PublishOffer';
+import SeeApplicants from './offers/SeeApplicants';
+import SendEmail from './offers/SendEmail';
+import { useWindowSize } from '../hooks/responsive/useWindowSize';
+import LoadingScreen from './UI/LoadingScreens/LoadingScreen';
+import type { user } from '../types/user';
+import EditProfile from './user/EditProfile';
 
 /**
  * The main application component that handles routing and session management.
@@ -36,13 +47,10 @@ import ProfileInfo from './user/ProfileInfo';
  * @Author: Haziel Magallanes
  */
 
-import { useEffect, useState } from 'react';
-import PublishOffer from './offers/PublishOffer';
-import SeeApplicants from './offers/SeeApplicants';
-import { useWindowSize } from '../hooks/responsive/useWindowSize';
-
 function App(): JSX.Element {
   // Axios configs
+  window.scrollTo(0, 0);
+
   axios.defaults.baseURL = import.meta.env.DEV ? import.meta.env.VITE_API_URL_DEV : import.meta.env.VITE_API_URL_PROD;
   axios.defaults.headers.common['Content-Type'] = 'application/json';
   axios.defaults.withCredentials = true;
@@ -51,8 +59,8 @@ function App(): JSX.Element {
     return config;
   });
 
-  const [session, setSession] = useState<Record<string, unknown> | null | undefined>(undefined);
-  const [loading, setLoading] = useState(true);
+  const [session, setSession] = useState<boolean>(false);
+  const [gettingSession, setGettingSession] = useState(true);
   const windowSize = useWindowSize();
   if (import.meta.env.DEV) {
     console.log("Window size changed to: ", windowSize, ", re-rendering...");
@@ -61,41 +69,47 @@ function App(): JSX.Element {
     // Check session from server
     axios.get('/session/me.php')
       .then(res => {
-        if (res.data.status === 'success' && res.data.data && res.data.data.user) {
-          User.set(res.data.data.user);
-          setSession(res.data.data.user);
-        } else {
-          setSession(null);
+        if (res.data.status === 'success' && res.data.data && res.data.data.user as user) {
+          User.set(res.data.data.user as user);
+          setSession(true);
         }
       })
-      .catch(() => setSession(null))
-      .finally(() => setLoading(false));
-  }, []);
+      .catch(() => setSession(false))
+      .finally(() => setGettingSession(false));
+  }, []); 
 
-  if (loading) return <div>Tenemos que hacer una pantallita de carga...</div>;
+  if (gettingSession ) {
+    return <div className='app-content'><LoadingScreen /></div>;
+  }
   // Browser routings
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <div className="app-content">
-        <BrowserRouter basename="/">
-          <Routes>
-            <Route path='/' element={!session ? <Login /> : <FeedBox />} />
-            <Route path='/test' element={<FeedBox />} />
-            <Route path='/register-enterprise' element={<RegisterEnterprise />} />
-            <Route path='/register-user' element={<RegisterUser />} />
-            <Route path='/password-reset' element={<ForgotPassword />} />
-            <Route path='/profile/:id' element={<ProfileInfo />} />
-            {/*Add default admin-menu route to the approve users one. */}
-            <Route path='/admin-menu/:panel' element={<AdminIndex />} />
-            <Route path="/job-offer/:offerId" element={<JobOfferFV />} />
-            <Route path="/job-offer/:offerId/:message/:type" element={<JobOfferFV />} />
-            <Route path="/publish-offer" element={<PublishOffer />} />
-            <Route path="/see-applicants" element={<SeeApplicants />} />
+    <ToastManagerProvider>
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <div className="app-content">
+          <BrowserRouter basename="/UNiTEC/">
+            <Routes>
+              <Route path='/' element={!session ? <Login /> : <FeedBox />} />
+              <Route path='/test' element={<FeedBox />} />
+              <Route path='/register-enterprise' element={<RegisterEnterprise />} />
+              <Route path='/register-user' element={<RegisterUser />} />
+              <Route path='/password-reset' element={<ForgotPasswordMail />} />
+              <Route path='/password-reset-code' element={<ForgotPasswordCode />} />
+              <Route path='/password-reset-new' element={<ForgotPasswordNewPass />} />
+              <Route path='/profile/:id' element={<ProfileInfo />} />
+              <Route path='/edit-profile' element={<EditProfile />} />
+              {/*Add default admin-menu route to the approve users one. */}
+              <Route path='/admin-menu/:panel' element={<AdminIndex />} />
+              <Route path="/job-offer/:offerId" element={<JobOfferFV />} />
+              <Route path="/job-offer/:offerId/:message/:type" element={<JobOfferFV />} />
+              <Route path="/publish-offer" element={<PublishOffer />} />
+              <Route path="/see-applicants" element={<SeeApplicants />} />
+              <Route path="/send-email" element={<SendEmail />} /> 
           </Routes>
-        </BrowserRouter>
+          </BrowserRouter>
+        </div>
+        <Footer/>
       </div>
-      <Footer />
-    </div>
+    </ToastManagerProvider>
   );
 }
 

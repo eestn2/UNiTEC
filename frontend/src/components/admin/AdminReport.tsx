@@ -3,30 +3,76 @@ import NavBar from "../UI/NavBar";
 import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import ReportRow from "../UI/admin/ReportRow";
+import axios from "axios";
+import { getReportReason } from "../../global/function/getReportReason";
+import { useNavigate } from "react-router-dom";
 
 interface Report {
   id: number;
-  reportedUser: string;
-  reportingUser: string;
+  reported_id: number;
+  reported_email: string;
+  reporter_id: number;
+  reporter_email: string;
+  reason: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 }
 
 const AdminReport: React.FC = () => {
 
-
   const [reports, setReports] = useState<Report[]>([]);
+  const navigate = useNavigate();
+    
+  const loadReports = async () => {
+    try {
+      const response = await axios.get('/admin/get-reports.php');
+        if (response.status !== 200 || response.data.status !== "success") {
+          console.error("Failed to load reports:", response.data.message);
+        } else {
+          const reportsList = response.data.data.reports.map((report: any) => ({
+            id: report.id,
+            reported_id: report.reported_id,
+            reporter_id: report.reporter_id,
+            reported_email: report.reported_email,
+            reporter_email: report.reporter_email,
+            reason: report.reason,
+          }));
+          setReports(reportsList);
+        }
+    } catch (error) {
+      console.error("An error occurred while loading reports:", error);
+    }
+  };
+
+  const handleDiscardReport = async (id: number) => {
+      const response = await axios.delete('/admin/delete_report.php', {
+        data :{id :id  }
+      })
+      if (response.status !== 200 || response.data.status !== "success") {
+        console.error("Failed to discard report:", response.data.message);
+      } else {
+        console.log("Report discarded successfully:", response.data.message);
+        await loadReports(); 
+      }
+
+  }
+
+  const handleBanUser = async ( reportedId: number ,id: number) => {
+      const response = await axios.delete('/admin/ban_user.php', {
+        data :{
+          reportId: id,
+          id :reportedId  }
+      })
+      if (response.status !== 200 || response.data.status !== "success") {
+        console.error("Failed to discard report:", response.data.message);
+      } else {
+        console.log("Report discarded successfully:", response.data.message);
+        await loadReports(); 
+      }
+  }
+
 
   useEffect(() => {
-    const mockData: Report[] = [
-      {
-        id: 1,
-        reportedUser: "usuarioInfractor@gmail.com",
-        reportingUser: "reporter@example.com",
-      },
-    ];
-    setReports(mockData);
-    // make the compiler stop bitching about the unused variable
-    console.log(reports);
-  }, [reports]);
+    loadReports();
+  }, []);
 
   return (
     <div>
@@ -52,22 +98,46 @@ const AdminReport: React.FC = () => {
         <div
           style={{
             display: "flex",
-            fontWeight: "bold",
-            margin: "10px 20px",
-            padding: "10px",
-            border: "2px solid #87a5f8",
-            borderRadius: "10px",
-            backgroundColor: "#d9e3ff",
+            fontWeight: "semibold",
+            margin: `${TranslateFigmaCoords.translateFigmaX(10)}px ${TranslateFigmaCoords.translateFigmaX(20)}px`,
+            padding: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
+            border: `${TranslateFigmaCoords.translateFigmaX(3)}px solid #5386FF`,
+            borderRadius: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
+            backgroundColor: "#DEE0EB",
           }}
         >
-          <div style={{ width: "50%", textAlign:"center" }}>Usuario reportado</div>
-          <div style={{ width: "50%", textAlign:"center" }}>Usuario que reporta</div>
+          <div style={{ width: "50%", textAlign:"center", color:"#6F88B3" }}>Usuario reportado</div>
+          <div style={{ width: "50%", textAlign:"center", color:"#6F88B3",}}>Usuario que reporta</div>
         </div>
-        <ReportRow>
-          
-        </ReportRow>
+         {reports.length === 0 ? (
+            <p style={{ textAlign: 'center', color:"#305894" }}>No hay reportes.</p>
+        ) : (
 
-        
+        reports.map((report) => (
+          <ReportRow
+            key={report.id}
+            id={report.id}
+            reportedUserId={report.reported_id}
+            reporterUserId={report.reporter_id}
+            reportedEmail={report.reported_email}
+            reporterEmail={report.reporter_email}
+            reportDescription={getReportReason(report.reason)}
+            onClickSeeProfile={(userId) => {
+              navigate(`/profile/${userId}`);
+            }}
+            onClickBan={(reportedId, id) => {
+               handleBanUser(reportedId, id);
+              alert(`Baneando al usuario con ID: ${reportedId}`);
+            }}
+            onClickDiscard={(Id) => {
+              
+              handleDiscardReport(Id);
+             
+              alert(`Descartando reporte`);
+            }}
+          />
+        ))
+      )}
       </AppWindow>
     </div>
   );

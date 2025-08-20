@@ -2,7 +2,7 @@
 /**
  * @file accept-application.php
  * @description API endpoint for enterprises to accept a job application (postulante).
- * Handles PUT requests, verifies permissions, checks application ownership, and updates applicant status.
+ * Handles PUT requests, verifies permissions, checks application ownership, and updates applicant `status`.
  * Ensures only enterprise users (user_type_id = 1) can accept applicants for their own job offers.
  * Rolls back on failure and returns a standardized JSON response.
  * @author Federico Nicolás Martínez
@@ -12,27 +12,29 @@
  *   Send a PUT request with JSON body containing:
  *     - creator_id: (int) ID of the enterprise user (must be the creator of the offer)
  *     - user_id: (int) ID of the applicant to accept
- *     - application_id: (int) ID of the job offer
+ *     - offer_id: (int) ID of the job offer
  *
  * Example:
  *   PUT /src/API/requests/enterprise/accept-application.php
- *   Body: { "creator_id": 5, "user_id": 12, "application_id": 7 }
- *   Response: { "status": "success", "message": "Postulante aceptado con éxito.", "data": null }
+ *   Body: { "creator_id": 5, "user_id": 12, "offer_id": 7 }
+ *   Response: { "`status`": "success", "message": "Postulante aceptado con éxito.", "data": null }
  */
 
+session_start();
 require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
+require_once __DIR__ . '/../../logic/notifications/send_notification.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "PUT") return_response("failed", "Metodo no permitido.", null);
+if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
+
+$creator_id = intval($_SESSION['user']['id']);
 $data = json_decode(file_get_contents("php://input"));
 
-if (!isset($data->creator_id) || !isset($data->user_id) || !isset($data->application_id)) return_response("failed", "Faltan datos obligatorios.", null);
-
-$creator_id = intval($data->creator_id);
+if (!isset($data->user_id) || !isset($data->offer_id)) return_response("failed", "Faltan datos obligatorios.", null);
 $user_id = intval($data->user_id);
-$application_id = intval($data->application_id);
-$accepted_status_id = 1; //Acepted
+$offer_id = intval($data->offer_id);
 
 try{
     $connection->beginTransaction();
@@ -46,8 +48,8 @@ try{
     }
 
     // Verificar que esa oferta fue creada por esa empresa
-    $stmt = $connection->prepare("SELECT * FROM applications WHERE id = :application_id AND creator_id = :creator_id");
-    $stmt->bindParam(':application_id', $application_id, PDO::PARAM_INT);
+    $stmt = $connection->prepare("SELECT * FROM offers WHERE id = :offer_id AND creator_id = :creator_id");
+    $stmt->bindParam(':offer_id', $offer_id, PDO::PARAM_INT);
     $stmt->bindParam(':creator_id', $creator_id, PDO::PARAM_INT);
     $stmt->execute();
     $application = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -55,15 +57,22 @@ try{
         return_response("failed", "No se encontró la oferta de trabajo o no pertenece al usuario.", null);
     }
 
+    
     // Actualizar estado del postulante
-    $stmt = $connection->prepare("UPDATE applicants SET status_id = :status_id WHERE user_id = :user_id AND application_id = :application_id");
-    $stmt->bindParam(':status_id', $accepted_status_id, PDO::PARAM_INT);
+    
+    $stmt = $connection->prepare("UPDATE applicants SET `status` = 1 WHERE user_id = :user_id AND offer_id = :offer_id");
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->bindParam(':application_id', $application_id, PDO::PARAM_INT);
+    $stmt->bindParam(':offer_id', $offer_id, PDO::PARAM_INT);
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
         $connection->commit();
+        send_notification(
+            $connection,
+            NotificationType::APPLICATION_ACCEPTED,
+            $user_id,
+            ['offer_id' => $offer_id]
+        );
         return_response("success", "Postulante aceptado con éxito.", null);
     } else {
         $connection->rollBack();

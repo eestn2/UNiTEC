@@ -25,17 +25,17 @@ require_once __DIR__ . '/../../logic/security/security_functions.php';
 if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
 
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($data->email) || !isset($data->password)) return_response("failed", "Faltan datos.", null);
+if (!isset($data->email) || !isset($data->password) || $data -> user_type===0 || $data -> status_id===0)  return_response("failed", "Faltan datos.", null);
 
 // Assign request body values to variables
 $name = $data->name ?? null;
-$user_age = date('Y-m-d H:i:s');
-$user_location = "notEnabledFunctionality";
+$user_age = $data->birth_date ?? date('Y-m-d H:i:s');
+$user_location = "" . ($data->location ?? null);
 $user_email = $data->email;
 $user_password = password_hash($data->password, PASSWORD_DEFAULT);
 $user_description = $data->description ?? null;
 $user_last_update_date = date('Y-m-d H:i:s');
-$user_profile_picture = " ";
+$user_profile_picture = '';
 $user_portfolio = $data->portfolio ?? null;
 $user_is_enabled = 0; // Default to disabled until approved
 $user_rol = isset($data->user_type) ? intval($data->user_type) : 2; // Default to student
@@ -53,7 +53,6 @@ function log_debug($msg) {
 }
 
 log_debug('Request received: ' . json_encode($data));
-
 try {
     $connection->beginTransaction();
     log_debug('Transaction started');
@@ -80,7 +79,7 @@ try {
     if ($user_rol !== 1) {
         // Insert user languages
         if (!empty($user_languages) && !empty($knownLanguagesWithLevels)) {
-            $stmt = $connection->prepare("INSERT INTO user_languages (user_id, language_id, level_id) VALUES (?, ?, ?)");
+            $stmt = $connection->prepare("INSERT INTO user_languages (user_id, language_id, `level`) VALUES (?, ?, ?)");
             foreach ($user_languages as $i => $lang_id) {
                 $level_id = $knownLanguagesWithLevels[$i] ?? null;
                 if ($level_id !== null) {
@@ -92,7 +91,7 @@ try {
 
         // Insert user tags
         if (!empty($user_tags) && !empty($tags_levels)) {
-            $stmt = $connection->prepare("INSERT INTO user_tags (user_id, tag_id, level_id) VALUES (?, ?, ?)");
+            $stmt = $connection->prepare("INSERT INTO user_tags (user_id, tag_id, `level`) VALUES (?, ?, ?)");
             foreach ($user_tags as $i => $tag_id) {
                 $level_id = $tags_levels[$i] ?? null;
                 if ($level_id !== null) {
@@ -109,7 +108,7 @@ try {
     log_debug('Transaction committed');
 
     // Send confirmation email (server-side, secure)
-    require_once __DIR__ . '/../../logic/send_email.php';
+    require_once __DIR__ . '/../../logic/communications/send_email.php';
     $email_subject = 'Registro en espera';
     $email_message = '¡Hola!, tu registro se ha cargado con éxito, debe esperar a que un administrador acepte su solicitud para poder utilizar nuestro software. Ten paciencia.<br><br>Gracias por registrarte en UNITEC.';
     $send_result = send_email($user_email, $email_subject, $email_message);
@@ -147,8 +146,9 @@ try {
 
     return_response("success", "Usuario registrado correctamente. Debe esperar aprobación.", null);
 } catch (Exception $e) {
-    $connection->rollBack();
-    log_debug('Exception: ' . $e->getMessage());
-    return_response("failed", "Ocurrió un error: " . $e->getMessage(), null);
+/*     $connection->rollBack();
+    log_debug('Transaction rolled back'); */
+    error_log('Exception: ' . $e->getMessage());
+    return_response("failed", "Ocurrió un error: No se pudo registrar al usuario" );
 }
 ?>

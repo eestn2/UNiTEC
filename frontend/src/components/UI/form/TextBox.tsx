@@ -26,6 +26,12 @@ interface TextBoxProps extends ResponsiveComponent {
     placeholder: string;
     /*** Change event handler for the TextArea. */
     onChange?: ChangeEventHandler<HTMLTextAreaElement>;
+    /*** The value of the TextArea for controlled input. */
+    value?: string;
+    /*** Custom styles for the TextArea. */
+    style?: React.CSSProperties;
+    /*** Custom CSS classes for the TextArea. */
+    className?: string;
 }
 
 /**
@@ -40,6 +46,7 @@ interface TextBoxProps extends ResponsiveComponent {
  * @param {React.CSSProperties} style - The inline styles to be applied to the text area.
  * @param {string} className - The custom CSS classes to be applied to the text area.
  * @param {ChangeEventHandler<HTMLTextAreaElement>} onChange - The event handler for changes in the text area.
+ * @param {string} value - The value of the text area for controlled input.
  * @returns {JSX.Element} - The TextBox component.
  * 
  * @example
@@ -53,8 +60,8 @@ interface TextBoxProps extends ResponsiveComponent {
  * 
  * @author Daviel Díaz Gonzáles
  */
-const TextBox: React.FC<TextBoxProps> = ({ width = 50, height = 10, name, placeholder = "Text Box", vertical = false, style, className, onChange }) => {
-    const { finalHeight, finalWidth, translateX } = useResponsiveDimensions({
+const TextBox: React.FC<TextBoxProps> = ({ width = 50, height = 10, name, placeholder = "Text Box", vertical = false, style, className, onChange, value }) => {
+    const { finalWidth, finalHeight, translateX } = useResponsiveDimensions({
         height,
         width,
         vertical
@@ -63,16 +70,20 @@ const TextBox: React.FC<TextBoxProps> = ({ width = 50, height = 10, name, placeh
     return (
         <textarea
             style={{
-                width: finalWidth,
+                width: finalWidth, // Allow textarea to fill parent and wrap
+                maxWidth: finalWidth,
                 height: finalHeight,
                 paddingLeft: `${translateX(18)}px`,
                 paddingTop: `${translateX(14)}px`,
+                overflowWrap: "anywhere",
                 ...style,
             }}
             name={name}
             placeholder={placeholder}
             className={`input-field ${className || ""}`} // Reuse the same class as InputField
             onChange={onChange} // Pass the onChange handler to the textarea
+            value={value} // Pass the value prop to the textarea for controlled input
+            wrap="soft" // Ensures text wraps within the textarea
         />
     );
 };

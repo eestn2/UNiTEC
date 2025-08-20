@@ -29,13 +29,36 @@ export type user = {
     /** The user's location (e.g., city, country). */
     location: string;
     /** The user's current status (e.g., "active", "inactive"). */
-    status: string;
+    status: UserStatusEnum
     /** The user's description or bio. */
     description: string;
     /** The user's portfolio or website URL. */
     portfolio: string;
     /** The user's role (e.g., "student", "enterprise", "admin"). */
-    type: string;
+    type: UserTypeEnum;
     /** Optional URL to the user's profile picture. */
     profile_picture?: string;
 };
+/** Enum de estados de usuario, 0 = Estudiando, 1 = Buscando trabajo, 2 = Trabajando, 3 = Egresado */
+export enum UserStatusEnum {
+    BuscandoBeca = 1,
+    TrabajandoNoDisponible = 2,
+    TrabajandoDisponible = 3,
+    NoDisponible = 4,
+    Disponible = 5,
+    EstudiandoDisponible = 6,
+    EstudiandoNoDisponible = 7,
+    EstudiandoBuscandoBeca = 8,
+    TrabajandoBuscandoBeca = 9,
+    Otro = 10
+};
+
+
+/** Enum de tipos de usuario 0 = Empresa, 1 = Estudiante, 2 = Egresado, 3 = Administrador. */
+export enum UserTypeEnum {
+    Empresa = 1,
+    Estudiante = 2,
+    Egresado = 3,
+    Administrador = 4
+}
+export default user;

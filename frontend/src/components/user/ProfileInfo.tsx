@@ -7,76 +7,110 @@
  * @date May 20, 2025
  */
 
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import AppWindow from '../UI/AppWindow';
 import ActionButton from '../UI/ActionButton';
-import TranslateFigmaCoords from '../../global/function/TranslateFigmaCoords';
 import reportIcon from '../../assets/icons/report.svg';
 import Logo from '../UI/unitec/Logo';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { user as UserType } from '../../types/user';
 import default_profile from '../../assets/defaults/profile-picture/1.svg';
+import User from '../session/User';
+import { getTranslates } from '../../global/function/getTranslates';
+import getUserStatus from '../../global/function/getUserStatus';
+import getUserType from '../../global/function/getUserType';
+import TagList, { Tag } from '../UI/Tags/TagList';
+import useNotImplementedToast from '../../hooks/UI/useNotImplementedToast';
+import { UserTypeEnum } from '../../types/user';
+
+import '../../styles/profile-info.css';
+import LoadingScreen from '../UI/LoadingScreens/LoadingScreen';
 
 // Add types for tags and languages
+
+export enum levelEnum {
+  Basico = 1,
+  Intermedio = 2,
+  Avanzado = 3
+}
+
 interface tag {
   name: string;
-  level?: 'Básico' | 'Intermedio' | 'Avanzado';
+  level?: levelEnum;
 }
 interface Language {
   name: string;
-  level?: 'Básico' | 'Intermedio' | 'Avanzado';
+  level?: levelEnum;
 }
-
-const LEVELS = ['Básico', 'Intermedio', 'Avanzado'] as const;
-
-type Level = typeof LEVELS[number];
-
-const groupByLevel = <T extends { level?: Level }>(items: T[]): Record<Level, T[]> => {
-  return LEVELS.reduce((acc, level) => {
-    acc[level] = items.filter(item => item.level === level);
-    return acc;
-  }, {} as Record<Level, T[]>);
-};
 
 const ProfileInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const isUserProfile = id === User.data.id.toString();
   const [userData, setUserData] = useState<UserType & {
     tags?: tag[];
     languages?: Language[];
-  } | null>(null);
-
+  }>();
+  const navigate = useNavigate();
+  const showNotImplementedToast = useNotImplementedToast();
   useEffect(() => {
-    if (!id) return;
-    axios.get(`/user/user-info.php?id=${id}`)
-      .then(res => {
-        if (res.data.status === "success") {
-          setUserData(res.data.data.user);
-        }
-      });
-  }, [id]);
+  if (!id) return;
+  axios.get(`/user/user-info.php?id=${id}`)
+    .then((res) => {
+      const user = res?.data?.data?.user;
+      if (!user) return;
 
+      // Prefix portfolio only if present and missing protocol
+      if (typeof user.portfolio === 'string' && user.portfolio.length > 0 && !/^https?:\/\//i.test(user.portfolio)) {
+        user.portfolio = `http://${user.portfolio}`;
+      }
+
+      setUserData(user);
+    })
+    .catch((err) => {
+      console.error("Failed to load user-info", err);
+    });
+
+  }, [id]);
+const normalize = (arr: unknown): Tag[] => {
+  if (!Array.isArray(arr)) return [];
+  return arr
+    .map((item: any) => {
+      if (Array.isArray(item)) {
+        const [name, level] = item;
+        return {
+          name: String(name ?? ""),
+          level: level != null ? (Number(level) as 1 | 2 | 3) : undefined,
+        };
+      }
+      return {
+        name: String(item?.name ?? ""),
+        level: item?.level != null ? (Number(item.level) as 1 | 2 | 3) : undefined,
+      };
+    })
+    .filter((t) => t.name.length > 0);
+};
   // Example handlers
   const handleEditProfile = () => {
-    console.log("Edit profile clicked");
+    navigate('/edit-profile');
   };
 
   const handleChangePassword = () => {
-    console.log("Change password clicked");
+    navigate('/password-reset');
   };
 
-const handleLogout = async () => {
-  try {
-    await axios.get('/session/logout.php', { withCredentials: true });
-    window.location.href = `/`;
-  } catch (error) {
-    alert("Error al cerrar sesión. Por favor, inténtalo de nuevo.");
-    console.error("Logout failed:", error);
-  }
-};
+  const handleLogout = async () => {
+    try {
+      await axios.get('/session/logout.php', { withCredentials: true });
+      window.location.href = `/`;
+    } catch (error) {
+      alert("Error al cerrar sesión. Por favor, inténtalo de nuevo.");
+      console.error("Logout failed:", error);
+    }
+  };
 
   const handleDeleteAccount = () => {
-    console.log("Delete account clicked");
+    showNotImplementedToast();
   };
 
   const handleReport = () => {
@@ -84,270 +118,264 @@ const handleLogout = async () => {
   };
 
   // Group tags and languages by level
-  const tagsByLevel = groupByLevel(userData?.tags || ["Ejemplo 1", "Ejemplo 2", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", "Lorem", ].map(tag => ({ name: tag, level: 'Básico' })));
-  // For demonstration, using static tags if userData is not available
-  /* const languagesByLevel = groupByLevel(userData?.languages || ["Español", "Inglés"].map(language => ({ name: language, level: 'Intermedio' }))); */
+ const tags: Tag[] = normalize(userData?.tags || []);
+const languages: Tag[] = normalize(userData?.languages || []);
   // For demonstration, using static languages if userData is not available
   const isPortrait = window.innerHeight > window.innerWidth;
-  const windowWidth = window.innerWidth > window.innerHeight ? 980 : 1120;
+  const windowWidth = window.innerWidth > window.innerHeight ? 980 : 1280;
+
+  // Get translate functions based on orientation
+  const [translateX, translateY] = getTranslates(isPortrait);
+  const isEmpresaOrAdmin = userData?.type === UserTypeEnum.Empresa || userData?.type === UserTypeEnum.Administrador;
 
   // State for selected language
-/*   const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null);
-  const selectedLanguageLevel = selectedLanguage?.level; */
+  /*   const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null);
+    const selectedLanguageLevel = selectedLanguage?.level; */
   // State for selected tag
   const [selectedTag, setSelectedTag] = useState<tag | null>(null);
-  const selectedTagLevel = selectedTag?.level;
-
+  const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null);
+  if (!userData) {
+    return <LoadingScreen />;
+  }
   return (
     <div>
-      <Logo className='watermark'/>
+      <Logo className='watermark' />
       <AppWindow
-        width={windowWidth}
+        width={isEmpresaOrAdmin ? 600 : windowWidth}
         height={isPortrait ? undefined : 680}
         className='centered-w-wm flex-column'
         style={{
-          padding: TranslateFigmaCoords.translateFigmaY(10),
-          paddingBottom: TranslateFigmaCoords.translateFigmaY(10),
-          minHeight: TranslateFigmaCoords.translateFigmaY(isPortrait ? 680 : 620),
-          rowGap: TranslateFigmaCoords.translateFigmaY(16),
+          ...isEmpresaOrAdmin ? { transform: 'translate(20%, -50%)' } : {},
+          padding: translateY(10),
+          paddingBottom: translateY(10),
+          minHeight: translateY(isPortrait ? 680 : 620),
           height: 'fit-content',
         }}
       >
         {/* Header */}
-        <div className="flex-row-reversed" style={{width: "100%", height: TranslateFigmaCoords.translateFigmaY(60), textAlign: 'center', alignItems: 'center', justifyContent: 'space-between'}}>
-          <h1 className='profile-title centered-x' style={{
-              top: TranslateFigmaCoords.translateFigmaY(14),
-              transform: 'translate(-50%, -50%)',
+        <div className="flex-row" style={{ width: "100%", height: translateY(60), textAlign: 'center', alignItems: 'center', justifyContent: 'space-between' }}>
+          <h1 className='profile-title centered-x relative' style={{
+            top: translateY(14),
+            transform: 'translate(-50%, -50%)',
           }}>Detalles de la Cuenta</h1>
           <ActionButton
-            style={{ 
-              width: TranslateFigmaCoords.translateFigmaX(windowWidth - 880),
+            style={{
+              width: translateX(windowWidth - 880),
               backgroundColor: 'var(--danger)',
-              paddingLeft: TranslateFigmaCoords.translateFigmaX(10),
-              paddingRight: TranslateFigmaCoords.translateFigmaX(10),
-              justifySelf: 'flex-end',
-            }} 
+              paddingLeft: translateX(10),
+              paddingRight: translateX(10),
+              justifySelf: 'flex-end', 
+              ...isUserProfile ? {display:'none'}:{}
+            }}
             height={40}
             action={handleReport}>
-              <img src={reportIcon} width={TranslateFigmaCoords.translateFigmaY(25)} height={TranslateFigmaCoords.translateFigmaY(23)}/><span style={{ fontWeight: 600 }}>Reportar</span>
+            <img src={reportIcon} width={translateY(25)} height={translateY(23)} />
+            <span style={{ fontWeight: 600 }}>Reportar</span>
           </ActionButton>
         </div>
-        <div className="offer-fv-description-delimiter centered-x" style={{
-            width: `${TranslateFigmaCoords.translateFigmaX(windowWidth - 30)}px`,
-            top: TranslateFigmaCoords.translateFigmaY(68),
-        }} />
         {/* Responsive User Info Grid Container */}
         <div
           className='user-info-container'
           style={{
-            ...( isPortrait ? 
-                {
-                  gridTemplateColumns: '1fr 1fr',
-                }
-              : {
-                  gridTemplateColumns: `repeat(3, 1fr)`,
-                }),
+            ...(isPortrait ?
+              { gridTemplateColumns: '1fr 1fr' } : {
+                ...(isEmpresaOrAdmin ?
+                  { gridTemplateColumns: 'repeat(2, 1fr)' } : { gridTemplateColumns: `repeat(3, 1fr)` }
+                )
+              }
+            ),
             display: 'grid',
             width: '100%',
             alignContent: 'center',
-            gridTemplateRows: `repeat(8, ${TranslateFigmaCoords.translateFigmaY(55)}px)`,
-            gap: `${TranslateFigmaCoords.translateFigmaX(12)}px ${TranslateFigmaCoords.translateFigmaY(16)}px`,
+            paddingTop: translateY(10),
+            gridTemplateRows: `repeat(8, ${translateY(55)}px)`,
+            gap: `${translateX(12)}px ${translateY(16)}px`,
+            borderTop: '4px solid var(--delimiters)',
           }}
         >
           {/* Column 1: Profile Photo and Contact Info */}
           <div
             className='profile-photo-section input-field'
-            style={{...( isPortrait ? { gridColumn: '1', gridRow: '1 / span 4', padding: TranslateFigmaCoords.translateFigmaY(20) } : { padding: TranslateFigmaCoords.translateFigmaY(20)}),
+            style={{
+              ...(isPortrait ? { gridColumn: '1', gridRow: '1 / span 4' } :
+                { gridColumn: '1' }),
               color: '#113893',
+              padding: translateY(20)
             }}
           >
-            <div className="user-photo-container" style={{ 
-              width: TranslateFigmaCoords.translateFigmaX(isPortrait ? 200 : 160),
-              height: TranslateFigmaCoords.translateFigmaX(isPortrait ? 200 : 160),
+            <div className="user-photo-container" style={{
+              width: translateX(isPortrait ? 200 : 160),
+              height: translateX(isPortrait ? 200 : 160),
               borderRadius: '50%',
-              border: `${TranslateFigmaCoords.translateFigmaX(4)}px solid #113893`,
+              border: `${translateX(4)}px solid #113893`,
               overflow: 'hidden',
             }}>
-              <img src={default_profile} alt={userData?.name} style={{width: '100%', height: '100%'}} />
+              <img src={userData?.profile_picture ? userData?.profile_picture : default_profile} alt={userData?.name} style={{
+                width: '100%', height: '100%',
+                textAlign: 'center',
+                justifyContent: 'center',
+                alignItems: 'center',
+                display: 'flex',
+                objectFit: 'cover',
+              }} />
             </div>
             <h1>{userData?.name}</h1>
           </div>
           <div
             className='user-info-item profile-field input-field'
-            style={isPortrait ? { gridColumn: '2', gridRow: '1' } : { gridRow: 6 }}
+            style={isPortrait ? { gridColumn: '2', gridRow: '1' } : { gridColumn: '1', gridRow: '6' }}
           >
             <div>Email: {userData?.email}</div>
           </div>
           <div
             className='user-info-item profile-field input-field'
-            style={isPortrait ? { gridColumn: '2', gridRow: '2' } : { gridRow: 7 }}
+            style={isPortrait ? { gridColumn: '2', gridRow: '2' } : { gridColumn: '1', gridRow: '7' }}
           >
             <div>Localidad: {userData?.location}</div>
           </div>
           <div
             className='user-info-item profile-field input-field'
-            style={isPortrait ? { gridColumn: '2', gridRow: '3' } : { gridRow: 8 }}
+            style={isPortrait ? { gridColumn: '2', gridRow: '3' } : { gridColumn: '1', gridRow: 8 }}
           >
-            <div>Portfolio web: {userData?.portfolio}</div>
+            <div style={{ textWrap: "nowrap", overflowInline: "clip", overflowX: "hidden", maxWidth: translateX(isPortrait ? 340 : 300) }}>Portfolio web: <a href={userData?.portfolio}>{userData?.portfolio}</a></div>
           </div>
           {/* Column 2: Type, Status, Description */}
           <div
             className='user-labels-section profile-field input-field'
-            style={isPortrait ? { gridColumn: '2', gridRow: '4' } : {}}
+            style={isEmpresaOrAdmin ? { display: 'none' } : {
+              ...(isPortrait ? { gridColumn: '2', gridRow: '4' } : {})
+            }}
           >
-            <div>Tipo de Usuario: {userData?.type}</div>
+            <div>Tipo de Usuario: {getUserType(userData?.type)}</div>
           </div>
           <div
             className='user-status-section profile-field input-field'
-            style={isPortrait ? { gridColumn: '2', gridRow: '5' } : {}}
+            style={isEmpresaOrAdmin ? { display: 'none' } : {
+              ...(isPortrait ? { gridColumn: '2', gridRow: '5' } : {})
+            }
+            }
           >
-            <div>Estado: {userData?.status}</div>
+            <div>Estado: {getUserStatus(userData?.status)}</div>
           </div>
           <div
             className='user-description-section input-field'
-            style={isPortrait ? { gridColumn: '2', gridRow: '6 / span 6' } : {}}
+            style={{
+              ...(isPortrait ? { gridColumn: '2', gridRow: '6 / span 6' } : {
+                ...(isEmpresaOrAdmin ? {
+                  gridColumn: '2', gridRow: '1 / span 4'
+                } : { gridColumn: '3', gridRow: '1 / span 4' })
+              }),
+              overflowWrap: "anywhere",
+              overflowY: "auto",
+            }}
+
           >
-            <p>Descripción:<br/>{userData?.description}</p>
+            <p>Descripción:<br />{userData?.description}</p>
           </div>
           {/* Tags and Languages below portfolio/description in portrait */}
           <div
             className='user-skills-section input-field flex-row'
             style={{
-                ...(isPortrait ? { gridColumn: '1', gridRow: '5 / span 3', height: TranslateFigmaCoords.translateFigmaY(240) } : {}),
-                alignItems: 'flex-start',
-                justifyContent: 'flex-start',
-                color: 'rgba(0, 49, 123, 0.5)',
+              ...(isEmpresaOrAdmin ? { display: 'none' } : {
+                ...(isPortrait ? { gridColumn: '1', gridRow: '5 / span 3' } : { gridRow: '3 / span 3' })
+              }
+              ),
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
+              color: 'rgba(0, 49, 123, 0.5)',
             }}
           >
-            <div className='flex-column' style={{
-                width: TranslateFigmaCoords.translateFigmaY(isPortrait ? 140 : 130),
-                borderRight: `${TranslateFigmaCoords.translateFigmaX(2)}px solid var(--delimiters)`,
-                paddingTop: TranslateFigmaCoords.translateFigmaY(7),
-                paddingLeft: TranslateFigmaCoords.translateFigmaY(7),
-                paddingRight: TranslateFigmaCoords.translateFigmaY(16),
-                gap: TranslateFigmaCoords.translateFigmaY(16),
-                height: '96%',
-            }}>
-                <span style={{ fontWeight: 600, fontSize: TranslateFigmaCoords.translateFigmaY(22), color: 'rgba(0, 49, 123, 0.8)'}}>Etiquetas:</span>
-                {LEVELS.map(level => (
-                <label key={level} style={{ display: 'flex', alignItems: 'center', fontWeight: 500}}>
-                    <input
-                    type="checkbox"
-                    checked={selectedTagLevel === level}
-                    readOnly
-                    style={{
-                        accentColor: '#335A95',
-                        width: TranslateFigmaCoords.translateFigmaX(18),
-                        height: TranslateFigmaCoords.translateFigmaX(18),
-                        pointerEvents: 'none',
-                    }}
-                    tabIndex={-1}
-                    />
-                    {level}
-                </label>)
-                )}
-            </div>
-            {/* Tags list on the right side */}
-            <div style={{
-                width: /* TranslateFigmaCoords.translateFigmaY(isPortrait ? 189 : 229), */ "100%",
-                height: '96%',
-                borderLeft: `${TranslateFigmaCoords.translateFigmaX(2)}px solid var(--delimiters)`,
-                paddingTop: TranslateFigmaCoords.translateFigmaY(7),
-                paddingLeft: TranslateFigmaCoords.translateFigmaY(7),
-                borderTopRightRadius: TranslateFigmaCoords.translateFigmaX(8),
-                borderBottomRightRadius: TranslateFigmaCoords.translateFigmaX(8),
-                backgroundColor: '#AABAC9',
-                overflowY: 'scroll',
-                }}
-                className='tag-display-profile'>
-                {Object.values(tagsByLevel).flat().length === 0 ? (
-                <span style={{ color: '#888' }}>Sin habilidades</span>
-                ) : (
-                Object.values(tagsByLevel).flat().map(tag => {
-                    // Check if the tag is selected
-                    const isSelected = selectedTag && selectedTag.name === tag.name && selectedTag.level === tag.level;
-                    return (
-                    <span
-                    key={tag.name}
-                    style={{ 
-                        display: 'inline-block', 
-                        margin: `${TranslateFigmaCoords.translateFigmaY(4)}px 0`, 
-                        padding: `${TranslateFigmaCoords.translateFigmaY(4)}px ${TranslateFigmaCoords.translateFigmaY(8)}px`, 
-                        backgroundColor: isSelected ? '#D6F5F9' : '#fff', 
-                        borderRadius: TranslateFigmaCoords.translateFigmaX(20),
-                        width: TranslateFigmaCoords.translateFigmaY(isPortrait ? 145 : 185),
-                        textAlign: 'center',
-                        cursor: 'pointer',
-                        fontWeight: isSelected ? 600 : undefined,
-                        color: isSelected ? '#113893' : undefined,
-                        border: isSelected ? '2px solid #00B6D9' : 'none',
-                        transition: 'background 0.15s, border 0.15s',
-                    }}
-                    onClick={() => {
-                      console.log("Tag clicked:", tag);
-                      setSelectedTag(isSelected ? tag : null)
-                    }}
-                    >
-                    {tag.name}
-                    </span>
-                )}))}
-            </div>
+            <TagList
+              tags={tags}
+              title="Etiquetas:"
+              selectedTag={selectedTag}
+              onSelectTag={setSelectedTag}
+              isPortrait={isPortrait}
+              translateX={translateX}
+              translateY={translateY}
+            />
+
           </div>
           {/* Idiomas styled like Etiquetas */}
           <div
-            className='user-languages-section profile-field input-field flex-row'
+            className='user-languages-section input-field flex-row'
             style={{
-                ...(isPortrait ? { gridColumn: '1', gridRow: '9 / span 3', height: TranslateFigmaCoords.translateFigmaY(240) } : {}),
-                alignItems: 'flex-start',
-                justifyContent: 'flex-start',
-                color: 'rgba(0, 49, 123, 0.5)',
+              ...(isEmpresaOrAdmin ? { display: 'none' } : {
+                ...(isPortrait ? { gridColumn: '1', gridRow: '9 / span 3' } : { gridRow: '6 / span 3' })
+              }),
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
+              color: 'rgba(0, 49, 123, 0.5)',
             }}
           >
-            {/* Languages list on the right side */}
-
+            <TagList
+              tags={languages}
+              title="Idiomas:"
+              selectedTag={selectedLanguage}
+              onSelectTag={setSelectedLanguage}
+              isPortrait={isPortrait}
+              translateX={translateX}
+              translateY={translateY}
+            />
           </div>
           {/* Buttons below tags/languages, 2 per column in portrait */}
-          {isPortrait ? (
-            <div
-              className='user-button-section'
-              style={{
-                gridColumn: '1 / span 2',
-                gridRow: '12',
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: 12,
-                marginTop: 12,
-              }}
-            >
-              <ActionButton height={60} action={handleEditProfile} style={{ gridColumn: 1 }}>
-                Editar Perfil
-              </ActionButton>
-              <ActionButton height={60} action={handleChangePassword} style={{ backgroundColor: '#DFB529', gridColumn: 2 }}>
-                Cambiar Contraseña
-              </ActionButton>
-              <ActionButton height={60} action={handleLogout} style={{ backgroundColor: '#F0823D', gridColumn: 1 }}>
-                Cerrar Sesión
-              </ActionButton>
-              <ActionButton height={60} action={handleDeleteAccount} style={{ backgroundColor: 'var(--danger)', color: 'white', gridColumn: 2 }}>
-                Eliminar Cuenta
-              </ActionButton>
-            </div>
-          ) : (
-            <div className='user-button-section' style={{ fontSize: TranslateFigmaCoords.translateFigmaY(24) }}>
-              <ActionButton height={60} action={handleEditProfile}>
-                Editar Perfil
-              </ActionButton>
-              <ActionButton height={60} action={handleChangePassword} style={{ backgroundColor: '#DFB529' }}>
-                Cambiar Contraseña
-              </ActionButton>
-              <ActionButton height={60} action={handleLogout} style={{ backgroundColor: '#F0823D' }}>
-                Cerrar Sesión
-              </ActionButton>
-              <ActionButton height={60} action={handleDeleteAccount} style={{ backgroundColor: 'var(--danger)', color: 'white' }}>
-                Eliminar Cuenta
-              </ActionButton>
-            </div>
-          )}
+          {!isUserProfile ? (<></>) :
+            isPortrait ? (
+              <div
+                className='user-button-section'
+                style={{
+                  gridColumn: '1 / span 2',
+                  gridRow: '12',
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: 12,
+                  marginTop: 12,
+                }}
+              >
+                <ActionButton height={60} action={handleEditProfile} style={{ gridColumn: 1 }}>
+                  Editar Perfil
+                </ActionButton>
+                <ActionButton height={60} action={handleChangePassword} style={{ backgroundColor: '#DFB529', gridColumn: 2 }}>
+                  Cambiar Contraseña
+                </ActionButton>
+                <ActionButton height={60} action={handleLogout} style={{ backgroundColor: '#F0823D', gridColumn: 1 }}>
+                  Cerrar Sesión
+                </ActionButton>
+                <ActionButton height={60} action={handleDeleteAccount} style={{ backgroundColor: 'var(--danger)', color: 'white', gridColumn: 2 }}>
+                  Eliminar Cuenta
+                </ActionButton>
+              </div>
+            ) : (
+              <div className='user-button-section' style={{
+                fontSize: translateY(24), ...(isEmpresaOrAdmin ? {
+                  gridColumn: '2',
+                  gridRow: '5/9',
+                  overflow: 'hidden',
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(1, 1fr)',
+                  gridTemplateRows: 'repeat(4, 1fr)',
+                  gap: 12,
+                  marginTop: 0
+                } : {
+                  gridColumn: '3',
+                  gridRow: '5/9'
+                })
+
+              }}>
+                <ActionButton height={'100%'} action={handleEditProfile} style={{ gridColumn: 1 }}>
+                  Editar Perfil
+                </ActionButton>
+                <ActionButton height={'100%'} action={handleChangePassword} style={{ gridColumn: '1', backgroundColor: '#DFB529' }}>
+                  Cambiar Contraseña
+                </ActionButton>
+                <ActionButton height={'100%'} action={handleLogout} style={{ gridColumn: 1, backgroundColor: '#F0823D' }}>
+                  Cerrar Sesión
+                </ActionButton>
+                <ActionButton height={'100%'} action={handleDeleteAccount} style={{ gridColumn: 1, backgroundColor: 'var(--danger)', color: 'white' }}>
+                  Eliminar Cuenta
+                </ActionButton>
+              </div>
+            )}
         </div>
       </AppWindow>
     </div>

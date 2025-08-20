@@ -1,0 +1,25 @@
+.contenedorInputs {
+    height: auto;
+    display: flex;
+    gap: calc((8/1280) * var(--x-multiplier));
+    justify-content: center;
+    width: 100%;
+}
+
+.contenedorInputs input {
+    width:calc((32/1280) * var(--x-multiplier));
+    height: calc((42/1280) * var(--x-multiplier));
+    text-align: center;
+    font-size:calc((24/1280) * var(--x-multiplier));
+    border-radius: calc((10/1280) * var(--x-multiplier));
+    border: calc((2/1280) * var(--x-multiplier)) solid #5386FF;
+    background-color: #ffff;
+    color: #5386FF;
+}
+
+.contenedorInputs input:focus {
+    outline: none;
+    box-shadow: none;
+    background-color: #5386FF;
+    color: #ffff;
+}

@@ -2,7 +2,7 @@
  * @file InputField.tsx
  * @description A reusable React component for creating responsive input fields in the app.
  * Converts width and height from pixels to responsive units based on screen size.
- * @author Haziel Magallanes, Daviel Díaz Gonzáles
+ * @author Haziel Magallanes, Daviel Díaz Gonzáles, Matias Emiliano Grecco
  * @date May 11, 2025
  */
 
@@ -48,6 +48,10 @@ interface InputFieldProps extends ResponsiveComponent {
     style?: React.CSSProperties;
     /** Optional custom CSS classes to apply to the input field. */
     className?: string;
+    /** Optional key down event handler. */
+    onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
+    /** Optional focus event handler. */
+    onFocus?: React.FocusEventHandler<HTMLInputElement>;
 }
 
 /**
@@ -96,6 +100,8 @@ const InputField: React.FC<InputFieldProps> = ({
     children,
     max,
     min,
+    onKeyDown,
+    onFocus,
 }) => {
     const { finalHeight, finalWidth, translateX } = useResponsiveDimensions({
         height,
@@ -119,6 +125,8 @@ const InputField: React.FC<InputFieldProps> = ({
             value={value}
             max={type === "date" ? max : undefined}
             min={type === "date" ? min : undefined}
+            onKeyDown={onKeyDown}
+            onFocus={onFocus}
         >{children}</input>
     );
 };

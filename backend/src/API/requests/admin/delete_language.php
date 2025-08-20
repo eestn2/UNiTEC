@@ -39,6 +39,11 @@ $data->id = intval($data->id);
 try {
     $connection->beginTransaction(); 
 
+    $query = "DELETE FROM user_languages WHERE language_id = :id";
+    $stmt = $connection->prepare($query);
+    $stmt->bindParam(':id', $data->id, PDO::PARAM_INT);
+    $stmt->execute();
+
     $query = "DELETE FROM languages WHERE id = :id";
     $stmt = $connection->prepare($query);
     $stmt->bindParam(':id', $data->id, PDO::PARAM_INT);

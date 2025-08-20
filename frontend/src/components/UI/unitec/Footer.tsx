@@ -11,11 +11,9 @@ const Footer: React.FC<ResponsiveComponent> = ({ style, className }) => {
     return (
         <footer
             className={`${className || ""} unitec-footer`}
-            style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                width: '100%',
+            style={{ 
+                left: 0, 
+                display:'block',
                 ...style,
             }}
             id="footer"

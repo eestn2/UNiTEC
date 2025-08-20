@@ -10,8 +10,7 @@ const AdminLanguages: React.FC = () => {
 
   const handleDeleteAttribute = async (id: number) => {
     try {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      await axios.delete(`${apiUrl}/admin/delete_language.php`, {
+      await axios.delete('/admin/delete_language.php', {
         data: { id: id },
       });
       setLanguages(prev => prev.filter(lang => lang.id !== id));
@@ -22,8 +21,7 @@ const AdminLanguages: React.FC = () => {
   };
 
   const handleChangeAttribute = async (attribute: string, id: number) => {
-    const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-    const response = await axios.put(`${apiUrl}/admin/edit_language.php`, {
+    const response = await axios.put('/admin/edit_language.php', {
       id: id,
       name: attribute,
     });
@@ -32,8 +30,7 @@ const AdminLanguages: React.FC = () => {
 
   const loadAttributes = async () => {
     try {
-      const apiUrl = import.meta.env.PROD ? import.meta.env.VITE_API_URL_PROD : import.meta.env.VITE_API_URL_DEV;
-      const response = await axios.get(`${apiUrl}/function/get-languages.php`);
+      const response = await axios.get('/function/get-languages.php');
       if (response.status !== 200 && response.data.status !== "success") {
         console.error("Failed to load languages:", response.data.message);
       } else {

@@ -5,13 +5,13 @@ import { user } from "../../../types/user";
 import { getTranslates } from "../../../global/function/getTranslates";
 import defaultProfilePicture from '../../../assets/defaults/profile-picture/1.svg'; 
 
-interface ProfilePictureProps {
+interface ProfilePictureProps extends React.ImgHTMLAttributes<HTMLImageElement> {
     userId: number;
     size?: number;
     vertical?: boolean;
 }
 
-const ProfilePicture: React.FC<ProfilePictureProps> = ({ userId, size = 10, vertical = false }) => {
+const ProfilePicture: React.FC<ProfilePictureProps> = ({ userId, size = 10, vertical = false, style }) => {
     const navigate = useNavigate();
     const [User, setUser] = useState<user | null>(null);
     const [translateX] = getTranslates(vertical)
@@ -35,8 +35,19 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({ userId, size = 10, vert
             src={User?.profile_picture || defaultProfilePicture}
             alt={User ? `${User.name}` : 'Foto de perfil'}
             className="profile-picture"
-            style={{ width: translateX(size), height: translateX(size), borderRadius: "50%", fill: "#aabac9", cursor: "pointer" }}
+            style={{ width: translateX(size), height: translateX(size), borderRadius: "50%", fill: "#aabac9", cursor: "pointer", ...style}}
             onClick={handleProfileClick}
+            onMouseDown={(e) => {
+                e.preventDefault();
+                e.currentTarget.style.scale = '0.9';
+            }} onMouseUp={(e) => {
+                e.preventDefault(); 
+                e.currentTarget.style.scale = '1';
+            }}
+            onMouseLeave={(e) => {
+                e.preventDefault();
+                e.currentTarget.style.scale = '1';
+            }}
         />
     );
 };

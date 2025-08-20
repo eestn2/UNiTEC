@@ -14,7 +14,14 @@ if (!is_admin($_SESSION['user']['id'], $connection)) {
 }
 
 try {
-    $stmt = $connection->prepare("SELECT * FROM reports");
+    $stmt = $connection->prepare("
+        SELECT r.*, 
+            reporter.email AS reporter_email, 
+            reported.email AS reported_email
+        FROM reports r
+        JOIN users reporter ON r.reporter_id = reporter.id
+        JOIN users reported ON r.reported_id = reported.id
+    ");
     $stmt->execute();
     $reports = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return_response("success", "reports retrieved successfully.", ["reports" => $reports]);

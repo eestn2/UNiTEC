@@ -21,7 +21,7 @@ $email = trim($_GET['email']);
 
 try {
     $stmt = $connection->prepare("
-        SELECT id, email, first_name, last_name, user_type
+        SELECT id, email, name, user_type
         FROM users
         WHERE email LIKE :email
           AND user_type != :excluded_type

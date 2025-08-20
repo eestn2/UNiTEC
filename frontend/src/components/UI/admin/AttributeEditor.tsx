@@ -140,7 +140,7 @@ const AttributeEditor: React.FC<AttributeEditorProps> = ({
                                 }}
                                 action={() => {
                                     alert(attribute +" fue eliminado")
-                                    onDelete && onDelete(id);
+                                    if(onDelete) onDelete(id);
                                 }
                             }
                             />

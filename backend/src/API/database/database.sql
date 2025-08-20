@@ -52,9 +52,9 @@ CREATE TABLE `languages` (
 INSERT INTO `languages` (`id`, `name`) VALUES
 (1, 'Español'),
 (2, 'Inglés'),
-(3, 'Portugués '),
+(3, 'Portugués'),
 (4, 'Francés'),
-(5, 'Italiano '),
+(5, 'Italiano'),
 (6, 'Chino');
 
 -- --------------------------------------------------------

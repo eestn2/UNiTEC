@@ -7,25 +7,31 @@ import AdminDesignate from "./AdminDesignate";
 import AdminReport from "./AdminReport";
 import "../../styles/admin.css";
 import AdminReview from "./AdminReview";
+import ProtectedRoute from "./ProtectedRoute";
+import User from "../session/User";
+import { UserTypeEnum } from "../../types/user";
+
+
 const AdminIndex: React.FC = () => {
     const { panel } = useParams<{ panel: string }>();
     switch (panel) {
         case "tags":
-            return <AdminTags />
+            return <ProtectedRoute user_type={User.data.type} allowedType={UserTypeEnum.Administrador} children={<AdminTags />} />
         case "languages":
-            return <AdminLanguages />
+            return <ProtectedRoute user_type={User.data.type} allowedType={UserTypeEnum.Administrador} children={<AdminLanguages />} />
         case "inserts":
-            return <AdminInserts />
+            return <ProtectedRoute user_type={User.data.type} allowedType={UserTypeEnum.Administrador} children={<AdminInserts />} />
         case "designate":
-            return <AdminDesignate />
+            return <ProtectedRoute user_type={User.data.type} allowedType={UserTypeEnum.Administrador} children={<AdminDesignate />} />
         case "report":
-            return <AdminReport />
+            return <ProtectedRoute user_type={User.data.type} allowedType={UserTypeEnum.Administrador} children={<AdminReport />} />
         case "review":
-            return <AdminReview />
+            return <ProtectedRoute user_type={User.data.type} allowedType={UserTypeEnum.Administrador} children={<AdminReview />} />
         case "panel":
-            return <AdminPanel />
+            return <ProtectedRoute user_type={User.data.type} allowedType={UserTypeEnum.Administrador} children={<AdminPanel />} />
         default:
-            return <AdminPanel />
+            return <ProtectedRoute user_type={User.data.type} allowedType={UserTypeEnum.Administrador} children={<AdminPanel />} />
+            
     }
 }
 

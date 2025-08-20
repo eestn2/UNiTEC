@@ -1,0 +1,44 @@
+ .tag2 {
+    
+     background-color: #6F88B3; 
+     border: none!important;
+     color: #ffffff!important;
+     padding-left: calc((20/1280) * var(--x-multiplier))!important;
+     border-radius: 33px;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     width: 90%;
+     height: calc((35/1280) * var(--x-multiplier))!important;
+     font-weight: 600; 
+     margin-left: calc((-2/1280) * var(--x-multiplier));
+     position: relative;
+ }
+
+ .tag2-delete {
+     border: none; 
+     fill: white!important;
+     background: none!important;
+     width: calc((50/1280) * var(--x-multiplier))!important;
+     height: calc((35/1280) * var(--x-multiplier))!important;
+     cursor: pointer;
+     border-radius: calc((20/1280) * var(--x-multiplier));
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     margin-right: calc((-2/1280) * var(--x-multiplier));
+ }
+ .tag2-level{
+    position: absolute;
+    height: 100%; 
+    display: flex;
+    align-items: center;
+    left: 50%;
+ }
+.tag2-level-icon{
+    height: 15px;  
+    filter: brightness(0) invert(1); 
+}
+ .tag2-delete img {
+     width: calc((24/1280) * var(--x-multiplier));
+ }

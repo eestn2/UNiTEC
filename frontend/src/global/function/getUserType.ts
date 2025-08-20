@@ -1,4 +1,6 @@
-export function getUserType(type: number) :string {
+import { UserTypeEnum } from "../../types/user";
+
+export function getUserType(type: 1 | 2 | 3 | 4 | UserTypeEnum) :string {
     switch (type) {
         case 1:
             return "Empresa";
@@ -12,3 +14,5 @@ export function getUserType(type: number) :string {
             return "Error";
     }
 }
+
+export default getUserType;

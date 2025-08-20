@@ -19,6 +19,7 @@ import type { offer } from '../../types/JobOfferTypes';
 import type { notification } from '../../types/notification';
 import no_notifications from '../../assets/icons/no-notis.svg';
 import no_feed from '../../assets/icons/no-feed.svg';
+import LoadingScreen from '../UI/LoadingScreens/LoadingScreen';
 
 /**
  * A React functional component that renders the main feed with job offers and notifications.
@@ -35,31 +36,28 @@ import no_feed from '../../assets/icons/no-feed.svg';
  */
 function FeedBox() {
   // State variables for job offers and notifications
-  const [jobOffers, setJobOffers] = useState<ReactElement[] | undefined>(undefined);
+  const [jobOffers, setJobOffers] = useState<offer[]>([]);
+
   const [notifications, setNotifications] = useState<ReactElement[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   // Fetch job offers from the server
   const loadJobOffers = async () => {
     try {
-      const {data: response} = await axios.get<TypedResponseWNamedArray<offer, "job_offers">>(`/feed/job-offers.php`);
+      const { data: response } = await axios.get<TypedResponseWNamedArray<offer, "job_offers">>(
+        `/feed/job-offers.php`
+      );
       if (response.status !== "success") {
         console.error("Failed to load job offers:", response.message);
       } else {
-        const offers = response.data.job_offers.map((offer) => (
-          <JobOffer
-            key={offer.id}
-            width={820}
-            height={400}
-            authorId={offer.creator_id}
-            title={offer.title}
-            description={offer.description}
-          />
-        ));
-        setJobOffers(offers);
+        setJobOffers(response.data.job_offers);
       }
+      setLoading(false);
     } catch (error) {
       console.error("An error occurred while loading job offers:", error);
+      setLoading(false);
     }
   };
+
   // Fetch notifications from the server
   const loadNotifications = async () => {
     try {
@@ -83,7 +81,7 @@ function FeedBox() {
     loadJobOffers();
     loadNotifications();
   }, []);
-
+  if (loading) return <LoadingScreen />;
   return (
     <div>
       <NavBar />
@@ -115,8 +113,21 @@ function FeedBox() {
         >
           Ofertas de Trabajo
         </div>
-        {jobOffers ? jobOffers : (
-          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+        {jobOffers.length > 0 ? (
+          jobOffers.map((offer) => (
+            <JobOffer
+              key={offer.id}
+              width={820}
+              height={400}
+              authorId={offer.creator_id}
+              title={offer.title}
+              description={offer.description}
+              offerId={offer.id}
+              onDelete={(id) => setJobOffers((prev) => prev.filter((o) => o.id !== id))}
+            />
+          ))
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <img src={no_feed} style={{
               width: TranslateFigmaCoords.translateFigmaX(300),
               height: TranslateFigmaCoords.translateFigmaX(300),
@@ -127,6 +138,7 @@ function FeedBox() {
             }}>No hay ofertas de trabajo.</span>
           </div>
         )}
+
       </AppWindow>
       <AppWindow
         height={600}
@@ -135,7 +147,9 @@ function FeedBox() {
           position: "absolute",
           right: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
           top: `${TranslateFigmaCoords.translateFigmaY(100)}px`,
-          overflowY: "scroll",
+          height: `${TranslateFigmaCoords.translateFigmaY(600)}px`,
+          overflowX: "hidden",
+          overflowY: "auto",
           display: "flex", 
           flexDirection: "column", 
           rowGap: TranslateFigmaCoords.translateFigmaY(20), 

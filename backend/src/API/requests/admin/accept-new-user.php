@@ -25,6 +25,7 @@ require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . "/../../logic/database/connection.php";
 require_once __DIR__ . "/../../logic/communications/return_response.php";
 require_once __DIR__ . '/../../logic/security/is_admin.php';
+require_once __DIR__ . '/../../logic/notifications/send_notification.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
     return_response("failed", "Method not allowed", null);
@@ -78,7 +79,7 @@ try {
     if ($stmt->rowCount() >= 0) {
         // 3. Send the email after successful enable
         if (isset($user['email'])) {
-            require_once __DIR__ . '/../../logic/send_email.php';
+            require_once __DIR__ . '/../../logic/communications/send_email.php';
             $to = $user['email'];
             $name = isset($user['name']) ? $user['name'] : '';
             $subject = "¡Bienvenido a UNITEC!";
@@ -93,6 +94,7 @@ try {
                     ";
             send_email($to, $subject, $body);
         }
+        send_notification($connection, NotificationType::ACCOUNT_APPROVED, $target_user_id, []);
         return_response("success", "Usuario aceptado con exito.", null);
     } else {
         return_response("failed", "No se pudo aceptar al usuario.", null);

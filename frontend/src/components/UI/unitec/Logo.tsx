@@ -12,6 +12,7 @@ import logo_text from "../../../assets/unitec/unitec-text.svg";
 import AppWindow from "../AppWindow"; 
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import { getTranslates } from "../../../global/function/getTranslates";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Props for the `Logo` component.
@@ -61,6 +62,7 @@ const Logo: React.FC<LogoProps> = ({
     className
 }) => {
     const [ translateX ] = getTranslates(vertical);
+    const navigate = useNavigate();
     return (
         <AppWindow
             width={width}
@@ -82,7 +84,25 @@ const Logo: React.FC<LogoProps> = ({
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
-                    alignItems: "center"
+                    alignItems: "center",
+                    transition: "scale 0.2s ease-in-out",
+                    cursor: "pointer",
+                    userSelect: "none",
+                }}
+                onClick={() => {
+                    navigate("/"); // Navigate to home page on click
+                }}
+                onMouseDown={(e) => {
+                    e.preventDefault();
+                    e.currentTarget.style.scale = "0.9";
+                }}
+                onMouseUp = {(e) => {
+                    e.preventDefault();
+                    e.currentTarget.style.scale = "1";
+                }}
+                onMouseLeave={(e) => {
+                    e.preventDefault(); // Prevent default button behavior
+                    e.currentTarget.style.scale = '1';
                 }}
             >
                 <img
