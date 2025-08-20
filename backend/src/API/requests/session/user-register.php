@@ -128,22 +128,6 @@ try {
     $user = $stmt->fetch();
     log_debug('User fetched for session: ' . json_encode($user));
 
-    // Store user in session (auto-login after registration)
-    $_SESSION['user'] = [
-        "id" => $user["id"],
-        "name" => $user["name"],
-        "age" => $user["birth_date"],
-        "location" => $user["location"],
-        "email" => $user["email"],
-        "description" => $user["description"],
-        "last_active_date" => $user["last_active_date"],
-        "profile_picture" => $user["profile_picture"],
-        "portfolio" => $user["portfolio"],
-        "is_enabled" => $user["enabled"],
-        "type_id" => $user["user_type"],
-        "status" => $user["status"]
-    ];
-
     return_response("success", "Usuario registrado correctamente. Debe esperar aprobación.", null);
 } catch (Exception $e) {
 /*     $connection->rollBack();
