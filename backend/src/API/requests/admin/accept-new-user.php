@@ -27,36 +27,20 @@ require_once __DIR__ . "/../../logic/communications/return_response.php";
 require_once __DIR__ . '/../../logic/security/is_admin.php';
 require_once __DIR__ . '/../../logic/notifications/send_notification.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
-    return_response("failed", "Method not allowed", null);
-    exit;
-}
+if ($_SERVER['REQUEST_METHOD'] !== 'PUT') return_response("failed", "Method not allowed", null);
 
 $data = json_decode(file_get_contents("php://input"));
-if (!$data || !isset($data->target_user_id)) {
-    return_response("failed", "Falta el ID del usuario a aceptar", null);
-    exit;
-}
+if (!$data || !isset($data->target_user_id)) return_response("failed", "Falta el ID del usuario a aceptar", null);
 
 $target_user_id = intval($data->target_user_id);
-if ($target_user_id <= 0) {
-    return_response("failed", "ID de usuario a aceptar inválido.", null);
-    exit;
-}
+if ($target_user_id <= 0) return_response("failed", "ID de usuario a aceptar inválido.", null);
 
 // Obtener el usuario autenticado desde la sesión
-if (!isset($_SESSION['user']['id'])) {
-    return_response("failed", "No autenticado.", null);
-    exit;
-}
+if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
 $auth_user_id = $_SESSION['user']['id'];
 
 // Verificar si el usuario autenticado es admin
-if (!is_admin($auth_user_id, $connection)) {
-    return_response("failed", "Solo los administradores pueden aceptar usuarios.", null);
-    exit;
-}
-
+if (!is_admin($auth_user_id, $connection)) return_response("failed", "Solo los administradores pueden aceptar usuarios.", null);
 // Aceptar al usuario destino
 try {
     // 1. Get the user's email and name first
@@ -101,6 +85,5 @@ try {
     }
 } catch(PDOException $e) {
     return_response("failed", "Error al aceptar el usuario.", null);
-    exit;
 }
 ?>

@@ -113,8 +113,8 @@ try {
     // Log the sent email in the database
     $currentDatetime = date('Y-m-d H:i:s');
     $stmt = $connection->prepare("INSERT INTO sent_emails (subject, message, sender_id, receiver_id, sent_date) VALUES (?, ?, ?, ?, ?)");
-    $email_sender = 1; // System/admin user ID
-    $stmt->execute([$email_subject, $email_message, $email_sender, $user_id, $currentDatetime]);
+    $email_sender = "admin@admin.com"; // System/admin user ID
+    $stmt->execute([$email_subject, $email_message, $email_sender, $user_email, $currentDatetime]);
     error_log('Sent email logged in DB');
 
     // Retrieve the newly created user for response

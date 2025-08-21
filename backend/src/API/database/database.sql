@@ -146,8 +146,8 @@ CREATE TABLE `sent_emails` (
   `id` int(10) NOT NULL,
   `subject` text NOT NULL,
   `message` text NOT NULL,
-  `sender_id` int(10) NOT NULL,
-  `receiver_id` int(10) NOT NULL,
+  `sender_email` text NOT NULL,
+  `receiver_email` text NOT NULL,
   `sent_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -320,10 +320,6 @@ ALTER TABLE `reviews`
 --
 -- Indices de la tabla `sent_emails`
 --
-ALTER TABLE `sent_emails`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `mail_emisor` (`sender_id`),
-  ADD KEY `mail_receptor` (`receiver_id`);
 
 --
 -- Indices de la tabla `tags`
@@ -502,9 +498,6 @@ ALTER TABLE `reviews`
 --
 -- Filtros para la tabla `sent_emails`
 --
-ALTER TABLE `sent_emails`
-  ADD CONSTRAINT `mails_enviados_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `mails_enviados_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`);
 
 --
 -- Filtros para la tabla `user_following`
