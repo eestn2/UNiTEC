@@ -29,5 +29,5 @@ services:
       - DB_PASS_DEV=${DB_PASS_DEV}
       - DB_PORT_DEV=${DB_PORT_DEV}
     ports:
-      - "10001:80"
+      - "9090:80"
     profiles: ["dev"]
