@@ -58,8 +58,12 @@ try {
 
     if($target_user_type != 1){
         // 3. Delete user-specific data if not an admin
-        $connection->exec("DELETE FROM user_languages WHERE user_id = $target_user_id");
-        $connection->exec("DELETE FROM user_tags WHERE user_id = $target_user_id");
+        $delLangs = $connection->prepare("DELETE FROM user_languages WHERE user_id = :id");
+        $delLangs->bindValue(':id', $target_user_id, PDO::PARAM_INT);
+        $delLangs->execute();
+        $delTags = $connection->prepare("DELETE FROM user_tags WHERE user_id = :id");
+        $delTags->bindValue(':id', $target_user_id, PDO::PARAM_INT);
+        $delTags->execute();
     }
     // 2. Delete or disable the user
     $stmt = $connection->prepare("DELETE FROM users WHERE id = :id"); // or UPDATE users SET enabled = 0 WHERE id = :id
