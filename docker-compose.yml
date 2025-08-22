@@ -32,7 +32,7 @@ services:
       - EMAIL_PORT=${EMAIL_PORT}
       - EMAIL_USERNAME=${EMAIL_USERNAME}
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
-      - API_BASE_URL_DEV=http://eestn2.ghostix.com.ar:9090/src/API
+      - API_BASE_URL_DEV=http://localhost:9090/src/API
       - API_BASE_URL_PROD=http://eestn2.ghostix.com.ar:9090/UNiTEC-API/src/API
     depends_on:
       - mysql
