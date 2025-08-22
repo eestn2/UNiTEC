@@ -321,7 +321,7 @@ ALTER TABLE `reviews`
 -- Indices de la tabla `sent_emails`
 --
 ALTER TABLE `sent_emails`
-  ADD PRIMARY KEY (`id`)
+  ADD PRIMARY KEY (`id`);
 --
 -- Indices de la tabla `tags`
 --
@@ -363,88 +363,21 @@ ALTER TABLE `user_tags`
 --
 
 --
--- AUTO_INCREMENT de la tabla `applicants`
---
-ALTER TABLE `applicants`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE applicants MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE languages MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE notifications MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE offers MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE offer_languages MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE offer_tags MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE reports MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE reviews MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE sent_emails MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE tags MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE users MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE user_following MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE user_languages MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE user_tags MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT de la tabla `languages`
---
-ALTER TABLE `languages`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT de la tabla `notifications`
---
-ALTER TABLE `notifications`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `offers`
---
-ALTER TABLE `offers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `offer_languages`
---
-ALTER TABLE `offer_languages`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `offer_tags`
---
-ALTER TABLE `offer_tags`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `reports`
---
-ALTER TABLE `reports`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `reviews`
---
-ALTER TABLE `reviews`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `sent_emails`
---
-ALTER TABLE `sent_emails`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `tags`
---
-ALTER TABLE `tags`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
-
---
--- AUTO_INCREMENT de la tabla `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `user_following`
---
-ALTER TABLE `user_following`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `user_languages`
---
-ALTER TABLE `user_languages`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `user_tags`
---
-ALTER TABLE `user_tags`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
