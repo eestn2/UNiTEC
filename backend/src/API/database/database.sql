@@ -320,7 +320,8 @@ ALTER TABLE `reviews`
 --
 -- Indices de la tabla `sent_emails`
 --
-
+ALTER TABLE `sent_emails`
+  ADD PRIMARY KEY (`id`)
 --
 -- Indices de la tabla `tags`
 --
