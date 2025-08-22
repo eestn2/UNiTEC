@@ -112,7 +112,7 @@ try {
 
     // Log the sent email in the database
     $currentDatetime = date('Y-m-d H:i:s');
-    $stmt = $connection->prepare("INSERT INTO sent_emails (subject, message, sender_id, receiver_id, sent_date) VALUES (?, ?, ?, ?, ?)");
+    $stmt = $connection->prepare("INSERT INTO sent_emails (subject, message, sender_email, receiver_email, sent_date) VALUES (?, ?, ?, ?, ?)");
     $email_sender = "admin@admin.com"; // System/admin user ID
     $stmt->execute([$email_subject, $email_message, $email_sender, $user_email, $currentDatetime]);
     error_log('Sent email logged in DB');
@@ -125,8 +125,8 @@ try {
 
     return_response("success", "Usuario registrado correctamente. Debe esperar aprobación.", null);
 } catch (Exception $e) {
-/*     $connection->rollBack();
-    error_log('Transaction rolled back'); */
+    $connection->rollBack();
+    error_log('Transaction rolled back');
     error_log('Exception: ' . $e->getMessage());
     return_response("failed", "Ocurrió un error: No se pudo registrar al usuario" );
 }

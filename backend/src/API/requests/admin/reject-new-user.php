@@ -71,7 +71,7 @@ try {
     if ($stmt->rowCount() > 0) {
         // 3. Send the email after successful delete/disable
         if (isset($user['email'])) {
-            require_once __DIR__ . '/../../logic/send_email.php';
+            require_once __DIR__ . '/../../logic/communications/send_email.php';
             $to = $user['email'];
             $name = isset($user['name']) ? $user['name'] : '';
             $subject = "Notificación sobre el estado de su solicitud";
@@ -92,6 +92,8 @@ try {
         return_response("failed", "No se pudo rechazar al usuario.", null);
     }
 } catch(PDOException $e) {
+    $connection->rollBack();
+    error_log("Error rejecting user: " . $e->getMessage());
     return_response("failed", "Error al rechazar el usuario." . $e->getMessage(), null);
 }
 ?>
