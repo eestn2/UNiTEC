@@ -8,7 +8,8 @@
   padding-left: calc((40 / 720) * var(--y-multiplier));
   padding-right: calc((20 / 720) * var(--y-multiplier));
   height: fit-content;
-  word-break: break-all;
+  overflow-wrap: anywhere;
+  word-break: normal;
   white-space: normal;
   border-left-style: solid;
   border-left-width: calc((3 / 1280) * var(--x-multiplier));
