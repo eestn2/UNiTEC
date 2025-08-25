@@ -32,30 +32,18 @@ if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
 }
 
 $data = json_decode(file_get_contents("php://input"));
-if (!$data || !isset($data->target_user_id) || !isset($data->target_user_type)) {
-    return_response("failed", "Falta el ID del usuario a rechazar", null);
-    exit;
-}
+if (!$data || !isset($data->target_user_id) || !isset($data->target_user_type)) return_response("failed", "Falta el ID del usuario a rechazar", null);
 
 $target_user_id = intval($data->target_user_id);
 $target_user_type = intval($data->target_user_type);
-if ($target_user_id <= 0) {
-    return_response("failed", "ID de usuario a rechazar inválido.", null);
-    exit;
-}
-
+if ($target_user_id <= 0) return_response("failed", "ID de usuario a rechazar inválido.", null);
 // Obtener el usuario autenticado desde la sesión
-if (!isset($_SESSION['user']['id'])) {
-    return_response("failed", "No autenticado.", null);
-    exit;
-}
+if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
+
 $auth_user_id = $_SESSION['user']['id'];
 
 // Verificar si el usuario autenticado es admin
-if (!is_admin($auth_user_id, $connection)) {
-    return_response("failed", "Solo los administradores pueden rechazar usuarios.", null);
-    exit;
-}
+if (!is_admin($auth_user_id, $connection)) return_response("failed", "Solo los administradores pueden rechazar usuarios.", null);
 
 
 // Rechazar al usuario destino
@@ -66,27 +54,28 @@ try {
     $email_stmt->execute();
     $user = $email_stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$user) {
-        return_response("failed", "No se encontró al usuario.", null);
-        exit;
-    }
+    if (!$user) return_response("failed", "No se encontró al usuario.", null);
 
-    
+    if($target_user_type != 1){
+        // 3. Delete user-specific data if not an admin
+        $delLangs = $connection->prepare("DELETE FROM user_languages WHERE user_id = :id");
+        $delLangs->bindValue(':id', $target_user_id, PDO::PARAM_INT);
+        $delLangs->execute();
+        $delTags = $connection->prepare("DELETE FROM user_tags WHERE user_id = :id");
+        $delTags->bindValue(':id', $target_user_id, PDO::PARAM_INT);
+        $delTags->execute();
+    }
     // 2. Delete or disable the user
     $stmt = $connection->prepare("DELETE FROM users WHERE id = :id"); // or UPDATE users SET enabled = 0 WHERE id = :id
     $stmt->bindParam(':id', $target_user_id, PDO::PARAM_INT);
     $stmt->execute();
 
-    if($target_user_type != 1){
-        // 3. Delete user-specific data if not an admin
-        $connection->exec("DELETE FROM user_languages WHERE user_id = $target_user_id");
-        $connection->exec("DELETE FROM user_tags WHERE user_id = $target_user_id");
-    }
+
 
     if ($stmt->rowCount() > 0) {
         // 3. Send the email after successful delete/disable
         if (isset($user['email'])) {
-            require_once __DIR__ . '/../../logic/send_email.php';
+            require_once __DIR__ . '/../../logic/communications/send_email.php';
             $to = $user['email'];
             $name = isset($user['name']) ? $user['name'] : '';
             $subject = "Notificación sobre el estado de su solicitud";
@@ -107,7 +96,8 @@ try {
         return_response("failed", "No se pudo rechazar al usuario.", null);
     }
 } catch(PDOException $e) {
-    return_response("failed", "Error al rechazar el usuario.", null);
-    exit;
+    $connection->rollBack();
+    error_log("Error rejecting user: " . $e->getMessage());
+    return_response("failed", "Error al rechazar el usuario." . $e->getMessage(), null);
 }
 ?>

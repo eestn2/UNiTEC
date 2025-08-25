@@ -28,10 +28,10 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `applicants` (
-  `id` int(11) NOT NULL,
-  `user_id` int(10) NOT NULL,
-  `offer_id` int(10) NOT NULL,
-  `status` int(10) NOT NULL
+  `id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
+  `offer_id` bigint NOT NULL,
+  `status` tinyint NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -67,8 +67,8 @@ CREATE TABLE `notifications` (
   `id` bigint(20) NOT NULL,
   `type` tinyint(4) NOT NULL DEFAULT 1,
   `message` text NOT NULL,
-  `sender_id` bigint(20) NOT NULL,
-  `receiver_id` int(10) NOT NULL
+  `sender_id` bigint NOT NULL,
+  `receiver_id` bigint NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -78,8 +78,8 @@ CREATE TABLE `notifications` (
 --
 
 CREATE TABLE `offers` (
-  `id` int(11) NOT NULL,
-  `creator_id` int(10) NOT NULL,
+  `id` bigint NOT NULL,
+  `creator_id` bigint NOT NULL,
   `title` text NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp(),
   `description` text NOT NULL,
@@ -93,9 +93,9 @@ CREATE TABLE `offers` (
 --
 
 CREATE TABLE `offer_languages` (
-  `id` int(10) NOT NULL,
+  `id` bigint NOT NULL,
   `language_id` int(10) NOT NULL,
-  `offer_id` int(10) NOT NULL
+  `offer_id` bigint NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -105,9 +105,9 @@ CREATE TABLE `offer_languages` (
 --
 
 CREATE TABLE `offer_tags` (
-  `id` int(10) NOT NULL,
+  `id` bigint NOT NULL,
   `tag_id` int(10) NOT NULL,
-  `offer_id` int(10) NOT NULL
+  `offer_id` bigint NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -117,9 +117,9 @@ CREATE TABLE `offer_tags` (
 --
 
 CREATE TABLE `reports` (
-  `id` int(11) NOT NULL,
-  `reported_id` int(11) NOT NULL,
-  `reporter_id` int(11) NOT NULL,
+  `id` bigint NOT NULL,
+  `reported_id` bigint NOT NULL,
+  `reporter_id` bigint NOT NULL,
   `reason` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -130,9 +130,9 @@ CREATE TABLE `reports` (
 --
 
 CREATE TABLE `reviews` (
-  `id` int(11) NOT NULL,
-  `user_id` int(10) NOT NULL,
-  `reviewed_id` int(11) NOT NULL,
+  `id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
+  `reviewed_id` bigint NOT NULL,
   `text` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -143,11 +143,11 @@ CREATE TABLE `reviews` (
 --
 
 CREATE TABLE `sent_emails` (
-  `id` int(10) NOT NULL,
+  `id` bigint NOT NULL,
   `subject` text NOT NULL,
   `message` text NOT NULL,
-  `sender_id` int(10) NOT NULL,
-  `receiver_id` int(10) NOT NULL,
+  `sender_email` varchar(254) NOT NULL,
+  `receiver_email` varchar(254) NOT NULL,
   `sent_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -158,7 +158,7 @@ CREATE TABLE `sent_emails` (
 --
 
 CREATE TABLE `tags` (
-  `id` int(10) NOT NULL,
+  `id` bigint NOT NULL,
   `name` varchar(80) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -200,7 +200,7 @@ INSERT INTO `tags` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `users` (
-  `id` int(10) NOT NULL,
+  `id` bigint NOT NULL,
   `name` varchar(80) NOT NULL,
   `birth_date` date NOT NULL,
   `location` varchar(80) NOT NULL,
@@ -222,9 +222,9 @@ CREATE TABLE `users` (
 --
 
 CREATE TABLE `user_following` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `following_id` int(11) NOT NULL
+  `id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
+  `following_id` bigint NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -234,10 +234,10 @@ CREATE TABLE `user_following` (
 --
 
 CREATE TABLE `user_languages` (
-  `id` int(10) NOT NULL,
-  `user_id` int(10) NOT NULL,
+  `id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
   `language_id` int(10) NOT NULL,
-  `level` int(10) NOT NULL
+  `level` tinyint NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -247,8 +247,8 @@ CREATE TABLE `user_languages` (
 --
 
 CREATE TABLE `user_tags` (
-  `id` int(10) NOT NULL,
-  `user_id` int(10) NOT NULL,
+  `id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
   `tag_id` int(10) NOT NULL,
   `level` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -321,10 +321,7 @@ ALTER TABLE `reviews`
 -- Indices de la tabla `sent_emails`
 --
 ALTER TABLE `sent_emails`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `mail_emisor` (`sender_id`),
-  ADD KEY `mail_receptor` (`receiver_id`);
-
+  ADD PRIMARY KEY (`id`);
 --
 -- Indices de la tabla `tags`
 --
@@ -366,88 +363,21 @@ ALTER TABLE `user_tags`
 --
 
 --
--- AUTO_INCREMENT de la tabla `applicants`
---
-ALTER TABLE `applicants`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE applicants MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
+ALTER TABLE languages MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE notifications MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
+ALTER TABLE offers MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
+ALTER TABLE offer_languages MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
+ALTER TABLE offer_tags MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
+ALTER TABLE reports MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
+ALTER TABLE reviews MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
+ALTER TABLE sent_emails MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
+ALTER TABLE tags MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE users MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
+ALTER TABLE user_following MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
+ALTER TABLE user_languages MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
+ALTER TABLE user_tags MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT de la tabla `languages`
---
-ALTER TABLE `languages`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT de la tabla `notifications`
---
-ALTER TABLE `notifications`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `offers`
---
-ALTER TABLE `offers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `offer_languages`
---
-ALTER TABLE `offer_languages`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `offer_tags`
---
-ALTER TABLE `offer_tags`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `reports`
---
-ALTER TABLE `reports`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `reviews`
---
-ALTER TABLE `reviews`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `sent_emails`
---
-ALTER TABLE `sent_emails`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `tags`
---
-ALTER TABLE `tags`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
-
---
--- AUTO_INCREMENT de la tabla `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `user_following`
---
-ALTER TABLE `user_following`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `user_languages`
---
-ALTER TABLE `user_languages`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `user_tags`
---
-ALTER TABLE `user_tags`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
@@ -502,9 +432,6 @@ ALTER TABLE `reviews`
 --
 -- Filtros para la tabla `sent_emails`
 --
-ALTER TABLE `sent_emails`
-  ADD CONSTRAINT `mails_enviados_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `mails_enviados_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`);
 
 --
 -- Filtros para la tabla `user_following`

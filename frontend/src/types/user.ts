@@ -38,6 +38,10 @@ export type user = {
     type: UserTypeEnum;
     /** Optional URL to the user's profile picture. */
     profile_picture?: string;
+    /** The user's birthdate. */
+    birth_date: string;
+    /** Indicates if the user is enabled. */
+    is_enabled: boolean;
 };
 /** Enum de estados de usuario, 0 = Estudiando, 1 = Buscando trabajo, 2 = Trabajando, 3 = Egresado */
 export enum UserStatusEnum {

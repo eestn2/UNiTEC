@@ -3,189 +3,168 @@ import { useEffect, useState } from "react";
 import NavBar from "../UI/NavBar";
 import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import { calculateAge } from "../../global/function/calculateAge";
-import ActionButton from "../UI/ActionButton";
-import { getUserType } from "../../global/function/getUserType";
-
+import PendingUser from "../UI/admin/PendingUser";
+import user from "../../types/user";
+import LoadingScreen from "../UI/LoadingScreens/LoadingScreen";
 
 const AdminPanel: React.FC = () => {
-    const handleAcceptUser = async ( id: number) => {
-      const response = await axios.put('/admin/accept-new-user.php', {
-          target_user_id:id,
-      });
-    console.log(response);
-    await loadUsers();
-    };
-    const handleRejectUser = async ( id: number, user_type: number) => {
-      const response = await axios.put('/admin/reject-new-user.php', {
-          target_user_id:id,
-          target_user_type:user_type,
-      });
-    console.log(response);
-    await loadUsers();
-    };
-    const [users, setUsers] = useState<any[]>([]);
-    const loadUsers = async () => {
-        try {
-            const response = await axios.get('/admin/get-undefined-users.php');
-            if (response.status === 200 && response.data.status === "success") {
-                setUsers(response.data.data.users);
-            } else {
-                console.error("Failed to load users:", response.data.message);
-            }
-        } catch (error) {
-            console.error("An error occurred while loading users:", error);
-        }
-    };
-    useEffect(() => {
-        loadUsers();
-    }, []);
+  const [users, setUsers] = useState<user[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [awaitingAction, setAwaitingAction] = useState(false);
 
-    return (
-        <>
-        <NavBar />
-            <AppWindow
-                height={600}
-                width={1234}
-                className="feedbox"
-                style={{
-                    position: "absolute",
-                    left: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
-                    top: `${TranslateFigmaCoords.translateFigmaY(100)}px`,
-                                                overflowY: "scroll",
-                            maxHeight:`${TranslateFigmaCoords.translateFigmaX(480)}px`,
-                    borderTopRightRadius: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
-                    borderBottomRightRadius: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
-                }}
+  const handleAcceptUser = async (id: number) => {
+    setAwaitingAction(true);
+    try {
+      const response = await axios.put('/admin/accept-new-user.php', { target_user_id: id });
+      if (response.status === 200 && response.data.status === "success") {
+        setUsers(users.filter(user => user.id !== id));
+      } else {
+        alert("Error al aceptar el usuario. Por favor, intenta de nuevo.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Error al aceptar el usuario. Por favor, intenta de nuevo.");
+    }
+    setAwaitingAction(false);
+  };
+
+  const handleRejectUser = async (id: number, type: number) => {
+    setAwaitingAction(true);
+    try {
+      const response = await axios.put('/admin/reject-new-user.php', { target_user_id: id, target_user_type: type });
+      if (response.status === 200 && response.data.status === "success") {
+        setUsers(users.filter(user => user.id !== id));
+      } else {
+        alert("Error al rechazar el usuario. Por favor, intenta de nuevo.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Error al rechazar el usuario. Por favor, intenta de nuevo.");
+    }
+    setAwaitingAction(false);
+  };
+
+  const loadUsers = async () => {
+    try {
+      const response = await axios.get('/admin/get-undefined-users.php');
+      if (response.status === 200 && response.data.status === "success") {
+        setUsers(response.data.data.users);
+      } else {
+        alert("Error al cargar los usuarios. Por favor, intenta de nuevo.");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadUsers();
+  }, []);
+
+  if (loading) return <LoadingScreen />;
+
+  return (
+    <>
+      <NavBar />
+      <AppWindow
+        height={600}
+        width={1234}
+        className="feedbox"
+        style={{
+          position: "absolute",
+          left: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
+          top: `${TranslateFigmaCoords.translateFigmaY(100)}px`,
+          overflowY: "scroll",
+          maxHeight: `${TranslateFigmaCoords.translateFigmaX(480)}px`,
+          borderTopRightRadius: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
+          borderBottomRightRadius: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
+        }}
+      >
+        <div style={{ padding: `${TranslateFigmaCoords.translateFigmaX(16)}px` }}>
+          <h1 style={{ textAlign: "center", color: "#305894" }}>Solicitudes de Registro</h1>
+
+          <div style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center" }}>
+            <div
+              style={{
+                width: `${TranslateFigmaCoords.translateFigmaX(1100)}px`,
+                display: "flex",
+                borderRadius: `${TranslateFigmaCoords.translateFigmaX(30)}px`,
+                border: `${TranslateFigmaCoords.translateFigmaX(2)}px solid #5386FF`,
+                backgroundColor: "#E5E8F6",
+                overflow: "hidden",
+              }}
             >
-                <div style={{ padding: `${TranslateFigmaCoords.translateFigmaX(16)}px` }}>
-                    <h1 style={{ textAlign: "center", color: "#305894" }}>Solicitudes de Registro</h1>
-                    
-                   <div style={{display:"flex",width:"100%", justifyContent:"center", alignItems:"center" }}>
+              {["Nombre", "Edad", "Localidad", "Email", "Portfolio", "Tipo de Usuario"].map((title, index) => (
+                <div
+                  key={title}
+                  style={{
+                    flex: 1,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: `${TranslateFigmaCoords.translateFigmaX(6)}px 0`,
+                    fontWeight: "bold",
+                    color: "#305894",
+                    fontSize: "medium",
+                    borderLeft: index === 0 ? "none" : `${TranslateFigmaCoords.translateFigmaX(2)}px solid #5386FF`,
+                  }}
+                >
+                  {title}
+                </div>
+              ))}
+            </div>
+          </div>
 
-                    <div
-                        style={{
-                            width: `${TranslateFigmaCoords.translateFigmaX(1100)}px`,
-                            display: "flex",
-                            borderRadius: `${TranslateFigmaCoords.translateFigmaX(30)}px`,
-                            border: `${TranslateFigmaCoords.translateFigmaX(2)}px solid #5386FF`,
-                            backgroundColor: "#E5E8F6",
-                            overflow: "hidden",
-                            
-                        }}
-                        >
-                        {["Nombre", "Edad", "Localidad", "Email", "Portfolio", "Tipo de Usuario"].map((title, index) => (
-                            <div
-                            key={title}
-                            style={{
-                                flex: 1,
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                padding: `${TranslateFigmaCoords.translateFigmaX(6)}px 0`,
-                                fontWeight: "bold",
-                                color: "#305894",
-                                fontSize: "medium",
-                                borderLeft: index === 0 ? "none" : `${TranslateFigmaCoords.translateFigmaX(2)}px solid #5386FF`,
-                            }}
-                            >
-                            {title}
-                            </div>
-                        ))}
-                        </div>
-                   </div>
-                    {users.length === 0 ? (
-                        <p style={{ textAlign: 'center', color:"#305894" }}>No hay solicitudes de registro.</p>
-                    ) : (
-                        
-                        users.map((user) => (
-                        <div key={user.id} style={{
-                            background: 'white',
-                            borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
-                            padding: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
-                            marginTop: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
-                            marginBottom: `${TranslateFigmaCoords.translateFigmaX(16)}px`,
-                            boxShadow: `0 ${TranslateFigmaCoords.translateFigmaX(2)}px ${TranslateFigmaCoords.translateFigmaX(8)}px rgba(0,0,0,0.1)`,
-                            borderWidth :`${TranslateFigmaCoords.translateFigmaX(3)}px`,
-                            borderColor: '#5386FF',
-                            borderStyle: 'solid',
+          {users.length === 0 ? (
+            <p style={{ textAlign: 'center', color: "#305894" }}>No hay solicitudes de registro.</p>
+          ) : (
+            users.map((user) => (
+              <PendingUser
+                key={user.id}
+                user={user}
+                onApprove={handleAcceptUser}
+                onReject={handleRejectUser}
+              />
+            ))
+          )}
+        </div>
+      </AppWindow>
 
-                            
-                        }}>
-                            <div style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(6, 1fr)',
-                            gridTemplateRows: 'repeat(1, 1fr)',
-                            gap: `${TranslateFigmaCoords.translateFigmaX(16)}px`,
-                            alignItems: 'center',
-                            border: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
-                            paddingLeft: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
-                            backgroundColor:'#DEE0EB',
-                            color:'#6F88B3',
-                            borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
-                            borderWidth :`${TranslateFigmaCoords.translateFigmaX(3)}px`,
-                            borderColor: '#5386FF',
-                            borderStyle: 'solid'
-                            }}>
-                            <div style={{    display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            textAlign: "center",
-                            fontSize: "large",}} ><strong>{user.name}</strong></div>
-                            <div className="users_approve" style={{                           
-                            borderLeftWidth: `${TranslateFigmaCoords.translateFigmaX(3)}px`,
-                            borderLeftColor: '#5386FF',
-                            borderLeftStyle: 'solid',}}
-                            >{calculateAge(user.birth_date)} años</div>
-                            <div className="users_approve" style={{                           
-                            borderLeftWidth: `${TranslateFigmaCoords.translateFigmaX(3)}px`,
-                            borderLeftColor: '#5386FF',
-                            borderLeftStyle: 'solid',}}
-                            >{user.location}</div>
-                            <div className="users_approve" style={{                           
-                            borderLeftWidth: `${TranslateFigmaCoords.translateFigmaX(3)}px`,
-                            borderLeftColor: '#5386FF',
-                            borderLeftStyle: 'solid',}}
-                            >{user.email}</div>
-                            <div  className="users_approve" 
-                            style={{                           
-                            borderLeftWidth: `${TranslateFigmaCoords.translateFigmaX(3)}px`,
-                            borderLeftColor: '#5386FF',
-                            borderLeftStyle: 'solid',}}>{user.portfolio}</div>
-                            <div className="users_approve" style={{                           
-                            borderLeftWidth: `${TranslateFigmaCoords.translateFigmaX(3)}px`,
-                            borderLeftColor: '#5386FF',
-                            borderLeftStyle: 'solid',}}>{getUserType(user.user_type)}</div>
-                            </div>
+      {/* Overlay */}
+      {awaitingAction && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 9999
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "6px solid #305894",
+            borderTop: "6px solid #5386FF",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite"
+          }} />
+        </div>
+      )}
 
-                            <div style={{ marginTop:`${TranslateFigmaCoords.translateFigmaX(10)}px`, display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-                            <ActionButton 
-                            text={"Aceptar"}
-                            style={{                
-                                borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
-                                padding: `${TranslateFigmaCoords.translateFigmaX(18)}px ${TranslateFigmaCoords.translateFigmaY(16)}px`,}}
-                            action={() => {
-                                alert(`Aceptaste a: ${user.name}`);
-                                handleAcceptUser(user.id);}}    
-                            />
-                            <ActionButton 
-                            text={"Rechazar"}
-                            style={{                
-                                borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
-                                padding: `${TranslateFigmaCoords.translateFigmaX(18)}px ${TranslateFigmaCoords.translateFigmaY(16)}px`,
-                                backgroundColor: "#F03D3D"}}
-                               action={() => {
-                                alert(`Rechazaste a: ${user.name}`)
-                                handleRejectUser(user.id, user.user_type);}} 
-                            />
-                            </div>
-                        </div>
-                        ))
-                    )}
-                    </div>
-            </AppWindow>
-        </>
-    );
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
+    </>
+  );
 };
 
 export default AdminPanel;

@@ -1,26 +1,28 @@
 .users_approve{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: large;
-    min-height: calc((90 / 720) * var(--y-multiplier));
-    padding-left: calc((40 / 720) * var(--y-multiplier));
-    padding-right: calc((20 / 720) * var(--y-multiplier));
-    height: fit-content;
-    word-break: break-all;
-    white-space: normal;
-   
-    overflow-wrap: break-word;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: large;
+  min-height: calc((90 / 720) * var(--y-multiplier));
+  padding-left: calc((40 / 720) * var(--y-multiplier));
+  padding-right: calc((20 / 720) * var(--y-multiplier));
+  height: fit-content;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  white-space: normal;
+  border-left-style: solid;
+  border-left-width: calc((3 / 1280) * var(--x-multiplier));
+  border-left-color: #05386F;
+  overflow-wrap: break-word;
 }
 .admin_attributes_grid{
-
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(calc((250 / 720) * var(--y-multiplier)), 1fr));
-    gap: calc((16 / 720) * var(--y-multiplier));
-    padding: calc((16 / 720) * var(--y-multiplier));
-    overflow-y: scroll;
-    max-height: calc((480 / 720) * var(--y-multiplier));
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(calc((250 / 720) * var(--y-multiplier)), 1fr));
+  gap: calc((16 / 720) * var(--y-multiplier));
+  padding: calc((16 / 720) * var(--y-multiplier));
+  overflow-y: scroll;
+  max-height: calc((480 / 720) * var(--y-multiplier));
 }
 
 @media (max-width: 600px) {

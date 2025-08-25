@@ -13,7 +13,7 @@ services:
       - VITE_API_URL_DEV=http://localhost:9090/src/API/requests
       - VITE_API_URL_PROD=http://localhost:9090/src/API/requests
     ports:
-      - "10000:5173"
+      - "5174:5173"
     profiles: ["dev"]
 
   backend:
@@ -29,5 +29,5 @@ services:
       - DB_PASS_DEV=${DB_PASS_DEV}
       - DB_PORT_DEV=${DB_PORT_DEV}
     ports:
-      - "10001:80"
+      - "9090:80"
     profiles: ["dev"]

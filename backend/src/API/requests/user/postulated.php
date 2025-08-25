@@ -28,7 +28,9 @@ $stmt = $connection->prepare("SELECT `status` FROM applicants WHERE user_id = ? 
 $stmt->execute([$user_id, $offer_id]);
 
 $result = $stmt->fetch(PDO::FETCH_ASSOC);
-$is_postulated = $result["status"] ?? false; // Default to not postulated if not found
+// check if length of result is 0
+$is_postulated = !$result ? false : true; // Default to not postulated if not found
+error_log("Debug: user_id=$user_id, offer_id=$offer_id, is_postulated=" . $is_postulated);
 return_response("success", "Estado de postulación obtenido.", ["postulated" => $is_postulated]);
 
 ?>

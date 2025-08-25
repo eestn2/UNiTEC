@@ -48,10 +48,9 @@ import EditProfile from './user/EditProfile';
  */
 
 function App(): JSX.Element {
-  // Axios configs
   window.scrollTo(0, 0);
-
-  axios.defaults.baseURL = import.meta.env.DEV ? import.meta.env.VITE_API_URL_DEV : import.meta.env.VITE_API_URL_PROD;
+  // Axios configs
+  axios.defaults.baseURL = import.meta.env.DEV ? import.meta.env.VITE_API_URL_DEV : "http://eestn2.ghostix.com.ar:9090/UNiTEC-API/src/API/requests";
   axios.defaults.headers.common['Content-Type'] = 'application/json';
   axios.defaults.withCredentials = true;
   axios.interceptors.request.use((config) => {

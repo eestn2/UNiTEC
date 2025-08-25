@@ -7,7 +7,7 @@ services:
       - "10000:80"
     environment:
       - NODE_ENV=production
-      - VITE_API_URL_DEV=http://localhost:10001/src/API/requests
+      - VITE_API_URL_DEV=http://localhost:9090/src/API/requests
       - VITE_API_URL_PROD=http://eestn2.ghostix.com.ar:10001/UNiTEC-API/src/API/requests
     restart: unless-stopped
     # In production, serve built files. In dev, override with volume and npm run dev.
@@ -32,7 +32,7 @@ services:
       - EMAIL_PORT=${EMAIL_PORT}
       - EMAIL_USERNAME=${EMAIL_USERNAME}
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
-      - API_BASE_URL_DEV=http://eestn2.ghostix.com.ar:10001/src/API
+      - API_BASE_URL_DEV=http://localhost:9090/src/API
       - API_BASE_URL_PROD=http://eestn2.ghostix.com.ar:9090/UNiTEC-API/src/API
     depends_on:
       - mysql
