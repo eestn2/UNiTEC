@@ -102,6 +102,7 @@ const normalize = (arr: unknown): Tag[] => {
   const handleLogout = async () => {
     try {
       await axios.get('/session/logout.php', { withCredentials: true });
+      User.clear();
       navigate('/');
     } catch (error) {
       alert("Error al cerrar sesión. Por favor, inténtalo de nuevo.");

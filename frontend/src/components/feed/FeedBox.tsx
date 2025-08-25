@@ -78,6 +78,7 @@ function FeedBox() {
 
   // Load job offers on component mount
   useEffect(() => {
+    if (!User.data.id) window.location.reload();
     loadJobOffers();
     loadNotifications();
   }, []);
