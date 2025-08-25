@@ -31,7 +31,7 @@ import { useWindowSize } from '../hooks/responsive/useWindowSize';
 import LoadingScreen from './UI/LoadingScreens/LoadingScreen';
 import type { user } from '../types/user';
 import EditProfile from './user/EditProfile';
-
+import OffersPustulated from './offers/OffersPustulated';
 /**
  * The main application component that handles routing and session management.
  * 
@@ -104,6 +104,7 @@ function App(): JSX.Element {
               <Route path="/publish-offer" element={<PublishOffer />} />
               <Route path="/see-applicants" element={<SeeApplicants />} />
               <Route path="/send-email" element={<SendEmail />} /> 
+              <Route path="/offers-postulated" element={<OffersPustulated />} />
           </Routes>
           </BrowserRouter>
         </div>

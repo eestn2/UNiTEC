@@ -38,11 +38,11 @@ function FeedBox() {
   // State variables for job offers and notifications
   const [jobOffers, setJobOffers] = useState<ReactElement[] | undefined>(undefined);
   const [notifications, setNotifications] = useState<ReactElement[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loadingOffers, setLoadingOffers] = useState<boolean>(true);
   // Fetch job offers from the server
-  const loadJobOffers = async () => {
+  const loadJobOffers = async () => { 
     try {
-      const {data: response} = await axios.get<TypedResponseWNamedArray<offer, "job_offers">>(`/feed/job-offers.php`);
+      const { data: response } = await axios.get<TypedResponseWNamedArray<offer, "job_offers">>(`/feed/job-offers.php`);
       if (response.status !== "success") {
         console.error("Failed to load job offers:", response.message);
       } else {
@@ -58,11 +58,11 @@ function FeedBox() {
           />
         ));
         setJobOffers(offers);
-        setLoading(false);
+        setLoadingOffers(false);
       }
     } catch (error) {
       console.error("An error occurred while loading job offers:", error);
-      setLoading(false);
+      setLoadingOffers(false);
     }
   };
   // Fetch notifications from the server
@@ -87,8 +87,7 @@ function FeedBox() {
   useEffect(() => {
     loadJobOffers();
     loadNotifications();
-  }, []);
-  if (loading) return <LoadingScreen />;
+  }, []); 
   return (
     <div>
       <NavBar />
@@ -120,18 +119,22 @@ function FeedBox() {
         >
           Ofertas de Trabajo
         </div>
-        {jobOffers ? jobOffers : (
-          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-            <img src={no_feed} style={{
-              width: TranslateFigmaCoords.translateFigmaX(300),
-              height: TranslateFigmaCoords.translateFigmaX(300),
-            }} />
-            <span style={{
-              color: "rgb(170, 164, 211)",
-              textAlign: "center"
-            }}>No hay ofertas de trabajo.</span>
-          </div>
-        )}
+        { loadingOffers ? <LoadingScreen loadingContent={true}/>
+        : jobOffers ? jobOffers : (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <img src={no_feed} style={{
+                width: TranslateFigmaCoords.translateFigmaX(300),
+                height: TranslateFigmaCoords.translateFigmaX(300),
+              }} />
+              <span style={{
+                color: "rgb(170, 164, 211)",
+                textAlign: "center"
+              }}>No hay ofertas de trabajo.</span>
+            </div>
+          )
+        }
+
+
       </AppWindow>
       <AppWindow
         height={600}
@@ -142,9 +145,9 @@ function FeedBox() {
           top: `${TranslateFigmaCoords.translateFigmaY(100)}px`,
           overflowX: "hidden",
           overflowY: "auto",
-          display: "flex", 
-          flexDirection: "column", 
-          rowGap: TranslateFigmaCoords.translateFigmaY(20), 
+          display: "flex",
+          flexDirection: "column",
+          rowGap: TranslateFigmaCoords.translateFigmaY(20),
         }}
         className="notification-box"
       >
@@ -163,7 +166,7 @@ function FeedBox() {
           Notificaciones
         </div>
         {notifications.length > 0 ? notifications : (
-          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <img src={no_notifications} style={{
               width: TranslateFigmaCoords.translateFigmaX(200),
               height: TranslateFigmaCoords.translateFigmaX(200),
@@ -173,7 +176,7 @@ function FeedBox() {
               color: "rgb(170, 164, 211)"
             }}>No tienes notificaciones.</span>
           </div>
-          
+
         )}
       </AppWindow>
     </div>

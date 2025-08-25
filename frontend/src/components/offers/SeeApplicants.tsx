@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import NavBar from "../UI/NavBar";
+import LoadingScreen from "../UI/LoadingScreens/LoadingScreen";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import AppWindow from "../UI/AppWindow";
 import ModalOverlay from "./ModalOverlay";
@@ -29,7 +30,7 @@ const SeeApplicants: React.FC = () => {
   const [offers, setOffers] = useState<OfferWithApplicants[]>([]);
   const [popupActivo, setPopupActivo] = useState<number | null>(null);
   const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false)
-  const [loading, setLoading] = useState(true);
+  const [loadingOffers, setLoadingOffers] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const togglePopup = (offerId: number) => {
@@ -62,9 +63,9 @@ const SeeApplicants: React.FC = () => {
   }
 
   const changeInternalStatus = (
-    offerId: number,
-    postulanteId: number,
-    newStatus: number
+  offerId: number,
+  postulanteId: number,
+  newStatus: number
   ) => {
     setOffers((prevOffers) =>
       prevOffers.map((offer) =>
@@ -90,7 +91,7 @@ const SeeApplicants: React.FC = () => {
   }, [popupActivo]);
 
   const loadOffersWithApplicants = async () => {
-    setLoading(true);
+    setLoadingOffers(true);
     setError(null);
     try {
       const response = await axios.get(
@@ -104,7 +105,7 @@ const SeeApplicants: React.FC = () => {
     } catch {
       setError("No se pudo conectar con el servidor.");
     } finally {
-      setLoading(false);
+      setLoadingOffers(false);
     }
   };
 
@@ -134,9 +135,9 @@ const SeeApplicants: React.FC = () => {
         }}
       >
         <div className="Contenedor scroll">
-          {loading && <p>Cargando ofertas...</p>}
+          {loadingOffers && <LoadingScreen loadingContent={true}/>}
           {error && <p>{error}</p>}
-          {!loading &&
+          {!loadingOffers &&
             !error &&
             offers.map((offer) => (
               <div key={offer.id} className="offer-block">

@@ -12,7 +12,8 @@ import { useEffect, useState } from "react";
 import '../../styles/SeeEtiquetas.css';
 import Tag2 from "../UI/Tag2";
 import { getStates } from "../../global/function/getStates";
-
+import Lottie from "lottie-react";
+import throbber from "../../assets/animated/Insider-loading.json";
 
 type EtiquetaSeleccionada = {
   etiqueta: string;
@@ -107,6 +108,7 @@ function RegisterUser() {
   const [Languages, setLanguages] = useState<string[]>([]);
   const [Tags, setTags] = useState<string[]>([]);
   const navigate = useNavigate();
+  const [cargando, setCargando] = useState(false);
 
   const handleDeleteEtiqueta = (etiqueta: string, bloque: string) => {
     setLabelsFromSelection(prev =>
@@ -146,67 +148,70 @@ function RegisterUser() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setError("");
+    e.preventDefault();
+    setError("");
 
-  const langs = getIdsAndLevels(Languages, labelsFromSelection, 2);
-  const tags = getIdsAndLevels(Tags, labelsFromSelection, 1);
+    const langs = getIdsAndLevels(Languages, labelsFromSelection, 2);
+    const tags = getIdsAndLevels(Tags, labelsFromSelection, 1);
 
-  const formToSend = {
-    ...form,
-    languages: langs.ids,
-    tags: tags.ids,
-    languages_levels: langs.levels,
-    tags_levels: tags.levels
-  };
+    const formToSend = {
+      ...form,
+      languages: langs.ids,
+      tags: tags.ids,
+      languages_levels: langs.levels,
+      tags_levels: tags.levels
+    };
 
-  // Validation using formToSend instead of form
-  const requiredFields = [
-    "name", "birth_date", "email",
-    "password", "confirm_password",
-    "description", "user_type", "status_id"
-  ];
-  const newErrors: any = {};
-  let hasError = false;
-  const camposInvalidos = ["user_type", "status_id"];
+    // Validation using formToSend instead of form
+    const requiredFields = [
+      "name", "birth_date", "email",
+      "password", "confirm_password",
+      "description", "user_type", "status_id"
+    ];
+    const newErrors: any = {};
+    let hasError = false;
+    const camposInvalidos = ["user_type", "status_id"];
 
-  requiredFields.forEach((field) => {
-    const value = formToSend[field as keyof typeof formToSend];
-    if (
-      value === null ||
-      value === undefined ||
-      (typeof value === "string" && value.trim() === "") ||
-      (camposInvalidos.includes(field) && value === 0)
-    ) {
-      newErrors[field] = "Este campo es obligatorio";
+    requiredFields.forEach((field) => {
+      const value = formToSend[field as keyof typeof formToSend];
+      if (
+        value === null ||
+        value === undefined ||
+        (typeof value === "string" && value.trim() === "") ||
+        (camposInvalidos.includes(field) && value === 0)
+      ) {
+        newErrors[field] = "Este campo es obligatorio";
+        hasError = true;
+      }
+    });
+
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formToSend.email)) {
+      newErrors.email = "Formato de email inválido";
       hasError = true;
     }
-  });
 
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formToSend.email)) {
-    newErrors.email = "Formato de email inválido";
-    hasError = true;
-  }
-
-  if (formToSend.password !== formToSend.confirm_password) {
-    newErrors.confirm_password = "Las contraseñas no coinciden";
-    hasError = true;
-  }
-
-  setFieldErrors((prev) => ({ ...prev, ...newErrors }));
-  if (hasError) return;
-
-  try {
-    const res = await axios.post("/session/user-register.php", formToSend);
-    if (res.data.status === "success") {
-      navigate("/");
-    } else {
-      setError(res.data.message || "Error en el registro");
+    if (formToSend.password !== formToSend.confirm_password) {
+      newErrors.confirm_password = "Las contraseñas no coinciden";
+      hasError = true;
     }
-  } catch {
-    setError("No se pudo registrar. Intente de nuevo más tarde.");
-  }
-};
+
+    setFieldErrors((prev) => ({ ...prev, ...newErrors }));
+    if (hasError) return;
+
+    try {
+      setCargando(true);
+      const res = await axios.post("/session/user-register.php", formToSend);
+      if (res.data.status === "success") {
+        navigate("/");
+      } else {
+        setCargando(false);
+        setError(res.data.message || "Error en el registro");
+      }
+    } catch {
+      setCargando(false);
+      setError("No se pudo registrar. Intente de nuevo más tarde.");
+    }
+  };
 
 
 
@@ -394,7 +399,7 @@ function RegisterUser() {
             paddingLeft: `${TranslateFigmaCoords.translateFigmaX(25)}`,
             paddingRight: `${TranslateFigmaCoords.translateFigmaX(25)}`,
           }}>
-            <div style={{ height: 'auto',display:'flex',flexDirection:'column' }}>
+            <div style={{ height: 'auto', display: 'flex', flexDirection: 'column' }}>
               <div>
                 <div className="corner-container">
                   <TextBox name="user-description" placeholder="Ingrese una descripción personal" width={292} height={265} className="corner-visible" onChange={(e) => handleChange("description", e.target.value)} />
@@ -410,7 +415,7 @@ function RegisterUser() {
                 blocks={blocks}
                 searchData={searchData}
                 etiquetasSeleccionadas={labelsFromSelection}
-                setEtiquetasSeleccionadas={setLabelsFromSelection} 
+                setEtiquetasSeleccionadas={setLabelsFromSelection}
                 className="labels-selection"
               />
             </div>
@@ -468,10 +473,24 @@ function RegisterUser() {
               paddingTop: `${TranslateFigmaCoords.translateFigmaY(20)}`
             }}>
               Si has rellenado todos los campos necesarios solo queda:
-            </span>
-            <ActionButton height={60} text={"Registrarse"} width={100} action={(e) => {
-              handleSubmit(e);
-            }} />
+            </span> 
+            {cargando? 
+              <ActionButton vertical={true} height={50} width={100} text="" style={{ backgroundColor: 'white', color: '#888', border: '2px solid #ccc', cursor: 'not-allowed' }} action={(event) => {
+                event.preventDefault();
+              }}>
+
+                <Lottie
+                  animationData={throbber}
+                  loop={true}
+                  autoplay={true}
+                  style={{ height: '100%', scale: 1.5 }}
+                />
+
+              </ActionButton>
+              :
+              <ActionButton height={60} text={"Registrarse"} width={100} action={(e) => {
+                handleSubmit(e);
+              }} /> }
             <div className="delimiter"></div>
             <span className="form-text" style={{ paddingBottom: `${TranslateFigmaCoords.translateFigmaY(17)}` }}>
               Registrarse como <Link to="/register-enterprise" className="golden-link">Empresa</Link><br />
