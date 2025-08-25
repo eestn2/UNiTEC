@@ -51,7 +51,7 @@ const SeeApplicants: React.FC = () => {
         setOffers((prevOffers) =>
           prevOffers.map((offer) =>
             offer.id === offerId ? { ...offer, status: 0 } : offer
-        ));
+          ));
         setShowConfirmationModal(false);
       } else {
         console.error("Ocurrio un error.")
@@ -63,21 +63,21 @@ const SeeApplicants: React.FC = () => {
   }
 
   const changeInternalStatus = (
-  offerId: number,
-  postulanteId: number,
-  newStatus: number
+    offerId: number,
+    postulanteId: number,
+    newStatus: number
   ) => {
     setOffers((prevOffers) =>
       prevOffers.map((offer) =>
         offer.id === offerId
           ? {
-              ...offer,
-              applicants: offer.applicants?.map((postulante) =>
-                postulante.id === postulanteId
-                  ? { ...postulante, status: newStatus }
-                  : postulante
-              ),
-            }
+            ...offer,
+            applicants: offer.applicants?.map((postulante) =>
+              postulante.id === postulanteId
+                ? { ...postulante, status: newStatus }
+                : postulante
+            ),
+          }
           : offer
       )
     );
@@ -135,7 +135,7 @@ const SeeApplicants: React.FC = () => {
         }}
       >
         <div className="Contenedor scroll">
-          {loadingOffers && <LoadingScreen loadingContent={true}/>}
+          {loadingOffers && <LoadingScreen loadingContent={true} />}
           {error && <p>{error}</p>}
           {!loadingOffers &&
             !error &&
@@ -144,13 +144,13 @@ const SeeApplicants: React.FC = () => {
                 <button
                   className="offer-header"
                   onClick={() => togglePopup(offer.id)}
-                  style={offer.status === 0 ? {backgroundColor: "#c9c9c9"} : {}}
+                  style={offer.status === 0 ? { backgroundColor: "#c9c9c9" } : {}}
                 >
                   <span className="texto-truncado">{offer.title}</span>
                   {offer.status !== 0 && (
-                    <ActionButton text="Cerrar" height={"80%"} style={{backgroundColor: "var(--danger)"}} action={() => {
+                    <ActionButton text="Cerrar" height={"80%"} style={{ backgroundColor: "var(--danger)" }} action={() => {
                       setShowConfirmationModal(true);
-                    }}/>
+                    }} />
                   )}
                 </button>
               </div>
@@ -169,11 +169,11 @@ const SeeApplicants: React.FC = () => {
       )}
       {ofertaActiva && showConfirmationModal && (
         <ConfirmModal
-            title="Confirmar eliminación"
-            message="¿Estás seguro de que deseas eliminar esta oferta?"
-            onAccept={() => handleDisable(ofertaActiva.id)}
-            onReject={() => setShowConfirmationModal(false)}
-            onClose={() => setShowConfirmationModal(false)}
+          title="Confirmar eliminación"
+          message="¿Estás seguro de que deseas eliminar esta oferta?"
+          onAccept={() => handleDisable(ofertaActiva.id)}
+          onReject={() => setShowConfirmationModal(false)}
+          onClose={() => setShowConfirmationModal(false)}
         />
       )}
     </>
