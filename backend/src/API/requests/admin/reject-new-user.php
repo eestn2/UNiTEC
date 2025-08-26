@@ -98,6 +98,6 @@ try {
 } catch(PDOException $e) {
     $connection->rollBack();
     error_log("Error rejecting user: " . $e->getMessage());
-    return_response("failed", "Error al rechazar el usuario." . $e->getMessage(), null);
+    return_response("failed", "Error al rechazar el usuario.", null);
 }
 ?>

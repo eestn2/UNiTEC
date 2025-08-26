@@ -25,7 +25,7 @@ require_once __DIR__ . '/../../logic/security/security_functions.php';
 if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
 
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($data->email) || !isset($data->password) || $data -> user_type===0 )  return_response("failed", "Faltan datos.", null);
+if (!isset($data->email) || !isset($data->password) || !isset($data->user_type) || $data -> user_type===0 )  return_response("failed", "Faltan datos.", null);
 
 // Assign request body values to variables
 $name = $data->name ?? null;

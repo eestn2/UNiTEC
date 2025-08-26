@@ -32,8 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'PUT') return_response("failed", "Method not 
 $data = json_decode(file_get_contents("php://input"));
 if (!$data || !isset($data->target_user_id)) return_response("failed", "Falta el ID del usuario a aceptar", null);
 
-$target_user_id = intval($data->target_user_id);
-if ($target_user_id <= 0) return_response("failed", "ID de usuario a aceptar inválido.", null);
+$target_user_id = filter_var($data->target_user_id, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1]]);  
+if ($target_user_id === false) return_response("failed", "ID de usuario a aceptar inválido.", null); 
 
 // Obtener el usuario autenticado desde la sesión
 if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
