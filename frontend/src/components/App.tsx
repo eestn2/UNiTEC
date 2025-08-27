@@ -32,6 +32,8 @@ import LoadingScreen from './UI/LoadingScreens/LoadingScreen';
 import type { user } from '../types/user';
 import EditProfile from './user/EditProfile';
 import OffersPustulated from './offers/OffersPustulated';
+import UserReview from './UI/user/UserReview';
+import ReportUser from './UI/user/ReportUser';
 /**
  * The main application component that handles routing and session management.
  * 
@@ -99,11 +101,14 @@ function App(): JSX.Element {
               <Route path='/edit-profile' element={<EditProfile />} />
               {/*Add default admin-menu route to the approve users one. */}
               <Route path='/admin-menu/:panel' element={<AdminIndex />} />
+              <Route path="/job-offer/:offerId/:showReviewButton" element={<JobOfferFV />} />
               <Route path="/job-offer/:offerId" element={<JobOfferFV />} />
               <Route path="/job-offer/:offerId/:message/:type" element={<JobOfferFV />} />
               <Route path="/publish-offer" element={<PublishOffer />} />
               <Route path="/see-applicants" element={<SeeApplicants />} />
               <Route path="/send-email" element={<SendEmail />} /> 
+             <Route path="/review/:reviewedId/:reviewedName/:reviewerId/:reviewerName" element={<UserReview />} />
+             <Route path="/report/:reportedId/:reportedName" element={<ReportUser />} />
               <Route path="/offers-postulated" element={<OffersPustulated />} />
           </Routes>
           </BrowserRouter>

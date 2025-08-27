@@ -76,7 +76,10 @@ const OffersPustulated: React.FC = () => {
             <div key={app.application_id} className="offer-block">
               <button
                 className="offer-header"
-                onClick={() => navigate(`/job-offer/${app.application_id}`)}
+                onClick={() => {
+                  const showReview = Number(app.application_status) === 1 ? 'true' : '';
+                  navigate(`/job-offer/${app.application_id}/${showReview}`);
+                }}
                 style={{ position: 'relative', overflow: 'visible' }}
               >
                 <span className="texto-truncado" style={{ maxWidth: '80%' }}>{app.title}</span>

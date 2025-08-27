@@ -43,8 +43,7 @@ const ProfileInfo: React.FC = () => {
   const [userData, setUserData] = useState<UserType & {
     tags?: tag[];
     languages?: Language[];
-  }>();
-  const navigate = useNavigate();
+  }>(); 
   const showNotImplementedToast = useNotImplementedToast();
   useEffect(() => {
     if (!id) return;
@@ -82,8 +81,11 @@ const ProfileInfo: React.FC = () => {
     showNotImplementedToast();
   };
 
+  const navigate = useNavigate();
   const handleReport = () => {
-    console.log("Report clicked");
+    if (userData?.id && userData?.name) {
+      navigate(`/report/${userData.id}/${encodeURIComponent(userData.name)}`);
+    }
   };
 
   // Group tags and languages by level

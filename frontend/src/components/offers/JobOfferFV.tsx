@@ -12,13 +12,14 @@ import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 import ActionButton from "../UI/ActionButton";
 import { user } from "../../types/user";
 import TextWithBreaks from "../UI/TextWithBreaks";
+import User from "../session/User";
 
 const JobOfferFV: React.FC = () => {
     // Re-Render on window resize
     const windowSize = useWindowSize();
     console.log("Window size:", windowSize);
     // State variables for job offer data
-    const { offerId, message, type } = useParams<{ offerId: string; message: string; type: string }>();
+    const { offerId, message, type, showReviewButton: showReviewParam } = useParams<{ offerId: string; message: string; type: string; showReviewButton?: string }>();
     const iType = type ? parseInt(type, 10) : undefined;
     const [jobOffer, setJobOffer] = useState<offer | null>(null);
     const [author, setAuthor] = useState<user | null>(null);
@@ -63,6 +64,14 @@ const JobOfferFV: React.FC = () => {
     console.log(author);
     if (loading) return <div>Cargando...</div>;
     if (!jobOffer) return <div>No se encontró la oferta.</div>;
+
+    // Botón para reseñar si el estado de la oferta es 1, o si se pasa por params
+    let showReviewButton = false;
+    if (typeof showReviewParam !== 'undefined') {
+        showReviewButton = showReviewParam === 'true';
+    } else if (typeof showReviewParam === 'undefined') {
+        showReviewButton = false;
+    }
 
     return (<>
         <NavBar />
@@ -131,33 +140,49 @@ const JobOfferFV: React.FC = () => {
                             }}>{message}</span>
                         </div>
                     )}
-                    <div className="text" style={{ 
+                    <div className="text" style={{
                         marginBottom: `${TranslateFigmaCoords.translateFigmaY(5)}px`,
-                        marginTop: !message ? 0 : `${TranslateFigmaCoords.translateFigmaY(40)}px`}}>
+                        marginTop: !message ? 0 : `${TranslateFigmaCoords.translateFigmaY(40)}px`
+                    }}>
                         <span className="offer-title">{jobOffer.title}</span>
                         <br />
-                        <div className="offer-fv-description-delimiter" style={{marginBottom: `${TranslateFigmaCoords.translateFigmaY(4)}px`}}></div>
+                        <div className="offer-fv-description-delimiter" style={{ marginBottom: `${TranslateFigmaCoords.translateFigmaY(4)}px` }}></div>
                         <div style={{
                             width: `${TranslateFigmaCoords.translateFigmaX(1154)}px`,
                             height: `${TranslateFigmaCoords.translateFigmaY(350)}px`,
                             paddingRight: `${TranslateFigmaCoords.translateFigmaX(24)}px`,
-                            overflowY: "auto" 
+                            overflowY: "auto"
                         }}
-                        className="scrollbar">
+                            className="scrollbar">
                             <TextWithBreaks text={jobOffer.description} />
                         </div>
-                        <div className="offer-fv-description-delimiter" style={{marginTop: `${TranslateFigmaCoords.translateFigmaY(4)}px`}}></div>
+                        <div className="offer-fv-description-delimiter" style={{ marginTop: `${TranslateFigmaCoords.translateFigmaY(4)}px` }}></div>
                         {iType === 4 || iType === 5 ? null : (
                             // If notification type is 4 or 5, hide Deapply button
-                            <ActionButton text="Despostularse" className="offer-fv-deapply" height={40} style={{marginTop: `${TranslateFigmaCoords.translateFigmaY(6)}px`}}/>
-                        )}
-                        
+                            showReviewButton ? author && (
+                                <ActionButton
+                                    text={`Reseñar a ${author.name || "usuario"}`}
+                                    height={40}
+                                    style={{ marginTop: `${TranslateFigmaCoords.translateFigmaY(12)}px`, backgroundColor: "#3a3a7c", color: "#fff" }}
+                                    action={() => {
+                                        navigate(`/review/${author.id}/${encodeURIComponent(author.name)}/${User.data.id}/${encodeURIComponent(User.data.name)}`);
+                                    }}
+                                />
+                            ) :
+                                (
+                                    <ActionButton text="Despostularse" className="offer-fv-deapply" height={40} style={{ marginTop: `${TranslateFigmaCoords.translateFigmaY(6)}px` }} />
+                                )
+                        )
+                        }
+
+
                     </div>
                 </AppWindow>
             </AppWindow>
         </AppWindow>
     </>
     );
+
 };
 
 export default JobOfferFV;
