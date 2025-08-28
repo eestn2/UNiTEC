@@ -17,15 +17,16 @@ const AdminPanel: React.FC = () => {
     try {
       const response = await axios.put('/admin/accept-new-user.php', { target_user_id: id });
       if (response.status === 200 && response.data.status === "success") {
-        setUsers(users.filter(user => user.id !== id));
+        setUsers(prev => prev.filter(user => user.id !== id));
       } else {
         alert("Error al aceptar el usuario. Por favor, intenta de nuevo.");
       }
     } catch (error) {
       console.error(error);
       alert("Error al aceptar el usuario. Por favor, intenta de nuevo.");
+    } finally {
+      setAwaitingAction(false);
     }
-    setAwaitingAction(false);
   };
 
   const handleRejectUser = async (id: number, type: number) => {
