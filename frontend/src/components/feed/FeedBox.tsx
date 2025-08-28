@@ -49,6 +49,7 @@ function FeedBox() {
         console.error("Failed to load job offers:", response.message);
       } else {
         setJobOffers(response.data.job_offers);
+        setLoadingOffers(false);
       }
     } catch (error) {
       console.error("An error occurred while loading job offers:", error);
