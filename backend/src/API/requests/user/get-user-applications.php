@@ -51,6 +51,6 @@ try {
         return_response("failed", "No se encontraron postulaciones.", null);
     }
 } catch (PDOException $e) {
-    return_response("failed", "Error en la consulta: " . $e->getMessage(), null);
+    return_response("failed", "Error al recoger aplicaciones. ", null);
 }
 ?>

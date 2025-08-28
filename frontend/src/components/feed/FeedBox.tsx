@@ -37,29 +37,18 @@ import LoadingScreen from '../UI/LoadingScreens/LoadingScreen';
 function FeedBox() {
   // State variables for job offers and notifications
   const [jobOffers, setJobOffers] = useState<offer[]>([]);
-
-  const [notifications, setNotifications] = useState<ReactElement[]>([]);
   const [loadingOffers, setLoadingOffers] = useState<boolean>(true);
+  const [notifications, setNotifications] = useState<ReactElement[]>([]);
   // Fetch job offers from the server
   const loadJobOffers = async () => { 
     try {
-      const { data: response } = await axios.get<TypedResponseWNamedArray<offer, "job_offers">>(`/feed/job-offers.php`);
+      const { data: response } = await axios.get<TypedResponseWNamedArray<offer, "job_offers">>(
+        `/feed/job-offers.php`
+      );
       if (response.status !== "success") {
         console.error("Failed to load job offers:", response.message);
       } else {
-        const offers = response.data.job_offers.map((offer) => (
-          <JobOffer
-            key={offer.id}
-            width={820}
-            height={400}
-            authorId={offer.creator_id}
-            title={offer.title}
-            description={offer.description}
-            offerId={offer.id}
-          />
-        ));
-        setJobOffers(offers);
-        setLoadingOffers(false);
+        setJobOffers(response.data.job_offers);
       }
     } catch (error) {
       console.error("An error occurred while loading job offers:", error);
@@ -123,21 +112,31 @@ function FeedBox() {
           Ofertas de Trabajo
         </div>
         { loadingOffers ? <LoadingScreen loadingContent={true}/>
-        : jobOffers ? jobOffers : (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <img src={no_feed} style={{
-                width: TranslateFigmaCoords.translateFigmaX(300),
-                height: TranslateFigmaCoords.translateFigmaX(300),
-              }} />
-              <span style={{
-                color: "rgb(170, 164, 211)",
-                textAlign: "center"
-              }}>No hay ofertas de trabajo.</span>
-            </div>
-          )
-        }
-
-
+          : jobOffers.length > 0 ? ( 
+            jobOffers.map((offer) => (
+              <JobOffer
+                key={offer.id}
+                width={820}
+                height={400}
+                authorId={offer.creator_id}
+                title={offer.title}
+                description={offer.description}
+                offerId={offer.id}
+                onDelete={(id) => setJobOffers((prev) => prev.filter((o) => o.id !== id))}
+              />
+            ))
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <img src={no_feed} style={{
+                  width: TranslateFigmaCoords.translateFigmaX(300),
+                  height: TranslateFigmaCoords.translateFigmaX(300),
+                }} />
+                <span style={{
+                  color: "rgb(170, 164, 211)",
+                  textAlign: "center"
+                }}>No hay ofertas de trabajo.</span>
+              </div>
+            )}
       </AppWindow>
       <AppWindow
         height={600}
