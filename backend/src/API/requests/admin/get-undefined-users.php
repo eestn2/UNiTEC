@@ -16,6 +16,24 @@ if (!is_admin($_SESSION['user']['id'], $connection)) {
 try {
     $stmt = $connection->query("SELECT * FROM users WHERE enabled= 0");
     $users = $stmt->fetchAll();
+    if (!$users) return_response("success", "No hay usuarios no habilitados.", ["users" => []]);
+    // Sanitize user data to match the expected structure
+    $users = array_map(function($user) {
+        return [
+            "id" => $user['id'],
+            "name" => $user['name'],
+            "email" => $user['email'],
+            "location" => $user['location'],
+            "status" => $user['status'],
+            "description" => $user['description'],
+            "portfolio" => $user['portfolio'],
+            "type" => $user['user_type'],
+            "profile_picture" => $user['profile_picture'] ?? null,
+            "birth_date" => $user['birth_date'],
+            "is_enabled" => $user['enabled'] == 1,
+        ];
+    }, $users);
+    error_log("Users retrieved successfully: " . json_encode($users));
     return_response("success", "not enabled retrieved successfully.", ["users" => $users]);
 } catch (PDOException $e) {
     error_log("Error retrieving users: " . $e->getMessage());

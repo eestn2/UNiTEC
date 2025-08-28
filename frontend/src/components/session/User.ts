@@ -29,7 +29,7 @@ import type { user } from "../../types/user";
  * @author Haziel Magallanes
  */
 class User {
-    private user_data: user| null = null;
+    private user_data: user | null = null;
 
     /**
      * Sets the user session data.
@@ -39,6 +39,12 @@ class User {
         this.user_data = user;
     }
 
+    /**
+     * Clears the user session data.
+     */
+    clear() {
+        this.user_data = null;
+    }
     /**
      * Returns a Proxy to access user session data properties directly.
      * @returns {Proxy<user | null>}

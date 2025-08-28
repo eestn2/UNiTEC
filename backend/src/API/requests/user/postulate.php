@@ -16,7 +16,7 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id'])) {
     return_response("failed", "Usuario no autenticado.", null);
 }
 
-$user_id = $_SESSION['user'] ['id'] ;
+$user_id = $_SESSION['user']['id'] ;
 $offer_id = intval($data->offer_id);
 if ($user_id <= 0 || $offer_id <= 0) {
     return_response("failed", "Datos invalidos.", null);
