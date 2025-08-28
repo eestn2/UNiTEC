@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import User from '../../session/User';
 import axios from 'axios';
 import './applicants.css';
 import defaultProfileImage from '../../../assets/defaults/profile-picture/1.svg';
@@ -24,6 +26,7 @@ const AplicantsCard: React.FC<UserCardProps> = ({
   userId,
 }) => {
   const [status, setStatus] = useState<number>(initialStatus);
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -116,6 +119,17 @@ const AplicantsCard: React.FC<UserCardProps> = ({
             {loading ? 'Procesando...' : buttonText}
           </button>
           <button className={`btn btn-red ${buttonRechazarClass}`} style={status === 2 ? {display: 'none'} : {}}  onClick={handleReject} disabled={loading}>Rechazar</button>
+          {status === 1 && (
+            <button
+              className="btn"
+              style={{ backgroundColor: '#3a3a7c', color: '#fff', borderRadius: '9999px', fontWeight: 600, fontSize: 'inherit', width: '100px', cursor: 'pointer' }}
+              onClick={() => {
+                navigate(`/review/${userId}/${encodeURIComponent(name || '')}/${User.data.id}/${encodeURIComponent(User.data.name)}`);
+              }}
+            >
+              Reseñar
+            </button>
+          )}
         </div>
         {error && <div className="error">{error}</div>}
       </div>

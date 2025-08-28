@@ -1,11 +1,21 @@
 
 import Player from 'lottie-react';
 import throbber from '../../../assets/animated/loading_square.json';
+import throbber2 from '../../../assets/animated/loading_square_grey.json'
 import whiteBriefcase from '../../../assets/unitec/white.svg';
+import greyBriefCase from '../../../assets/unitec/grey.svg'
 import './blockFooter.css'
-export default function LoadingScreen() {
+interface LoadingScreenProps {
+  loadingContent?: boolean;
+  size?: string;
+}
+
+export default function LoadingScreen({ loadingContent = false, size = "1" }: LoadingScreenProps) {
   return (
-    <div style={styles.container}>
+    <div style={{
+      ...styles.container,
+      ...(loadingContent ? { position: 'absolute', top: '35%', transform: `scale(${size})` } : { height: '100vh' }),
+    }}>
       <div style={styles.maskWrapper}>
         <svg
           width={140}
@@ -16,9 +26,10 @@ export default function LoadingScreen() {
         >
 
           <defs>
+            <title id="briefcaseTitle">{loadingContent ? 'Cargando contenido' : 'Cargando'}</title>
             <mask id="briefcase-mask" maskUnits="userSpaceOnUse">
               <image
-                href={whiteBriefcase}
+                href={loadingContent ? greyBriefCase : whiteBriefcase}
                 width={140}
                 height={126}
                 style={{}}
@@ -32,26 +43,26 @@ export default function LoadingScreen() {
                 <Player
                   autoplay
                   loop
-                  animationData={throbber}
+                  animationData={loadingContent ? throbber2 : throbber}
                   style={{ width: '100%', height: '100%' }}
                 />
               </div>
             </foreignObject>
           </g>
         </svg>
-      </div> 
+      </div>
     </div>
   );
 }
 
 const styles = {
   container: {
-    height: '100vh',
+    width: '100%',
     display: 'flex',
     flexDirection: 'column' as const,
     justifyContent: 'center',
     alignItems: 'center',
-    color: '#fff', 
+    color: '#0080d0ff'
   },
   maskWrapper: {
     position: 'relative' as const,
@@ -60,9 +71,5 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  text: {
-    marginTop: '24px',
-    fontSize: '1.2rem',
   },
 };
