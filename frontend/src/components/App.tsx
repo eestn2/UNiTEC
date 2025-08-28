@@ -23,6 +23,7 @@ import JobOfferFV from './offers/JobOfferFV';
 import AdminIndex from './admin/AdminIndex';
 import ProfileInfo from './user/ProfileInfo';
 import { ToastManagerProvider } from './UI/ToastManager';
+import PageNotFound from './misc/PageNotFound';
 import { useEffect, useState } from 'react';
 import PublishOffer from './offers/PublishOffer';
 import SeeApplicants from './offers/SeeApplicants';
@@ -94,6 +95,8 @@ function App(): JSX.Element {
               <Route path='/password-reset' element={<ForgotPasswordMail />} />
               <Route path='/password-reset-code' element={<ForgotPasswordCode />} />
               <Route path='/password-reset-new' element={<ForgotPasswordNewPass />} />
+              <Route path='/password-reset-code' element={<ForgotPasswordCode />} />
+              <Route path='/password-reset-new' element={<ForgotPasswordNewPass />} />
               <Route path='/profile/:id' element={<ProfileInfo />} />
               <Route path='/edit-profile' element={<EditProfile />} />
               {/*Add default admin-menu route to the approve users one. */}
@@ -103,6 +106,7 @@ function App(): JSX.Element {
               <Route path="/publish-offer" element={<PublishOffer />} />
               <Route path="/see-applicants" element={<SeeApplicants />} />
               <Route path="/send-email" element={<SendEmail />} /> 
+              <Route path='*' element={<PageNotFound />} />
           </Routes>
           </BrowserRouter>
         </div>
