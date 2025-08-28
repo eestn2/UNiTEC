@@ -106,7 +106,7 @@ CREATE TABLE `offer_languages` (
 
 CREATE TABLE `offer_tags` (
   `id` bigint NOT NULL,
-  `tag_id` int(10) NOT NULL,
+  `tag_id` bigint NOT NULL,
   `offer_id` bigint NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
