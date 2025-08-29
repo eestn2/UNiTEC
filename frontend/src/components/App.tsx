@@ -71,7 +71,7 @@ function App(): JSX.Element {
     // Check session from server
     axios.get('/session/me.php')
       .then(res => {
-        if (res.data.status === 'success' && res.data.data && res.data.data.user as user) {
+        if (res.status === 200 && res.data.data.user as user) {
           User.set(res.data.data.user as user);
           setSession(true);
         }

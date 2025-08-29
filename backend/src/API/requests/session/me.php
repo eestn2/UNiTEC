@@ -10,8 +10,5 @@ session_start();
 require_once __DIR__ . '/../cors-policy.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
-if (isset($_SESSION['user'])) {
-    return_response_outdated("success", "Usuario autenticado.", ["user" => $_SESSION['user']]);
-} else {
-    return_response_outdated("failed", "No autenticado.", null);
-}
+if (isset($_SESSION['user'])) return_response(status::OK, "Usuario autenticado.", ["user" => $_SESSION['user']]);
+return_response(status::UNAUTHORIZED, "No autenticado.", null);
