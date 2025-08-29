@@ -18,14 +18,14 @@ require_once __DIR__ . "/../requests/cors-policy.php";
 require_once __DIR__ . '/../logic/database/connection.php';
 require_once __DIR__ . '/../logic/communications/return_response.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response_outdated("failed", "Metodo no permitido.", null);
 
 try {
     $stmt = $connection->query("SELECT * FROM offer_languages");
     $languages = $stmt->fetchAll();
-    return_response("success", "languages retrieved successfully.", ["languages" => $languages]);
+    return_response_outdated("success", "languages retrieved successfully.", ["languages" => $languages]);
 } catch (PDOException $e) {
     error_log("Error retrieving job languages: " . $e->getMessage());
-    return_response("failed", "Error retrieving languages.", null);
+    return_response_outdated("failed", "Error retrieving languages.", null);
 }
 ?>

@@ -4,13 +4,13 @@ require_once __DIR__ . "/../../logic/database/connection.php";
 require_once __DIR__ . "/../../logic/communications/return_response.php";
 
 if ($_SERVER["REQUEST_METHOD"] !== "GET") {
-    return_response("failed", "Metodo no permitido.", null);
+    return_response_outdated("failed", "Metodo no permitido.", null);
     exit;
 }
 
 $user_id = isset($_GET["user_id"]) ? intval($_GET["user_id"]) : null;
 if (!$user_id || $user_id <= 0) {
-    return_response("failed", "Falta el ID del usuario.", null);
+    return_response_outdated("failed", "Falta el ID del usuario.", null);
     exit;
 }
 
@@ -21,7 +21,7 @@ try {
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$user || !in_array(intval($user['user_type']), [2, 3])) {
-        return_response("failed", "El usuario no tiene permisos para ver postulaciones.", null);
+        return_response_outdated("failed", "El usuario no tiene permisos para ver postulaciones.", null);
         exit;
     }
 
@@ -46,11 +46,11 @@ try {
     $applications = $query->fetchAll(PDO::FETCH_ASSOC);
 
     if ($applications) {
-        return_response("success", "Postulaciones encontradas.", $applications);
+        return_response_outdated("success", "Postulaciones encontradas.", $applications);
     } else {
-        return_response("failed", "No se encontraron postulaciones.", null);
+        return_response_outdated("failed", "No se encontraron postulaciones.", null);
     }
 } catch (PDOException $e) {
-    return_response("failed", "Error al recoger aplicaciones. ", null);
+    return_response_outdated("failed", "Error al recoger aplicaciones. ", null);
 }
 ?>

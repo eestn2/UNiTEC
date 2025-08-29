@@ -25,14 +25,14 @@ require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 require_once __DIR__ . '/../../logic/security/is_admin.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "DELETE") return_response("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] !== "DELETE") return_response_outdated("failed", "Metodo no permitido.", null);
 
 $data = json_decode(file_get_contents("php://input"));
 if (!$data || !isset($data->id)) {
-    return_response("failed", "Datos de entrada inválidos.", null);
+    return_response_outdated("failed", "Datos de entrada inválidos.", null);
 }
 if (!is_admin($_SESSION['user']['id'], $connection)) {
-    return_response("failed", "Solo los administradores pueden eliminar idiomas.", null);
+    return_response_outdated("failed", "Solo los administradores pueden eliminar idiomas.", null);
 }
 $data->id = intval($data->id);
 
@@ -51,9 +51,9 @@ try {
 
     $connection->commit(); 
 
-    return_response("success", "Idioma eliminado con éxito.", null);
+    return_response_outdated("success", "Idioma eliminado con éxito.", null);
 } catch(PDOException $e) {
     $connection->rollBack(); 
-    return_response("failed", "Error al eliminar el idioma: " . $e->getMessage(), null);
+    return_response_outdated("failed", "Error al eliminar el idioma: " . $e->getMessage(), null);
 }
 ?>

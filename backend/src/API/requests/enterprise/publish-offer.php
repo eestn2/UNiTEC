@@ -23,15 +23,15 @@ require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response_outdated("failed", "Metodo no permitido.", null);
 // Validate session and user authentication
 if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id'])) {
-    return_response("failed", "Usuario no autenticado.", null);
+    return_response_outdated("failed", "Usuario no autenticado.", null);
 }
 $creator_id = $_SESSION['user']['id'];
 $data = json_decode(file_get_contents("php://input"));
 
-if ( !isset($data->title) || !isset($data->description) ||  empty(trim($data -> title)) || empty(trim($data -> description)) ||!isset($data->languages) || !isset($data->tags) ) return_response("failed", "Faltan datos.", null);
+if ( !isset($data->title) || !isset($data->description) ||  empty(trim($data -> title)) || empty(trim($data -> description)) ||!isset($data->languages) || !isset($data->tags) ) return_response_outdated("failed", "Faltan datos.", null);
 
 $title = trim($data->title);
 $description = trim($data->description);
@@ -46,13 +46,13 @@ try{
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$user) {
-        return_response("failed", "Usuario no encontrado.", null);
+        return_response_outdated("failed", "Usuario no encontrado.", null);
     }
     if (intval($user['user_type']) !== 1){
-        return_response("failed", "Solo las empresas pueden publicar ofertas de trabajo.", null);
+        return_response_outdated("failed", "Solo las empresas pueden publicar ofertas de trabajo.", null);
     }
 }catch (PDOException $e) {
-    return_response("failed", "Error al verificar el tipo de usuario:" . $e->getMessage(), null);
+    return_response_outdated("failed", "Error al verificar el tipo de usuario:" . $e->getMessage(), null);
 }
 
 try {
@@ -69,11 +69,11 @@ try {
 
 
     $connection->commit();
-    return_response("success", "Oferta de trabajo publicada con exito.", null);
+    return_response_outdated("success", "Oferta de trabajo publicada con exito.", null);
 } catch (PDOException $e) {
     if ($connection->inTransaction()) {
         $connection->rollBack();
     }
-    return_response("failed", "Error al insertar la oferta de trabajo: " . $e->getMessage(), null);
+    return_response_outdated("failed", "Error al insertar la oferta de trabajo: " . $e->getMessage(), null);
 }
 ?>

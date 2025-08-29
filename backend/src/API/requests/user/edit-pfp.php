@@ -27,13 +27,13 @@ $dotenv->safeLoad();
 $env = getenv('ENVIRONMENT');
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    return_response("failed", "Método no permitido. Solo POST.", null);
+    return_response_outdated("failed", "Método no permitido. Solo POST.", null);
 }
 session_start();
 
 // Verificar si el usuario está autenticado
 if (!isset($_SESSION['user']['id'])) {
-    return_response("failed", "No autenticado.", null);
+    return_response_outdated("failed", "No autenticado.", null);
 }
 $id = intval($_SESSION['user']['id']);
 
@@ -41,7 +41,7 @@ $id = intval($_SESSION['user']['id']);
 $data = json_decode(file_get_contents("php://input"));
 
 if ($data === null) {
-    return_response("failed", "JSON inválido.", null);
+    return_response_outdated("failed", "JSON inválido.", null);
 }
 
 $base64_image = $data->profile_picture;
@@ -54,7 +54,7 @@ $allowed_exts = ['jpg', 'jpeg', 'png'];
 
 $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 if (!in_array($mime_type, $allowed_types) || !in_array($ext, $allowed_exts)) {
-    return_response("failed", "Formato de imagen no permitido. Solo JPG o PNG.", null);
+    return_response_outdated("failed", "Formato de imagen no permitido. Solo JPG o PNG.", null);
 }
 
 // Extraer solo los datos base64 si viene con encabezado
@@ -65,14 +65,14 @@ if (strpos($base64_image, 'base64,') !== false) {
 // Decodificar base64
 $image_data = base64_decode($base64_image);
 if ($image_data === false) {
-    return_response("failed", "No se pudo decodificar la imagen.", null);
+    return_response_outdated("failed", "No se pudo decodificar la imagen.", null);
 }
 
 // Define file size limit as constant
 define('MAX_FILE_SIZE', 2 * 1024 * 1024); // 2 MB
 $max_file_size = MAX_FILE_SIZE;
 if (strlen($image_data) > $max_file_size) {
-    return_response("failed", "La imagen es demasiado grande. Máximo 2 MB.", null);
+    return_response_outdated("failed", "La imagen es demasiado grande. Máximo 2 MB.", null);
 }
 
 // Crear carpeta si no existe
@@ -94,26 +94,26 @@ $unique_filename = uniqid("profile_{$id}_") . '.' . $ext;
 $target_path = $upload_dir . $unique_filename;
 $API_base_url = $env === 'production' ? getenv('API_BASE_URL_PROD') : getenv('API_BASE_URL_DEV');
 if (!$API_base_url) {
-    return_response("failed", "Error de configuración del servidor.", null);
+    return_response_outdated("failed", "Error de configuración del servidor.", null);
 }
 $picture_path = $API_base_url . "/uploads/profile-pictures/" . $unique_filename;
 // Actualizar base de datos
 try {
     // Guardar imagen en el servidor
     if (file_put_contents($target_path, $image_data) === false) {
-        return_response("failed", "Error al guardar la imagen.", null);
+        return_response_outdated("failed", "Error al guardar la imagen.", null);
     }
     $stmt = $connection->prepare("UPDATE users SET profile_picture = ? WHERE id = ?");
     $stmt->execute([$picture_path, $id]);
 
     if ($stmt->rowCount() === 0) {
-        return_response("failed", "Usuario no encontrado o sin cambios.", null);
+        return_response_outdated("failed", "Usuario no encontrado o sin cambios.", null);
     }
-    return_response("success", "Foto de perfil actualizada correctamente.", [
+    return_response_outdated("success", "Foto de perfil actualizada correctamente.", [
         "path" => $picture_path,
     ]);
 } catch (PDOException $e) {
     error_log("Error en DB: " . $e->getMessage());
-    return_response("failed", "Error al actualizar la base de datos.", null);
+    return_response_outdated("failed", "Error al actualizar la base de datos.", null);
 }
 ?>

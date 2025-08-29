@@ -14,16 +14,16 @@ require_once __DIR__ . "/../../logic/database/connection.php";
 require_once __DIR__ . "/../../logic/communications/return_response.php";
 
 if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
-    return_response("failed", "Method not allowed", null);
+    return_response_outdated("failed", "Method not allowed", null);
 }
 
 $data = json_decode(file_get_contents("php://input"));
 if (!$data) {
-    return_response("failed", "No se recibieron datos", null);
+    return_response_outdated("failed", "No se recibieron datos", null);
 }
 session_start();
 if (!isset($_SESSION['user']['id'])) {
-    return_response("failed", "No se ha iniciado sesión", null);
+    return_response_outdated("failed", "No se ha iniciado sesión", null);
 }
 $userId = $_SESSION['user']['id'];
 
@@ -42,7 +42,7 @@ foreach ($allowed_fields as $field) {
 if (empty($fields_to_update)) {
     // Check if we're only updating languages or tags
     if (!isset($data->languages) && !isset($data->tags)) {
-        return_response("failed", "No se recibieron datos para actualizar", null);
+        return_response_outdated("failed", "No se recibieron datos para actualizar", null);
         exit;
     }
 }
@@ -127,9 +127,9 @@ try {
     $updated->execute([$userId]);
     $updated_user = $updated->fetch(PDO::FETCH_ASSOC);
 
-    return_response("success", "Usuario actualizado correctamente", $updated_user);
+    return_response_outdated("success", "Usuario actualizado correctamente", $updated_user);
 } catch (PDOException $e) {
     $connection->rollBack();
-    return_response("failed", "Error al actualizar el usuario: " . $e->getMessage(), null);
+    return_response_outdated("failed", "Error al actualizar el usuario: " . $e->getMessage(), null);
 }
 ?>

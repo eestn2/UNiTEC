@@ -24,12 +24,12 @@ require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "PUT") return_response("failed", "Método no permitido.", null);
-if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
+if ($_SERVER["REQUEST_METHOD"] !== "PUT") return_response_outdated("failed", "Método no permitido.", null);
+if (!isset($_SESSION['user']['id'])) return_response_outdated("failed", "No autenticado.", null);
 
 $data = json_decode(file_get_contents("php://input"));
 
-if (!isset($data->offer_id)) return_response("failed", "Faltan datos obligatorios.", null);
+if (!isset($data->offer_id)) return_response_outdated("failed", "Faltan datos obligatorios.", null);
 
 $offer_id = intval($data->offer_id);
 $creator_id = $_SESSION["user"]["id"];
@@ -43,10 +43,10 @@ try {
     $stmt->execute();
     $offer = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$offer) return_response("failed", "No tienes permisos para modificar esta oferta.", null);
+    if (!$offer) return_response_outdated("failed", "No tienes permisos para modificar esta oferta.", null);
 
 } catch (PDOException $e) {
-    return_response("failed", "Error al verificar permisos.", null);
+    return_response_outdated("failed", "Error al verificar permisos.", null);
 }
 
 // Actualizar el estado de la oferta
@@ -55,8 +55,8 @@ try {
     $stmt->bindParam(':offer_id', $offer_id, PDO::PARAM_INT);
     $stmt->execute();
 
-    return_response("success", "Oferta marcada como cerrada correctamente.", null);
+    return_response_outdated("success", "Oferta marcada como cerrada correctamente.", null);
 } catch (PDOException $e) {
-    return_response("failed", "Error al actualizar la oferta.", null); 
+    return_response_outdated("failed", "Error al actualizar la oferta.", null); 
 }
 ?>

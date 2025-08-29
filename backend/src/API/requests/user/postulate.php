@@ -6,20 +6,20 @@ require_once __DIR__ . '/../../logic/communications/return_response.php';
 require_once __DIR__ . '/../../logic/notifications/send_notification.php';
 
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response_outdated("failed", "Metodo no permitido.", null);
 $data = json_decode(file_get_contents("php://input"));
 
-if (!isset($data->offer_id)) return_response("failed", "Faltan datos.", null);
+if (!isset($data->offer_id)) return_response_outdated("failed", "Faltan datos.", null);
 
 // Validate session and user authentication
 if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id'])) {
-    return_response("failed", "Usuario no autenticado.", null);
+    return_response_outdated("failed", "Usuario no autenticado.", null);
 }
 
 $user_id = $_SESSION['user']['id'] ;
 $offer_id = intval($data->offer_id);
 if ($user_id <= 0 || $offer_id <= 0) {
-    return_response("failed", "Datos invalidos.", null);
+    return_response_outdated("failed", "Datos invalidos.", null);
 }
 try {
     $connection->beginTransaction();
@@ -28,8 +28,8 @@ try {
     $stmt->execute([$offer_id]);
     $offer = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$offer) return_response("failed", "La oferta no existe.", null);
-    if ($offer['status'] == 0) return_response("failed", "La oferta ya cerro.", null);
+    if (!$offer) return_response_outdated("failed", "La oferta no existe.", null);
+    if ($offer['status'] == 0) return_response_outdated("failed", "La oferta ya cerro.", null);
     
     $stmt = $connection -> prepare( 
         "INSERT INTO applicants (user_id, offer_id, `status`) VALUES (?, ?, 0)");
@@ -55,12 +55,12 @@ try {
             ['offer_id' => $offer_id, 'applicant_id' => $user_id]
         );
     }
-    return_response("success", "Usuario postulado con exito.", null);
+    return_response_outdated("success", "Usuario postulado con exito.", null);
 } catch (PDOException $e) {
     error_log("Error inserting postulation for user ID: $user_id, offer ID: $offer_id. Error: " . $e->getMessage());
     if ($connection->inTransaction()) {
         $connection->rollBack();
     }
-    return_response("failed", "Error al insertar la postulacion: " . $e->getMessage(), null);
+    return_response_outdated("failed", "Error al insertar la postulacion: " . $e->getMessage(), null);
 }
 ?>

@@ -11,7 +11,7 @@ require_once __DIR__ . '/../cors-policy.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "GET") {
-    return_response("failed", "Método no permitido.", null);
+    return_response_outdated("failed", "Método no permitido.", null);
     exit;
 }
 
@@ -30,4 +30,4 @@ if (ini_get("session.use_cookies")) {
 // Destroy the session
 session_destroy();
 
-return_response("success", "Sesión cerrada correctamente.", null);
+return_response_outdated("success", "Sesión cerrada correctamente.", null);

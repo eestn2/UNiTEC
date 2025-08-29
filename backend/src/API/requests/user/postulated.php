@@ -17,10 +17,10 @@ require_once __DIR__ . '/../../logic/communications/return_response.php';
 
 
 
-if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response_outdated("failed", "Metodo no permitido.", null);
 
-if (!isset($_SESSION['user']['id'])) return_response("failed", "Usuario no autenticado.", null);
-if (!isset($_GET['offer_id'])) return_response("failed", "Falta el parametro offer_id", null);
+if (!isset($_SESSION['user']['id'])) return_response_outdated("failed", "Usuario no autenticado.", null);
+if (!isset($_GET['offer_id'])) return_response_outdated("failed", "Falta el parametro offer_id", null);
 $user_id = $_SESSION['user']['id'];
 $offer_id = intval($_GET['offer_id']);
 
@@ -31,6 +31,6 @@ $result = $stmt->fetch(PDO::FETCH_ASSOC);
 // check if length of result is 0
 $is_postulated = !$result ? false : true; // Default to not postulated if not found
 error_log("Debug: user_id=$user_id, offer_id=$offer_id, is_postulated=" . $is_postulated);
-return_response("success", "Estado de postulación obtenido.", ["postulated" => $is_postulated]);
+return_response_outdated("success", "Estado de postulación obtenido.", ["postulated" => $is_postulated]);
 
 ?>

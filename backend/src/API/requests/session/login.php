@@ -21,10 +21,10 @@ require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response_outdated("failed", "Metodo no permitido.", null);
 
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($data->email) || !isset($data->password)) return_response("failed", "Faltan datos.", null);
+if (!isset($data->email) || !isset($data->password)) return_response_outdated("failed", "Faltan datos.", null);
 
 $email = $data->email;
 $password = $data->password;
@@ -34,11 +34,11 @@ $stmt = $connection->prepare("SELECT * FROM users WHERE email = ?");
 $stmt->execute([$email]);
 $user = $stmt->fetch();
 
-if (!$user) return_response("failed", "Dirección de correo electronico no registrada.", null);
+if (!$user) return_response_outdated("failed", "Dirección de correo electronico no registrada.", null);
 
 
-if (!password_verify($password, $user["password"])) return_response("failed", "Contraseña incorrecta.", null);
-if ($user["enabled"] == 0) return_response("failed", "Usuario no habilitado.", null);
+if (!password_verify($password, $user["password"])) return_response_outdated("failed", "Contraseña incorrecta.", null);
+if ($user["enabled"] == 0) return_response_outdated("failed", "Usuario no habilitado.", null);
 
 // Store user data in session (do not include password)
 $_SESSION['user'] = [
@@ -56,5 +56,5 @@ $_SESSION['user'] = [
     "status" => $user["status"]
 ];
 
-return_response("success", "Inicio de sesión exitoso.", null);
+return_response_outdated("success", "Inicio de sesión exitoso.", null);
 ?>

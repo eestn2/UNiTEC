@@ -19,12 +19,12 @@ require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "GET") {
-    return_response("failed", "Metodo no permitido.", null);
+    return_response_outdated("failed", "Metodo no permitido.", null);
 }
 
 // Retrieve and validate the user ID from the query parameters
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    return_response("failed", "Ocurrió un error, intente de nuevo.", null);
+    return_response_outdated("failed", "Ocurrió un error, intente de nuevo.", null);
 }
 
 $id = intval($_GET['id']);
@@ -50,8 +50,8 @@ try {
     $stmt->execute([$id]);
     $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    if (!$user) return_response("failed", "Usuario no encontrado.", null);
-    return_response("success", "Datos del usuario devueltos correctamente.", [
+    if (!$user) return_response_outdated("failed", "Usuario no encontrado.", null);
+    return_response_outdated("success", "Datos del usuario devueltos correctamente.", [
         "user" => [
             "id" => $user["id"],
             "name" => $user["name"],
@@ -68,6 +68,6 @@ try {
     ]);
 } catch (PDOException $e) {
     error_log("Error retrieving user info: " . $e->getMessage());
-    return_response("failed", "Error al recuperar la información del usuario.", null);
+    return_response_outdated("failed", "Error al recuperar la información del usuario.", null);
 }
 ?>

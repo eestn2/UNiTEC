@@ -5,9 +5,9 @@ require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response_outdated("failed", "Metodo no permitido.", null);
 
-if (!isset($_GET['userId'])) return_response("failed", "Falta el parámetro userId.", null);
+if (!isset($_GET['userId'])) return_response_outdated("failed", "Falta el parámetro userId.", null);
 
 $userId = intval($_GET['userId']);
 
@@ -17,12 +17,12 @@ try {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user === false) {
-        return_response("failed", "Usuario no encontrado.", null);
+        return_response_outdated("failed", "Usuario no encontrado.", null);
     } else {
-        return_response("success", "Datos encontrados.", ["email" => $user['email']]);
+        return_response_outdated("success", "Datos encontrados.", ["email" => $user['email']]);
     }
 } catch (PDOException $e) {
     error_log("Error retrieving user email: " . $e->getMessage());
-    return_response("failed", "Error retrieving user email.", null);
+    return_response_outdated("failed", "Error retrieving user email.", null);
 }
 ?>

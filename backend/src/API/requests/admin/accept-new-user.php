@@ -27,20 +27,20 @@ require_once __DIR__ . "/../../logic/communications/return_response.php";
 require_once __DIR__ . '/../../logic/security/is_admin.php';
 require_once __DIR__ . '/../../logic/notifications/send_notification.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'PUT') return_response("failed", "Method not allowed", null);
+if ($_SERVER['REQUEST_METHOD'] !== 'PUT') return_response_outdated("failed", "Method not allowed", null);
 
 $data = json_decode(file_get_contents("php://input"));
-if (!$data || !isset($data->target_user_id)) return_response("failed", "Falta el ID del usuario a aceptar", null);
+if (!$data || !isset($data->target_user_id)) return_response_outdated("failed", "Falta el ID del usuario a aceptar", null);
 
 $target_user_id = filter_var($data->target_user_id, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1]]);  
-if ($target_user_id === false) return_response("failed", "ID de usuario a aceptar inválido.", null); 
+if ($target_user_id === false) return_response_outdated("failed", "ID de usuario a aceptar inválido.", null); 
 
 // Obtener el usuario autenticado desde la sesión
-if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
+if (!isset($_SESSION['user']['id'])) return_response_outdated("failed", "No autenticado.", null);
 $auth_user_id = $_SESSION['user']['id'];
 
 // Verificar si el usuario autenticado es admin
-if (!is_admin($auth_user_id, $connection)) return_response("failed", "Solo los administradores pueden aceptar usuarios.", null);
+if (!is_admin($auth_user_id, $connection)) return_response_outdated("failed", "Solo los administradores pueden aceptar usuarios.", null);
 // Aceptar al usuario destino
 try {
     // 1. Get the user's email and name first
@@ -50,7 +50,7 @@ try {
     $user = $email_stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$user) {
-        return_response("failed", "No se encontró al usuario.", null);
+        return_response_outdated("failed", "No se encontró al usuario.", null);
         exit;
     }
 
@@ -79,11 +79,11 @@ try {
             send_email($to, $subject, $body);
         }
         send_notification($connection, NotificationType::ACCOUNT_APPROVED, $target_user_id, []);
-        return_response("success", "Usuario aceptado con exito.", null);
+        return_response_outdated("success", "Usuario aceptado con exito.", null);
     } else {
-        return_response("failed", "No se pudo aceptar al usuario.", null);
+        return_response_outdated("failed", "No se pudo aceptar al usuario.", null);
     }
 } catch(PDOException $e) {
-    return_response("failed", "Error al aceptar el usuario.", null);
+    return_response_outdated("failed", "Error al aceptar el usuario.", null);
 }
 ?>

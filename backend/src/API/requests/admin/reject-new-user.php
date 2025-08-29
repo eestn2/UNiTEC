@@ -27,23 +27,23 @@ require_once __DIR__ . "/../../logic/communications/return_response.php";
 require_once __DIR__ . '/../../logic/security/is_admin.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
-    return_response("failed", "Method not allowed", null);
+    return_response_outdated("failed", "Method not allowed", null);
     exit;
 }
 
 $data = json_decode(file_get_contents("php://input"));
-if (!$data || !isset($data->target_user_id) || !isset($data->target_user_type)) return_response("failed", "Falta el ID del usuario a rechazar", null);
+if (!$data || !isset($data->target_user_id) || !isset($data->target_user_type)) return_response_outdated("failed", "Falta el ID del usuario a rechazar", null);
 
 $target_user_id = intval($data->target_user_id);
 $target_user_type = intval($data->target_user_type);
-if ($target_user_id <= 0) return_response("failed", "ID de usuario a rechazar inválido.", null);
+if ($target_user_id <= 0) return_response_outdated("failed", "ID de usuario a rechazar inválido.", null);
 // Obtener el usuario autenticado desde la sesión
-if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
+if (!isset($_SESSION['user']['id'])) return_response_outdated("failed", "No autenticado.", null);
 
 $auth_user_id = $_SESSION['user']['id'];
 
 // Verificar si el usuario autenticado es admin
-if (!is_admin($auth_user_id, $connection)) return_response("failed", "Solo los administradores pueden rechazar usuarios.", null);
+if (!is_admin($auth_user_id, $connection)) return_response_outdated("failed", "Solo los administradores pueden rechazar usuarios.", null);
 
 
 // Rechazar al usuario destino
@@ -54,7 +54,7 @@ try {
     $email_stmt->execute();
     $user = $email_stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$user) return_response("failed", "No se encontró al usuario.", null);
+    if (!$user) return_response_outdated("failed", "No se encontró al usuario.", null);
 
     if($target_user_type != 1){
         // 3. Delete user-specific data if not an admin
@@ -91,13 +91,13 @@ try {
                     ";
             send_email($to, $subject, $body);
         }
-        return_response("success", "Usuario rechazado con exito.", null);
+        return_response_outdated("success", "Usuario rechazado con exito.", null);
     } else {
-        return_response("failed", "No se pudo rechazar al usuario.", null);
+        return_response_outdated("failed", "No se pudo rechazar al usuario.", null);
     }
 } catch(PDOException $e) {
     $connection->rollBack();
     error_log("Error rejecting user: " . $e->getMessage());
-    return_response("failed", "Error al rechazar el usuario.", null);
+    return_response_outdated("failed", "Error al rechazar el usuario.", null);
 }
 ?>

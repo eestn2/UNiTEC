@@ -19,11 +19,11 @@ require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response_outdated("failed", "Metodo no permitido.", null);
 
 
 if (!isset($_SESSION['user']['id'])) {
-    return_response("failed", "No se ha iniciado sesión", null);
+    return_response_outdated("failed", "No se ha iniciado sesión", null);
 }
 
 try {
@@ -66,7 +66,7 @@ try {
         }
     }
 
-    return_response("success", "offers retrieved successfully.", [ "offers" => array_values($offers) ]);
+    return_response_outdated("success", "offers retrieved successfully.", [ "offers" => array_values($offers) ]);
 
 } catch (PDOException $e) {
     echo json_encode(['error' => $e->getMessage()]);

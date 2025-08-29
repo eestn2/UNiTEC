@@ -11,7 +11,7 @@ require_once __DIR__ . '/../cors-policy.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
 if (isset($_SESSION['user'])) {
-    return_response("success", "Usuario autenticado.", ["user" => $_SESSION['user']]);
+    return_response_outdated("success", "Usuario autenticado.", ["user" => $_SESSION['user']]);
 } else {
-    return_response("failed", "No autenticado.", null);
+    return_response_outdated("failed", "No autenticado.", null);
 }

@@ -22,10 +22,10 @@ require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 require_once __DIR__ . '/../../logic/security/security_functions.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response_outdated("failed", "Metodo no permitido.", null);
 
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($data->email) || !isset($data->password) || !isset($data->user_type) || $data -> user_type===0 )  return_response("failed", "Faltan datos.", null);
+if (!isset($data->email) || !isset($data->password) || !isset($data->user_type) || $data -> user_type===0 )  return_response_outdated("failed", "Faltan datos.", null);
 
 // Assign request body values to variables
 $name = $data->name ?? null;
@@ -57,7 +57,7 @@ try {
     $stmt->execute([$user_email]);
     if ($stmt->fetch()) {
         error_log('Duplicate email: ' . $user_email);
-        return_response("failed", "El correo ya existe.", null);
+        return_response_outdated("failed", "El correo ya existe.", null);
     }
 
     // Insert user data
@@ -123,11 +123,11 @@ try {
     $user = $stmt->fetch();
     error_log('User fetched for session: ' . json_encode($user));
 
-    return_response("success", "Usuario registrado correctamente. Debe esperar aprobación.", null);
+    return_response_outdated("success", "Usuario registrado correctamente. Debe esperar aprobación.", null);
 } catch (Exception $e) {
     $connection->rollBack();
     error_log('Transaction rolled back');
     error_log('Exception: ' . $e->getMessage());
-    return_response("failed", "Ocurrió un error: No se pudo registrar al usuario" );
+    return_response_outdated("failed", "Ocurrió un error: No se pudo registrar al usuario" );
 }
 ?>

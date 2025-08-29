@@ -26,7 +26,7 @@ require_once __DIR__ . "/../../logic/database/connection.php";
 require_once __DIR__ . "/../../logic/communications/return_response.php";
 
 if ($_SERVER["REQUEST_METHOD"] !== "PATCH") {
-    return_response("failed", "Metodo no permitido.", null);
+    return_response_outdated("failed", "Metodo no permitido.", null);
     exit;
 }
 
@@ -34,19 +34,19 @@ $data = json_decode(file_get_contents("php://input"));
 
 
 if (!isset($data->password) || !isset($data->new_password)) {
-    return_response("failed", "Faltan datos requeridos.", null);
+    return_response_outdated("failed", "Faltan datos requeridos.", null);
     exit;
 }
 
 if (!isset($_SESSION['user']['id'])) {
-    return_response("failed", "No autenticado.", null);
+    return_response_outdated("failed", "No autenticado.", null);
     exit;
 }
 $user_id = intval($_SESSION['user']['id']);
 
 // Validar la nueva contraseña (longitud mínima, etc.)
 if (strlen($data->new_password) < 8) {
-    return_response("failed", "La nueva contraseña debe tener al menos 8 caracteres.", null);
+    return_response_outdated("failed", "La nueva contraseña debe tener al menos 8 caracteres.", null);
     exit;
 }
 
@@ -56,20 +56,20 @@ try {
     $query->execute([':id' => $user_id]);
     $result = $query->fetch(PDO::FETCH_ASSOC);
     if (!$result || !password_verify($data->password, $result['password'])) {
-        return_response("failed", "La contraseña actual es incorrecta.", null);
+        return_response_outdated("failed", "La contraseña actual es incorrecta.", null);
         exit;
     }
 
     // Evitar cambiar a la misma contraseña
     if (password_verify($data->new_password, $result['password'])) {
-        return_response("failed", "La nueva contraseña no puede ser igual a la actual.", null);
+        return_response_outdated("failed", "La nueva contraseña no puede ser igual a la actual.", null);
         exit;
     }
 
     // Hashear la nueva contraseña
     $hashed_new_password = password_hash($data->new_password, PASSWORD_DEFAULT);
     if ($hashed_new_password === false) {
-        return_response("failed", "Error al hashear la nueva contraseña.", null);
+        return_response_outdated("failed", "Error al hashear la nueva contraseña.", null);
         exit;
     }
 
@@ -80,13 +80,13 @@ try {
         ':id' => $user_id
     ]);
     if ($update_query->rowCount() > 0) {
-        return_response("success", "Contraseña cambiada correctamente.", null);
+        return_response_outdated("success", "Contraseña cambiada correctamente.", null);
     } else {
-        return_response("failed", "No se pudo cambiar la contraseña.", null);
+        return_response_outdated("failed", "No se pudo cambiar la contraseña.", null);
     }
 } catch (PDOException $e) {
     // Log the error server-side if needed
-    return_response("failed", "Error al cambiar la contraseña.", null);
+    return_response_outdated("failed", "Error al cambiar la contraseña.", null);
     exit;
 }
 ?>

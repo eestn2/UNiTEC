@@ -20,11 +20,11 @@ require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
 if (!isset($_SESSION['user']['id'])) {
-    return_response("failed", "No se ha iniciado sesión", null);
+    return_response_outdated("failed", "No se ha iniciado sesión", null);
 }
 
 
-if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response_outdated("failed", "Metodo no permitido.", null);
 
 $userId = $_SESSION['user']['id'];
 
@@ -46,7 +46,7 @@ try {
 
     $stmt = $connection->query("SELECT * FROM languages");
     $languages = $stmt->fetchAll();
-    return_response("success", "Datos obtenidos correctamente.", [
+    return_response_outdated("success", "Datos obtenidos correctamente.", [
         "languages" => $languages,
         "tags" => $tags,
         "loadedLanguages" => $loadedLanguages,
@@ -54,6 +54,6 @@ try {
     ]);
 } catch (PDOException $e) {
     error_log("Error retrieving job languages: " . $e->getMessage());
-    return_response("failed", "Error retrieving languages.", $e->getMessage());
+    return_response_outdated("failed", "Error retrieving languages.", $e->getMessage());
 }
 ?>

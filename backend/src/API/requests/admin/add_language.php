@@ -24,14 +24,14 @@ require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 require_once __DIR__ . '/../../logic/security/is_admin.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response_outdated("failed", "Metodo no permitido.", null);
 
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($data->name) || empty(trim($data -> name))) return_response("failed", "Faltan datos o estan vacios.", null);
+if (!isset($data->name) || empty(trim($data -> name))) return_response_outdated("failed", "Faltan datos o estan vacios.", null);
 
-if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
+if (!isset($_SESSION['user']['id'])) return_response_outdated("failed", "No autenticado.", null);
 if (!is_admin($_SESSION['user']['id'], $connection)) {
-    return_response("failed", "Solo los administradores pueden agregar lenguajes.", null);
+    return_response_outdated("failed", "Solo los administradores pueden agregar lenguajes.", null);
 }
 $name = $data->name;
 try{
@@ -41,8 +41,8 @@ try{
     $stmt->execute();
     $connection->beginTransaction();
     $connection->commit();
-    return_response("success", "lenguaje insertada con exito.", null);
+    return_response_outdated("success", "lenguaje insertada con exito.", null);
 }catch(PDOException $e) {
-    return_response("failed","Error al insertar el lenguaje". $e->getMessage(), null);
+    return_response_outdated("failed","Error al insertar el lenguaje". $e->getMessage(), null);
 }
 ?>

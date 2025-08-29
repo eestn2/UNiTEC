@@ -26,15 +26,15 @@ require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 require_once __DIR__ . '/../../logic/notifications/send_notification.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "PUT") return_response("failed", "Metodo no permitido.", null);
-if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
+if ($_SERVER["REQUEST_METHOD"] !== "PUT") return_response_outdated("failed", "Metodo no permitido.", null);
+if (!isset($_SESSION['user']['id'])) return_response_outdated("failed", "No autenticado.", null);
 
 $creator_id = intval($_SESSION['user']['id']);
 
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($data->user_id) || !isset($data->application_id)) return_response("failed", "Faltan datos obligatorios.", null);
+if (!isset($data->user_id) || !isset($data->application_id)) return_response_outdated("failed", "Faltan datos obligatorios.", null);
 
-if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
+if (!isset($_SESSION['user']['id'])) return_response_outdated("failed", "No autenticado.", null);
 $creator_id = intval($_SESSION['user']['id']);
 $user_id = intval($data->user_id);
 $application_id = intval($data->application_id);
@@ -49,7 +49,7 @@ try{
     $stmt->execute();
     $application = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$application) {
-        return_response("failed", "No se encontró la oferta de trabajo o no pertenece al usuario.", null);
+        return_response_outdated("failed", "No se encontró la oferta de trabajo o no pertenece al usuario.", null);
     }
 
     // Actualizar estado del postulante
@@ -67,16 +67,16 @@ try{
             $user_id,
             ['offer_id' => $offer_id]
         );
-        return_response("success", "Postulante rechazado con éxito.", null);
+        return_response_outdated("success", "Postulante rechazado con éxito.", null);
     } else {
         $connection->rollBack();
-        return_response("failed", "No se pudo rechazar al postulante o ya fue rechazado anteriormente.", null);
+        return_response_outdated("failed", "No se pudo rechazar al postulante o ya fue rechazado anteriormente.", null);
     }
 }catch (PDOException $e){
     if ($connection->inTransaction()) {
         $connection->rollBack();
     }
-    return_response("failed", "Error en el servidor:" . $e->getMessage(), null);
+    return_response_outdated("failed", "Error en el servidor:" . $e->getMessage(), null);
 }
 
 ?>
