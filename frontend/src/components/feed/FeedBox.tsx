@@ -9,7 +9,6 @@
 import NavBar from '../UI/NavBar';
 import AppWindow from '../UI/AppWindow';
 import JobOffer from "../UI/feed/JobOffer";
-import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import Notification from "../UI/feed/Notification";
 import { ReactElement, useEffect, useState } from "react";
 import axios from "axios";
@@ -20,6 +19,8 @@ import type { notification } from '../../types/notification';
 import no_notifications from '../../assets/icons/no-notis.svg';
 import no_feed from '../../assets/icons/no-feed.svg';
 import LoadingScreen from '../UI/LoadingScreens/LoadingScreen';
+import '../../styles/feed/feedbox.css';
+import '../../styles/notifications/notifications.css';
 
 /**
  * A React functional component that renders the main feed with job offers and notifications.
@@ -39,6 +40,7 @@ function FeedBox() {
   const [jobOffers, setJobOffers] = useState<offer[]>([]);
   const [loadingOffers, setLoadingOffers] = useState<boolean>(true);
   const [notifications, setNotifications] = useState<ReactElement[]>([]);
+
   // Fetch job offers from the server
   const loadJobOffers = async () => { 
     try {
@@ -88,28 +90,9 @@ function FeedBox() {
         height={600}
         width={880}
         className="feedbox"
-        style={{
-          position: "absolute",
-          left: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
-          top: `${TranslateFigmaCoords.translateFigmaY(100)}px`,
-          overflowY: "scroll",
-          height: `${TranslateFigmaCoords.translateFigmaY(600)}px`,
-          borderTopRightRadius: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
-          borderBottomRightRadius: `${TranslateFigmaCoords.translateFigmaX(5)}px`,
-        }}
+        style={{height: 600}}
       >
-        <div
-          className="feed-title"
-          style={{
-            width: `${TranslateFigmaCoords.translateFigmaX(350)}px`,
-            height: `${TranslateFigmaCoords.translateFigmaY(53)}px`,
-            position: "relative",
-            left: "50%",
-            transform: "translateX(-50%)",
-            marginTop: `${TranslateFigmaCoords.translateFigmaY(32)}px`,
-            marginBottom: `${TranslateFigmaCoords.translateFigmaY(32)}px`,
-          }}
-        >
+        <div className="feed-title">
           Ofertas de Trabajo
         </div>
         { loadingOffers ? <LoadingScreen loadingContent={true}/>
@@ -127,60 +110,25 @@ function FeedBox() {
               />
             ))
             ) : (
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <img src={no_feed} style={{
-                  width: TranslateFigmaCoords.translateFigmaX(300),
-                  height: TranslateFigmaCoords.translateFigmaX(300),
-                }} />
-                <span style={{
-                  color: "rgb(170, 164, 211)",
-                  textAlign: "center"
-                }}>No hay ofertas de trabajo.</span>
+              <div className="feed-container">
+                <img src={no_feed} />
+                <span>No hay ofertas de trabajo.</span>
               </div>
             )}
       </AppWindow>
       <AppWindow
         height={600}
         width={340}
-        style={{
-          position: "absolute",
-          right: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
-          top: `${TranslateFigmaCoords.translateFigmaY(100)}px`,
-          height: `${TranslateFigmaCoords.translateFigmaY(600)}px`,
-          overflowX: "hidden",
-          overflowY: "auto",
-          display: "flex",
-          flexDirection: "column",
-          rowGap: TranslateFigmaCoords.translateFigmaY(20),
-        }}
         className="notification-box"
       >
-        <div
-          className="feed-title"
-          style={{
-            width: `${TranslateFigmaCoords.translateFigmaX(250)}px`,
-            height: `${TranslateFigmaCoords.translateFigmaY(53)}px`,
-            position: "relative",
-            right: "50%",
-            transform: "translateX(50%)",
-            marginTop: `${TranslateFigmaCoords.translateFigmaY(32)}px`,
-            marginBottom: `${TranslateFigmaCoords.translateFigmaY(32)}px`,
-          }}
-        >
+        <div className="feed-title">
           Notificaciones
         </div>
         {notifications.length > 0 ? notifications : (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <img src={no_notifications} style={{
-              width: TranslateFigmaCoords.translateFigmaX(200),
-              height: TranslateFigmaCoords.translateFigmaX(200),
-            }} />
-            <span style={{
-              direction: "ltr",
-              color: "rgb(170, 164, 211)"
-            }}>No tienes notificaciones.</span>
+          <div className="feed-container">
+            <img src={no_notifications} />
+            <span>No tienes notificaciones.</span>
           </div>
-
         )}
       </AppWindow>
     </div>
