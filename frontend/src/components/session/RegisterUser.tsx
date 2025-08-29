@@ -180,13 +180,14 @@ function RegisterUser() {
 
     try {
       const res = await axios.post("/session/user-register.php", formToSend);
-      if (res.data.status === "success") {
+      if ( res.status === 200 ) {
+        alert("Registro exitoso. Debe esperar aprobación de su cuenta, porfavor sea paciente.");
         navigate("/");
-      } else {
-        setError(res.data.message || "Error en el registro");
       }
     } catch {
-      setError("No se pudo registrar. Intente de nuevo más tarde.");
+      const defaultError = "No se pudo registrar. Intente de nuevo más tarde.";
+      if (axios.isAxiosError(error)) return setError(error.response?.data?.message || defaultError);
+      setError(defaultError);
     }
   };
 
