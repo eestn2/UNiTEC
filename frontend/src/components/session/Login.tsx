@@ -48,11 +48,8 @@ const Login: React.FC = () => {
         } catch (error) {
             const defaultError = 'No se pudo establecer la conexión con el servidor.'
             if (axios.isAxiosError(error)) {
-                console.error(error)
-                console.error("Login failed:", error.response?.data.message);
                 setError(error.response?.data?.message || defaultError);
             } else {
-                console.error("Unexpected error:", error);
                 setError(defaultError);
             }
         } finally {
