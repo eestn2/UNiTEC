@@ -27,21 +27,19 @@ enum status: int {
     case CONFLICT = 409;
     case INTERNAL_SERVER_ERROR = 500;
     case SERVICE_UNAVAILABLE = 503;
-   
-}
+};
 
-function return_response(status $status, string $message, $data = null) {
-    header('Content-Type: application/json');
+function return_response(status $status, string $message, $data = null): never {
+    //header('Content-Type: application/json');
     http_response_code($status->value);
     $data = [
-        'status' => $status->name,
         'message' => $message,
         'data' => $data
     ];
     echo json_encode($data);
     exit;
 }
-function return_response_outdated(string $status, string $message, $data = null) {
+function return_response_outdated(string $status, string $message, $data = null): never {
     header('Content-Type: application/json');
     http_response_code($status == 'success' ? 200 : 400);
     $response = [

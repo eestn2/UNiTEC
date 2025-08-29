@@ -43,20 +43,20 @@ const Login: React.FC = () => {
             const response = await axios.post(`/session/login.php`, {
                 email,
                 password,
-                withCredentials: true // Ensure cookies are sent with the request
-            });
-            if (response.status === 200 && response.data.status === "success") {
-                // Session is now set server-side; reload to update app state
-                window.location.reload();
-            } else {
-                console.log(response);
-                console.error("Login failed:", await response.data.message);
-                setError(response.data.message);
-                setCargando(false);
-            }
+            }, { withCredentials: true });
+            if (response.status === 200) window.location.reload();
         } catch (error) {
-            console.error("An error occurred during login:", error);
-            setError("No se ha podido establecer la conexión. Intentelo de nuevo más tarde.");
+            const defaultError = 'No se pudo establecer la conexión con el servidor.'
+            if (axios.isAxiosError(error)) {
+                console.error(error)
+                console.error("Login failed:", error.response?.data.message);
+                setError(error.response?.data?.message || defaultError);
+            } else {
+                console.error("Unexpected error:", error);
+                setError(defaultError);
+            }
+        } finally {
+            setCargando(false);
         }
     };
 
