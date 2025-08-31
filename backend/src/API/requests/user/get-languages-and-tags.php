@@ -3,7 +3,6 @@
  * @file get-languages.php
  * @description API endpoint to retrieve all available languages from the database.
  * Handles GET requests, queries the languages table, and returns a standardized JSON response with the list of languages or an error message.
- * @author Francesco Sidotti
  * @date May 17, 2025
  *
  * Usage:
