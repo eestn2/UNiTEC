@@ -34,6 +34,7 @@ import '../../styles/profile-info.css';
 import getUserStatus from '../../global/function/getUserStatus';
 import getUserType from '../../global/function/getUserType';
 import { sortByName } from '../../global/function/sortByName';
+import defaultError from '../../global/messages/defaultError';
 
 const STATUS_OPTIONS = Object.values(UserStatusEnum)
     .filter((v) => typeof v === "number")
@@ -65,71 +66,68 @@ const EditProfile: React.FC = () => {
     // Cargar idiomas y etiquetas
     useEffect(() => {
         handleLoadLabels();
-    }, []);
-        useEffect(() => {
+    });
+
+    useEffect(() => {
         console.log(labelsFromSelection);
     }, [labelsFromSelection]);
 
-const handleLoadLabels = async () => {
-    try {
-        const response = await axios.get('/user/get-languages-and-tags-edit.php');
-        if (response.data.status !== 'success') {
-            console.error('Error al cargar etiquetas y lenguajes:', response.data.message);
-            alert('Error al cargar etiquetas y lenguajes');
-            return;
+    const handleLoadLabels = async () => {
+        try {
+            const response = await axios.get('/user/get-languages-and-tags-edit.php');
+            if (response) {
+                // Get and sort all available options
+                const allTags : OptionItem[] = sortByName(response.data.data.tags || []);
+                const allLanguages : OptionItem[] = sortByName(response.data.data.languages || []);
+
+                const loadedTagsRaw = response.data.data.loadedTags || []; 
+                const loadedLanguagesRaw = response.data.data.loadedLanguages || [];
+
+                // Convert loaded items to proper format
+                const loadedTags: LoadedTag[] = loadedTagsRaw.map((t: { tag_id: number | string; level: number | string }) => ({
+                    id: Number(t.tag_id),
+                    level: Number(t.level)
+                }));
+
+                const loadedLanguages: LoadedLanguage[] = loadedLanguagesRaw.map((l: { language_id: number | string; level: number | string }) => ({
+                    id: Number(l.language_id),
+                    level: Number(l.level)
+                }));
+
+
+                // Create selected items for the UI 
+                const selectedItems: SelectedItem[] = [
+                    ...loadedTags.map(t => {
+                        const tag = allTags.find(tag => tag.id === t.id);
+                        return {
+                            id: t.id,
+                            name: tag?.name || `Tag ${t.id}`,
+                            block: "Etiquetas" as const,
+                            level: t.level
+                        };
+                    }),
+                    ...loadedLanguages.map(l => {
+                        const lang = allLanguages.find(lang => lang.id === l.id);
+                        return {
+                            id: l.id,
+                            name: lang?.name || `Language ${l.id}`,
+                            block: "Idiomas" as const,
+                            level: l.level
+                        };
+                    })
+                ];
+
+                // Save to state
+                setLabelsFromSelection(selectedItems);
+                setTags(allTags);
+                setLanguages(allLanguages);
+            }
+        } catch (error) {
+            if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+            alert(defaultError);
         }
+    };
 
-        // Get and sort all available options
-        const allTags : OptionItem[] = sortByName(response.data.data.tags || []);
-        const allLanguages : OptionItem[] = sortByName(response.data.data.languages || []);
-
-        const loadedTagsRaw = response.data.data.loadedTags || []; 
-        const loadedLanguagesRaw = response.data.data.loadedLanguages || [];
-
-        // Convert loaded items to proper format
-        const loadedTags: LoadedTag[] = loadedTagsRaw.map((t: { tag_id: number | string; level: number | string }) => ({
-            id: Number(t.tag_id),
-            level: Number(t.level)
-        }));
-
-        const loadedLanguages: LoadedLanguage[] = loadedLanguagesRaw.map((l: { language_id: number | string; level: number | string }) => ({
-            id: Number(l.language_id),
-            level: Number(l.level)
-        }));
-
-
-        // Create selected items for the UI 
-        const selectedItems: SelectedItem[] = [
-            ...loadedTags.map(t => {
-                const tag = allTags.find(tag => tag.id === t.id);
-                return {
-                    id: t.id,
-                    name: tag?.name || `Tag ${t.id}`,
-                    block: "Etiquetas" as const,
-                    level: t.level
-                };
-            }),
-            ...loadedLanguages.map(l => {
-                const lang = allLanguages.find(lang => lang.id === l.id);
-                return {
-                    id: l.id,
-                    name: lang?.name || `Language ${l.id}`,
-                    block: "Idiomas" as const,
-                    level: l.level
-                };
-            })
-        ];
-
-        // Save to state
-        setLabelsFromSelection(selectedItems);
-        setTags(allTags);
-        setLanguages(allLanguages);
-        console.log('Items seleccionados:', selectedItems);
-    } catch (error) {
-        console.error('Error al cargar etiquetas y lenguajes:', error);
-        alert('Error al cargar etiquetas y lenguajes');
-    }
-};
     const blocks = [
         {
             titulo: "Etiquetas",
@@ -142,6 +140,7 @@ const handleLoadLabels = async () => {
             placeholder: "Añadir un Idioma",
         },
     ];
+
     const searchData = {
         Etiquetas: Tags,
         Idiomas: Languages,
@@ -197,17 +196,16 @@ const handleLoadLabels = async () => {
 
             const response = await axios.put('/user/edit-user.php', payload);
             console.log(response.data);
-            if (response.data.status !== 'success') {
-                throw new Error(response.data.message || 'Error al actualizar el perfil');
-            } else {
+            if (response) {
                 alert('Perfil actualizado');
                 User.set({ ...User.data, ...payload }); // Update User session data
                 setNewPicture(null);
                 setNewPicturePath(null);
                 navigate(-1);
             }
-        } catch {
-            alert('Error al actualizar el perfil');
+        } catch (error) {
+            if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+            alert(defaultError);
         }
     };
 
@@ -238,16 +236,13 @@ const handleLoadLabels = async () => {
                     filename: file.name,
                     type: file.type,
                 });
-                if (response.data.status === 'success') {
+                if (response) {
                     setNewPicturePath(response.data.data.path); // Store path for form
                     console.log('Foto de perfil subida:', response.data.data.path);
                     alert('Foto de perfil subida, recuerda guardar los cambios');
-                } else {
-                    alert(response.data.message || 'Error al subir la foto');
-                    setNewPicture(null);
-                    setNewPicturePath(null);
                 }
-            } catch {
+            } catch (error) {
+                if (axios.isAxiosError(error)) return alert(error.response?.data?.message || 'Error al subir la foto');
                 alert('Error al subir la foto');
                 setNewPicture(null);
                 setNewPicturePath(null);
@@ -264,7 +259,7 @@ const handleLoadLabels = async () => {
     const isPortrait = window.innerHeight > window.innerWidth;
     const windowWidth = window.innerWidth > window.innerHeight ? 980 : 1280;
     const [translateX, translateY] = getTranslates(isPortrait);
-   const isEmpresaOrAdmin = form.type === UserTypeEnum.Empresa || form.type === UserTypeEnum.Administrador;
+    const isEmpresaOrAdmin = form.type === UserTypeEnum.Empresa || form.type === UserTypeEnum.Administrador;
     return (
         <div>
             <Logo className='watermark' />
