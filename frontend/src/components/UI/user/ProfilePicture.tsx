@@ -4,6 +4,7 @@ import axios from "axios";
 import { user } from "../../../types/user";
 import { getTranslates } from "../../../global/function/getTranslates";
 import defaultProfilePicture from '../../../assets/defaults/profile-picture/1.svg'; 
+import defaultError from "../../../global/messages/defaultError";
 
 interface ProfilePictureProps extends React.ImgHTMLAttributes<HTMLImageElement> {
     userId: number;
@@ -17,14 +18,14 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({ userId, size = 10, vert
     const [translateX] = getTranslates(vertical)
 
     useEffect(() => {
-        axios
-            .get(`/user/user-info.php?id=${userId}`)
+        axios.get(`/user/user-info.php?id=${userId}`)
             .then(res => {
-                if (res.data.status === "success") {
-                    setUser(res.data.data.user);
-                }
-            });
-    }, [userId]);
+                if (res) setUser(res.data.data.user);
+            })
+            .catch(error => {
+                if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+                alert(defaultError);
+            })}, [userId]);
 
     const handleProfileClick = () => {
         if (User) navigate(`/profile/${userId}`);
