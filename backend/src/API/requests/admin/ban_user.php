@@ -5,9 +5,6 @@
  * Handles DELETE requests, verifies admin permissions using session authentication, and deletes the user from the database.
  * Returns a standardized JSON response indicating success or failure.
  * 
- * Note: The authenticated user is obtained from the session, not from the request body.
- * 
- * @author Francesco Sidotti
  * @date May 31, 2025
  *
  * Usage:
@@ -26,33 +23,36 @@ require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 require_once __DIR__ . '/../../logic/security/is_admin.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "DELETE") return_response_outdated("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") return_response(status::OK, "Preflight OK.");
+if ($_SERVER["REQUEST_METHOD"] !== "DELETE") return_response(status::METHOD_NOT_ALLOWED, "Método no permitido.");
 
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($_SESSION['user']['id'])) return_response_outdated("failed", "No autenticado.", null);
-if (!is_admin($_SESSION['user']['id'], $connection)) {
-    return_response_outdated("failed", "Solo los administradores pueden eliminar usuarios.", null);
-}
+if (!isset($data->id) || !isset($data->reportId)) return_response(status::BAD_REQUEST, "Faltan datos obligatorios.");
+
+if (!isset($_SESSION['user']['id'])) return_response(status::UNAUTHORIZED, "No autenticado.");
+if (!is_admin($_SESSION['user']['id'], $connection)) return_response(status::FORBIDDEN, "Solo los administradores pueden banear usuarios.");
 
 $data->id = intval($data->id);
 $data->reportId = intval($data->reportId);
 
 try {
     $connection->beginTransaction();
+    // Delete user
     $query = "DELETE FROM users WHERE id = :id";
     $stmt = $connection->prepare($query);
     $stmt->bindParam(':id', $data->id, PDO::PARAM_INT);
     $stmt->execute();
-    $connection->commit();
-    return_response_outdated("success", "Usuario eliminado con exito.", null);
-    $connection->beginTransaction();
+    // Delete associated report
     $query = "DELETE FROM reports WHERE id = :reportId";
     $stmt = $connection->prepare($query);
-    $stmt->bindParam(':offerId', $data->offerId, PDO::PARAM_INT);
+    $stmt->bindParam(':reportId', $data->reportId, PDO::PARAM_INT);
     $stmt->execute();
+    
     $connection->commit();
-    return_response_outdated("success", "Oferta eliminada con exito.", null);
+    return_response(status::OK, "Usuario baneado y reporte eliminado con éxito.");
+    
 } catch(PDOException $e) {
-    return_response_outdated("failed", "Error al eliminar alguno de los dos: " . $e->getMessage(), null);
+    if ($connection->inTransaction()) $connection->rollBack();
+    return_response(status::INTERNAL_SERVER_ERROR, "Error al banear al usuario.");
 }
 ?>

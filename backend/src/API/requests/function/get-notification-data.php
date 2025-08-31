@@ -15,10 +15,11 @@ require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response_outdated("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") return_response(status::OK, "Preflight OK.");
+if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response(status::METHOD_NOT_ALLOWED, "Método no permitido.");
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    return_response_outdated("failed", "Falta o es inválido el parámetro id.", null);
+    return_response(status::BAD_REQUEST, "Falta o es inválido el parámetro id.");
 }
 
 $notification_id = intval($_GET['id']);
@@ -27,7 +28,7 @@ try {
     $stmt = $connection->prepare("SELECT * FROM notifications WHERE id = ?");
     $stmt->execute([$notification_id]);
     $notification = $stmt->fetch();
-    if (!$notification) return_response_outdated("failed", "Notificacion no encontrada.", null);
+    if (!$notification) return_response(status::NOT_FOUND, "Notificación no encontrada.");
     $response = [
         "id" => $notification["id"],
         "type" => $notification["type"],
@@ -41,9 +42,9 @@ try {
     }elseif ($notification["type"] == 5) {
         $response["action"] = "see_message";
     }
-    return_response_outdated("success", "Notificacion encontrada.", $response);
+    return_response(status::OK, "Notificación encontrada.", $response);
 } catch (PDOException $e) {
     error_log("Error retrieving notification data: " . $e->getMessage());
-    return_response_outdated("failed", "Error al recuperar la notificacion.", null);
+    return_response(status::INTERNAL_SERVER_ERROR, "Error al recuperar la notificación.");
 }
 ?>

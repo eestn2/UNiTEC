@@ -6,17 +6,16 @@ require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 require_once __DIR__ . '/../../logic/security/is_admin.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response_outdated("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") return_response(status::OK, "Preflight OK.");
+if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response(status::METHOD_NOT_ALLOWED, "Método no permitido.");
 
-if (!isset($_SESSION['user']['id'])) return_response_outdated("failed", "No autenticado.", null);
-if (!is_admin($_SESSION['user']['id'], $connection)) {
-    return_response_outdated("failed", "Solo los administradores pueden ver los usuarios a aprobar.", null);
-}
+if (!isset($_SESSION['user']['id'])) return_response(status::UNAUTHORIZED, "No autenticado.");
+if (!is_admin($_SESSION['user']['id'], $connection)) return_response(status::FORBIDDEN, "Solo los administradores pueden ver los usuarios a aprobar.");
 
 try {
     $stmt = $connection->query("SELECT * FROM users WHERE enabled= 0");
     $users = $stmt->fetchAll();
-    if (!$users) return_response_outdated("success", "No hay usuarios no habilitados.", ["users" => []]);
+    if (!$users) return_response(status::OK, "No hay usuarios no habilitados.", ["users" => []]);
     // Sanitize user data to match the expected structure
     $users = array_map(function($user) {
         return [
@@ -34,10 +33,10 @@ try {
         ];
     }, $users);
     error_log("Users retrieved successfully: " . json_encode($users));
-    return_response_outdated("success", "not enabled retrieved successfully.", ["users" => $users]);
+    return_response(status::OK, "Usuarios recuperados correctamente.", ["users" => $users]);
 } catch (PDOException $e) {
     error_log("Error retrieving users: " . $e->getMessage());
-    return_response_outdated("failed", "Error retrieving users.", null);
+    return_response(status::INTERNAL_SERVER_ERROR, "Error al recuperar los usuarios.");
 }
 
 ?>

@@ -5,9 +5,6 @@
  * Handles PUT requests, verifies admin permissions using session authentication, updates the 'enabled' status of the target user to 1, and sends a notification email upon acceptance.
  * Returns a standardized JSON response indicating success or failure.
  *
- * Note: The authenticated admin user is retrieved from the session. No admin ID is required in the request body.
- * 
- * @author Francesco Sidotti
  * @date May 31, 2025
  *
  * Usage:
@@ -27,20 +24,22 @@ require_once __DIR__ . "/../../logic/communications/return_response.php";
 require_once __DIR__ . '/../../logic/security/is_admin.php';
 require_once __DIR__ . '/../../logic/notifications/send_notification.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'PUT') return_response_outdated("failed", "Method not allowed", null);
+if ($_SERVER['REQUEST_METHOD'] === "OPTIONS") return_response(status::OK, "Preflight OK.");
+if ($_SERVER['REQUEST_METHOD'] !== 'PUT') return_response(status::METHOD_NOT_ALLOWED, "Método no permitido.");
 
 $data = json_decode(file_get_contents("php://input"));
-if (!$data || !isset($data->target_user_id)) return_response_outdated("failed", "Falta el ID del usuario a aceptar", null);
+if (!$data || !isset($data->target_user_id)) return_response(status::BAD_REQUEST, "Falta el ID del usuario a aceptar.");
 
 $target_user_id = filter_var($data->target_user_id, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1]]);  
-if ($target_user_id === false) return_response_outdated("failed", "ID de usuario a aceptar inválido.", null); 
+if ($target_user_id === false) return_response(status::BAD_REQUEST, "ID de usuario a aceptar inválido."); 
 
 // Obtener el usuario autenticado desde la sesión
-if (!isset($_SESSION['user']['id'])) return_response_outdated("failed", "No autenticado.", null);
+if (!isset($_SESSION['user']['id'])) return_response(status::UNAUTHORIZED, "No autenticado.");
 $auth_user_id = $_SESSION['user']['id'];
 
 // Verificar si el usuario autenticado es admin
-if (!is_admin($auth_user_id, $connection)) return_response_outdated("failed", "Solo los administradores pueden aceptar usuarios.", null);
+if (!is_admin($auth_user_id, $connection)) return_response(status::FORBIDDEN, "Solo los administradores pueden aceptar usuarios.");
+
 // Aceptar al usuario destino
 try {
     // 1. Get the user's email and name first
@@ -49,10 +48,7 @@ try {
     $email_stmt->execute();
     $user = $email_stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$user) {
-        return_response_outdated("failed", "No se encontró al usuario.", null);
-        exit;
-    }
+    if (!$user) return_response(status::NOT_FOUND, "No se encontró al usuario.");
 
     // 2. Enable the user (set enabled = 1)
     $stmt = $connection->prepare("UPDATE users SET enabled = 1 WHERE id = :id");
@@ -79,11 +75,10 @@ try {
             send_email($to, $subject, $body);
         }
         send_notification($connection, NotificationType::ACCOUNT_APPROVED, $target_user_id, []);
-        return_response_outdated("success", "Usuario aceptado con exito.", null);
-    } else {
-        return_response_outdated("failed", "No se pudo aceptar al usuario.", null);
+        return_response(status::OK, "Usuario aceptado con éxito.");
     }
+    return_response(status::CONFLICT, "No se pudo aceptar al usuario.");
 } catch(PDOException $e) {
-    return_response_outdated("failed", "Error al aceptar el usuario.", null);
+    return_response(status::INTERNAL_SERVER_ERROR, "Error al aceptar el usuario: " . $e->getMessage());
 }
 ?>

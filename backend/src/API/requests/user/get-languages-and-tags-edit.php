@@ -19,18 +19,14 @@ require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
-if (!isset($_SESSION['user']['id'])) {
-    return_response_outdated("failed", "No se ha iniciado sesión", null);
-}
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") return_response(status::OK, "Preflight OK.");
+if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response(status::METHOD_NOT_ALLOWED, "Método no permitido.");
 
-
-if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response_outdated("failed", "Metodo no permitido.", null);
+if (!isset($_SESSION['user']['id'])) return_response(status::UNAUTHORIZED, "No se ha iniciado sesión.");
 
 $userId = $_SESSION['user']['id'];
 
-
 try {
-    
     // Tags
     $stmt = $connection->prepare("SELECT tag_id, `level` FROM user_tags WHERE user_id = ?");
     $stmt->execute([$userId]); // <-- parámetro dentro de un array
@@ -46,14 +42,15 @@ try {
 
     $stmt = $connection->query("SELECT * FROM languages");
     $languages = $stmt->fetchAll();
-    return_response_outdated("success", "Datos obtenidos correctamente.", [
+    
+    return_response(status::OK, "Datos obtenidos correctamente.", [
         "languages" => $languages,
         "tags" => $tags,
         "loadedLanguages" => $loadedLanguages,
         "loadedTags" => $loadedTags
     ]);
 } catch (PDOException $e) {
-    error_log("Error retrieving job languages: " . $e->getMessage());
-    return_response_outdated("failed", "Error retrieving languages.", $e->getMessage());
+    error_log("Error retrieving languages and tags: " . $e->getMessage());
+    return_response(status::INTERNAL_SERVER_ERROR, "Error al obtener lenguajes y etiquetas.");
 }
 ?>

@@ -13,18 +13,13 @@ require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . "/../../logic/database/connection.php";
 require_once __DIR__ . "/../../logic/communications/return_response.php";
 
-if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
-    return_response_outdated("failed", "Method not allowed", null);
-}
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") return_response(status::OK, "Preflight OK.");
+if ($_SERVER['REQUEST_METHOD'] !== 'PUT') return_response(status::METHOD_NOT_ALLOWED, "Método no permitido.");
 
 $data = json_decode(file_get_contents("php://input"));
-if (!$data) {
-    return_response_outdated("failed", "No se recibieron datos", null);
-}
+if (!$data) return_response(status::BAD_REQUEST, "No se recibieron datos.");
 session_start();
-if (!isset($_SESSION['user']['id'])) {
-    return_response_outdated("failed", "No se ha iniciado sesión", null);
-}
+if (!isset($_SESSION['user']['id'])) return_response(status::UNAUTHORIZED, "No se ha iniciado sesión.");
 $userId = $_SESSION['user']['id'];
 
 $allowed_fields = ["name", "birth_date", "user_type", "status", "location", "email", "description", "profile_picture", "portfolio"];
@@ -41,10 +36,7 @@ foreach ($allowed_fields as $field) {
 
 if (empty($fields_to_update)) {
     // Check if we're only updating languages or tags
-    if (!isset($data->languages) && !isset($data->tags)) {
-        return_response_outdated("failed", "No se recibieron datos para actualizar", null);
-        exit;
-    }
+    if (!isset($data->languages) && !isset($data->tags)) return_response(status::BAD_REQUEST, "No se recibieron datos para actualizar.");
 }
 
 try {
@@ -56,6 +48,11 @@ try {
         $sql = "UPDATE users SET " . implode(", ", $fields_to_update) . " WHERE id = :id";
         $query = $connection->prepare($sql);
         $query->execute($params);
+        
+        if ($query->rowCount() === 0) {
+            $connection->rollBack();
+            return_response(status::NOT_FOUND, "Usuario no encontrado o no se realizaron cambios.");
+        }
     }
 
     // === LANGUAGES ===
@@ -127,9 +124,11 @@ try {
     $updated->execute([$userId]);
     $updated_user = $updated->fetch(PDO::FETCH_ASSOC);
 
-    return_response_outdated("success", "Usuario actualizado correctamente", $updated_user);
+    return_response(status::OK, "Usuario actualizado correctamente.", $updated_user);
 } catch (PDOException $e) {
-    $connection->rollBack();
-    return_response_outdated("failed", "Error al actualizar el usuario: " . $e->getMessage(), null);
+    if ($connection->inTransaction()) {
+        $connection->rollBack();
+    }
+    return_response(status::INTERNAL_SERVER_ERROR, "Error al actualizar el usuario.");
 }
 ?>

@@ -6,8 +6,6 @@
  * Returns a standardized JSON response indicating success or failure.
  * 
  * Note: The authenticated admin is retrieved from the session. No admin ID is required in the body.
- *
- * @author Federico Nicolás Martínez
  * @date May 17, 2025
  *
  * Usage:
@@ -17,7 +15,7 @@
  * Example:
  *   PUT /src/API/requests/admin/reject-new-user.php
  *   Body: { "target_user_id": 8 }
- *   Response: { "status": "success", "message": "Usuario rechazado con éxito.", "data": null }
+ *   Response: { "message": "Usuario rechazado con éxito.", "data": null }
  */
 
 session_start();
@@ -26,24 +24,21 @@ require_once __DIR__ . "/../../logic/database/connection.php";
 require_once __DIR__ . "/../../logic/communications/return_response.php";
 require_once __DIR__ . '/../../logic/security/is_admin.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
-    return_response_outdated("failed", "Method not allowed", null);
-    exit;
-}
+if ($_SERVER['REQUEST_METHOD'] !== 'PUT') return_response(status::METHOD_NOT_ALLOWED, "Method not allowed");
 
 $data = json_decode(file_get_contents("php://input"));
-if (!$data || !isset($data->target_user_id) || !isset($data->target_user_type)) return_response_outdated("failed", "Falta el ID del usuario a rechazar", null);
+if (!$data || !isset($data->target_user_id) || !isset($data->target_user_type)) return_response(status::BAD_REQUEST, "Falta el ID del usuario a rechazar");
 
 $target_user_id = intval($data->target_user_id);
 $target_user_type = intval($data->target_user_type);
-if ($target_user_id <= 0) return_response_outdated("failed", "ID de usuario a rechazar inválido.", null);
+if ($target_user_id <= 0) return_response(status::BAD_REQUEST, "ID de usuario a rechazar inválido.");
 // Obtener el usuario autenticado desde la sesión
-if (!isset($_SESSION['user']['id'])) return_response_outdated("failed", "No autenticado.", null);
+if (!isset($_SESSION['user']['id'])) return_response(status::UNAUTHORIZED, "No autenticado.");
 
 $auth_user_id = $_SESSION['user']['id'];
 
 // Verificar si el usuario autenticado es admin
-if (!is_admin($auth_user_id, $connection)) return_response_outdated("failed", "Solo los administradores pueden rechazar usuarios.", null);
+if (!is_admin($auth_user_id, $connection)) return_response(status::FORBIDDEN, "Solo los administradores pueden rechazar usuarios.");
 
 
 // Rechazar al usuario destino
@@ -54,7 +49,7 @@ try {
     $email_stmt->execute();
     $user = $email_stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$user) return_response_outdated("failed", "No se encontró al usuario.", null);
+    if (!$user) return_response(status::NOT_FOUND, "No se encontró al usuario.");
 
     if($target_user_type != 1){
         // 3. Delete user-specific data if not an admin
@@ -69,8 +64,6 @@ try {
     $stmt = $connection->prepare("DELETE FROM users WHERE id = :id"); // or UPDATE users SET enabled = 0 WHERE id = :id
     $stmt->bindParam(':id', $target_user_id, PDO::PARAM_INT);
     $stmt->execute();
-
-
 
     if ($stmt->rowCount() > 0) {
         // 3. Send the email after successful delete/disable
@@ -91,13 +84,12 @@ try {
                     ";
             send_email($to, $subject, $body);
         }
-        return_response_outdated("success", "Usuario rechazado con exito.", null);
-    } else {
-        return_response_outdated("failed", "No se pudo rechazar al usuario.", null);
+        return_response(status::OK, "Usuario rechazado con éxito.");
     }
+    return_response(status::NOT_FOUND, "No se pudo rechazar al usuario.");
 } catch(PDOException $e) {
     $connection->rollBack();
     error_log("Error rejecting user: " . $e->getMessage());
-    return_response_outdated("failed", "Error al rechazar el usuario.", null);
+    return_response(status::INTERNAL_SERVER_ERROR, "Error al rechazar el usuario.");
 }
 ?>

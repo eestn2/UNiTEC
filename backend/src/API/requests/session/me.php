@@ -2,7 +2,6 @@
 /**
  * @file me.php
  * @description Returns the current session user if logged in, or an error if not authenticated.
- * @author Migration Script
  * @date May 31, 2025
  */
 
