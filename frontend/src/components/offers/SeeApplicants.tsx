@@ -9,6 +9,7 @@ import ModalOverlay from "./ModalOverlay";
 import "../offers/SeeApplicants.css";
 import ActionButton from "../UI/ActionButton";
 import ConfirmModal from "../UI/Modals/ConfirmModal";
+import defaultError from "../../global/messages/defaultError";
 
 type Postulante = {
   id: number;
@@ -43,21 +44,17 @@ const SeeApplicants: React.FC = () => {
 
   const handleDisable = async (offerId: number) => {
     try {
-      const response = await axios.put('/enterprise/end-job-offer.php', {
-        offer_id: offerId
-      });
-      if (response.data.status === "success") {
-        console.log("Estado de la oferta actualizado con exito.");
+      const response = await axios.put('/enterprise/end-job-offer.php', { offer_id: offerId });
+      if (response) {
         setOffers((prevOffers) =>
           prevOffers.map((offer) =>
             offer.id === offerId ? { ...offer, status: 0 } : offer
           ));
         setShowConfirmationModal(false);
-      } else {
-        console.error("Ocurrio un error.")
       }
-    } catch (e) {
-      console.error("Error al actualizar el estado de la oferta:", e);
+    } catch (error) {
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
     }
 
   }
@@ -94,16 +91,11 @@ const SeeApplicants: React.FC = () => {
     setLoadingOffers(true);
     setError(null);
     try {
-      const response = await axios.get(
-        '/enterprise/get-offers-and-applicants.php'
-      );
-      if (response.status !== 200 || response.data.status !== "success") {
-        setError("Error al cargar ofertas.");
-      } else {
-        setOffers(response.data.data.offers);
-      }
+      const response = await axios.get('/enterprise/get-offers-and-applicants.php');
+      if (response) setOffers(response.data.data.offers);
     } catch {
-      setError("No se pudo conectar con el servidor.");
+      if (axios.isAxiosError(error)) return setError(error.response?.data?.message || defaultError);
+      setError(defaultError);
     } finally {
       setLoadingOffers(false);
     }
@@ -111,7 +103,7 @@ const SeeApplicants: React.FC = () => {
 
   useEffect(() => {
     loadOffersWithApplicants();
-  }, []);
+  });
 
   const ofertaActiva = offers.find((o) => o.id === popupActivo);
 
