@@ -5,7 +5,6 @@
  * Handles DELETE requests, verifies admin permissions using session authentication, and deletes the tag from the database.
  * Returns a standardized JSON response indicating success or failure.
  * 
- * 
  * @date May 31, 2025
  *
  * Usage:
