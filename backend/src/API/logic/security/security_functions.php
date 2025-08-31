@@ -2,7 +2,6 @@
 /**
  * @file security_functions.php
  * @description Contains security-related functions for password encryption and decryption.
- * @author Haziel Magallanes
  * @date May 14, 2025
  *
  * Usage:
@@ -13,8 +12,7 @@
  *   $hashedPassword = encryption('my_password');
  *   $isValid = password_verify('my_password', $hashedPassword);
  */
-function encryption($password){
-	$Definitive_password=password_hash($password, PASSWORD_BCRYPT,['cost'=>10]);
-	return $Definitive_password;
+function encryption(string $password): string{
+	return password_hash($password, PASSWORD_BCRYPT,['cost'=>16]);;
 }
 ?>

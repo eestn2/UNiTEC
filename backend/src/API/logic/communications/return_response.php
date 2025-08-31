@@ -36,7 +36,6 @@ enum status: int {
 };
 
 function return_response(status $status, string $message, $data = null): never {
-    //header('Content-Type: application/json');
     http_response_code($status->value);
     $data = [
         'message' => $message,
@@ -45,16 +44,4 @@ function return_response(status $status, string $message, $data = null): never {
     echo json_encode($data);
     exit;
 }
-function return_response_outdated(string $status, string $message, $data = null): never {
-    header('Content-Type: application/json');
-    http_response_code($status == 'success' ? 200 : 400);
-    $response = [
-        'status' => $status,
-        'message' => $message,
-        'data' => $data
-    ];
-    echo json_encode($response);
-    exit;
-}
-
 ?>
