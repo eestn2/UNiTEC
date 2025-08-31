@@ -16,6 +16,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Lottie from "lottie-react";
 import throbber from "../../assets/animated/Insider-loading.json";
+import defaultError from "../../global/messages/defaultError";
+
 /**
  * A React functional component that renders the login form inside a responsive window.
  * Handles window resize for responsive design, manages form state, and provides links for password reset and registration.
@@ -40,18 +42,11 @@ const Login: React.FC = () => {
         event.preventDefault();
         try {
             setCargando(true);
-            const response = await axios.post(`/session/login.php`, {
-                email,
-                password,
-            }, { withCredentials: true });
-            if (response.status === 200) window.location.reload();
+            const response = await axios.post(`/session/login.php`, { email, password });
+            if (response) window.location.reload();
         } catch (error) {
-            const defaultError = 'No se pudo establecer la conexión con el servidor.'
-            if (axios.isAxiosError(error)) {
-                setError(error.response?.data?.message || defaultError);
-            } else {
-                setError(defaultError);
-            }
+            if (axios.isAxiosError(error)) return setError(error.response?.data?.message || defaultError);
+            setError(defaultError);
         } finally {
             setCargando(false);
         }
@@ -83,16 +78,12 @@ const Login: React.FC = () => {
                     <ActionButton vertical={true} height={50} width={200} text=""  style={{ backgroundColor: 'white', color: '#888', border: '2px solid #ccc', cursor: 'not-allowed'}} action={(event) => {
                         event.preventDefault();
                     }}> 
-                    
                          <Lottie
                                 animationData={throbber}  
                                 loop={true}
                                 autoplay={true}
                                 style={{height:'100%',scale:1.5}}
-                            /> 
-               
-                           
-
+                            />
                     </ActionButton>
                     :
                     <ActionButton vertical={true} width={200} height={50} text="Iniciar Sesión" action={(event) => {

@@ -50,7 +50,6 @@ const RegisterEnterprise: React.FC = () => {
         if( passTry !== confirmPassTry){
             setIsCorrectPass(false);
             setPassError( <span className="error">Las contraseñas no coinciden.</span>);
-            
         }else{
             setPassError(<></>);
             setIsCorrectPass(true);
@@ -62,7 +61,6 @@ const RegisterEnterprise: React.FC = () => {
         if (emailTry && !emailRegex.test(emailTry)) {
             setIsCorrect(false);
             setEmailError(<span className="error">El correo electrónico no es válido.</span>);
-            
         }else{
             setIsCorrect(true);
             setEmailError(null);
@@ -70,14 +68,11 @@ const RegisterEnterprise: React.FC = () => {
     }
 
     function valueForm() : boolean{
-        if (!isCorrect || !isCorrectPass || email.trim() === "" || password.trim() === "" || enterpriseName.trim() === "" || description.trim() === "" ){
-            return false
-        }
-        return true
+        return !(!isCorrect || !isCorrectPass || email.trim() === "" || password.trim() === "" || enterpriseName.trim() === "" || description.trim() === "");
     }
 
     const handleRegister = async (event: FormEvent) => {
-        event.preventDefault(); 
+        event.preventDefault();
         if (!valueForm()) return setError(<span className="error">Por favor, complete todos los campos correctamente.</span>);
         try {
             const response = await axios.post(`/session/user-register.php`, {
@@ -88,9 +83,9 @@ const RegisterEnterprise: React.FC = () => {
                 user_type: 1, // 1 for enterprise
                 description: description
             });
-            if (response.status === 200){ 
-                navigate('/');
+            if (response) {
                 alert("Registro exitoso. Debe esperar aprobación de su cuenta, porfavor sea paciente.");
+                navigate('/');
             }
         } catch (error) {
             if (axios.isAxiosError(error)) return setError(<span className="error">{error.response?.data?.message || "No se ha podido registrar. Intente de nuevo más tarde."}</span>);
@@ -148,10 +143,7 @@ const RegisterEnterprise: React.FC = () => {
                         placeholder="Correo Electrónico" 
                         width={305} 
                         height={55}
-                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                            getWrongEmailText(event.target.value);
-                        }
-                        }
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => getWrongEmailText(event.target.value)}
                     />
                     {emailError}
                     <InputField 
@@ -160,8 +152,7 @@ const RegisterEnterprise: React.FC = () => {
                         placeholder="Contraseña" 
                         width={305} 
                         height={55}
-                        onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                            getWrongPassText( event.target.value, confirmPassword)}
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => getWrongPassText( event.target.value, confirmPassword)}
                     />
                     <InputField 
                         name="password-confirm-enterprise" 
@@ -169,9 +160,7 @@ const RegisterEnterprise: React.FC = () => {
                         placeholder="Confirmar Contraseña" 
                         width={305} 
                         height={55}
-                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                            getWrongPassText(password, event.target.value);
-                        }}
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => getWrongPassText(password, event.target.value)}
                     />
                     {passError}
                     <InputField 
@@ -201,7 +190,6 @@ const RegisterEnterprise: React.FC = () => {
                         event.preventDefault();
                         const form = document.getElementById("register-enterprise") as HTMLFormElement;
                         if (form) form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
-
                     }}/>
                     {error}
                     <div className="delimiter"></div>
