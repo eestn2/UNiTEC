@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../logic/communications/return_response.php';
 if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") return_response(status::OK, "Preflight OK.");
 if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response(status::METHOD_NOT_ALLOWED, "Método no permitido.");
 if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id'])) return_response(status::UNAUTHORIZED, "No autenticado.");
-// Retrieve and validate the user ID from the query parameters
+// Retrieve and validate the offer ID from the query parameters
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) return_response(status::BAD_REQUEST, "ID de oferta inválido.");
 
 $id = intval($_GET['id']);
