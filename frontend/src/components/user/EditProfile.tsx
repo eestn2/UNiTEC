@@ -238,14 +238,13 @@ const EditProfile: React.FC = () => {
                 });
                 if (response) {
                     setNewPicturePath(response.data.data.path); // Store path for form
-                    console.log('Foto de perfil subida:', response.data.data.path);
                     alert('Foto de perfil subida, recuerda guardar los cambios');
                 }
             } catch (error) {
-                if (axios.isAxiosError(error)) return alert(error.response?.data?.message || 'Error al subir la foto');
-                alert('Error al subir la foto');
                 setNewPicture(null);
                 setNewPicturePath(null);
+                if (axios.isAxiosError(error)) return alert(error.response?.data?.message || 'Error al subir la foto');
+                alert('Error al subir la foto');
             } finally {
                 setUploading(false);
             }
