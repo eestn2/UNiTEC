@@ -32,7 +32,7 @@ import { useWindowSize } from '../hooks/responsive/useWindowSize';
 import LoadingScreen from './UI/LoadingScreens/LoadingScreen';
 import type { user } from '../types/user';
 import EditProfile from './user/EditProfile';
-import OffersPustulated from './offers/OffersPustulated';
+import OffersPostulated from './offers/OffersPostulated';
 import UserReview from './UI/user/UserReview';
 import ReportUser from './UI/user/ReportUser';
 /**
@@ -111,7 +111,7 @@ function App(): JSX.Element {
               <Route path="/send-email" element={<SendEmail />} /> 
              <Route path="/review/:reviewedId/:reviewedName/:reviewerId/:reviewerName" element={<UserReview />} />
              <Route path="/report/:reportedId/:reportedName" element={<ReportUser />} />
-             <Route path="/offers-postulated" element={<OffersPustulated />} />
+             <Route path="/offers-postulated" element={<OffersPostulated />} />
               <Route path='*' element={<PageNotFound />} />
           </Routes>
           </BrowserRouter>

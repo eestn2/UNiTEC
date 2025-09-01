@@ -5,7 +5,6 @@ import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import { useNavigate } from "react-router-dom";
 import "../offers/SeeApplicants.css";
-import User from "../session/User";
 import LoadingScreen from "../UI/LoadingScreens/LoadingScreen";
 
 type Application = {
@@ -17,7 +16,7 @@ type Application = {
   application_status: string;
 };
 
-const OffersPustulated: React.FC = () => {
+const OffersPostulated: React.FC = () => {
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,24 +25,18 @@ const OffersPustulated: React.FC = () => {
   useEffect(() => {
     const fetchApplications = async () => {
       setLoading(true);
-      setError(null);
       try {
-        const userId = User.data.id;
-        const { data: response } = await axios.get(`/user/get-user-applications.php?user_id=${userId}`);
-        if (response.status === "success" && response.data) {
-          setApplications(response.data);
-        } else {
-          setError("No se encontraron postulaciones.");
-
-        }
+        const response = await axios.get(`/user/get-user-applications.php`);
+        if (response) setApplications(response.data.data);
       } catch {
+        if (axios.isAxiosError(error)) return setError(error.response?.data?.message || "Error al cargar postulaciones.");
         setError("Error al cargar postulaciones.");
       } finally {
         setLoading(false);
       }
     };
     fetchApplications();
-  }, []);
+  }, [error, setError, setApplications]);
 
   return (
     <>
@@ -111,4 +104,4 @@ const OffersPustulated: React.FC = () => {
   );
 };
 
-export default OffersPustulated;
+export default OffersPostulated;
