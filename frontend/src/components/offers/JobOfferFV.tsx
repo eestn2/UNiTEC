@@ -3,21 +3,17 @@ import AppWindow from "../UI/AppWindow";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import type { offer } from "../../types/JobOfferTypes";
-import type { TypedResponse } from "../../types/Response";
 import close_icon from "../../assets/icons/close.svg";
 import NavBar from "../UI/NavBar";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 import ActionButton from "../UI/ActionButton";
 import { user } from "../../types/user";
 import TextWithBreaks from "../UI/TextWithBreaks";
 import User from "../session/User";
 import ProfilePicture from "../UI/user/ProfilePicture";
+import defaultError from "../../global/messages/defaultError";
 
 const JobOfferFV: React.FC = () => {
-    // Re-Render on window resize
-    const windowSize = useWindowSize();
-    console.log("Window size:", windowSize);
     // State variables for job offer data
     const { offerId, message, type, showReviewButton: showReviewParam } = useParams<{ offerId: string; message: string; type: string; showReviewButton?: string }>();
     const iType = type ? parseInt(type, 10) : undefined;
@@ -29,14 +25,11 @@ const JobOfferFV: React.FC = () => {
     useEffect(() => {
         const fetchOffer = async () => {
             try {
-                const { data: response } = await axios.get<TypedResponse<offer>>(
-                    `/feed/job-offer.php?id=${offerId}`
-                );
-                if (response.status === "success") {
-                    setJobOffer(response.data);
-                }
-            } catch (e) {
-                console.error("Error fetching job offer:", e);
+                const response = await axios.get(`/feed/job-offer.php?id=${offerId}`);
+                if (response) setJobOffer(response.data.data);
+            } catch (error) {
+                if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+                alert(defaultError);
             } finally {
                 setLoading(false);
             }
@@ -46,22 +39,21 @@ const JobOfferFV: React.FC = () => {
 
     useEffect(() => {
         const fetchAuthor = async () => {
+            if(!jobOffer) return;
+            setLoading(true);
             try {
-                const { data: response } = await axios.get<TypedResponse<any>>(
-                    `/user/user-info.php?id=${jobOffer?.creator_id}`
-                );
-                if (response.status === "success") {
-                    setAuthor(response.data.user as user);
-                }
-            } catch (e) {
-                console.error("Error fetching job offer:", e);
+                const response = await axios.get(`/user/user-info.php?id=${jobOffer?.creator_id}`);
+                if (response) setAuthor(response.data.data.user as user);
+            } catch (error) {
+                if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+                alert(defaultError);
             } finally {
                 setLoading(false);
             }
         };
         fetchAuthor();
     }, [jobOffer]);
-    console.log(author);
+    
     if (loading) return <div>Cargando...</div>;
     if (!jobOffer) return <div>No se encontró la oferta.</div>;
 
