@@ -3,7 +3,6 @@
  * @file get-notification-data.php
  * @description API endpoint to retrieve all data for a specific notification by its ID.
  * Handles GET requests, validates input, queries the database, and returns a JSON response with the notification data.
- * @author Haziel Magallanes
  * @date May 14, 2025
  *
  * Usage:
