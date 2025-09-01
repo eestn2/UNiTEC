@@ -14,7 +14,7 @@ export default function LoadingScreen({ loadingContent = false, size = "1" }: Lo
   return (
     <div style={{
       ...styles.container,
-      ...(loadingContent ? { position: 'absolute', top: '35%', transform: `scale(${size})` } : { height: '100vh' }),
+      ...(loadingContent ? { position: 'absolute', top: '25%', transform: `scale(${size})`,backgroundColor:"red" } : { height: '100vh' }),
     }}>
       <div style={styles.maskWrapper}>
         <svg
@@ -31,9 +31,7 @@ export default function LoadingScreen({ loadingContent = false, size = "1" }: Lo
               <image
                 href={loadingContent ? greyBriefCase : whiteBriefcase}
                 width={140}
-                height={126}
-                style={{}}
-              // El SVG blanco será la máscara
+                height={126}  
               />
             </mask>
           </defs>
@@ -57,7 +55,7 @@ export default function LoadingScreen({ loadingContent = false, size = "1" }: Lo
 
 const styles = {
   container: {
-    width: '100%',
+    width: '100%', 
     display: 'flex',
     flexDirection: 'column' as const,
     justifyContent: 'center',

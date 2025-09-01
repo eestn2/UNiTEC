@@ -1,0 +1,124 @@
+.app-window {
+    width: 980px;
+    display: "flex";
+    align-Items: "center";
+    justify-Content: "center";
+    row-Gap: 10px;
+    padding: 0px 20px;
+    padding-bottom: 10px;
+    flex-Direction: "column";
+    position: "relative";
+    margin-left: 220px;
+}
+
+
+
+.logo-responsive {
+    background-color: var(--window-outer);
+    border-radius: 20px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px calc((6 / 720) * var(--y-multiplier)) calc((12 / 720) * var(--y-multiplier)) calc((-2 / 720) * var(--y-multiplier)), rgba(0, 0, 0, 0.3) 0px calc((3 / 720) * var(--y-multiplier)) calc((7 / 720) * var(--y-multiplier)) calc((-3 / 720) * var(--y-multiplier));
+    position: absolute;
+    left: 0;
+    top: 8vh;
+    width: 210px;
+    height: 210px;
+}
+
+.InputField {
+    height: 44px !important;
+    font-size: 16px;
+    width: 100% !important;
+}
+
+.top-title {
+    width: 100%;
+    padding-bottom: 15px;
+    padding-top: 5px;
+    font-size: 33px;
+}
+
+.horizontal-display {
+    width: 100%;
+    justify-content: space-between;
+    column-count: 3;
+    column-gap: 20px;
+    padding-top: 20px;
+}
+
+.action-button {
+    margin-top: 5px;
+}
+
+.item {
+    break-inside: avoid;
+    margin-bottom: 12px;
+    display: block;
+    width: 100%;
+}
+
+.delimiter {
+    margin-top: 10px;
+}
+
+@media (max-width: 1220px) {
+    .app-window {
+        margin-left: 100px;
+    }
+
+    .horizontal-display {
+        column-count: 2;
+    }
+
+     :global(.labels-selection){
+        margin-top: 10px;
+     }
+
+    .app-window {
+        width: 650px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .logo-responsive {
+        position: relative;
+        width: 170px !important;
+        height: 130px !important;
+        left: auto;
+        top: 10px;
+        margin: 0 auto;
+    }
+
+    .logo-responsive :global(#TextLogo) {
+        display: none;
+    }
+
+    .app-window {
+        margin: 0;
+    }
+
+}
+
+@media (max-width: 710px) {
+    .horizontal-display {
+        column-count: 1;
+    }
+
+    .app-window {
+        width: 90%;
+        max-width: 600px;
+    }
+
+    :global(.checkbox-label){
+        font-size: 18px;
+    }
+    :global(.labels-selection){
+        height: 230px!important; 
+    }
+}
+
+@media (max-width:420px) {
+    .app-window {
+        width: 100%;
+    }
+
+}

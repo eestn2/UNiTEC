@@ -57,12 +57,8 @@ export interface ActionButtonProps extends ResponsiveComponent {
  * ```
  * @author Haziel Magallanes, Daviel Díaz Gonzáles
  */
-const ActionButton: React.FC<ActionButtonProps> = ({ height = 10, vertical = false, width = 'auto', action, text, style, className, children }) => {
-    const { finalHeight, finalWidth, translateX } = useResponsiveDimensions({
-        height,
-        width,
-        vertical
-    });
+const ActionButton: React.FC<ActionButtonProps> = ({ height = '10px', vertical = false, width = 'auto', action, text, style, className, children }) => {
+ 
     const animationDuration = 0.2; // seconds
     const buttonStyle: React.CSSProperties = {
         transition: `all ${animationDuration}s ease-in-out`,
@@ -71,9 +67,8 @@ const ActionButton: React.FC<ActionButtonProps> = ({ height = 10, vertical = fal
         justifyContent: "center",
         display: "flex",
         flexDirection: "row",
-        width: finalWidth,
-        height: finalHeight,
-        columnGap: translateX(4),
+        width: width,
+        height: height, 
         ...style,
     };
 

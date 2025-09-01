@@ -80,7 +80,7 @@ function App(): JSX.Element {
       .finally(() => setGettingSession(false));
   }, []); 
 
-  if (gettingSession ) {
+  if (gettingSession) {
     return <div className='app-content'><LoadingScreen /></div>;
   }
   // Browser routings

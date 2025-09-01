@@ -1,0 +1,140 @@
+.error {
+    font-size: 15px;
+}
+
+:global(.app-content) {
+    align-items: center !important;
+    justify-content: center !important;
+    display: flex;
+    padding: 5vh 0;
+    padding-bottom: 5vh;
+}
+
+.app-window {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    row-gap: 15px;
+    padding: 16px;
+    margin: 0 30px;
+    padding-top: 10px;
+    flex-direction: column;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    height: auto;
+}
+
+.top-title {
+    width: 100%;
+    padding-bottom: 15px;
+    padding-top: 5px;
+    font-size: 33px;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    gap: 15px;
+}
+
+.vertical-sections {
+    width: 100%;
+    max-width: 280px;
+    overflow: hidden;
+}
+
+.vertical-sections:first-child {
+    max-width: max-content;
+}
+
+.logo-responsive {
+    background-color: var(--window-outer);
+    border-radius: 20px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px calc((6 / 720) * var(--y-multiplier)) calc((12 / 720) * var(--y-multiplier)) calc((-2 / 720) * var(--y-multiplier)), rgba(0, 0, 0, 0.3) 0px calc((3 / 720) * var(--y-multiplier)) calc((7 / 720) * var(--y-multiplier)) calc((-3 / 720) * var(--y-multiplier));
+    position: absolute;
+    left: 0;
+    top: 8vh;
+    width: 210px;
+    height: 210px;
+}
+
+
+
+@media (max-width: 1100px) {
+    .logo-responsive {
+        position: relative;
+        width: 170px !important;
+        height: 130px !important;
+        left: none;
+        top: 0;
+    }
+
+    .logo-responsive :global(#TextLogo) {
+        display: none;
+    }
+}
+
+@media (max-width: 715px) {
+
+    .app-window {
+        margin: 0;
+    }
+
+    hr {
+        display: none;
+    }
+
+    .register-form {
+        flex-direction: column;
+    }
+
+    .vertical-sections,
+    .vertical-sections:first-child {
+        max-width: 100%;
+    }
+
+    .InputField {
+        width: 100% !important;
+    }
+
+    .TextBox {
+        width: 100% !important;
+    }
+
+    .title {
+        font-size: 30px !important;
+        padding-top: 5px;
+    }
+
+    .error {
+        font-size: 20px;
+    }
+
+}
+
+
+
+hr {
+    margin: 0;
+    width: 2.5px;
+    border: none;
+    background-color: #ffc123;
+}
+
+.InputField {
+    height: 44px !important;
+    font-size: 16px;
+}
+
+.form-text {
+    display: block;
+}
+
+.golden-link {
+    color: #ffc123;
+    text-decoration: underline;
+}

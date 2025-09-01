@@ -1,18 +1,17 @@
 import ActionButton from "../UI/ActionButton";
 import SelectionField from "../UI/form/SelectionField";
-import AppWindow from "../UI/AppWindow";
 import Logo from "../UI/unitec/Logo";
-import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import InputField from "../UI/form/InputField";
 import TextBox from "../UI/form/TextBox";
 import { Link, useNavigate } from "react-router-dom";
 import LabelsSelection from "../UI/form/LabelsSelection";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import '../../styles/SeeEtiquetas.css';
+import styles from './RegisterUser.module.css'
 import Tag2 from "../UI/Tag2";
+import '../../styles/SeeEtiquetas.css'
 import { getStates } from "../../global/function/getStates";
-import {sortByName} from "../../global/function/sortByName";
+import { sortByName } from "../../global/function/sortByName";
 type SelectedItem = {
   id: number;
   name: string;
@@ -195,7 +194,7 @@ function RegisterUser() {
       const response = await axios.get('/function/get-languages.php');
       if (response.status === 200 && response.data.status === "success") {
         setLanguages(sortByName(response.data.data.languages));
-        
+
       }
     } catch (error) {
       console.error("Error loading languages:", error);
@@ -240,235 +239,219 @@ function RegisterUser() {
 
   return (
     <>
-      <Logo className="watermark" />
-      <AppWindow
-        width={980}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          rowGap: `${TranslateFigmaCoords.translateFigmaY(20)}`,
-          padding: `${TranslateFigmaCoords.translateFigmaY(20)}px`,
-          flexDirection: "column",
-          position: "relative",
-          margin: '5vh auto',
-          left: '7%',
-          overflow: 'hidden',
-        }}
-      >
+
+      <div className={`${styles['app-window']} app-window`}>
+        <Logo className={`${styles['logo-responsive']} logo-responsive`} />
         <span
-          className="top-section title"
+          className={`${styles['top-title']} title top-section`}
           style={{
             display: "flex",
-            height: `${TranslateFigmaCoords.translateFigmaY(80)}`,
+            height: '60px',
             width: "100%",
-            paddingBottom: `${TranslateFigmaCoords.translateFigmaY(10)}`,
+            paddingBottom: '0px',
           }}
         >
           Registro del Estudiante
         </span>
-        <form onSubmit={handleSubmit} className="horizontal-display">
-          <div className="vertical-sections">
-            <InputField
-              name="name-user"
-              type="text"
-              placeholder="Nombre y Apellido"
-              width={'100%'}
-              height={55}
-              value={form.name}
-              onChange={(e) => handleChange("name", (e.target as HTMLInputElement).value)}
-            />
-            {fieldErrors.name && <span style={{ color: "red" }}>{fieldErrors.name}</span>}
-            <InputField
-              name="birthday-user"
-              type="date"
-              min="1925-01-01"
-              max={new Date().toISOString().split("T")[0]}
-              placeholder="Fecha de nacimiento:"
-              width={'100%'}
-              height={55}
-              value={form.birth_date}
-              onChange={(e) => handleChange("birth_date", (e.target as HTMLInputElement).value)}
-            />
-            {fieldErrors.birth_date && <span style={{ color: "red" }}>{fieldErrors.birth_date}</span>}
-            <InputField
-              name="mail-user"
-              type="text"
-              placeholder="Correo Electrónico"
-              width={'100%'}
-              height={55}
-              value={form.email}
-              onChange={(e) => handleChange("email", (e.target as HTMLInputElement).value)}
-            />
-            {fieldErrors.email && <span style={{ color: "red" }}>{fieldErrors.email}</span>}
-            <InputField
-              name="password-user"
-              type="password"
-              placeholder="Contraseña"
-              width={'100%'}
-              height={55}
-              value={form.password}
-              onChange={(e) => handleChange("password", (e.target as HTMLInputElement).value)}
-            />
-            {fieldErrors.password && <span style={{ color: "red" }}>{fieldErrors.password}</span>}
-            <InputField
-              name="confirm-password-user"
-              type="password"
-              placeholder="Confirmar Contraseña"
-              width={'100%'}
-              height={55}
-              value={form.confirm_password}
-              onChange={(e) => handleChange("confirm_password", (e.target as HTMLInputElement).value)}
-            />
-            {fieldErrors.confirm_password && <span style={{ color: "red" }}>{fieldErrors.confirm_password}</span>}
-            <SelectionField
-              name="user-type"
-              options={[
-                { value: "2", label: "Estudiante" },
-                { value: "3", label: "Egresado" },
-              ]}
-              placeholder="Tipo de Usuario"
-              width={'100%'}
-              height={55}
-              className="input-field"
-              onChange={(e) => handleChange("user_type", (e.target as HTMLSelectElement).value)}
-            />
-            <SelectionField
-              name="user-state"
-              options={[
-                { value: "1", label: getStates(1) },
-                { value: "2", label: getStates(2) },
-                { value: "3", label: getStates(3) },
-                { value: "4", label: getStates(4) },
-                { value: "5", label: getStates(5) },
-                { value: "6", label: getStates(6) },
-                { value: "7", label: getStates(7) },
-                { value: "8", label: getStates(8) },
-                { value: "9", label: getStates(9) },
-                { value: "10", label: getStates(10) },
-              ]}
-              placeholder="Estado"
-              width={'100%'}
-              height={55}
-              className="input-field"
-              onChange={(e) => handleChange("status_id", (e.target as HTMLSelectElement).value)}
-            />
-            <InputField
-              name="user-portfolio"
-              type="text"
-              placeholder="Enlace a su Portfolio (Opcional)"
-              width={'100%'}
-              height={55}
-              value={form.portfolio}
-              onChange={(e) => handleChange("portfolio", (e.target as HTMLInputElement).value)}
-            />
-          </div>
-          <div className="vertical-sections" style={{
-            alignItems: 'center',
-            borderLeft: "3px solid rgba(255, 193, 35, 1)", 
-            borderRight: "3px solid rgba(255, 193, 35, 1)",
-            paddingLeft: `${TranslateFigmaCoords.translateFigmaX(25)}`,
-            paddingRight: `${TranslateFigmaCoords.translateFigmaX(25)}`,
-          }}>
-            <div style={{ height: 'auto', display: 'flex', flexDirection: 'column' }}>
-              <div>
-                <div className="corner-container">
-                  <TextBox 
-                    name="user-description" 
-                    placeholder="Ingrese una descripción personal" 
-                    width={292} 
-                    height={265} 
-                    className="corner-visible" 
-                    onChange={(e) => handleChange("description", e.target.value)} 
-                  />
-                  <p className="corner-down-right"></p>
-                </div>
-                {fieldErrors.description && <span style={{ color: "red" }}>{fieldErrors.description}</span>}
-              </div>
+        <form onSubmit={handleSubmit} className={`${styles['horizontal-display']} horizontal-display`}>
 
-              <LabelsSelection
-                width={292}
-                height={215}
-                blocks={blocks}
-                searchData={searchData}
-                selectedItems={selectedItems}
-                setSelectedItems={setSelectedItems}
-                className="labels-selection"
-              />
-            </div>
+          <InputField
+            name="name-user"
+            type="text"
+            placeholder="Nombre y Apellido"
+            value={form.name}
+            className={`${styles.item} ${styles.InputField}`}
+            onChange={(e) => handleChange("name", (e.target as HTMLInputElement).value)}
+          />
+          {fieldErrors.name && <span style={{ color: "red" }}>{fieldErrors.name}</span>}
+
+          <InputField
+            name="birthday-user"
+            type="date"
+            min="1925-01-01"
+            max={new Date().toISOString().split("T")[0]}
+            placeholder="Fecha de nacimiento:"
+            width={'292px'}
+            height={'50px'}
+            value={form.birth_date}
+            className={`${styles.item} ${styles.InputField}`}
+            onChange={(e) => handleChange("birth_date", (e.target as HTMLInputElement).value)}
+          />
+          {fieldErrors.birth_date && <span style={{ color: "red" }}>{fieldErrors.birth_date}</span>}
+
+          <InputField
+            name="mail-user"
+            type="text"
+            placeholder="Correo Electrónico"
+            width={'292px'}
+            height={'50px'}
+            value={form.email}
+            className={`${styles.item} ${styles.InputField}`}
+            onChange={(e) => handleChange("email", (e.target as HTMLInputElement).value)}
+          />
+          {fieldErrors.email && <span style={{ color: "red" }}>{fieldErrors.email}</span>}
+
+          <InputField
+            name="password-user"
+            type="password"
+            placeholder="Contraseña"
+            width={'292px'}
+            height={'50px'}
+            value={form.password}
+            className={`${styles.item} ${styles.InputField}`}
+            onChange={(e) => handleChange("password", (e.target as HTMLInputElement).value)}
+          />
+          {fieldErrors.password && <span style={{ color: "red" }}>{fieldErrors.password}</span>}
+
+          <InputField
+            className={`${styles.item} ${styles.InputField}`}
+            name="confirm-password-user"
+            type="password"
+            placeholder="Confirmar Contraseña"
+            width={'292px'}
+            height={'50px'}
+            value={form.confirm_password}
+            onChange={(e) => handleChange("confirm_password", (e.target as HTMLInputElement).value)}
+          />
+          {fieldErrors.confirm_password && <span style={{ color: "red" }}>{fieldErrors.confirm_password}</span>}
+
+          <SelectionField
+            className={`${styles.item} ${styles.InputField} input-field`}
+            name="user-type"
+            options={[
+              { value: "2", label: "Estudiante" },
+              { value: "3", label: "Egresado" },
+            ]}
+            placeholder="Tipo de Usuario"
+            width={'292px'}
+            height={'50px'}
+            onChange={(e) => handleChange("user_type", (e.target as HTMLSelectElement).value)}
+          />
+
+          <SelectionField
+            className={`${styles.item} ${styles.InputField} input-field`}
+            name="user-state"
+            options={[
+              { value: "1", label: getStates(1) },
+              { value: "2", label: getStates(2) },
+              { value: "3", label: getStates(3) },
+              { value: "4", label: getStates(4) },
+              { value: "5", label: getStates(5) },
+              { value: "6", label: getStates(6) },
+              { value: "7", label: getStates(7) },
+              { value: "8", label: getStates(8) },
+              { value: "9", label: getStates(9) },
+              { value: "10", label: getStates(10) },
+            ]}
+            placeholder="Estado"
+            onChange={(e) => handleChange("status_id", (e.target as HTMLSelectElement).value)}
+          />
+          <InputField
+            className={`${styles.item} ${styles.InputField}`}
+            name="user-portfolio"
+            type="text"
+            placeholder="Enlace a su Portfolio (Opcional)"
+            value={form.portfolio}
+            onChange={(e) => handleChange("portfolio", (e.target as HTMLInputElement).value)}
+          />
+
+          <div className={`${styles.item} corner-visible`}>
+            {fieldErrors.description && <span style={{ color: "red" }}>{fieldErrors.description}</span>}
+            <TextBox
+              name="user-description"
+              placeholder="Ingrese una descripción personal"
+              width={'100%'}
+              height={'220px'}
+              onChange={(e) => handleChange("description", e.target.value)}
+            />
+            <p className="corner-down-right"></p>
           </div>
 
-          <div className="vertical-sections">
-            <div className="labels-view">
-              <div className="view-tabs">
-                {blocks.map((block, index) => (
-                  <button
-                    type="button"
-                    key={index}
-                    className={block.titulo === filterBlock ? "active-view-tab" : "view-tab"}
-                    onClick={() => setFilterBlock(block.titulo as "Etiquetas" | "Idiomas")}
-                  >
-                    {block.titulo}
-                  </button>
-                ))}
-              </div>
-              <div className="view-content">
-                {selectedItems.filter(item => item.block === filterBlock).length > 0 ? (
-                  <div className="tags-container">
-                    {selectedItems
-                      .filter(item => item.block === filterBlock)
-                      .map((item) => (
-                        <Tag2
-                          key={`${item.id}-${item.block}`}
-                          texto={item.name}
-                          checkBox={["Básico", "Intermedio", "Avanzado"][item.level - 1]}
-                          onDelete={() => handleDeleteItem(item.id, item.block)}
-                        />
-                      ))}
-                  </div>
-                ) : (
-                  <div className="view-empty-message">
-                    Todavía no se han cargado <strong>{filterBlock}</strong>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="buttons-container-delete">
-              {blocks.map((block) => (
+          <div className={styles['item']}>
+            <LabelsSelection
+              width={'100%'}
+              height={'215px'}
+              blocks={blocks}
+              searchData={searchData}
+              selectedItems={selectedItems}
+              setSelectedItems={setSelectedItems}
+              className={`${styles['item']} labels-selection`}
+            />
+          </div>
+
+          <div className={`${styles['item']} labels-view`}>
+            <div className="view-tabs">
+              {blocks.map((block, index) => (
                 <button
                   type="button"
-                  key={`clear-${block.titulo}`}
-                  onClick={() => setSelectedItems(prev => 
-                    prev.filter(item => item.block !== block.titulo)
-                  )}
-                  className="buttons-delete"
-                  title={`Eliminar todas las etiquetas de ${block.titulo}`}
+                  key={index}
+                  className={block.titulo === filterBlock ? "active-view-tab" : "view-tab"}
+                  onClick={() => setFilterBlock(block.titulo as "Etiquetas" | "Idiomas")}
                 >
-                  Limpiar {block.titulo}
+                  {block.titulo}
                 </button>
               ))}
             </div>
-            <span className="form-text" style={{
-              borderTop: "3px solid rgba(255, 193, 35, 1)",
-              paddingTop: `${TranslateFigmaCoords.translateFigmaY(20)}`
-            }}>
-              Si has rellenado todos los campos necesarios solo queda:
-            </span>
-            <ActionButton 
-              height={60} 
-              text={"Registrarse"} 
-              width={100} 
-              action={handleSubmit} 
-            />
-            <div className="delimiter"></div>
-            <span className="form-text" style={{ paddingBottom: `${TranslateFigmaCoords.translateFigmaY(17)}` }}>
-              Registrarse como <Link to="/register-enterprise" className="golden-link">Empresa</Link><br />
-              ¿Ya tienes cuenta? <Link to="/" className="golden-link">Iniciar Sesión</Link>
-            </span>
+            <div className="view-content" >
+              {selectedItems.filter(item => item.block === filterBlock).length > 0 ? (
+                <div className="tags-container">
+                  {selectedItems
+                    .filter(item => item.block === filterBlock)
+                    .map((item) => (
+                      <Tag2
+                        key={`${item.id}-${item.block}`}
+                        texto={item.name}
+                        checkBox={["Básico", "Intermedio", "Avanzado"][item.level - 1]}
+                        onDelete={() => handleDeleteItem(item.id, item.block)}
+                      />
+                    ))}
+                </div>
+              ) : (
+                <div className="view-empty-message">
+                  Todavía no se han cargado <strong>{filterBlock}</strong>
+                </div>
+              )}
+            </div>
           </div>
-        </form>
-        {error && <div style={{ color: 'red', marginTop: 10 }}>{error}</div>}
-      </AppWindow>
+          <div className={`${styles['item']} buttons-container-delete`}>
+            {blocks.map((block) => (
+              <button
+                type="button"
+                key={`clear-${block.titulo}`}
+                onClick={() => setSelectedItems(prev =>
+                  prev.filter(item => item.block !== block.titulo)
+                )}
+                className="buttons-delete"
+                title={`Eliminar todas las etiquetas de ${block.titulo}`}
+              >
+                Limpiar {block.titulo}
+              </button>
+            ))}
+          </div>
+          <div className={`${styles.item} ${styles.delimiter} delimiter`}></div>
+          <span className="form-text" style={{ 
+            paddingTop: '20px'
+
+          }}>
+            Si has rellenado todos los campos necesarios solo queda:
+          </span>
+          <ActionButton
+            height={'50px'}
+            text={"Registrarse"}
+            width={'100%'}
+            action={handleSubmit}
+            className={styles['action-button']}
+          />
+          <div className={`${styles.item} ${styles.delimiter} delimiter`}></div>
+          <span className={`${styles['item']} form-text`}
+            style={{ paddingBottom: '17px' }}>
+            Registrarse como <Link to="/register-enterprise" className="golden-link">Empresa</Link><br />
+            ¿Ya tienes cuenta? <Link to="/" className="golden-link">Iniciar Sesión</Link>
+          </span>
+        </form >
+        {error && <div style={{ color: 'red', marginTop: 10 }}>{error}</div>
+        }
+      </div >
     </>
   );
 }

@@ -106,7 +106,7 @@ h1 {
 }
 .golden-link {
   color: var(--delimiters);
-  font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
+  font-size: 16px;
   font-weight: bold;
   text-decoration: underline;
 }
@@ -117,7 +117,7 @@ h1 {
 .title {
   color: #305894;
   font-weight: 550;
-  font-size: calc((40 / 720) * var(--y-multiplier) * var(--font-multiplier));
+  font-size: 32px;
 }
 .profile-title {
   color: #305894;
@@ -131,7 +131,7 @@ h1 {
 }
 .form-text {
   color: var(--forms-text);
-  font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
+  font-size: 16px;
   font-weight: bold;
 }
 .watermark {
@@ -152,15 +152,16 @@ h1 {
 .selection-field {
   background-color: #dee0eb;
   border: none;
-  border-radius: calc((10 / 1280) * var(--x-multiplier));
+  border-radius: 10px;
   text-align: left;
   align-items: center;
   color: var(--input);
   font-family: var(--app-font-family) ;
-  font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: 0;
   line-height: normal;
+  width: auto;
 }
 .input-field::placeholder {
   color: var(--input);
@@ -232,8 +233,8 @@ label {
   background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray"><path d="M7 10l5 5 5-5z"/></svg>');
   background-repeat: no-repeat;
   background-position: calc(100% - calc((15 / 1280) * var(--x-multiplier))) center;
-  background-size: calc((16 / 1280) * var(--x-multiplier));
-  padding-right: calc((30 / 1280) * var(--x-multiplier));
+  background-size:16px;
+  padding-right: 30px;
 }
 .selection-input {
   appearance: none;
@@ -245,11 +246,11 @@ label {
   text-decoration: underline;
   width: 100%;
   height: 100%;
-  padding-right: calc((30 / 1280) * var(--x-multiplier));
+  padding-right: 30px;
   background-image: url("../assets/icons/arrow.svg");
   background-repeat: no-repeat;
   background-position: calc(100% - calc((10 / 1280) * var(--x-multiplier))) center;
-  background-size: calc((10 / 1280) * var(--x-multiplier));
+  background-size: 13px;
 }
 .selection-input:focus {
   outline: none;
@@ -279,16 +280,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   flex-direction: row;
 }
-.horizontal-display {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 100%;
-  max-height: max-content;
-  padding-top: calc((15 / 720) * var(--y-multiplier));
-  justify-content: space-between;
-  column-gap:  calc((10 / 720) * var(--y-multiplier));
-}
+
 .vertical-sections {
   display: flex;
   flex-direction: column; 
@@ -308,15 +300,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .delimiter {
   background-color: var(--delimiters);
   width: 100%;
-  height: calc((3 / 720) * var(--y-multiplier));
+  height: 3px;
 }
 
 /* =========================
   AppWindow Styles
   ========================= */
-.app-window {
+.app-window{
   background-color: var(--window-outer);
-  border-radius: calc((20 / 1280) * var(--x-multiplier));
+  border-radius:20px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px calc((6 / 720) * var(--y-multiplier)) calc((12 / 720) * var(--y-multiplier)) calc((-2 / 720) * var(--y-multiplier)), rgba(0, 0, 0, 0.3) 0px calc((3 / 720) * var(--y-multiplier)) calc((7 / 720) * var(--y-multiplier)) calc((-3 / 720) * var(--y-multiplier));
 }
 
@@ -424,11 +416,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-family: var(--app-font-family);
   justify-content: center;
   align-items: center;
-  border-radius: calc((30 / 1280) * var(--x-multiplier));
+  border-radius: 30px;
   background-color: var(--action-button);
-  font-size: calc((20 / 720) * var(--y-multiplier));
+  font-size: 16px;
   cursor: pointer;
-  padding: 0 calc((20 / 720) * var(--y-multiplier));
+  padding: 0 10px;
   width: auto;
   white-space: nowrap;
   font-weight: 400;
@@ -493,12 +485,12 @@ footer{
 }
 .contact strong, .links strong {
   margin-bottom: calc((8 / 720) * var(--y-multiplier));
-  font-size: calc((24 / 720) * var(--y-multiplier) * var(--font-multiplier));
+  font-size: 22px;
 }
 .contact a, .links a {
   color: #fff;
   text-decoration: underline;
-  font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
+  font-size: 18px;
 }
 
 /* --- Responsive Footer --- */
@@ -546,35 +538,7 @@ footer{
   color: white;
 }
 
-
-/* =========================
-  Register Enterprise Styles
-  ========================= */
-
-  @media (orientation: portrait){
-    .register-enterprise-window {
-      width: 90% !important;
-      height: 36vh !important;
-    }
-
-    .register-enterprise-window .input-field {
-      font-size: 1em;
-      height: 30px !important;
-      min-width: 150px !important;
-    }
-    
-    .register-enterprise-window textarea.input-field {
-      font-size: 1em;
-      height: 60px !important;
-    }
-
-    .register-enterprise-window .action-button {
-      font-size: 1.9em;
-      height: 40px !important;
-      min-width: 90% !important;
-    }
-  }
-
+ 
 
 
   

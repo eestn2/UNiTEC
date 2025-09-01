@@ -61,6 +61,6 @@ try {
     if ($connection->inTransaction()) {
         $connection->rollBack();
     }
-    return_response("failed", "Error al insertar la postulacion: " . $e->getMessage(), null);
+    return_response("failed", 'Error al insertar la postulacion.', null);
 }
 ?>

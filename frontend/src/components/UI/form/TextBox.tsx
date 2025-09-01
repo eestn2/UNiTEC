@@ -7,8 +7,7 @@
  */
 
 import React, { ChangeEventHandler } from "react";
-import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
-import useResponsiveDimensions from "../../../hooks/responsive/useResponsiveDimensions";
+import ResponsiveComponent from "../../../global/interface/ResponsiveComponent"; 
 
 /**
  * Props for the TextBox component.
@@ -60,21 +59,16 @@ interface TextBoxProps extends ResponsiveComponent {
  * 
  * @author Daviel Díaz Gonzáles
  */
-const TextBox: React.FC<TextBoxProps> = ({ width = 50, height = 10, name, placeholder = "Text Box", vertical = false, style, className, onChange, value }) => {
-    const { finalWidth, finalHeight, translateX } = useResponsiveDimensions({
-        height,
-        width,
-        vertical
-    });
+const TextBox: React.FC<TextBoxProps> = ({ width = '50px', height = '10px', name, placeholder = "Text Box", vertical = false, style, className, onChange, value }) => {
+ 
     
     return (
         <textarea
             style={{
-                width: finalWidth, // Allow textarea to fill parent and wrap
-                maxWidth: finalWidth,
-                height: finalHeight,
-                paddingLeft: `${translateX(18)}px`,
-                paddingTop: `${translateX(14)}px`,
+                width: width, // Allow textarea to fill parent and wrap 
+                height:height,
+                paddingLeft:'18px',
+                paddingTop: '10px',
                 overflowWrap: "anywhere",
                 ...style,
             }}

@@ -95,7 +95,7 @@ const OffersPustulated: React.FC = () => {
                     {Number(app.application_status) === 1 ? "Aceptado" : Number(app.application_status) === 0 ? "Pendiente" : "Rechazado"}
                   </span>
                   <div style={{
-                    ...Number(app.application_status) === 1 ? { backgroundColor: "var(--success)" } : Number(app.application_status) === 0 ? { backgroundColor: "#FF7553" } : {  backgroundColor: "#FF5353"},
+                    ...Number(app.application_status) === 1 ? { backgroundColor: "var(--success)" } : Number(app.application_status) === 0 ? { backgroundColor: "var(--delimiters)" } : {  backgroundColor: "#FF5353"},
                     width: `${TranslateFigmaCoords.translateFigmaY(15)}px`,
                     height: `${TranslateFigmaCoords.translateFigmaY(15)}px`,
                     borderRadius: '50%'

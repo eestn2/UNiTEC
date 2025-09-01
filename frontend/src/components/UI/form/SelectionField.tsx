@@ -109,7 +109,7 @@ const SelectionField: React.FC<SelectionFieldProps> = ({
                 style={{
                     width: "100%",
                     height: "100%",
-                    paddingLeft: `${TranslateFigmaCoords.translateFigmaX(18)}px`,
+                    paddingLeft:'18px',
                     backgroundColor: "transparent",
                     border: "none",
                     color: "#00317B",

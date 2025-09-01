@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Lottie from "lottie-react";
 import throbber from "../../assets/animated/Insider-loading.json";
+import styles from './login.module.css'
 /**
  * A React functional component that renders the login form inside a responsive window.
  * Handles window resize for responsive design, manages form state, and provides links for password reset and registration.
@@ -61,15 +62,7 @@ const Login: React.FC = () => {
     };
 
     return (
-        <AppWindow width={370} height={650} vertical={true} style={{
-            display: "flex",
-            flexDirection: "column",
-            rowGap: TranslateFigmaCoords.translateFigmaYAlt(26),
-            alignItems: "center",
-            position: "absolute",
-            height: "auto",
-            top: "50%", left: "50%", translate: "-50% -50%"
-        }}>
+        <AppWindow className={`${styles['app-window']}`} vertical={true} >
             <Logo width={180} height={180} logo_size={140} logo_text_size={34} vertical={true} />
             <form
                 name="login"
@@ -85,17 +78,13 @@ const Login: React.FC = () => {
                 {cargando ?
                     <ActionButton vertical={true} height={50} width={200} text=""  style={{ backgroundColor: 'white', color: '#888', border: '2px solid #ccc', cursor: 'not-allowed'}} action={(event) => {
                         event.preventDefault();
-                    }}> 
-                    
+                    }}>  
                          <Lottie
                                 animationData={throbber}  
                                 loop={true}
                                 autoplay={true}
                                 style={{height:'100%',scale:1.5}}
-                            /> 
-               
-                           
-
+                            />  
                     </ActionButton>
                     :
                     <ActionButton vertical={true} width={200} height={50} text="Iniciar Sesión" action={(event) => {
@@ -112,11 +101,12 @@ const Login: React.FC = () => {
                 borderTop: `${TranslateFigmaCoords.translateFigmaYAlt(4)}px solid #FFD64F`,
                 borderBottom: `${TranslateFigmaCoords.translateFigmaYAlt(4)}px solid #FFD64F`,
                 width: "100%",
-                height: TranslateFigmaCoords.translateFigmaYAlt(71),
+                height: '50px',
                 display: "flex",
                 alignItems: "center"
             }}>
-                <Link to={'/password-reset'} className="link" style={{ marginLeft: TranslateFigmaCoords.translateFigmaXAlt(27) }}>Restablecer contraseña</Link>
+                <Link to={'/password-reset'} className={`${styles.link} link`} 
+                style={{ marginLeft:'27px' }}>Restablecer contraseña</Link>
             </div>
             <div style={{
                 display: "flex",
@@ -124,12 +114,15 @@ const Login: React.FC = () => {
                 alignSelf: "flex-start",
                 alignItems: "flex-start",
                 textAlign: "left",
-                marginTop: -TranslateFigmaCoords.translateFigmaYAlt(12),
-                textIndent: TranslateFigmaCoords.translateFigmaXAlt(27),
+                marginTop: '-12px',
+                textIndent: '27px',
                 color: "#00317B"
             }}>
-                <span>¿No tienes una cuenta?</span>
-                <span style={{ paddingBottom: `${TranslateFigmaCoords.translateFigmaYAlt(10)}px` }}>Registrate como <Link className="link" style={{ color: "rgb(255, 193, 35)" }} to={'/register-enterprise'}>Empresa</Link> / <Link to={'register-user'} className="link" style={{ color: "rgb(255, 193, 35)" }}>Estudiante</Link></span>
+                <span className={styles.link}>¿No tienes una cuenta?</span>
+                <span className={styles.link} style={{ paddingBottom: `${TranslateFigmaCoords.translateFigmaYAlt(10)}px` }}>
+                    Registrate como <Link className={`${styles.link} link`} style={{ color: "rgb(255, 193, 35)" }} 
+                    to={'/register-enterprise'}>Empresa</Link> / <Link to={'register-user'}
+                     className={`${styles.link} link`} style={{ color: "rgb(255, 193, 35)" }}>Estudiante</Link></span>
             </div>
         </AppWindow>
     );

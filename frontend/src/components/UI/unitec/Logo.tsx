@@ -9,7 +9,7 @@
 import React from "react";
 import logo from "../../../assets/unitec/unitec-icon.svg";
 import logo_text from "../../../assets/unitec/unitec-text.svg";
-import AppWindow from "../AppWindow"; 
+import AppWindow from "../AppWindow";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import { getTranslates } from "../../../global/function/getTranslates";
 import { useNavigate } from "react-router-dom";
@@ -56,25 +56,22 @@ const Logo: React.FC<LogoProps> = ({
     width = 210,
     height = 210,
     logo_size = 140,
-    logo_text_size = 38,
-    vertical = false,
+    logo_text_size = 38, 
     style,
     className
-}) => {
-    const [ translateX ] = getTranslates(vertical);
+}) => { 
     const navigate = useNavigate();
     return (
-        <AppWindow
-            width={width}
-            height={height}
-            vertical={vertical}
+        <div
             style={{
                 borderTopLeftRadius: 0,
                 borderBottomLeftRadius: 0,
-                boxShadow: "none",
+                boxShadow: "none", 
+                width: width,
+                height: height,
                 ...style
             }}
-            className={className || ''}
+            className={className || 'app-window'}
         >
             <div
                 className="unitec-logo-container"
@@ -96,7 +93,7 @@ const Logo: React.FC<LogoProps> = ({
                     e.preventDefault();
                     e.currentTarget.style.scale = "0.9";
                 }}
-                onMouseUp = {(e) => {
+                onMouseUp={(e) => {
                     e.preventDefault();
                     e.currentTarget.style.scale = "1";
                 }}
@@ -108,17 +105,18 @@ const Logo: React.FC<LogoProps> = ({
                 <img
                     src={logo}
                     alt="Unitec Logo"
-                    width={translateX(logo_size)}
-                    height={translateX(logo_size)}
+                    width={logo_size}
+                    height={logo_size}
                 />
                 <img
+                id="TextLogo"
                     src={logo_text}
                     alt="Unitec Text"
-                    width={translateX(logo_size)}
-                    height={translateX(logo_text_size)}
+                    width={logo_size}
+                    height={logo_text_size}
                 />
             </div>
-        </AppWindow>
+        </div>
     );
 };
 

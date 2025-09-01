@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import MinimalistSearchBar from "../../UI/form/MinimalSearchBar";
 import "../../../styles/Label.css";
-import Agregar from "../../../assets/icons/add.svg";
-import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
+import Agregar from "../../../assets/icons/add.svg"; 
 
 interface Bloque {
   titulo: string;
@@ -21,7 +20,10 @@ interface SearchData {
   [key: string]: Array<{ id: number; name: string }>;
 }
 
-interface LabelsSelectionProps extends ResponsiveComponent {
+interface LabelsSelectionProps {
+  className?: string;
+  width: number | string;
+  height: number | string;
   blocks: Bloque[];
   searchData: SearchData;
   selectedItems: SelectedItem[];
@@ -32,6 +34,7 @@ interface LabelsSelectionProps extends ResponsiveComponent {
 }
 
 const LabelsSelection: React.FC<LabelsSelectionProps> = ({
+  className,
   width,
   height,
   blocks,

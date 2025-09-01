@@ -31,7 +31,7 @@ import useResponsiveDimensions from "../../hooks/responsive/useResponsiveDimensi
  * ```
  * @Author: Haziel Magallanes
  */
-const AppWindow: React.FC<ResponsiveComponent> = ({ height = 10, width = 10, vertical = false, ref, children, style, className }) => {
+const AppWindow: React.FC<ResponsiveComponent> = ({ height = '10px', width = '10px', vertical = false, ref, children, style, className }) => {
     const { finalHeight, finalWidth } = useResponsiveDimensions({
         height,
         width,
@@ -49,7 +49,7 @@ const AppWindow: React.FC<ResponsiveComponent> = ({ height = 10, width = 10, ver
             }}
             ref={ref}
         >
-            
+
             {children}
         </div>
     );
