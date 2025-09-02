@@ -56,7 +56,6 @@ const SeeApplicants: React.FC = () => {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);
     }
-
   }
 
   const changeInternalStatus = (
@@ -87,23 +86,24 @@ const SeeApplicants: React.FC = () => {
     };
   }, [popupActivo]);
 
-  const loadOffersWithApplicants = async () => {
-    setLoadingOffers(true);
-    setError(null);
-    try {
-      const response = await axios.get('/enterprise/get-offers-and-applicants.php');
-      if (response) setOffers(response.data.data.offers);
-    } catch {
-      if (axios.isAxiosError(error)) return setError(error.response?.data?.message || defaultError);
-      setError(defaultError);
-    } finally {
-      setLoadingOffers(false);
-    }
-  };
+
 
   useEffect(() => {
+    const loadOffersWithApplicants = async () => {
+      setLoadingOffers(true);
+      setError(null);
+      try {
+        const response = await axios.get('/enterprise/get-offers-and-applicants.php');
+        if (response) setOffers(response.data.data.offers);
+      } catch {
+        if (axios.isAxiosError(error)) return setError(error.response?.data?.message || defaultError);
+        setError(defaultError);
+      } finally {
+        setLoadingOffers(false);
+      }
+    };
     loadOffersWithApplicants();
-  });
+  }, [error, setError, setOffers]);
 
   const ofertaActiva = offers.find((o) => o.id === popupActivo);
 
