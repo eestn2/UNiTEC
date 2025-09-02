@@ -12,14 +12,20 @@ import TextWithBreaks from "../UI/TextWithBreaks";
 import User from "../session/User";
 import ProfilePicture from "../UI/user/ProfilePicture";
 import defaultError from "../../global/messages/defaultError";
+import StateButton from "../UI/StateButton";
+import { usePostulate } from "../../hooks/user/usePostulate";
+import apply_icon from "../../assets/icons/apply.svg";
+import deapply_icon from "../../assets/icons/deapply.svg";
 
 const JobOfferFV: React.FC = () => {
     // State variables for job offer data
     const { offerId, message, type, showReviewButton: showReviewParam } = useParams<{ offerId: string; message: string; type: string; showReviewButton?: string }>();
     const iType = type ? parseInt(type, 10) : undefined;
+    const numericOfferId = offerId ? parseInt(offerId, 10) : NaN;
     const [jobOffer, setJobOffer] = useState<offer | null>(null);
     const [author, setAuthor] = useState<user | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [offerLoading, setOfferLoading] = useState(true);
+    const { postulated, setPostulated, postulate, depostulate } = usePostulate(numericOfferId);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,7 +37,7 @@ const JobOfferFV: React.FC = () => {
                 if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
                 alert(defaultError);
             } finally {
-                setLoading(false);
+                setOfferLoading(false);
             }
         };
         fetchOffer();
@@ -40,7 +46,7 @@ const JobOfferFV: React.FC = () => {
     useEffect(() => {
         const fetchAuthor = async () => {
             if(!jobOffer) return;
-            setLoading(true);
+            setOfferLoading(true);
             try {
                 const response = await axios.get(`/user/user-info.php?id=${jobOffer?.creator_id}`);
                 if (response) setAuthor(response.data.data.user as user);
@@ -48,13 +54,14 @@ const JobOfferFV: React.FC = () => {
                 if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
                 alert(defaultError);
             } finally {
-                setLoading(false);
+                setOfferLoading(false);
             }
         };
         fetchAuthor();
     }, [jobOffer]);
     
-    if (loading) return <div>Cargando...</div>;
+    if (!offerId || isNaN(numericOfferId)) return <div>ID de oferta inválido.</div>;
+    if (offerLoading) return <div>Cargando...</div>;
     if (!jobOffer) return <div>No se encontró la oferta.</div>;
 
     // Botón para reseñar si el estado de la oferta es 1, o si se pasa por params
@@ -168,7 +175,18 @@ const JobOfferFV: React.FC = () => {
                                 />
                             ) :
                                 (
-                                    <ActionButton text="Despostularse" className="offer-fv-deapply" height={40} style={{ marginTop: `${TranslateFigmaCoords.translateFigmaY(6)}px` }} />
+                                    <StateButton
+                                        trueIcon={apply_icon}
+                                        falseIcon={deapply_icon}
+                                        trueText="Postularse"
+                                        falseText="Despostularse"
+                                        state={postulated as boolean}
+                                        setState={setPostulated}
+                                        action={() => {
+                                            if (postulated) return depostulate();
+                                            postulate();
+                                        }}
+                                    />
                                 )
                         )
                         }

@@ -145,10 +145,7 @@ const JobOffer: React.FC<JobOfferProps> = ({
                     state={postulated}
                     setState={setPostulated}
                     action={() => {
-                        if (postulated) {
-                            depostulate();
-                            return;
-                        }
+                        if (postulated) return depostulate();
                         postulate();
                     }}
                 />
