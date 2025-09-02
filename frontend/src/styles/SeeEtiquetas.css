@@ -1,17 +1,19 @@
-.labels-view { 
+.labels-view {
     position: relative;
-    height: 190px; 
-    width: 100%; 
+    height: 190px;
+    width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     background-color: #dee0eb;
     align-items: flex-start;
-    border-radius: 10px;  
-    padding: 10px; 
+    border-radius: 10px;
+    padding: 10px;
     font-family: sans-serif;
     justify-content: space-between;
 }
+
+
 
 /* Tabs para filtro */
 .view-tabs {
@@ -21,7 +23,7 @@
     width: min-content;
     justify-content: center;
     background-color: #6a87c2;
-    border-radius: 20px; 
+    border-radius: 20px;
     overflow: hidden;
 }
 
@@ -58,7 +60,7 @@
     flex: 1;
 }
 
-.tags-container{
+.tags-container {
     position: absolute;
     bottom: 5px;
     height: 130px;
@@ -89,18 +91,18 @@
     width: 100%;
 }
 
-.buttons-container-delete{
+.buttons-container-delete {
     display: flex;
     align-items: center;
     margin: 0 auto;
     gap: 5px;
 }
 
-.buttons-delete{
+.buttons-delete {
     background-color: #5386FF;
     border: none;
     border-radius: 30px;
-    font-size: 15px; 
+    font-size: 15px;
     cursor: pointer;
     font-weight: 500;
     padding: 5px 20px;
@@ -109,33 +111,35 @@
 }
 
 .tags-container::-webkit-scrollbar {
-  width: 8px;
-} 
-.tags-container::-webkit-scrollbar-thumb {
-  border-radius: 8px;
-  background-color: #5e73b8;
-} 
-
-.vertical-sections .corner-container{
-    position: relative;  
+    width: 8px;
 }
 
-.corner-visible{
+.tags-container::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: #5e73b8;
+}
+
+.vertical-sections .corner-container {
+    position: relative;
+}
+
+.corner-visible {
     position: relative;
     margin-bottom: 0;
 }
 
-.corner-down-right{
+.corner-down-right {
     visibility: visible;
-    position: absolute; 
+    position: absolute;
     bottom: 3px;
     right: 13px;
     height: 15px;
     width: 15px;
-    border: 3px solid #8098BD ; 
+    border: 3px solid #8098BD;
     border-top: none;
-    border-left: none; 
+    border-left: none;
 }
-.corner-visible:focus + .corner-down-right{
+
+.corner-visible:focus+.corner-down-right {
     visibility: hidden;
 }

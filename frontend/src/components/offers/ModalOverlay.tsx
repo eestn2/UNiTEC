@@ -4,7 +4,8 @@ import { createPortal } from "react-dom";
 import ApplicantsCard from './Aplicants/ApplicantsCard';
 import cross_icon from "../../assets/icons/close.svg";
 import { useNavigate } from "react-router-dom";
-import "./SeeApplicants.css"; // general styles
+import "./SeeApplicants.module.css"; // general styles
+import styles from "./SeeApplicants.module.css";
 
 type Postulante = {
   id: number;
@@ -31,15 +32,15 @@ const ModalOverlay: React.FC<ModalOverlayProps> = ({
   const navigate = useNavigate();
 
   return createPortal(
-    <div className="overlay" onClick={onClose}>
-      <div className="popup-card" onClick={(e) => e.stopPropagation()}>
-        <div className="Top">
-          <div className="popup-title">{title}</div>
-          <button className="cerrar" onClick={onClose}>
-            <img src={cross_icon} alt="close" className="cross" />
+    <div className={styles.overlay} onClick={onClose}>
+      <div className={styles["popup-card"]} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.Top}>
+          <div className={styles["popup-title"]}>{title}</div>
+          <button className={styles.cerrar} onClick={onClose}>
+            <img src={cross_icon} alt="close" className={styles.cross} />
           </button>
         </div>
-        <div className="postulantes-container scroll padding">
+        <div className={`${styles["postulantes-container"]} scroll padding`}>
           {postulantes?.length === 0 && <p>No hay postulantes para esta oferta.</p>}
             {postulantes?.map((postulante) => (
             <ApplicantsCard

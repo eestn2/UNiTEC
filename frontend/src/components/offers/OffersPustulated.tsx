@@ -3,8 +3,8 @@ import axios from "axios";
 import NavBar from "../UI/NavBar";
 import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import { useNavigate } from "react-router-dom";
-import "../offers/SeeApplicants.css";
+import { useNavigate } from "react-router-dom"; 
+import styles from "../offers/SeeApplicants.module.css";
 import User from "../session/User";
 import LoadingScreen from "../UI/LoadingScreens/LoadingScreen";
 
@@ -48,56 +48,41 @@ const OffersPustulated: React.FC = () => {
   return (
     <>
       <NavBar />
-      <AppWindow
-        width={1200}
-        height={630}
-        style={{
-          position: "relative",
-          top: `${TranslateFigmaCoords.translateFigmaY(80)}px`,
-          left: "50%",
-          transform: "translate(-50%, 0%)",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: `${TranslateFigmaCoords.translateFigmaY(10)}px`,
-          overflow: "hidden",
-          maxHeight: "1px",
-          color: 'black'
-        }}
-      >
-
-        <div className="Contenedor scroll">
+      <div className={`${styles['app-window']} app-window`}>   
+         <span className={`${styles['top-title']} top-section title`} >
+                   Tus postulaciones
+                </span>  
+  <div className={`${styles.Contenedor} ${styles.scroll}`}> 
           {loading && <LoadingScreen loadingContent={true} />}
           {error && <p>{error}</p>}
           {!loading && !error && applications.length === 0 && (
             <p>No tienes postulaciones activas.</p>
           )}
           {!loading && !error && applications.map((app) => (
-            <div key={app.application_id} className="offer-block">
+            <div key={app.application_id} className={styles["offer-block"]}>
               <button
-                className="offer-header"
+                className={styles["offer-header"]}
                 onClick={() => {
                   const showReview = Number(app.application_status) === 1 ? 'true' : '';
                   navigate(`/job-offer/${app.application_id}/${showReview}`);
                 }}
                 style={{ position: 'relative', overflow: 'visible' }}
               >
-                <span className="texto-truncado" style={{ maxWidth: '80%' }}>{app.title}</span>
-                <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', right: `${TranslateFigmaCoords.translateFigmaY(10)}px`, gap: '10px' }}>
+                <span className={styles["texto-truncado"]} >{app.title}</span>
+                <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', right: '10px', gap: '10px' }}>
                   <span style={{
                     fontWeight: 500, 
                     lineHeight: '1',
                     display: 'inline-block',  
                     padding: 0,
-                    margin: 0,
-                    fontSize: `${TranslateFigmaCoords.translateFigmaY(25)}px`,
+                    margin: 0, 
                   }}>
                     {Number(app.application_status) === 1 ? "Aceptado" : Number(app.application_status) === 0 ? "Pendiente" : "Rechazado"}
                   </span>
                   <div style={{
                     ...Number(app.application_status) === 1 ? { backgroundColor: "var(--success)" } : Number(app.application_status) === 0 ? { backgroundColor: "var(--delimiters)" } : {  backgroundColor: "#FF5353"},
-                    width: `${TranslateFigmaCoords.translateFigmaY(15)}px`,
-                    height: `${TranslateFigmaCoords.translateFigmaY(15)}px`,
+                    width: '15px',
+                    height:'15px',
                     borderRadius: '50%'
                   }}></div>
                 </div>
@@ -106,7 +91,7 @@ const OffersPustulated: React.FC = () => {
             </div>
           ))}
         </div>
-      </AppWindow>
+      </div>
     </>
   );
 };

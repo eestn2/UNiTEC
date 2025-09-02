@@ -1,19 +1,52 @@
 .Contenedor {
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  padding: calc((28/1280) * var(--x-multiplier));
-  gap: calc((20/1280) * var(--x-multiplier));
+  padding: 28px;
+  padding-top: 0;
+  column-count: 2;
+  column-gap: 20px;
   overflow-y: auto;
 }
 
+@media (max-width: 800px) {
+  .Contenedor {
+    column-count: 1;
+  }
+}
+
+@media (max-width: 520px) {
+  .Contenedor {
+    padding: 15px;
+  }
+
+  .app-window {
+    width: 100% !important;
+    height: 95vh !important;
+  }
+}
+
+.app-window {
+  width: 95%;
+  max-width: 1200px;
+  min-height: 420px;
+  height: 85vh;
+  margin-top: 40px;
+  position: relative;
+  display: flex;
+  flex-Direction: column;
+  align-Items: center;
+  gap: 10px;
+  overflow: hidden;
+  color: 'black'
+}
+
 .offer-block {
-  width: calc((550/1280) * var(--x-multiplier));
+  width: 100%;
+  height: min-content;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 15px;
 }
 
 
@@ -24,24 +57,35 @@
   background-color: rgba(255, 255, 255, 0.9);
   color: #6F88B3;
   border: none;
-  border-radius: calc((10/1280) * var(--x-multiplier));
-  padding: calc((12/1280) * var(--x-multiplier)) calc((20/1280) * var(--x-multiplier));
-  font-size: calc((20/1280) * var(--x-multiplier));
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 20px;
   font-weight: 500;
-  width: calc((550/1280) * var(--x-multiplier));
+  width: 100%;
   cursor: pointer;
-  box-shadow: 0 calc((2/1280) * var(--x-multiplier)) calc((6/1280) * var(--x-multiplier)) rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   transition: background-color 0.2s ease;
-  white-space: nowrap; 
-  overflow: hidden; 
-  text-overflow: ellipsis;  
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 .texto-truncado {
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis; 
-min-width: 0; 
-max-width: 90%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  max-width: calc(100% - 100px);
+  /* Ajusta el valor según el espacio disponible */
+}
+
+.texto-truncado2 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  max-width: calc(100% - 60px) !important;
+  /* Ajusta el valor según el espacio disponible */
 }
 
 .Top {
@@ -49,7 +93,16 @@ max-width: 90%;
   height: auto;
   justify-content: space-between;
   position: relative;
-  border-bottom: calc((3/1280) * var(--x-multiplier)) solid #3b82f6;
+  border-bottom: 3px solid #3b82f6;
+}
+
+.top-title {
+  width: 95%;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  font-size: 33px;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 .cerrar {
@@ -58,15 +111,15 @@ max-width: 90%;
   overflow: hidden;
   align-items: center;
   justify-content: center;
-  top: calc((7/1280) * var(--x-multiplier));
+  top: 7px;
   display: flex;
-  right: calc((20/1280) * var(--x-multiplier));
+  right: 20px;
   background: transparent;
-  width: calc((50/1280) * var(--x-multiplier));
-  height: calc((50/1280) * var(--x-multiplier));
+  width: 50px;
+  height: 50px;
   background-color: crimson;
   padding: 0;
-  border: calc((10/1280) * var(--x-multiplier))solid crimson;
+  border: 10px solid crimson;
   cursor: pointer;
   border-radius: 50%;
   overflow: hidden;
@@ -81,16 +134,16 @@ max-width: 90%;
 
 .popup-title {
   width: 87%;
-  max-width: calc((550/1280) * var(--x-multiplier));
+  max-width: 550px;
   display: flex;
   height: auto;
   align-items: center;
   background-color: rgb(255, 255, 255);
   color: #6F88B3;
   border: none;
-  font-size: calc((23/1280) * var(--x-multiplier));
+  font-size: 23px;
   font-weight: 500;
-  padding: calc((16/1280) * var(--x-multiplier)); 
+  padding: 16px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -122,23 +175,23 @@ max-width: 90%;
   width: auto;
   max-height: 85%;
   min-height: 20%;
-  border-radius: calc((20/1280) * var(--x-multiplier));
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 calc((4/1280) * var(--x-multiplier)) calc((12/1280) * var(--x-multiplier)) rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   position: relative;
 }
 
 .scroll::-webkit-scrollbar {
-  width: calc((12 / 1280) * var(--x-multiplier));
+  width: 12px;
 }
 
 .scroll::-webkit-scrollbar-track {
-  border-radius: calc((8 / 1280) * var(--x-multiplier));
+  border-radius: 8px;
   background-color: var(--action-button) !important;
 }
 
 .scroll::-webkit-scrollbar-thumb {
-  border-radius: calc((8 / 1280) * var(--x-multiplier));
+  border-radius: 8px;
   background-color: var(--icons-nav-bar);
 }
 
@@ -154,8 +207,8 @@ max-width: 90%;
 .postulantes-container {
   display: flex;
   flex-direction: column;
-  gap: calc((16/1280) * var(--x-multiplier));
-  padding: calc((18/1280) * var(--x-multiplier)) calc((40/1280) * var(--x-multiplier));
+  gap: 16px;
+  padding: 18px 40px;
   overflow-y: auto;
   overflow-x: hidden;
   height: auto;
@@ -163,9 +216,31 @@ max-width: 90%;
   min-width: 200px;
   flex: 1;
   color: var(--bold);
+  align-items: center;
+}
+
+@media (max-width:630px) {
+  .postulantes-container {
+    padding: 18px 20px;
+  }
+
+  .popup-card {
+    width: min-content;
+  }
+
+}
+
+@media (max-width:480px) {
+  .postulantes-container {
+    padding: 18px 0px; 
+  }
+
+  .popup-card {
+    width: 100%;
+  }
 }
 
 .postulantes-container::-webkit-scrollbar-track {
-  border-radius: calc((0 / 1280) * var(--x-multiplier));
+  border-radius: 0;
 
 }

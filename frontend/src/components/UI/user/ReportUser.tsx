@@ -8,7 +8,8 @@ import { getReportReason } from '../../../global/function/getReportReason';
 import axios from "axios";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import NavBar from "../NavBar";
-import '../../offers/SeeApplicants.css';
+import '../../offers/SeeApplicants.module.css';
+import styles from '../../offers/SeeApplicants.module.css';
 const reasons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const ReportUser: React.FC = () => {
@@ -116,7 +117,7 @@ const ReportUser: React.FC = () => {
                             maxHeight: `${TranslateFigmaCoords.translateFigmaX(200)}px`,
                             overflowY: 'hidden'
                         }}>
-                            <div className="scroll" style={{
+                            <div className={styles.scroll} style={{
                                 display: "flex",
                                 gap: 10,
                                 width: '100%',

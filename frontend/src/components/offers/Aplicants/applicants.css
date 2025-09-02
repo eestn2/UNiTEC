@@ -1,20 +1,20 @@
 .user-card {
   display: flex;
   align-items: center;
-  border: calc((3/1280) * var(--x-multiplier)) solid #5787FA;
+  border: 3px solid #5787FA;
   /* Azul */
-  border-radius: calc((40/1280) * var(--x-multiplier)) calc((20/1280) * var(--x-multiplier)) calc((20/1280) * var(--x-multiplier)) calc((40/1280) * var(--x-multiplier));
-  padding: calc((15/1280) * var(--x-multiplier));
-  width: calc((450/1280) * var(--x-multiplier));
-  gap: calc((12/1280) * var(--x-multiplier));
-  box-shadow: 0 calc((2/1280) * var(--x-multiplier)) calc((4/1280) * var(--x-multiplier)) rgba(0, 0, 0, 0.1);
-  height: calc((120 / 720) * var(--y-multiplier));
+  border-radius: 40px 20px 20px 40px;
+  padding: 15px;
+  width:450px;
+  gap:12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 120px;
 }
 
 .user-image {
-  width: calc((70/1280) * var(--x-multiplier));
-  height: calc((70/1280) * var(--x-multiplier));
-  border: calc((3/1280) * var(--x-multiplier)) solid #5787FA;
+  width:70px;
+  height:70px;
+  border: 3px solid #5787FA;
   /* Azul */
   border-radius: 50%;
   object-fit: cover;
@@ -25,11 +25,11 @@
   flex: 1;
   color: #6F88B3; 
   font-weight: 500;
-  font-size: calc((23/1280) * var(--x-multiplier));
+  font-size: 23px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom: calc((5/1280) * var(--x-multiplier));
+  margin-bottom: 5px;
   white-space: nowrap;
   text-overflow: ellipsis;
   min-width: 0;
@@ -42,18 +42,35 @@
 
 .button-group {
   display: flex;
-  gap: calc((6/1280) * var(--x-multiplier));
+  gap: 6px;
 }
 
 .btn {
   border: none;
   border-radius: 9999px;
-  padding: calc((2/1280) * var(--x-multiplier)) 0px;
+  padding: 2px 0px;
   font-weight: 600;
-  font-size: calc((17/1280) * var(--x-multiplier));
-  width: calc((100/1280) * var(--x-multiplier));
+  font-size:17px;
+  width: 100px;
   cursor: pointer;
   transition: background-color 0.2s;
+}
+@media (max-width:650px){
+  .user-card {  
+  width:fit-content;
+  gap:12px;  
+}
+}
+@media (max-width:480px){
+.btn {  
+  font-size:17px;
+  width: 80px; 
+}
+.user-card {  
+  width:min-content;
+  gap:10px;   
+  padding: 10px;   
+}
 }
 
 /* Colores personalizados */

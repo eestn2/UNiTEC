@@ -2,13 +2,7 @@
     font-size: 15px;
 }
 
-:global(.app-content) {
-    align-items: center !important;
-    justify-content: center !important;
-    display: flex;
-    padding: 5vh 0;
-    padding-bottom: 5vh;
-}
+ 
 
 .app-window {
     display: flex;

@@ -14,10 +14,13 @@ import chart_icon_active from "../../assets/navbar/bxs-bar-chart-alt-2-activate.
 import add_offer_icon from "../../assets/navbar/bxs-edit.svg";
 import add_offer_icon_activate from "../../assets/navbar/bxs-edit-active.svg";
 import unitec_text from "../../assets/unitec/unitec-text.svg";
+import close_menu from '../../assets/navbar/cross-menu.svg';
+import open_menu from '../../assets/navbar/burger-menu.svg'
 import User from "../session/User";
 import { useLocation, useNavigate } from "react-router-dom";
 import ProfilePicture from "./user/ProfilePicture";
 import { UserTypeEnum } from "../../types/user";
+import { useState } from "react";
 
 /**
  * A React functional component that renders the navigation bar with logo and icon buttons.
@@ -37,7 +40,19 @@ const NavBar: React.FC = () => {
     // Router states
     const navigate = useNavigate();
     const location = useLocation();
+    const [menuOpen, setMenuOpen] = useState(false);
     // Conditional Variables to NavBar changes
+    const toggleMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setMenuOpen(prev => !prev);
+    
+    // Opcional: actualizar el hash en la URL sin scroll
+    if (!menuOpen) {
+      history.replaceState(null, "", window.location.pathname + "#menu");
+    } else {
+      history.replaceState(null, "", window.location.pathname);
+    }
+  };
     const user_type: UserTypeEnum = User.data.type;
     const buttons: React.ReactElement[] | undefined[] = [
         <img src={notification_icon} alt="Notification" className="bell" style={{ display: window.innerWidth > window.innerHeight ? "none" : "block" }} />,
@@ -99,13 +114,28 @@ const NavBar: React.FC = () => {
                 }}>
                 <img src={unitec_text} alt="Unitec Text" className="unitec-text" />
             </div>
-            <div className={!location.pathname.includes("admin-menu") ? "icons-section" : "icons-section admin"}>
-                {buttons}
-                <ProfilePicture userId={User.data.id as number} size={33} vertical={window.innerWidth > window.innerHeight} />
-            </div>
+            <a className="burger-menu" href="#menu" onClick={toggleMenu}>
+                {menuOpen
+                    ? <img src={close_menu} alt="Cerrar menú" />
+                    : <img src={open_menu} alt="Abrir menú" />}
+            </a>
 
-        </div>
+            <div
+                id="menu"
+                className={`icons-section ${location.pathname.includes("admin-menu") ? "admin" : ""} ${menuOpen ? "open" : ""}`}
+            >
+                {buttons}
+                <ProfilePicture
+                    userId={User.data.id as number}
+                    size={'33px'}
+                    vertical={window.innerWidth > window.innerHeight}
+                />
+            </div>
+        </div >
+
     )
+
+
 };
 
 export default NavBar;
