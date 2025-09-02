@@ -4,6 +4,7 @@ import User from '../../session/User';
 import axios from 'axios';
 import './applicants.css';
 import defaultProfileImage from '../../../assets/defaults/profile-picture/1.svg';
+import defaultError from '../../../global/messages/defaultError';
 
 interface UserCardProps {
   name?: string;
@@ -38,14 +39,13 @@ const AplicantsCard: React.FC<UserCardProps> = ({
         user_id: userId,
         offer_id: offerId
       });
-      if (response.status === 200 && response.data.status === "success") {
+      if (response) {
         setStatus(1);
         externalStatusChanger(1); // Notify parent component of status change
-      } else {
-        setError(response.data.message || "No se pudo aceptar al postulante.");
       }
     } catch {
-      setError("Ocurrió un error al aceptar al postulante.");
+      if (axios.isAxiosError(error)) return setError(error.response?.data?.message || defaultError);
+      setError(defaultError);
     } finally {
       setLoading(false);
     }
@@ -59,14 +59,13 @@ const AplicantsCard: React.FC<UserCardProps> = ({
         user_id: userId,
         application_id: offerId
       });
-      if (response.status === 200 && response.data.status === "success") {
+      if (response) {
         setStatus(2);
         externalStatusChanger(2); // Notify parent component of status change
-      } else {
-        setError(response.data.message || "No se pudo rechazar al postulante.");
       }
     } catch {
-      setError("Ocurrió un error al rechazar al postulante.");
+      if (axios.isAxiosError(error)) return setError(error.response?.data?.message || defaultError);
+      setError(defaultError);
     } finally {
       setLoading(false);
     }
@@ -76,25 +75,20 @@ const AplicantsCard: React.FC<UserCardProps> = ({
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get('/enterprise/get-user-email.php', {
-        params: { userId }
-      });
-      if (response.status !== 200 || response.data.status !== "success") {
-        setError("No se pudo cargar el email");
-        return;
+      const response = await axios.get('/enterprise/get-user-email.php', { params: { userId } });
+      if (response) {
+        const userEmail = response.data.data.email;
+        const url = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(userEmail)}`;
+        window.open(url, '_blank');
       }
-      const userEmail = response.data.data.email;
-      const url = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(userEmail)}`;
-      window.open(url, '_blank');
     } catch {
-      setError("Ocurrió un error al crear el email");
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
     } finally {
       setLoading(false);
     }
   };
-
-  //if (status === 2) return null; // Optionally hide rejected
-
+  
   const buttonText = status === 1 ? 'Contactar' : 'Aceptar';
   const buttonClass = status === 1 ? 'btn-orange' : 'btn-green';
   const buttonFunction = status === 1 ? handleContact : handleAccept;
