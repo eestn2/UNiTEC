@@ -28,7 +28,7 @@ const OffersPostulated: React.FC = () => {
       try {
         const response = await axios.get(`/user/get-user-applications.php`);
         if (response) setApplications(response.data.data);
-      } catch {
+      } catch (error) {
         if (axios.isAxiosError(error)) return setError(error.response?.data?.message || "Error al cargar postulaciones.");
         setError("Error al cargar postulaciones.");
       } finally {
@@ -36,7 +36,7 @@ const OffersPostulated: React.FC = () => {
       }
     };
     fetchApplications();
-  }, [error, setError, setApplications]);
+  }, [setError, setApplications]);
 
   return (
     <>
