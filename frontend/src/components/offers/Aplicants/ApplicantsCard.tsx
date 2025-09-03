@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import User from '../../session/User';
 import axios from 'axios';
 import './applicants.css';
 import defaultProfileImage from '../../../assets/defaults/profile-picture/1.svg';
@@ -118,7 +117,7 @@ const AplicantsCard: React.FC<UserCardProps> = ({
               className="btn"
               style={{ backgroundColor: '#3a3a7c', color: '#fff', borderRadius: '9999px', fontWeight: 600, fontSize: 'inherit', width: '100px', cursor: 'pointer' }}
               onClick={() => {
-                navigate(`/review/${userId}/${encodeURIComponent(name || '')}/${User.data.id}/${encodeURIComponent(User.data.name)}`);
+                navigate(`/review/${userId}/`);
               }}
             >
               Reseñar

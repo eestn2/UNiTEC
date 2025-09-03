@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from "react";
 import ConfirmModal from "../Modals/ConfirmModal";
 import defaultProfileImage from '../../../assets/defaults/profile-picture/1.svg';
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import ActionButton from "../ActionButton";
 import TextBox from "../form/TextBox";
 import AppWindow from "../AppWindow";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import NavBar from "../NavBar";
+import defaultError from "../../../global/messages/defaultError";
 
 const UserReview: React.FC = () => {
-    const { reviewedId, reviewerId, reviewedName, reviewerName } = useParams();
+    const { reviewedId } = useParams();
     const [reviewText, setReviewText] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
-    const [profileImage, setProfileImage] = useState<string>("");
+    const [profileImage, setProfileImage] = useState<string>(defaultProfileImage);
+    const [reviewedName, setReviewedName] = useState("Cargando...");
     const [showConfirmModal, setShowConfirmModal] = useState(false);
 
     const navigate = useNavigate();
@@ -26,43 +28,39 @@ const UserReview: React.FC = () => {
             (async () => {
                 try {
                     const response = await axios.get(`/user/user-info.php?id=${reviewedId}`);
-                    if (response.data.status === "success" && response.data.user?.profile_picture) {
-                        setProfileImage(response.data.user.profile_picture);
-                    } else {
-                        setProfileImage(defaultProfileImage);
+                    if (response) {
+                        setProfileImage(response.data.data.profile_picture ?? defaultProfileImage)
+                        setReviewedName(response.data.data.name);
                     }
-                } catch {
-                    setProfileImage(defaultProfileImage);
+                } catch (error) {
+                    if (isAxiosError(error)) return alert("No se pudo cargar el nombre o foto de perfil del usuario. Por favor, recargue la pestaña.")
+                    alert(defaultError)
                 }
             })();
         }
     }, [reviewedId]);
 
     const handleSendReview = async () => {
-        if (!reviewText.trim()) {
-            setError("La reseña no puede estar vacía.");
-            return;
-        }
+        if (!reviewText.trim()) return setError("La reseña no puede estar vacía.");
         setShowConfirmModal(true);
     };
 
     const confirmSendReview = async () => {
         setLoading(true);
         setError(null);
-        try {
+        try { 
             const response = await axios.post("/user/create-review.php", {
                 reviewed_id: Number(reviewedId),
                 text: reviewText.trim()
             });
-            if (response.data.status === "success") {
+            if (response) {
                 setSuccess(true);
                 setShowConfirmModal(false);
                 navigate(-1);
-            } else {
-                setError(response.data.message || "Error al enviar la reseña.");
             }
-        } catch (e: any) {
-            setError("Error de conexión o de servidor.");
+        } catch (error) {
+            if (axios.isAxiosError(error)) return setError(error.response?.data?.message || defaultError);
+            setError(defaultError);
         } finally {
             setLoading(false);
         }

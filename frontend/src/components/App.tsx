@@ -109,9 +109,9 @@ function App(): JSX.Element {
               <Route path="/publish-offer" element={<PublishOffer />} />
               <Route path="/see-applicants" element={<SeeApplicants />} />
               <Route path="/send-email" element={<SendEmail />} /> 
-             <Route path="/review/:reviewedId/:reviewedName/:reviewerId/:reviewerName" element={<UserReview />} />
-             <Route path="/report/:reportedId/:reportedName" element={<ReportUser />} />
-             <Route path="/offers-postulated" element={<OffersPostulated />} />
+              <Route path="/review/:reviewedId" element={<UserReview />} />
+              <Route path="/report/:reportedId" element={<ReportUser />} />
+              <Route path="/offers-postulated" element={<OffersPostulated />} />
               <Route path='*' element={<PageNotFound />} />
           </Routes>
           </BrowserRouter>
