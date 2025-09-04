@@ -10,6 +10,7 @@ import defaultError from "../../global/messages/defaultError";
 
 /* Axios error conditionals formated */
 /* Yw buddy **everything explodes**/
+/* AHORA SI CARNAL? YA? YAAA!? */
 
 const AdminPanel: React.FC = () => {
   const [users, setUsers] = useState<user[]>([]);
