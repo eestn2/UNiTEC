@@ -6,6 +6,10 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import PendingUser from "../UI/admin/PendingUser";
 import user from "../../types/user";
 import LoadingScreen from "../UI/LoadingScreens/LoadingScreen";
+import defaultError from "../../global/messages/defaultError";
+
+/* Axios error conditionals formated */
+/* Yw buddy **everything explodes**/
 
 const AdminPanel: React.FC = () => {
   const [users, setUsers] = useState<user[]>([]);
@@ -16,14 +20,10 @@ const AdminPanel: React.FC = () => {
     setAwaitingAction(true);
     try {
       const response = await axios.put('/admin/accept-new-user.php', { target_user_id: id });
-      if (response.status === 200 && response.data.status === "success") {
-        setUsers(prev => prev.filter(user => user.id !== id));
-      } else {
-        alert("Error al aceptar el usuario. Por favor, intenta de nuevo.");
-      }
+      if (response) setUsers(prev => prev.filter(user => user.id !== id));
     } catch (error) {
-      console.error(error);
-      alert("Error al aceptar el usuario. Por favor, intenta de nuevo.");
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
     } finally {
       setAwaitingAction(false);
     }
@@ -33,28 +33,22 @@ const AdminPanel: React.FC = () => {
     setAwaitingAction(true);
     try {
       const response = await axios.put('/admin/reject-new-user.php', { target_user_id: id, target_user_type: type });
-      if (response.status === 200 && response.data.status === "success") {
-        setUsers(users.filter(user => user.id !== id));
-      } else {
-        alert("Error al rechazar el usuario. Por favor, intenta de nuevo.");
-      }
+      if (response) setUsers(users.filter(user => user.id !== id));
     } catch (error) {
-      console.error(error);
-      alert("Error al rechazar el usuario. Por favor, intenta de nuevo.");
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
+    } finally {
+      setAwaitingAction(false);
     }
-    setAwaitingAction(false);
-  };
-
+  }
   const loadUsers = async () => {
     try {
       const response = await axios.get('/admin/get-undefined-users.php');
-      if (response.status === 200 && response.data.status === "success") {
-        setUsers(response.data.data.users);
-      } else {
-        alert("Error al cargar los usuarios. Por favor, intenta de nuevo.");
-      }
+      if (response) alert("Error al cargar los usuarios. Por favor, intenta de nuevo.");
+      setUsers(response.data.data.users);
     } catch (error) {
-      console.error(error);
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
     } finally {
       setLoading(false);
     }
@@ -159,11 +153,11 @@ const AdminPanel: React.FC = () => {
       )}
 
       <style>{`
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
     </>
   );
 };
