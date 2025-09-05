@@ -11,7 +11,6 @@ import ProtectedRoute from "./ProtectedRoute";
 import User from "../session/User";
 import { UserTypeEnum } from "../../types/user";
 
-
 const AdminIndex: React.FC = () => {
     const { panel } = useParams<{ panel: string }>();
     switch (panel) {

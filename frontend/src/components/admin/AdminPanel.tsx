@@ -8,10 +8,6 @@ import user from "../../types/user";
 import LoadingScreen from "../UI/LoadingScreens/LoadingScreen";
 import defaultError from "../../global/messages/defaultError";
 
-/* Axios error conditionals formated */
-/* Yw buddy **everything explodes**/
-/* AHORA SI CARNAL? YA? YAAA!? */
-
 const AdminPanel: React.FC = () => {
   const [users, setUsers] = useState<user[]>([]);
   const [loading, setLoading] = useState(true);
@@ -45,7 +41,7 @@ const AdminPanel: React.FC = () => {
   const loadUsers = async () => {
     try {
       const response = await axios.get('/admin/get-undefined-users.php');
-      if (response) alert("Error al cargar los usuarios. Por favor, intenta de nuevo.");
+      if (response) alert("Se cargaron los usuarios correctamentexx");
       setUsers(response.data.data.users);
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);

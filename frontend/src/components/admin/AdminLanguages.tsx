@@ -27,7 +27,7 @@ const AdminLanguages: React.FC = () => {
       id: id,
       name: attribute,
       });
-      if(response) alert(response.data.message);
+      if(response) alert(response.data.message); 
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);
@@ -38,8 +38,10 @@ const AdminLanguages: React.FC = () => {
   const loadAttributes = async () => {
     try {
       const response = await axios.get('/function/get-languages.php');
-      if (response) console.error("Failed to load languages:");
-      setLanguages(response.data.data.languages);
+      if (response){
+        alert("Se cargaron los idiomas adecuadamente");
+        setLanguages(response.data.data.languages);
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);

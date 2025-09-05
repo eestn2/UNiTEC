@@ -5,8 +5,6 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import AttributeAdd from "../UI/admin/AttributeAdd";
 import defaultError from "../../global/messages/defaultError";
 
-/* Axios error conditionals formated */
-
 const AdminInserts: React.FC = () => {
   const handleAddLanguage = async (attribute: string) => {
     try {

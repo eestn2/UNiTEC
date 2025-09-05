@@ -8,8 +8,6 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import ProfilePicture from "../UI/user/ProfilePicture";
 import defaultError from "../../global/messages/defaultError";
 
-/* Axios error conditionals formated */
-
 const AdminDesignate: React.FC = () => {
   type Admin = {
     id: number;
@@ -49,7 +47,6 @@ const AdminDesignate: React.FC = () => {
       alert(defaultError);
     }
   };
-
 
   const handleRemove = async (id: number) => {
     try {

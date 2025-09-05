@@ -7,8 +7,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import defaultError from "../../global/messages/defaultError";
 
-/* Axios error conditionals formated */
-
 type Review = {
   id: number;
   reviewed_id: number;
@@ -27,7 +25,8 @@ const AdminReview: React.FC = () => {
   const loadReviews = async () => {
     try {
       const response = await axios.get('/admin/get-reviews.php');
-      if (response) alert("Error al cargar los reportes. Por favor, intenta de nuevo.");
+  
+      if (response) alert("Reseñas cargadas correctamente");
       const reviewsList = response.data.data.reviews.map((review: any) => ({
         id: review.id,
         reviewed_id: review.reviewed_id,
@@ -37,7 +36,8 @@ const AdminReview: React.FC = () => {
         reviewed_email: review.reviewed_email,
         text: review.text,
       }));
-      setReviews(reviewsList);
+      setReviews(reviewsList)
+      
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);

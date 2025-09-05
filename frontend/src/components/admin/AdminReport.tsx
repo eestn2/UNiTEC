@@ -8,9 +8,6 @@ import { getReportReason } from "../../global/function/getReportReason";
 import { useNavigate } from "react-router-dom";
 import defaultError from "../../global/messages/defaultError";
 
-
-/* Axios error conditionals formated */
-
 interface Report {
   id: number;
   reported_id: number;
@@ -28,18 +25,20 @@ const AdminReport: React.FC = () => {
   const loadReports = async () => {
     try {
       const response = await axios.get('/admin/get-reports.php');
-      if (response) alert("Failed to load reports:");
-      const reportsList = response.data.data.reports.map((report: any) => ({
-            id: report.id,
-            reported_id: report.reported_id,
-            reporter_id: report.reporter_id,
-            reported_email: report.reported_email,
-            reporter_email: report.reporter_email,
-            reason: report.reason,
-          }
+      if (response) {
+        alert("Reportes cargados correctamente");
+        const reportsList = response.data.data.reports.map((report: any) => ({
+          id: report.id,
+          reported_id: report.reported_id,
+          reporter_id: report.reporter_id,
+          reported_email: report.reported_email,
+          reporter_email: report.reporter_email,
+          reason: report.reason,
+        }
         )
-      );
-      setReports(reportsList);
+        );
+        setReports(reportsList);
+      } 
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);
@@ -51,8 +50,7 @@ const AdminReport: React.FC = () => {
       const response = await axios.delete('/admin/delete_report.php', {
         data: { id: id }
       })
-      if (response) alert("Failed to discard report:");
-      console.log("Report discarded successfully:", response.data.message);
+      if (response) alert("Reporte descartado correctamente");
       await loadReports();
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
@@ -69,9 +67,10 @@ const AdminReport: React.FC = () => {
           id: reportedId
         }
       })
-      if (response) alert("Failed to ban user:");
-      console.log("Report discarded successfully:", response.data.message);
-      await loadReports();
+      if (response){
+        alert("Usuario baneado correctamente");
+        await loadReports();
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);

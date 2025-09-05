@@ -6,15 +6,15 @@ import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import defaultError from "../../global/messages/defaultError";
 
-/* Axios error conditionals formated */
-
 const AdminTags: React.FC = () => {
   const [tags, setTags] = useState<any[]>([]);
   const handleDeleteAttribute = async (id: number) => {
       try {
         const response = await axios.delete('/admin/delete_tag.php', {data: {id: id,}});
-        if(response) alert("Tag delete failed");
-        setTags(prevTags => prevTags.filter(tag => tag.id !== id));
+        if(response){
+          setTags(prevTags => prevTags.filter(tag => tag.id !== id));
+          alert("Etiqueta eliminada correctamente");
+        } 
       } catch (error) {
         if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
         alert(defaultError);
@@ -23,7 +23,7 @@ const AdminTags: React.FC = () => {
   const handleChangeAttribute = async (attribute: string, id: number) => {
     try{
       const response = await axios.put('/admin/edit_tag.php', {id: id, name: attribute});
-      if(response) alert("Tag update failed");
+      if(response) alert("Etiqueta editada correctamente");
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);
@@ -33,8 +33,10 @@ const AdminTags: React.FC = () => {
     const loadAttributes = async () => {
       try {
         const response = await axios.get('/function/get-tags.php');
-        if (response) alert("Error loading tags");
-        setTags(response.data.data.tags);
+        if (response) {
+          setTags(response.data.data.tags);
+          alert("Se cargaron los tags adecuadamente");
+        }
       } catch (error) {
         if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
         alert(defaultError);
