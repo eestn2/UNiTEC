@@ -29,8 +29,8 @@ const UserReview: React.FC = () => {
                 try {
                     const response = await axios.get(`/user/user-info.php?id=${reviewedId}`);
                     if (response) {
-                        setProfileImage(response.data.data.profile_picture ?? defaultProfileImage)
-                        setReviewedName(response.data.data.name);
+                        setProfileImage(response.data.data.user.profile_picture ?? defaultProfileImage)
+                        setReviewedName(response.data.data.user.name);
                     }
                 } catch (error) {
                     if (isAxiosError(error)) return alert("No se pudo cargar el nombre o foto de perfil del usuario. Por favor, recargue la pestaña.")

@@ -117,8 +117,8 @@ const ProfileInfo: React.FC = () => {
   };
 
   const handleReport = () => {
-    if (userData?.id && userData?.name) {
-      navigate(`/report/${userData.id}/${encodeURIComponent(userData.name)}`);
+    if (userData?.id) {
+      navigate(`/report/${userData.id}/`);
     }
   };
 

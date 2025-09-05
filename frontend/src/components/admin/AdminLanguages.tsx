@@ -14,9 +14,7 @@ const AdminLanguages: React.FC = () => {
       const response = await axios.delete('/admin/delete_language.php', {
         data: { id: id },
       });
-      if(response) alert("Error deleting language. Please try again.");
-        
-      setLanguages(prev => prev.filter(lang => lang.id !== id));
+      if(response) setLanguages(prev => prev.filter(lang => lang.id !== id));
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);
@@ -29,7 +27,7 @@ const AdminLanguages: React.FC = () => {
       id: id,
       name: attribute,
       });
-      if(response) alert("Error updating language. Please try again.");
+      if(response) alert(response.data.message);
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);

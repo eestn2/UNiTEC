@@ -21,17 +21,15 @@ const AdminDesignate: React.FC = () => {
   const loadAdmins = async () => {
     try {
       const response = await axios.get('/admin/get-admins.php', { withCredentials: true });
+      if (response) {
+        const adminsList = response.data?.data?.admins?.map((admin: any) => ({
+          id: admin.id,
+          email: admin.email,
+          name: admin.name,
+        })) ?? [];
 
-      if (response) alert("Failed to fetch admins:");
-
-      const adminsList = response.data?.data?.admins?.map((admin: any) => ({
-        id: admin.id,
-        email: admin.email,
-        name: admin.name,
-      })) ?? [];
-
-      setAdmins(adminsList);
-
+        setAdmins(adminsList);
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);
@@ -45,11 +43,7 @@ const AdminDesignate: React.FC = () => {
         { admin_email: attribute },
         { withCredentials: true }
       );
-
-      if (response) alert("Failed to add admin:");
-
-      await loadAdmins();
-
+      if (response) await loadAdmins();
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);
@@ -64,8 +58,7 @@ const AdminDesignate: React.FC = () => {
           id: id,
         }
       });
-      if (response) alert("Failed to remove admin:");
-      await loadAdmins();
+      if (response) await loadAdmins();
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);

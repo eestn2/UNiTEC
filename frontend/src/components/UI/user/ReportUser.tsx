@@ -5,20 +5,22 @@ import ActionButton from "../ActionButton";
 import ConfirmModal from "../Modals/ConfirmModal";
 import defaultProfileImage from '../../../assets/defaults/profile-picture/1.svg';
 import { getReportReason } from '../../../global/function/getReportReason';
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import TranslateFigmaCoords from "../../../global/function/TranslateFigmaCoords";
 import NavBar from "../NavBar";
 import '../../offers/SeeApplicants.css';
+import defaultError from "../../../global/messages/defaultError";
 const reasons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
+type reason = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 const ReportUser: React.FC = () => {
-    const { reportedId, reportedName } = useParams();
+    const { reportedId } = useParams();
     const [selectedReason, setSelectedReason] = useState<number | null>(null);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
-    const [profileImage, setProfileImage] = useState<string>("");
+    const [profileImage, setProfileImage] = useState<string>(defaultProfileImage);
+    const [reportedName, setReportedName] = useState<string>("Cargando...")
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -26,13 +28,13 @@ const ReportUser: React.FC = () => {
             (async () => {
                 try {
                     const response = await axios.get(`/user/user-info.php?id=${reportedId}`);
-                    if (response.data.status === "success" && response.data.user?.profile_picture) {
-                        setProfileImage(response.data.user.profile_picture);
-                    } else {
-                        setProfileImage(defaultProfileImage);
+                    if (response) {
+                        setProfileImage(response.data.data.user.profile_picture ?? defaultProfileImage);
+                        setReportedName(response.data.data.user.name);
                     }
-                } catch {
-                    setProfileImage(defaultProfileImage);
+                } catch (error) {
+                    if (axios.isAxiosError(error)) return alert("No se pudieron cargar los detalles del usuario a reportar. Por favor, recárgue la página.")
+                    alert(defaultError);
                 }
             })();
         }
@@ -54,15 +56,14 @@ const ReportUser: React.FC = () => {
                 reported_id: Number(reportedId),
                 reason: selectedReason
             });
-            if (response.data.status === "success") {
+            if (response) {
                 setSuccess(true);
                 setShowConfirmModal(false);
                 navigate(-1);
-            } else {
-                setError(response.data.message || "Error al enviar el reporte.");
             }
-        } catch (e: any) {
-            setError("Error de conexión o de servidor.");
+        } catch (error) {
+            if (isAxiosError(error)) return setError(error.response?.data.message ?? defaultError);
+            setError(defaultError);
         } finally {
             setLoading(false);
         }
@@ -103,7 +104,7 @@ const ReportUser: React.FC = () => {
                                 style={{ width: 30, height: 30, borderRadius: "50%", objectFit: "cover", display: "inline-block" }}
                                 onError={e => { (e.target as HTMLImageElement).src = defaultProfileImage; }}
                             />
-                            <span style={{ color: "#305894", fontWeight: 600 }}>{decodeURIComponent(reportedName || '')}</span>
+                            <span style={{ color: "#305894", fontWeight: 600 }}>{reportedName}</span>
                             <button style={{ marginLeft: "auto", background: "#FFD600", color: "#3a3a7c", border: "none", borderRadius: 32, padding: "4px 12px", fontWeight: 600, cursor: "pointer" }} onClick={() => { if (reportedId) navigate(`/profile/${reportedId}`); }}>Ver Perfil</button>
                         </div>
                     </div>
@@ -143,7 +144,7 @@ const ReportUser: React.FC = () => {
                                             onChange={() => setSelectedReason(reason)}
                                             style={{ marginRight: 10 }}
                                         />
-                                        {getReportReason(reason as any)}
+                                        {getReportReason(reason as reason)}
                                     </label>
                                 ))}
                             </div>
