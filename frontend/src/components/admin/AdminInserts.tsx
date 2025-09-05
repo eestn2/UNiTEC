@@ -3,20 +3,32 @@ import NavBar from "../UI/NavBar";
 import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import AttributeAdd from "../UI/admin/AttributeAdd";
+import defaultError from "../../global/messages/defaultError";
 
+/* Axios error conditionals formated */
 
 const AdminInserts: React.FC = () => {
   const handleAddLanguage = async (attribute: string) => {
-    const response = await axios.post('/admin/add_language.php', {
+    try {
+      const response = await axios.post('/admin/add_language.php', {
         name:attribute
-    });
-    console.log(response);
+      });
+      if(response) alert("Idioma agregado con éxito");
+    } catch (error) {
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
+    }
   };
     const handleAddTag = async (attribute: string) => {
-    const response = await axios.post('/admin/add_tag.php', {
+    try{
+      const response = await axios.post('/admin/add_tag.php', {
         name:attribute
-    });
-    console.log(response);
+      });
+      if(response) alert("Etiqueta agregada con éxito");
+    } catch (error) {
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
+    }
   };
     return (
         <div>

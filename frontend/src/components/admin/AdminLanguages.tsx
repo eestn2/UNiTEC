@@ -4,40 +4,47 @@ import AttributeEditor from "../UI/admin/AttributeEditor";
 import NavBar from "../UI/NavBar";
 import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
+import defaultError from "../../global/messages/defaultError";
 
 const AdminLanguages: React.FC = () => {
   const [languages, setLanguages] = useState<any[]>([]);
 
   const handleDeleteAttribute = async (id: number) => {
     try {
-      await axios.delete('/admin/delete_language.php', {
+      const response = await axios.delete('/admin/delete_language.php', {
         data: { id: id },
       });
+      if(response) alert("Error deleting language. Please try again.");
+        
       setLanguages(prev => prev.filter(lang => lang.id !== id));
     } catch (error) {
-      console.error("Failed to delete language:", error);
-      alert("Error deleting language. Please try again.");
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
     }
   };
 
   const handleChangeAttribute = async (attribute: string, id: number) => {
-    const response = await axios.put('/admin/edit_language.php', {
+    try{
+      const response = await axios.put('/admin/edit_language.php', {
       id: id,
       name: attribute,
-    });
-    console.log(response);
+      });
+      if(response) alert("Error updating language. Please try again.");
+    } catch (error) {
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
+    }
+    
   };
 
   const loadAttributes = async () => {
     try {
       const response = await axios.get('/function/get-languages.php');
-      if (response.status !== 200 && response.data.status !== "success") {
-        console.error("Failed to load languages:", response.data.message);
-      } else {
-        setLanguages(response.data.data.languages);
-      }
+      if (response) console.error("Failed to load languages:");
+      setLanguages(response.data.data.languages);
     } catch (error) {
-      console.error("An error occurred while loading languages:", error);
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
     }
   };
 

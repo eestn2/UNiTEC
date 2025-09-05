@@ -4,43 +4,40 @@ import AttributeEditor from "../UI/admin/AttributeEditor";
 import NavBar from "../UI/NavBar";
 import AppWindow from "../UI/AppWindow";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
+import defaultError from "../../global/messages/defaultError";
 
-
-
+/* Axios error conditionals formated */
 
 const AdminTags: React.FC = () => {
   const [tags, setTags] = useState<any[]>([]);
   const handleDeleteAttribute = async (id: number) => {
       try {
-        await axios.delete('/admin/delete_tag.php', {
-          data: {
-            id: id,
-          }
-        });
-        // Remove the deleted tag from state
+        const response = await axios.delete('/admin/delete_tag.php', {data: {id: id,}});
+        if(response) alert("Tag delete failed");
         setTags(prevTags => prevTags.filter(tag => tag.id !== id));
       } catch (error) {
-        console.error("Failed to delete tag:", error);
-        alert("Error deleting tag. Please try again.");
+        if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+        alert(defaultError);
       }
     };
-      const handleChangeAttribute = async (attribute: string, id: number) => {
-      const response = await axios.put('/admin/edit_tag.php', {
-          id:id,
-          name:attribute
-      });
-    console.log(response);
-    };
+  const handleChangeAttribute = async (attribute: string, id: number) => {
+    try{
+      const response = await axios.put('/admin/edit_tag.php', {id: id, name: attribute});
+      if(response) alert("Tag update failed");
+    } catch (error) {
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
+    }
+    
+  };
     const loadAttributes = async () => {
       try {
         const response = await axios.get('/function/get-tags.php');
-        if (response.status !== 200 && response.data.status !== "success") {
-          console.error("Failed to load tags:", response.data.message);
-        } else {
-          setTags(response.data.data.tags);
-        }
+        if (response) alert("Error loading tags");
+        setTags(response.data.data.tags);
       } catch (error) {
-        console.error("An error occurred while loading tags:", error);
+        if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+        alert(defaultError);
       }
     };
   useEffect(() => {
