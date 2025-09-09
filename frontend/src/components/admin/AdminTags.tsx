@@ -33,10 +33,7 @@ const AdminTags: React.FC = () => {
     const loadAttributes = async () => {
       try {
         const response = await axios.get('/function/get-tags.php');
-        if (response) {
-          setTags(response.data.data.tags);
-          alert("Se cargaron los tags adecuadamente");
-        }
+        if (response) setTags(response.data.data.tags);
       } catch (error) {
         if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
         alert(defaultError);

@@ -41,10 +41,7 @@ const AdminPanel: React.FC = () => {
   const loadUsers = async () => {
     try {
       const response = await axios.get('/admin/get-undefined-users.php');
-      if (response) {
-        alert("Se cargaron los usuarios correctamentexx");
-        setUsers(response.data.data.users);
-      }
+      if (response) setUsers(response.data.data.users);
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);
