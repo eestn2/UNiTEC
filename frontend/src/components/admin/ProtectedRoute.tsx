@@ -9,11 +9,7 @@ type ProtectedRouteProps = {
 };
 
 const ProtectedRoute = ({ user_type, allowedType, children }: ProtectedRouteProps) => {
-
-  if (user_type != allowedType || user_type === null ) {
-    return <Navigate to="/" replace />;
-  }
-
+  if (user_type != allowedType || user_type === null ) return <Navigate to="/" replace />
   return children;
 };
 
