@@ -26,7 +26,7 @@ const AdminReport: React.FC = () => {
     try {
       const response = await axios.get('/admin/get-reports.php');
       if (response) {
-        alert("Reportes cargados correctamente");
+
         const reportsList = response.data.data.reports.map((report: any) => ({
           id: report.id,
           reported_id: report.reported_id,
@@ -38,6 +38,7 @@ const AdminReport: React.FC = () => {
         )
         );
         setReports(reportsList);
+        alert("Reportes cargados correctamente");
       } 
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
@@ -68,8 +69,8 @@ const AdminReport: React.FC = () => {
         }
       })
       if (response){
-        alert("Usuario baneado correctamente");
         await loadReports();
+        alert("Usuario baneado correctamente");
       }
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);

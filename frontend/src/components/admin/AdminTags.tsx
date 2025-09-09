@@ -11,7 +11,7 @@ const AdminTags: React.FC = () => {
   const handleDeleteAttribute = async (id: number) => {
       try {
         const response = await axios.delete('/admin/delete_tag.php', {data: {id: id,}});
-        if(response){
+        if (response) {
           setTags(prevTags => prevTags.filter(tag => tag.id !== id));
           alert("Etiqueta eliminada correctamente");
         } 
@@ -23,7 +23,7 @@ const AdminTags: React.FC = () => {
   const handleChangeAttribute = async (attribute: string, id: number) => {
     try{
       const response = await axios.put('/admin/edit_tag.php', {id: id, name: attribute});
-      if(response) alert("Etiqueta editada correctamente");
+      if (response) alert("Etiqueta editada correctamente");
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);

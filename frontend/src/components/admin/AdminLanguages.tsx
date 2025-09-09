@@ -14,7 +14,7 @@ const AdminLanguages: React.FC = () => {
       const response = await axios.delete('/admin/delete_language.php', {
         data: { id: id },
       });
-      if(response) setLanguages(prev => prev.filter(lang => lang.id !== id));
+      if (response) setLanguages(prev => prev.filter(lang => lang.id !== id));
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);

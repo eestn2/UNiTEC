@@ -11,7 +11,7 @@ const AdminInserts: React.FC = () => {
       const response = await axios.post('/admin/add_language.php', {
         name:attribute
       });
-      if(response) alert("Idioma agregado con éxito");
+      if (response) alert("Idioma agregado con éxito");
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);
@@ -22,7 +22,7 @@ const AdminInserts: React.FC = () => {
       const response = await axios.post('/admin/add_tag.php', {
         name:attribute
       });
-      if(response) alert("Etiqueta agregada con éxito");
+      if (response) alert("Etiqueta agregada con éxito");
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);

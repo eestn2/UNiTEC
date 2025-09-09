@@ -18,14 +18,13 @@ const AdminDesignate: React.FC = () => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const loadAdmins = async () => {
     try {
-      const response = await axios.get('/admin/get-admins.php', { withCredentials: true });
+      const response = await axios.get('/admin/get-admins.php');
       if (response) {
         const adminsList = response.data?.data?.admins?.map((admin: any) => ({
           id: admin.id,
           email: admin.email,
           name: admin.name,
         })) ?? [];
-
         setAdmins(adminsList);
       }
     } catch (error) {
@@ -39,7 +38,6 @@ const AdminDesignate: React.FC = () => {
       const response = await axios.post(
         '/admin/add_admin.php',
         { admin_email: attribute },
-        { withCredentials: true }
       );
       if (response) await loadAdmins();
     } catch (error) {
@@ -70,13 +68,13 @@ const AdminDesignate: React.FC = () => {
     try {
       const response = await axios.get('/admin/get-users-by-email.php', {
         params: { email: input },
-        withCredentials: true,
       });
       if (response) setSuggestions(response.data.data.users.map((u: any) => `${u.email}`));
-    } catch (error) {
+    } catch (error) { 
+      setSuggestions([]);
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
       alert(defaultError);
-      setSuggestions([]);
+     
     }
   };
   useEffect(() => {
