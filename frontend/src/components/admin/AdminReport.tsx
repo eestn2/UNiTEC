@@ -48,7 +48,7 @@ const AdminReport: React.FC = () => {
 
   const handleDiscardReport = async (id: number) => {
     try {
-      const response = await axios.delete('/admin/delete_report.php', {
+      const response = await axios.delete('/admin/delete-report.php', {
         data: { id: id }
       })
       if (response) alert("Reporte descartado correctamente");
@@ -62,7 +62,7 @@ const AdminReport: React.FC = () => {
 
   const handleBanUser = async (reportedId: number, id: number) => {
     try {
-      const response = await axios.delete('/admin/ban_user.php', {
+      const response = await axios.delete('/admin/ban-user.php', {
         data: {
           reportId: id,
           id: reportedId

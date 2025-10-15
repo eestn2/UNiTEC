@@ -36,7 +36,7 @@ const AdminDesignate: React.FC = () => {
   const handleAdd = async (attribute: string) => {
     try {
       const response = await axios.post(
-        '/admin/add_admin.php',
+        '/admin/add-admin.php',
         { admin_email: attribute },
       );
       if (response) await loadAdmins();
@@ -48,7 +48,7 @@ const AdminDesignate: React.FC = () => {
 
   const handleRemove = async (id: number) => {
     try {
-      const response = await axios.delete('/admin/delete_user.php', {
+      const response = await axios.delete('/admin/delete-user.php', {
         data: {
           id: id,
         }

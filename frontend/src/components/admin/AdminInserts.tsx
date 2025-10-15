@@ -8,7 +8,7 @@ import defaultError from "../../global/messages/defaultError";
 const AdminInserts: React.FC = () => {
   const handleAddLanguage = async (attribute: string) => {
     try {
-      const response = await axios.post('/admin/add_language.php', {
+      const response = await axios.post('/admin/add-language.php', {
         name:attribute
       });
       if (response) alert("Idioma agregado con éxito");
@@ -19,7 +19,7 @@ const AdminInserts: React.FC = () => {
   };
     const handleAddTag = async (attribute: string) => {
     try{
-      const response = await axios.post('/admin/add_tag.php', {
+      const response = await axios.post('/admin/add-tag.php', {
         name:attribute
       });
       if (response) alert("Etiqueta agregada con éxito");

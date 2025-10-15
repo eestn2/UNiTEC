@@ -11,7 +11,7 @@ const AdminLanguages: React.FC = () => {
 
   const handleDeleteAttribute = async (id: number) => {
     try {
-      const response = await axios.delete('/admin/delete_language.php', {
+      const response = await axios.delete('/admin/delete-language.php', {
         data: { id: id },
       });
       if (response) setLanguages(prev => prev.filter(lang => lang.id !== id));
@@ -23,7 +23,7 @@ const AdminLanguages: React.FC = () => {
 
   const handleChangeAttribute = async (attribute: string, id: number) => {
     try{
-      const response = await axios.put('/admin/edit_language.php', {
+      const response = await axios.put('/admin/edit-language.php', {
       id: id,
       name: attribute,
       });

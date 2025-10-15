@@ -10,7 +10,7 @@ const AdminTags: React.FC = () => {
   const [tags, setTags] = useState<any[]>([]);
   const handleDeleteAttribute = async (id: number) => {
       try {
-        const response = await axios.delete('/admin/delete_tag.php', {data: {id: id,}});
+        const response = await axios.delete('/admin/delete-tag.php', {data: {id: id,}});
         if (response) {
           setTags(prevTags => prevTags.filter(tag => tag.id !== id));
           alert("Etiqueta eliminada correctamente");
@@ -22,7 +22,7 @@ const AdminTags: React.FC = () => {
     };
   const handleChangeAttribute = async (attribute: string, id: number) => {
     try{
-      const response = await axios.put('/admin/edit_tag.php', {id: id, name: attribute});
+      const response = await axios.put('/admin/edit-tag.php', {id: id, name: attribute});
       if (response) alert("Etiqueta editada correctamente");
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
