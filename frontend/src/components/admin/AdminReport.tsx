@@ -27,7 +27,7 @@ const AdminReport: React.FC = () => {
       const response = await axios.get('/admin/get-reports.php');
       if (response) {
 
-        const reportsList = response.data.data.reports.map((report: any) => ({
+        const reportsList = response.data.data.reports.map((report: Report) => ({
           id: report.id,
           reported_id: report.reported_id,
           reporter_id: report.reporter_id,
@@ -38,7 +38,6 @@ const AdminReport: React.FC = () => {
         )
         );
         setReports(reportsList);
-        alert("Reportes cargados correctamente");
       } 
     } catch (error) {
       if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);

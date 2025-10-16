@@ -20,7 +20,7 @@ const AdminDesignate: React.FC = () => {
     try {
       const response = await axios.get('/admin/get-admins.php');
       if (response) {
-        const adminsList = response.data?.data?.admins?.map((admin: any) => ({
+        const adminsList = response.data?.data?.admins?.map((admin: Admin) => ({
           id: admin.id,
           email: admin.email,
           name: admin.name,

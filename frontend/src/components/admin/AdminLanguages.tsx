@@ -39,7 +39,6 @@ const AdminLanguages: React.FC = () => {
     try {
       const response = await axios.get('/function/get-languages.php');
       if (response){
-        alert("Se cargaron los idiomas adecuadamente");
         setLanguages(response.data.data.languages);
       }
     } catch (error) {

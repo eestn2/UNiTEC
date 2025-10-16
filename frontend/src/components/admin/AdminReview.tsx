@@ -27,8 +27,7 @@ const AdminReview: React.FC = () => {
       const response = await axios.get('/admin/get-reviews.php');
   
       if (response) {
-        alert("Reseñas cargadas correctamente");
-        const reviewsList = response.data.data.reviews.map((review: any) => ({
+        const reviewsList = response.data.data.reviews.map((review: Review) => ({
           id: review.id,
           reviewed_id: review.reviewed_id,
           user_id: review.user_id,
@@ -75,6 +74,11 @@ const AdminReview: React.FC = () => {
             overflowY: "scroll",
             height : `${TranslateFigmaCoords.translateFigmaX(487)}px`,
           }} >
+            {reviews.length === 0 && (
+              <p style={{ textAlign: "center", color: "#305894" }}>
+                No hay reseñas para mostrar.
+              </p>
+            )}
             {reviews.map((review) => (
               <ReviewRow
                 key={review.id}
