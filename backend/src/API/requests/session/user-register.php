@@ -3,7 +3,6 @@
  * @file user-register.php
  * @description API endpoint for registering a new user (student). Handles POST requests, validates input, checks for duplicate emails, inserts user data and related languages/tags, sends a confirmation email, and logs the registration.
  * Uses transactions for data integrity and returns standardized JSON responses.
- * @author Federico Nicolás Martínez
  * @date May 11, 2025
  *
  * Usage:
@@ -22,10 +21,11 @@ require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 require_once __DIR__ . '/../../logic/security/security_functions.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") return_response(status::OK, "Preflight OK.");
+if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response(status::METHOD_NOT_ALLOWED, "Metodo no permitido.");
 
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($data->email) || !isset($data->password) || !isset($data->user_type) || $data -> user_type===0 )  return_response("failed", "Faltan datos.", null);
+if (!isset($data->email) || !isset($data->password) || !isset($data->user_type) || $data -> user_type===0 )  return_response(status::BAD_REQUEST, "Faltan datos.", null);
 
 // Assign request body values to variables
 $name = $data->name ?? null;
@@ -47,7 +47,6 @@ $knownLanguagesWithLevels = $data->languages_levels ?? [];
 $user_tags = $data->tags ?? [];
 $tags_levels = $data->tags_levels ?? [];
 
-error_log('Request received: ' . json_encode($data));
 try {
     $connection->beginTransaction();
     error_log('Transaction started');
@@ -55,10 +54,7 @@ try {
     // Check for duplicate email
     $stmt = $connection->prepare("SELECT email FROM users WHERE email = ?");
     $stmt->execute([$user_email]);
-    if ($stmt->fetch()) {
-        error_log('Duplicate email: ' . $user_email);
-        return_response("failed", "El correo ya existe.", null);
-    }
+    if ($stmt->fetch()) return_response(status::CONFLICT, "El correo ya existe.");
 
     // Insert user data
     $stmt = $connection->prepare(
@@ -77,10 +73,7 @@ try {
             $stmt = $connection->prepare("INSERT INTO user_languages (user_id, language_id, `level`) VALUES (?, ?, ?)");
             foreach ($user_languages as $i => $lang_id) {
                 $level_id = $knownLanguagesWithLevels[$i] ?? null;
-                if ($level_id !== null) {
-                    $stmt->execute([$user_id, $lang_id, $level_id]);
-                    error_log("Inserted user_language: user_id=$user_id, lang_id=$lang_id, level_id=$level_id");
-                }
+                if ($level_id !== null) $stmt->execute([$user_id, $lang_id, $level_id]);
             }
         }
 
@@ -89,10 +82,7 @@ try {
             $stmt = $connection->prepare("INSERT INTO user_tags (user_id, tag_id, `level`) VALUES (?, ?, ?)");
             foreach ($user_tags as $i => $tag_id) {
                 $level_id = $tags_levels[$i] ?? null;
-                if ($level_id !== null) {
-                    $stmt->execute([$user_id, $tag_id, $level_id]);
-                    error_log("Inserted user_tag: user_id=$user_id, tag_id=$tag_id, level_id=$level_id");
-                }
+                if ($level_id !== null) $stmt->execute([$user_id, $tag_id, $level_id]);
             }
         }
     
@@ -100,34 +90,28 @@ try {
 
     // Commit transaction
     $connection->commit();
-    error_log('Transaction committed');
 
     // Send confirmation email (server-side, secure)
     require_once __DIR__ . '/../../logic/communications/send_email.php';
     $email_subject = 'Registro en espera';
     $email_message = '¡Hola!, tu registro se ha cargado con éxito, debe esperar a que un administrador acepte su solicitud para poder utilizar nuestro software. Ten paciencia.<br><br>Gracias por registrarte en UNITEC.';
     $send_result = send_email($user_email, $email_subject, $email_message);
-    error_log('Email sent: ' . ($send_result ? 'OK' : 'FAILED'));
-    if (!$send_result) error_log("Failed to send registration email to $user_email");
-
+    if ($send_result === false) throw new Exception('Failed to send registration email to ' . $user_email);
     // Log the sent email in the database
     $currentDatetime = date('Y-m-d H:i:s');
     $stmt = $connection->prepare("INSERT INTO sent_emails (subject, message, sender_email, receiver_email, sent_date) VALUES (?, ?, ?, ?, ?)");
     $email_sender = "admin@admin.com"; // System/admin user ID
     $stmt->execute([$email_subject, $email_message, $email_sender, $user_email, $currentDatetime]);
-    error_log('Sent email logged in DB');
 
     // Retrieve the newly created user for response
     $stmt = $connection->prepare("SELECT * FROM users WHERE id = ?");
     $stmt->execute([$user_id]);
     $user = $stmt->fetch();
-    error_log('User fetched for session: ' . json_encode($user));
-
-    return_response("success", "Usuario registrado correctamente. Debe esperar aprobación.", null);
+    return_response(status::OK, "Usuario registrado correctamente. Debe esperar aprobación.", null);
 } catch (Exception $e) {
     $connection->rollBack();
     error_log('Transaction rolled back');
     error_log('Exception: ' . $e->getMessage());
-    return_response("failed", "Ocurrió un error: No se pudo registrar al usuario" );
+    return_response(status::INTERNAL_SERVER_ERROR, "Ocurrió un error: No se pudo registrar al usuario" );
 }
 ?>

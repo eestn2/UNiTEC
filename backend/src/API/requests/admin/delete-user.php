@@ -26,14 +26,14 @@ require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 require_once __DIR__ . '/../../logic/security/is_admin.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "DELETE") return_response("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") return_response(status::OK, "Preflight OK.");
+if ($_SERVER["REQUEST_METHOD"] !== "DELETE") return_response(status::METHOD_NOT_ALLOWED, "Método no permitido.");
 
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
-if (!is_admin($_SESSION['user']['id'], $connection)) {
-    return_response("failed", "Solo los administradores pueden eliminar usuarios.", null);
-}
+if (!isset($_SESSION['user']['id'])) return_response(status::UNAUTHORIZED, "No autenticado.");
+if (!is_admin($_SESSION['user']['id'], $connection)) return_response(status::FORBIDDEN, "Solo los administradores pueden eliminar usuarios.");
 
+if (!$data || !isset($data->id)) return_response(status::BAD_REQUEST, "Datos de entrada inválidos.");
 $data->id = intval($data->id);
 
 try {
@@ -43,9 +43,10 @@ try {
     $stmt->bindParam(':id', $data->id, PDO::PARAM_INT);
     $stmt->execute();
     $connection->commit();
-    return_response("success", "Usuario eliminado con exito.", null);
+    return_response(status::OK, "Usuario eliminado con éxito.");
 
 } catch(PDOException $e) {
-    return_response("failed", "Error al eliminar el usuario: " . $e->getMessage(), null);
+    if ($connection->inTransaction()) $connection->rollBack();
+    return_response(status::INTERNAL_SERVER_ERROR, "Error al eliminar el usuario: " . $e->getMessage());
 }
 ?>

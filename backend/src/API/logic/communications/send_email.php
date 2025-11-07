@@ -3,7 +3,6 @@
  * @file send_email.php
  * @description Secure and standardized function to send emails using PHPMailer. 
  *              Returns true on success, false on failure. Logs errors if sending fails.
- * @author Haziel Magallanes
  * @date May 12, 2025
  *
  * Usage:

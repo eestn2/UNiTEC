@@ -32,7 +32,7 @@ import { useWindowSize } from '../hooks/responsive/useWindowSize';
 import LoadingScreen from './UI/LoadingScreens/LoadingScreen';
 import type { user } from '../types/user';
 import EditProfile from './user/EditProfile';
-import OffersPustulated from './offers/OffersPustulated';
+import OffersPostulated from './offers/OffersPostulated';
 import UserReview from './UI/user/UserReview';
 import ReportUser from './UI/user/ReportUser';
 /**
@@ -71,7 +71,7 @@ function App(): JSX.Element {
     // Check session from server
     axios.get('/session/me.php')
       .then(res => {
-        if (res.data.status === 'success' && res.data.data && res.data.data.user as user) {
+        if (res.status === 200 && res.data.data.user as user) {
           User.set(res.data.data.user as user);
           setSession(true);
         }
@@ -109,9 +109,9 @@ function App(): JSX.Element {
               <Route path="/publish-offer" element={<PublishOffer />} />
               <Route path="/see-applicants" element={<SeeApplicants />} />
               <Route path="/send-email" element={<SendEmail />} /> 
-             <Route path="/review/:reviewedId/:reviewedName/:reviewerId/:reviewerName" element={<UserReview />} />
-             <Route path="/report/:reportedId/:reportedName" element={<ReportUser />} />
-             <Route path="/offers-postulated" element={<OffersPustulated />} />
+              <Route path="/review/:reviewedId" element={<UserReview />} />
+              <Route path="/report/:reportedId" element={<ReportUser />} />
+              <Route path="/offers-postulated" element={<OffersPostulated />} />
               <Route path='*' element={<PageNotFound />} />
           </Routes>
           </BrowserRouter>

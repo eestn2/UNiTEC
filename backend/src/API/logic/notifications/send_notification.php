@@ -3,7 +3,6 @@
  * @file send_notification.php
  * @description Utility function to log notifications into the database. Supports different notification types and messages.
  * Provides an enum called NotificationType for notification types for better readability.
- * @author Haziel Magallanes
  * @date May 14, 2025
  *
  * Usage:

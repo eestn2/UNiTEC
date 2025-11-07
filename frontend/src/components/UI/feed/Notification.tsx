@@ -2,15 +2,13 @@
  * @file Notification.tsx
  * @description A reusable React component for displaying notification messages in a responsive box.
  * Converts width from pixels to responsive units based on screen size.
- * @author Haziel Magallanes
  * @date May 6, 2025
  */
 
-import React, { JSX, useEffect, useState } from "react";
+import { JSX, useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import useResponsiveDimensions from "../../../hooks/responsive/useResponsiveDimensions";
-import type { TypedResponse } from "../../../types/Response";
 import type { notification } from "../../../types/notification";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 
@@ -52,29 +50,24 @@ const Notification: React.FC<NotificationProps> = ({ notificationId, width = 10,
         if (typeof action === "function") return <button onClick={() => {action()}} className="view-more">Ver más</button>;
         return null;
     }
-    const viewOffer = React.useCallback((id: number, message: string, type: number) => {
+    const viewOffer = useCallback((id: number, message: string, type: number) => {
         navigate(`/job-offer/${id}/${message}/${type}`);
     }, [navigate]);
     
     useEffect(() => {
         const fetchNotification = async () => {
             try {
-                const { data: response } = await axios.get<TypedResponse<notification>>(
-                    `/function/get-notification-data.php?id=${notificationId}`
-                );
-                const { status, message, data: notification } = response;
-                if (status === "success" && notification) {
+                const response = await axios.get(`/function/get-notification-data.php?id=${notificationId}`);
+                if (response) {
+                    const notification: notification = response.data.data;
                     setContent(notification.message);
-                    if (notification.action === "view_offer") {
-                        setAction(() => () => viewOffer(notification.sender_id, notification.message, notification.type));
-                    }
-                } else {
-                    console.error("Failed to fetch notification data:", message);
-                    setContent("No se pudo cargar la notificación.");
+                    if (notification.action === "view_offer") setAction(() => () => viewOffer(notification.sender_id, notification.message, notification.type));
                 }
             } catch (error) {
-                console.error("Error fetching notification data:", error);
                 setContent("Error al cargar la notificación.");
+                setAction(undefined);
+                if (axios.isAxiosError(error)) return console.error(error.response?.data?.message || "Error desconocido al cargar la notificación. ID: " + notificationId);
+                console.error("Error desconocido al cargar la notificación. ID: " + notificationId);
             }
         };
         fetchNotification();

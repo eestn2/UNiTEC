@@ -16,6 +16,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Lottie from "lottie-react";
 import throbber from "../../assets/animated/Insider-loading.json";
+import defaultError from "../../global/messages/defaultError";
+
 import styles from './login.module.css'
 /**
  * A React functional component that renders the login form inside a responsive window.
@@ -41,23 +43,13 @@ const Login: React.FC = () => {
         event.preventDefault();
         try {
             setCargando(true);
-            const response = await axios.post(`/session/login.php`, {
-                email,
-                password,
-                withCredentials: true // Ensure cookies are sent with the request
-            });
-            if (response.status === 200 && response.data.status === "success") {
-                // Session is now set server-side; reload to update app state
-                window.location.reload();
-            } else {
-                console.log(response);
-                console.error("Login failed:", await response.data.message);
-                setError(response.data.message);
-                setCargando(false);
-            }
+            const response = await axios.post(`/session/login.php`, { email, password });
+            if (response) window.location.reload();
         } catch (error) {
-            console.error("An error occurred during login:", error);
-            setError("No se ha podido establecer la conexión. Intentelo de nuevo más tarde.");
+            if (axios.isAxiosError(error)) return setError(error.response?.data?.message || defaultError);
+            setError(defaultError);
+        } finally {
+            setCargando(false);
         }
     };
 
@@ -78,13 +70,13 @@ const Login: React.FC = () => {
                 {cargando ?
                     <ActionButton vertical={true} height={50} width={200} text=""  style={{ backgroundColor: 'white', color: '#888', border: '2px solid #ccc', cursor: 'not-allowed'}} action={(event) => {
                         event.preventDefault();
-                    }}>  
+                    }}> 
                          <Lottie
                                 animationData={throbber}  
                                 loop={true}
                                 autoplay={true}
                                 style={{height:'100%',scale:1.5}}
-                            />  
+                            />
                     </ActionButton>
                     :
                     <ActionButton vertical={true} width={200} height={50} text="Iniciar Sesión" action={(event) => {

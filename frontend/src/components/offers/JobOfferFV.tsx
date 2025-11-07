@@ -3,42 +3,41 @@ import AppWindow from "../UI/AppWindow";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import type { offer } from "../../types/JobOfferTypes";
-import type { TypedResponse } from "../../types/Response";
 import close_icon from "../../assets/icons/close.svg";
 import NavBar from "../UI/NavBar";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 import ActionButton from "../UI/ActionButton";
 import { user } from "../../types/user";
 import TextWithBreaks from "../UI/TextWithBreaks";
 import User from "../session/User";
 import ProfilePicture from "../UI/user/ProfilePicture";
+import defaultError from "../../global/messages/defaultError";
+import StateButton from "../UI/StateButton";
+import { usePostulate } from "../../hooks/user/usePostulate";
+import apply_icon from "../../assets/icons/apply.svg";
+import deapply_icon from "../../assets/icons/deapply.svg";
 
 const JobOfferFV: React.FC = () => {
-    // Re-Render on window resize
-    const windowSize = useWindowSize();
-    console.log("Window size:", windowSize);
     // State variables for job offer data
     const { offerId, message, type, showReviewButton: showReviewParam } = useParams<{ offerId: string; message: string; type: string; showReviewButton?: string }>();
     const iType = type ? parseInt(type, 10) : undefined;
+    const numericOfferId = offerId ? parseInt(offerId, 10) : NaN;
     const [jobOffer, setJobOffer] = useState<offer | null>(null);
     const [author, setAuthor] = useState<user | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [offerLoading, setOfferLoading] = useState(true);
+    const { postulated, setPostulated, postulate, depostulate } = usePostulate(numericOfferId);
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchOffer = async () => {
             try {
-                const { data: response } = await axios.get<TypedResponse<offer>>(
-                    `/feed/job-offer.php?id=${offerId}`
-                );
-                if (response.status === "success") {
-                    setJobOffer(response.data);
-                }
-            } catch (e) {
-                console.error("Error fetching job offer:", e);
+                const response = await axios.get(`/feed/job-offer.php?id=${offerId}`);
+                if (response) setJobOffer(response.data.data);
+            } catch (error) {
+                if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+                alert(defaultError);
             } finally {
-                setLoading(false);
+                setOfferLoading(false);
             }
         };
         fetchOffer();
@@ -46,23 +45,23 @@ const JobOfferFV: React.FC = () => {
 
     useEffect(() => {
         const fetchAuthor = async () => {
+            if(!jobOffer) return;
+            setOfferLoading(true);
             try {
-                const { data: response } = await axios.get<TypedResponse<any>>(
-                    `/user/user-info.php?id=${jobOffer?.creator_id}`
-                );
-                if (response.status === "success") {
-                    setAuthor(response.data.user as user);
-                }
-            } catch (e) {
-                console.error("Error fetching job offer:", e);
+                const response = await axios.get(`/user/user-info.php?id=${jobOffer?.creator_id}`);
+                if (response) setAuthor(response.data.data.user as user);
+            } catch (error) {
+                if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+                alert(defaultError);
             } finally {
-                setLoading(false);
+                setOfferLoading(false);
             }
         };
         fetchAuthor();
     }, [jobOffer]);
-    console.log(author);
-    if (loading) return <div>Cargando...</div>;
+    
+    if (!offerId || isNaN(numericOfferId)) return <div>ID de oferta inválido.</div>;
+    if (offerLoading) return <div>Cargando...</div>;
     if (!jobOffer) return <div>No se encontró la oferta.</div>;
 
     // Botón para reseñar si el estado de la oferta es 1, o si se pasa por params
@@ -176,7 +175,18 @@ const JobOfferFV: React.FC = () => {
                                 />
                             ) :
                                 (
-                                    <ActionButton text="Despostularse" className="offer-fv-deapply" height={40} style={{ marginTop: `${TranslateFigmaCoords.translateFigmaY(6)}px` }} />
+                                    <StateButton
+                                        trueIcon={apply_icon}
+                                        falseIcon={deapply_icon}
+                                        trueText="Postularse"
+                                        falseText="Despostularse"
+                                        state={postulated as boolean}
+                                        setState={setPostulated}
+                                        action={() => {
+                                            if (postulated) return depostulate();
+                                            postulate();
+                                        }}
+                                    />
                                 )
                         )
                         }

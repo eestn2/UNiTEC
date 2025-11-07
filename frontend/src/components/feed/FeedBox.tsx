@@ -2,7 +2,6 @@
  * @file FeedBox.tsx
  * @description Main feed component that displays job offers and notifications in a responsive layout.
  * Fetches job offers from the server and renders them alongside notifications and navigation.
- * @author Haziel Magallanes
  * @date May 11, 2025
  */
 
@@ -13,7 +12,6 @@ import Notification from "../UI/feed/Notification";
 import { ReactElement, useEffect, useState } from "react";
 import axios from "axios";
 import User from "../session/User";
-import { TypedResponseWNamedArray } from '../../types/Response';
 import type { offer } from '../../types/JobOfferTypes';
 import type { notification } from '../../types/notification';
 import no_notifications from '../../assets/icons/no-notis.svg';
@@ -21,6 +19,7 @@ import no_feed from '../../assets/icons/no-feed.svg';
 import LoadingScreen from '../UI/LoadingScreens/LoadingScreen';
 import '../../styles/feed/feedbox.css';
 import '../../styles/notifications/notifications.css';
+import defaultError from '../../global/messages/defaultError';
 
 /**
  * A React functional component that renders the main feed with job offers and notifications.
@@ -44,17 +43,12 @@ function FeedBox() {
   // Fetch job offers from the server
   const loadJobOffers = async () => { 
     try {
-      const { data: response } = await axios.get<TypedResponseWNamedArray<offer, "job_offers">>(
-        `/feed/job-offers.php`
-      );
-      if (response.status !== "success") {
-        console.error("Failed to load job offers:", response.message);
-      } else {
-        setJobOffers(response.data.job_offers);
-        setLoadingOffers(false);
-      }
+      const response = await axios.get(`/feed/job-offers.php`);
+      if (response) setJobOffers(response.data.data.job_offers);
     } catch (error) {
-      console.error("An error occurred while loading job offers:", error);
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
+    } finally {
       setLoadingOffers(false);
     }
   };
@@ -63,17 +57,16 @@ function FeedBox() {
   const loadNotifications = async () => {
     try {
       const userId = User.data.id;
-      const { data: response } = await axios.get<TypedResponseWNamedArray<notification, "notifications">>(`/user/retrieve-notifications.php?user_id=${userId}`);
-      if (response.status !== "success") {
-        console.error("Failed to load notifications:", response.message);
-      } else {
-        const notificationsList = response.data.notifications.map((notif) => (
+      const response = await axios.get(`/user/retrieve-notifications.php?user_id=${userId}`);
+      if (response) {
+        const notificationsList = response.data.data.notifications.map((notif: notification) => (
           <Notification key={notif.id} width={300} height={60} notificationId={notif.id} />
         ));
         setNotifications(notificationsList);
       }
     } catch (error) {
-      console.error("An error occurred while loading notifications:", error);
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
     }
   };
 
@@ -90,7 +83,6 @@ function FeedBox() {
         height={600}
         width={880}
         className="feedbox"
-        style={{height: 600}}
       >
         <div className="feed-title">
           Ofertas de Trabajo

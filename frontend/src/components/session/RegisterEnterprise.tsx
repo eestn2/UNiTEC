@@ -67,11 +67,8 @@ const RegisterEnterprise: React.FC = () => {
         }
     }
 
-    function valueForm(): boolean {
-        if (!isCorrect || !isCorrectPass || email.trim() === "" || password.trim() === "" || enterpriseName.trim() === "" || description.trim() === "") {
-            return false
-        }
-        return true
+    function valueForm() : boolean{
+        return !(!isCorrect || !isCorrectPass || email.trim() === "" || password.trim() === "" || enterpriseName.trim() === "" || description.trim() === "");
     }
 
     const handleRegister = async (event: FormEvent) => {
@@ -86,15 +83,13 @@ const RegisterEnterprise: React.FC = () => {
                 user_type: 1, // 1 for enterprise
                 description: description
             });
-            if (response.status === 200 && response.data.status === "success") {
-                navigate('/')
-            } else {
-                console.error("Register failed:", await response.data.message);
-                setError(<span className={'error'}>{response.data.message}</span>);
+            if (response) {
+                alert("Registro exitoso. Debe esperar aprobación de su cuenta, porfavor sea paciente.");
+                navigate('/');
             }
         } catch (error) {
-            console.error("An error occurred during register:", error);
-            setError(<span className={'error'}>No se ha podido establecer la conexión. Intentelo de nuevo más tarde.</span>);
+            if (axios.isAxiosError(error)) return setError(<span className="error">{error.response?.data?.message || "No se ha podido registrar. Intente de nuevo más tarde."}</span>);
+            setError(<span className="error">No se ha podido establecer la conexión. Intentelo de nuevo más tarde.</span>);
         }
     };
 

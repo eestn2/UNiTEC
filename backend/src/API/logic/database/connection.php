@@ -4,7 +4,6 @@
  * @description Establishes a secure PDO connection to the MySQL database using environment variables.
  * Loads configuration from .env, supports production and development environments, and sets recommended PDO options for security and performance.
  * Throws HTTP 500 errors and logs details on failure, without exposing sensitive information to the client.
- * @author Haziel Magallanes
  * @date May 14, 2025
  *
  * Usage:

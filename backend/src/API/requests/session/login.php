@@ -3,7 +3,6 @@
  * @file login.php
  * @description API endpoint for user login. Validates credentials and returns user data on success.
  * Handles POST requests, checks email and password and returns a standardized JSON response.
- * @author Haziel Magallanes, Federico Nicolás Martínez.
  * @date May 11, 2025
  *
  * Usage:
@@ -12,7 +11,7 @@
  * Example:
  *   POST /src/php/requests/session/login.php
  *   Body: { "email": "user@example.com", "password": "password123" }
- *   Response: { "status": "success", "message": "...", "user": { ...user fields... } }
+ *   Response: { "status": OK, "message": "...", "data": null }
  */
 
 
@@ -21,10 +20,11 @@ require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST") return_response("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") return_response(status::OK, "Preflight OK.");
+if ($_SERVER["REQUEST_METHOD"] !== "POST" ) return_response(status::METHOD_NOT_ALLOWED, "Metodo no permitido.");
 
 $data = json_decode(file_get_contents("php://input"));
-if (!isset($data->email) || !isset($data->password)) return_response("failed", "Faltan datos.", null);
+if (!isset($data->email) || !isset($data->password)) return_response(status::BAD_REQUEST, "Faltan datos.");
 
 $email = $data->email;
 $password = $data->password;
@@ -34,11 +34,11 @@ $stmt = $connection->prepare("SELECT * FROM users WHERE email = ?");
 $stmt->execute([$email]);
 $user = $stmt->fetch();
 
-if (!$user) return_response("failed", "Dirección de correo electronico no registrada.", null);
+if (!$user) return_response(status::NOT_FOUND, "Dirección de correo electronico o contraseña incorrectos.");
 
 
-if (!password_verify($password, $user["password"])) return_response("failed", "Contraseña incorrecta.", null);
-if ($user["enabled"] == 0) return_response("failed", "Usuario no habilitado.", null);
+if (!password_verify($password, $user["password"])) return_response(status::NOT_FOUND, "Dirección de correo electronico o contraseña incorrectos.", null);
+if ($user["enabled"] == 0) return_response(status::FORBIDDEN, "Usuario no habilitado.");
 
 // Store user data in session (do not include password)
 $_SESSION['user'] = [
@@ -56,5 +56,5 @@ $_SESSION['user'] = [
     "status" => $user["status"]
 ];
 
-return_response("success", "Inicio de sesión exitoso.", null);
+return_response(status::OK, "Inicio de sesión exitoso.");
 ?>

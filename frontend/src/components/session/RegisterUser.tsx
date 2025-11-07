@@ -12,6 +12,8 @@ import Tag2 from "../UI/Tag2";
 import '../../styles/SeeEtiquetas.css'
 import { getStates } from "../../global/function/getStates";
 import { sortByName } from "../../global/function/sortByName";
+import defaultError from "../../global/messages/defaultError";
+
 type SelectedItem = {
   id: number;
   name: string;
@@ -113,9 +115,7 @@ function RegisterUser() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-
-    // Prepare languages and tags data from selected items
+    
     const languagesData = selectedItems
       .filter(item => item.block === "Idiomas")
       .reduce((acc, item) => {
@@ -140,25 +140,15 @@ function RegisterUser() {
       tags_levels: tagsData.levels
     };
 
-
     // Validation
-    const requiredFields = [
-      "name", "birth_date", "email",
-      "password", "confirm_password",
-      "description", "user_type", "status_id"
-    ];
-    const newErrors: any = {};
+    const requiredFields = ["name", "birth_date", "email", "password", "confirm_password", "description", "user_type", "status_id"];
+    const newErrors: Record<string, string> = {};
     let hasError = false;
     const camposInvalidos = ["user_type", "status_id"];
 
     requiredFields.forEach((field) => {
       const value = formToSend[field as keyof typeof formToSend];
-      if (
-        value === null ||
-        value === undefined ||
-        (typeof value === "string" && value.trim() === "") ||
-        (camposInvalidos.includes(field) && value === 0)
-      ) {
+      if (value === null || value === undefined || (typeof value === "string" && value.trim() === "") || (camposInvalidos.includes(field) && value === 0)) {
         newErrors[field] = "Este campo es obligatorio";
         hasError = true;
       }
@@ -178,37 +168,33 @@ function RegisterUser() {
     if (hasError) return;
 
     try {
-      const res = await axios.post("/session/user-register.php", formToSend);
-      if (res.data.status === "success") {
+      const response = await axios.post("/session/user-register.php", formToSend);
+      if (response) {
+        alert("Registro exitoso. Debe esperar aprobación de su cuenta, porfavor sea paciente.");
         navigate("/");
-      } else {
-        setError(res.data.message || "Error en el registro");
       }
-    } catch {
-      setError("No se pudo registrar. Intente de nuevo más tarde.");
+    } catch (error) {
+      if (axios.isAxiosError(error)) return setError(error.response?.data?.message || defaultError);
+      setError(defaultError);
     }
-  };
-
+  };  
   const loadLanguages = async () => {
     try {
       const response = await axios.get('/function/get-languages.php');
-      if (response.status === 200 && response.data.status === "success") {
-        setLanguages(sortByName(response.data.data.languages));
-
-      }
+      if (response) setLanguages(sortByName(response.data.data.languages));
     } catch (error) {
-      console.error("Error loading languages:", error);
+      if (axios.isAxiosError(error)) return setError(error.response?.data?.message || defaultError);
+      setError(defaultError);
     }
   };
 
   const loadTags = async () => {
     try {
       const response = await axios.get('/function/get-tags.php');
-      if (response.status === 200 && response.data.status === "success") {
-        setTags(sortByName(response.data.data.tags));
-      }
+      if (response) setTags(sortByName(response.data.data.tags));
     } catch (error) {
-      console.error("Error loading tags:", error);
+      if (axios.isAxiosError(error)) return setError(error.response?.data?.message || defaultError);
+      setError(defaultError);
     }
   };
 

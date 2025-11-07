@@ -6,6 +6,7 @@ import ReportRow from "../UI/admin/ReportRow";
 import axios from "axios";
 import { getReportReason } from "../../global/function/getReportReason";
 import { useNavigate } from "react-router-dom";
+import defaultError from "../../global/messages/defaultError";
 
 interface Report {
   id: number;
@@ -24,49 +25,56 @@ const AdminReport: React.FC = () => {
   const loadReports = async () => {
     try {
       const response = await axios.get('/admin/get-reports.php');
-        if (response.status !== 200 || response.data.status !== "success") {
-          console.error("Failed to load reports:", response.data.message);
-        } else {
-          const reportsList = response.data.data.reports.map((report: any) => ({
-            id: report.id,
-            reported_id: report.reported_id,
-            reporter_id: report.reporter_id,
-            reported_email: report.reported_email,
-            reporter_email: report.reporter_email,
-            reason: report.reason,
-          }));
-          setReports(reportsList);
+      if (response) {
+
+        const reportsList = response.data.data.reports.map((report: Report) => ({
+          id: report.id,
+          reported_id: report.reported_id,
+          reporter_id: report.reporter_id,
+          reported_email: report.reported_email,
+          reporter_email: report.reporter_email,
+          reason: report.reason,
         }
+        )
+        );
+        setReports(reportsList);
+      } 
     } catch (error) {
-      console.error("An error occurred while loading reports:", error);
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
     }
   };
 
   const handleDiscardReport = async (id: number) => {
-      const response = await axios.delete('/admin/delete_report.php', {
-        data :{id :id  }
+    try {
+      const response = await axios.delete('/admin/delete-report.php', {
+        data: { id: id }
       })
-      if (response.status !== 200 || response.data.status !== "success") {
-        console.error("Failed to discard report:", response.data.message);
-      } else {
-        console.log("Report discarded successfully:", response.data.message);
-        await loadReports(); 
-      }
+      if (response) alert("Reporte descartado correctamente");
+      await loadReports();
+    } catch (error) {
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
+    }
 
   }
 
-  const handleBanUser = async ( reportedId: number ,id: number) => {
-      const response = await axios.delete('/admin/ban_user.php', {
-        data :{
+  const handleBanUser = async (reportedId: number, id: number) => {
+    try {
+      const response = await axios.delete('/admin/ban-user.php', {
+        data: {
           reportId: id,
-          id :reportedId  }
+          id: reportedId
+        }
       })
-      if (response.status !== 200 || response.data.status !== "success") {
-        console.error("Failed to discard report:", response.data.message);
-      } else {
-        console.log("Report discarded successfully:", response.data.message);
-        await loadReports(); 
+      if (response){
+        await loadReports();
+        alert("Usuario baneado correctamente");
       }
+    } catch (error) {
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
+    }
   }
 
 

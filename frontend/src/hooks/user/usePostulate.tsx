@@ -1,6 +1,7 @@
 
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import defaultError from '../../global/messages/defaultError';
 
 export function usePostulate(offerID: number) {
   const [postulated, setPostulated] = useState<boolean | undefined>(undefined);
@@ -8,19 +9,11 @@ export function usePostulate(offerID: number) {
 
   const isPostulated = async () => {
     try {
-      const response = await axios.get('/user/postulated.php', {
-        params: {
-          offer_id: offerID,
-        },
-      });
-      if (response.data.status === "success") {
-        return response.data.data.postulated;
-      } else {
-        console.error("Failed to check postulation status:", response.data.message);
-        return undefined;
-      }
+      const response = await axios.get('/user/postulated.php', { params: { offer_id: offerID } });
+      if (response) return response.data.data.postulated;
     } catch (error) {
-      console.error("An error occurred while checking postulation status:", error);
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
       return undefined;
     }
   };
@@ -33,29 +26,26 @@ export function usePostulate(offerID: number) {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offerID]);
+
   const postulate = async () => {
     if (postulated) return;
     try {
-      await axios.post('/user/postulate.php', {
-        offer_id: offerID,
-      });
+      await axios.post('/user/postulate.php', { offer_id: offerID });
       setPostulated(true);
     } catch (error) {
-      console.error("Failed to postulate:", error);
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
     }
   };
 
   const depostulate = async () => {
     if (!postulated) return;
     try {
-      await axios.delete('/user/depostulate.php', {
-        data: {
-          offer_id: offerID,
-        },
-      });
+      await axios.delete('/user/depostulate.php', { data: { offer_id: offerID } });
       setPostulated(false);
     } catch (error) {
-      console.error("Failed to depostulate:", error);
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
     }
   };
 

@@ -2,7 +2,6 @@
  * @file JobOffer.tsx
  * @description Window with enterprise user and profile picture as sort of a title.
  *              Expands AppWindow height to 'auto' when "Ver más" is clicked.
- * @author Haziel Magallanes
  * @date May 5, 2025
  */
 
@@ -21,6 +20,7 @@ import { UserTypeEnum } from "../../../types/user";
 import { usePostulate } from "../../../hooks/user/usePostulate";
 import ConfirmModal from "../Modals/ConfirmModal";
 import ProfilePicture from "../user/ProfilePicture";
+import defaultError from "../../../global/messages/defaultError";
 
 /**
  * Props for the `JobOffer` component.
@@ -111,26 +111,17 @@ const JobOffer: React.FC<JobOfferProps> = ({
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const handleDelete = async () => {
         try {
-            const response = await axios.delete("/enterprise/delete-offer.php", {
-                data: { id: offerId },
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            const result = response.data;
-            if (result.status === "success") {
+            const response = await axios.delete("/enterprise/delete-offer.php", { data: { id: offerId } });
+            if (response) {
                 alert("Oferta eliminada con éxito.");
                 if (onDelete) onDelete(offerId);
                 setShowDeleteConfirm(false);
-            } else {
-                alert(result.message);
             }
-        } catch {
-            alert("Error de red al eliminar la oferta.");
+        } catch (error) {
+            if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+            alert(defaultError);
         }
     };
-
-
 
     let extraButton: React.ReactNode = undefined;
     const { postulated, setPostulated, postulate, depostulate, loading } = usePostulate(offerId);
@@ -154,10 +145,7 @@ const JobOffer: React.FC<JobOfferProps> = ({
                     state={postulated}
                     setState={setPostulated}
                     action={() => {
-                        if (postulated) {
-                            depostulate();
-                            return;
-                        }
+                        if (postulated) return depostulate();
                         postulate();
                     }}
                 />

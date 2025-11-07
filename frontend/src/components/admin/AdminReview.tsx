@@ -5,6 +5,7 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import ReviewRow from "../UI/admin/ReviewRow";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import defaultError from "../../global/messages/defaultError";
 
 type Review = {
   id: number;
@@ -24,22 +25,22 @@ const AdminReview: React.FC = () => {
   const loadReviews = async () => {
     try {
       const response = await axios.get('/admin/get-reviews.php');
-        if (response.status !== 200 || response.data.status !== "success") {
-          console.error("Failed to load reports:", response.data.message);
-        } else {
-          const reviewsList = response.data.data.reviews.map((review: any) => ({
-            id: review.id,
-            reviewed_id: review.reviewed_id,
-            user_id: review.user_id,
-            user_type: review.user_type,
-            user_email: review.user_email,
-            reviewed_email: review.reviewed_email,
-            text: review.text,
-          }));
-          setReviews(reviewsList);
-        }
+  
+      if (response) {
+        const reviewsList = response.data.data.reviews.map((review: Review) => ({
+          id: review.id,
+          reviewed_id: review.reviewed_id,
+          user_id: review.user_id,
+          user_type: review.user_type,
+          user_email: review.user_email,
+          reviewed_email: review.reviewed_email,
+          text: review.text,
+        }));
+        setReviews(reviewsList)
+      }
     } catch (error) {
-      console.error("An error occurred while loading reports:", error);
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
     }
   };
   useEffect(() => {
@@ -73,6 +74,11 @@ const AdminReview: React.FC = () => {
             overflowY: "scroll",
             height : `${TranslateFigmaCoords.translateFigmaX(487)}px`,
           }} >
+            {reviews.length === 0 && (
+              <p style={{ textAlign: "center", color: "#305894" }}>
+                No hay reseñas para mostrar.
+              </p>
+            )}
             {reviews.map((review) => (
               <ReviewRow
                 key={review.id}

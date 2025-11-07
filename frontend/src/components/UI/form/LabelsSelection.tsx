@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MinimalistSearchBar from "../../UI/form/MinimalSearchBar";
 import "../../../styles/Label.css";
 import Agregar from "../../../assets/icons/add.svg"; 
@@ -105,7 +105,7 @@ const LabelsSelection: React.FC<LabelsSelectionProps> = ({
   };
 
   // Sync active tab with external prop
-  React.useEffect(() => {
+  useEffect(() => {
     if (typeof activeTab === 'string') {
       const idx = blocks.findIndex(b => b.titulo === activeTab);
       if (idx >= 0 && idx !== activeIndex) setActiveIndex(idx);
