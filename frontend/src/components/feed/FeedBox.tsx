@@ -83,7 +83,6 @@ function FeedBox() {
         height={600}
         width={880}
         className="feedbox"
-        style={{height: 600}}
       >
         <div className="feed-title">
           Ofertas de Trabajo
