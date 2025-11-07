@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { user } from "../../../types/user";
-import { getTranslates } from "../../../global/function/getTranslates";
 import defaultProfilePicture from '../../../assets/defaults/profile-picture/1.svg'; 
 import defaultError from "../../../global/messages/defaultError";
 
@@ -12,10 +11,9 @@ interface ProfilePictureProps extends React.ImgHTMLAttributes<HTMLImageElement> 
     vertical?: boolean;
 }
 
-const ProfilePicture: React.FC<ProfilePictureProps> = ({ userId, size = '10px', vertical = false, style }) => {
+const ProfilePicture: React.FC<ProfilePictureProps> = ({ userId, size = '10px', style }) => {
     const navigate = useNavigate();
     const [User, setUser] = useState<user | null>(null);
-    const [translateX] = getTranslates(vertical)
 
     useEffect(() => {
         axios.get(`/user/user-info.php?id=${userId}`)

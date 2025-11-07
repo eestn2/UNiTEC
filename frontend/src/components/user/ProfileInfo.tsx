@@ -144,7 +144,7 @@ const ProfileInfo: React.FC = () => {
   }
   return (
     <div>
-      <Logo className='watermark' />
+      <Logo className='watermark' style={{borderTopRightRadius: 16, borderBottomRightRadius: 16}}/>
       <AppWindow
         width={isEmpresaOrAdmin ? 600 : windowWidth}
         height={isPortrait ? undefined : 680}

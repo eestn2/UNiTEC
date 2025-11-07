@@ -59,7 +59,7 @@ const Logo: React.FC<LogoProps> = ({
     logo_text_size = 38, 
     style,
     className
-}) => { 
+}) => {
     const navigate = useNavigate();
     return (
         <div
@@ -69,6 +69,7 @@ const Logo: React.FC<LogoProps> = ({
                 boxShadow: "none", 
                 width: width,
                 height: height,
+                backgroundColor: 'var(--window-outer)',
                 ...style
             }}
             className={className || 'app-window'}
