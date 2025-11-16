@@ -2,7 +2,6 @@
  * @file User.ts
  * @description Singleton class for managing and accessing user session data throughout the application.
  * Provides methods to set and retrieve user data in a type-safe manner.
- * @author Haziel Magallanes
  * @date May 11, 2025
  */
 
@@ -26,7 +25,6 @@ import type { user } from "../../types/user";
  * User.set({ id: 1, name: "Alice", ... });
  * console.log(User.data.name); // "Alice"
  * ```
- * @author Haziel Magallanes
  */
 class User {
     private user_data: user | null = null;

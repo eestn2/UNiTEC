@@ -3,7 +3,6 @@
  * @description Interface for creating responsive UI components with consistent props.
  * @date May 11, 2025
  * 
- * @Author: Haziel Magallanes
  */
 
 /** 
@@ -23,7 +22,6 @@ export type ResponsiveUnit = `${number}${'vw' | 'vh' | 'dvh' | '%' | 'px'}` | 'a
  * @property {string} [className] - Custom CSS classes to apply to the component.
  * @property {React.RefObject<HTMLDivElement>} [ref] - A ref to the component for direct DOM manipulation.
  *
- * @author Haziel Magallanes
  */
 
 export default interface ResponsiveComponent {

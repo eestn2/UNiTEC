@@ -2,7 +2,6 @@
  * @file AppWindow.tsx
  * @description A reusable React component for creating responsive windows in the app.
  * Converts width and height from pixels to responsive units based on screen size.
- * @author Haziel Magallanes
  * @date April 29, 2025
  */
 import React from "react";
@@ -29,7 +28,6 @@ import useResponsiveDimensions from "../../hooks/responsive/useResponsiveDimensi
  *   <p>Hello, world!</p>
  * </AppWindow>
  * ```
- * @Author: Haziel Magallanes
  */
 const AppWindow: React.FC<ResponsiveComponent> = ({ height = '10px', width = '10px', vertical = false, ref, children, style, className }) => {
     const { finalHeight, finalWidth } = useResponsiveDimensions({

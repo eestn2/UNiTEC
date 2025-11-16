@@ -2,7 +2,6 @@
  * @file user.ts
  * @description Type definition for User objects used in the application.
  * Represents the structure of a user as stored in the session and received from the backend.
- * @author Haziel Magallanes
  * @date May 19, 2025
  */
 

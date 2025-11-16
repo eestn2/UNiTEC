@@ -32,7 +32,6 @@ import defaultError from '../../global/messages/defaultError';
  * ```tsx
  * <FeedBox />
  * ```
- * @author Haziel Magallanes
  */
 function FeedBox() {
   // State variables for job offers and notifications

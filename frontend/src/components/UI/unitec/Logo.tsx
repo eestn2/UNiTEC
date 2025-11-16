@@ -2,7 +2,6 @@
  * @file Logo.tsx
  * @description A reusable React component that displays the Unitec logo and text in a responsive window.
  * Converts width, height, and logo sizes from pixels to responsive units based on screen size.
- * @author Haziel Magallanes
  * @date May 11, 2025
  */
 
@@ -22,7 +21,6 @@ import { useNavigate } from "react-router-dom";
  * @property {number} [logo_size=140] - The size of the logo icon in Figma coordinates.
  * @property {number} [logo_text_size=38] - The size of the logo text in Figma coordinates.
  * 
- * @author Haziel Magallanes
  */
 interface LogoProps extends ResponsiveComponent {
     /** The size of the logo icon in Figma coordinates. */
@@ -50,7 +48,6 @@ interface LogoProps extends ResponsiveComponent {
  * ```tsx
  * <Logo width={210} height={210} logo_size={140} logo_text_size={38} />
  * ```
- * @author Haziel Magallanes
  */
 const Logo: React.FC<LogoProps> = ({
     width = 210,

@@ -2,7 +2,6 @@
  * @file TextBox.tsx
  * @description A reusable React component for creating responsive text areas in the app.
  * Converts width and height from pixels to responsive units based on screen size.
- * @author Daviel Díaz Gonzáles
  * @date May 11, 2025
  */
 
@@ -16,7 +15,6 @@ import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
  * @property {string} name - The name attribute for the TextArea.
  * @property {string} placeholder - The placeholder text for the TextArea.
  * @property {ChangeEventHandler<HTMLTextAreaElement>} [onChange] - Change event handler for the TextArea.
- * @author Daviel Díaz Gonzáles
  */
 interface TextBoxProps extends ResponsiveComponent {
     /*** The name attribute for the TextArea. */
@@ -57,7 +55,6 @@ interface TextBoxProps extends ResponsiveComponent {
  *   onChange={(e) => console.log(e.target.value)}
  * />
  * 
- * @author Daviel Díaz Gonzáles
  */
 const TextBox: React.FC<TextBoxProps> = ({ width = '50px', height = '10px', name, placeholder = "Text Box", vertical = false, style, className, onChange, value }) => {
  

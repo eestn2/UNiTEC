@@ -37,7 +37,6 @@ import defaultError from "../../../global/messages/defaultError";
  * @property {React.CSSProperties} [style] - Additional inline styles for the window.
  * @property {string} [className] - Additional CSS class names for the window.
  * 
- * @author Haziel Magallanes
  */
 interface JobOfferProps extends ResponsiveComponent {
     /** The ID of the author (enterprise user) whose details are displayed. */
@@ -80,7 +79,6 @@ interface JobOfferProps extends ResponsiveComponent {
  * />
  * ```
  * When the description overflows, a "Ver más" button appears. Clicking it expands the AppWindow to show all content.
- * @author Haziel Magallanes
  */
 const JobOffer: React.FC<JobOfferProps> = ({    
     height = 10,

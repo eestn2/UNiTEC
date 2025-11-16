@@ -4,7 +4,6 @@
  * The button adapts its size responsively based on Figma design coordinates and can display different icons, text, and colors for each state.
  * Integrates with the ActionButton component and supports all responsive props defined in {@link ResponsiveComponent}.
  *
- * @author Haziel Magallanes
  * @date June 26, 2025
  */
 import { ReactNode } from "react";
@@ -27,7 +26,6 @@ import ActionButton from "./ActionButton";
  * @property {(state: boolean) => void} [action] - Optional callback triggered when the button is clicked and state changes.
  * @property {ReactNode} [children] - Optional children to render inside the button.
  *
- * @author Haziel Magallanes
  */
 interface StateButtonProps extends ResponsiveComponent {
     width?: number;
@@ -78,7 +76,6 @@ interface StateButtonProps extends ResponsiveComponent {
  * />
  * ```
  *
- * @author Haziel Magallanes
  */
 const StateButton: React.FC<StateButtonProps> = ({
     height = 45,

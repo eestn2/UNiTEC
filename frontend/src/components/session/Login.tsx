@@ -2,7 +2,6 @@
  * @file Login.tsx
  * @description Login page component for the application. It includes a form for user login, input fields for email and password, and a button to submit the form.
  * It also includes links for password reset and user registration. The component is styled to be responsive and centered on the screen.
- * @author Haziel Magallanes
  * @date May 11, 2025
  */
 
@@ -28,7 +27,6 @@ import styles from './login.module.css'
  * ```tsx
  * <Login />
  * ```
- * @author Haziel Magallanes
  */
 const Login: React.FC = () => {
     // State variables for form inputs and error messages

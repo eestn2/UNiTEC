@@ -4,7 +4,6 @@
  * It initializes the app, sets up Axios interceptors, and defines the routes for the application.
  * @date May 11, 2025
  * 
- * @Author: Haziel Magallanes
  */
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -47,7 +46,6 @@ import ReportUser from './UI/user/ReportUser';
  * @example
  * <App />
  * 
- * @Author: Haziel Magallanes
  */
 
 function App(): JSX.Element {

@@ -1,7 +1,6 @@
 /**
  * @file TranslateFigmaCoords.ts
  * @description Utility functions that convert Figma coordinates and sizes to current window size.
- * @author Haziel Magallanes
  */
 
 
@@ -79,7 +78,6 @@ function translateFigmaAlt(x: number, y: number): number[]{
 
 /**
  * Utility functions that convert Figma coordinates and sizes to current window size.
- * @author Haziel Magallanes
  */
 const TranslateFigmaCoords = {translateFigma, translateFigmaX, translateFigmaY, translateFigmaAlt, translateFigmaXAlt, translateFigmaYAlt}
 export default TranslateFigmaCoords;

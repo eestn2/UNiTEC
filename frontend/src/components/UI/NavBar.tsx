@@ -1,7 +1,6 @@
 /**
  * @file NavBar.tsx
  * @description A reusable React component that renders the application's navigation bar with logo and icon buttons.
- * @author Daviel Díaz Gonzáles
  * @date May 11, 2025
  */
 
@@ -32,7 +31,6 @@ import { useState } from "react";
  * ```tsx
  * <NavBar />
  * ```
- * @author Daviel Díaz Gonzáles
  */
 
 

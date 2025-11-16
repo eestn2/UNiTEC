@@ -2,7 +2,6 @@
  * @file ActionButton.tsx
  * @description A reusable React component for rendering a responsive action button with customizable text and click handler.
  * Converts width and height from pixels to responsive units based on screen size.
- * @author Haziel Magallanes, Daviel Díaz Gonzáles
  * @date May 11, 2025
  */
 
@@ -24,7 +23,6 @@ import throbber from "../../assets/animated/Insider-loading.json";
  * @property style - Optional inline styles to apply to the button.
  * @property className - Optional custom CSS classes to apply to the button.
  * 
- * @author Haziel Magallanes, Daviel Díaz Gonzáles
  */
 export interface ActionButtonProps extends ResponsiveComponent {
     /** The text to display inside the button. */
@@ -59,7 +57,6 @@ export interface ActionButtonProps extends ResponsiveComponent {
  *   action={() => alert("Button clicked!")}
  * />
  * ```
- * @author Haziel Magallanes, Daviel Díaz Gonzáles
  */
 const ActionButton: React.FC<ActionButtonProps> = ({ height = '10px', loading = false, width = 'auto', action, text, style, className, children }) => {
     const animationDuration = 0.2; // seconds

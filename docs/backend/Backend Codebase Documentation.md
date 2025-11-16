@@ -79,7 +79,6 @@ src/
  * Handles PUT requests, verifies permissions, checks application ownership, and updates applicant status.
  * Ensures only enterprise users (user_type_id = 1) can accept applicants for their own job offers.
  * Rolls back on failure and returns a standardized JSON response.
- * @author Federico Nicolás Martínez
  * @date May 17, 2025
  */
 ```
@@ -98,7 +97,6 @@ src/
  * Handles PUT requests, verifies permissions, checks application ownership, and updates applicant status to rejected.
  * Ensures only enterprise users (user_type_id = 1) can reject applicants for their own job offers.
  * Rolls back on failure and returns a standardized JSON response.
- * @author Federico Nicolás Martínez
  * @date May 17, 2025
  */
 ```
@@ -117,7 +115,6 @@ src/
  * Handles DELETE requests, verifies user permissions, checks offer ownership, and deletes the offer if authorized.
  * Only enterprise users (user_type_id = 1) and administrators (user_type_id = 4) can delete job offers.
  * Returns a standardized JSON response indicating success or failure.
- * @author Federico Nicolás Martínez
  * @date May 17, 2025
  */
 ```
@@ -135,7 +132,6 @@ src/
  * @description API endpoint for marking a job offer as closed by its creator (enterprise).
  * Handles PUT requests, verifies that the user is the creator of the offer, and updates the offer status to closed.
  * Returns a standardized JSON response indicating success or failure.
- * @author Federico Nicolás Martínez
  * @date May 17, 2025
  */
 ```
@@ -153,7 +149,6 @@ src/
  * @description API endpoint to retrieve all active job offers created by a specific enterprise user.
  * Handles GET requests, validates the creator_id parameter, and returns all job offers with active status (status = 1) for the given creator.
  * Returns a standardized JSON response with the list of active offers or an error message.
- * @author Federico Nicolás Martínez
  * @date May 17, 2025
  */
 ```
@@ -171,7 +166,6 @@ src/
  * @description API endpoint for publishing a new job offer by an enterprise user.
  * Handles POST requests, verifies that the user is an enterprise, and inserts the new job offer into the database.
  * Returns a standardized JSON response indicating success or failure.
- * @author Federico Nicolás Martínez
  * @date May 17, 2025
  */
 ```
@@ -188,7 +182,6 @@ src/
  * @file job-offers.php
  * @description API endpoint to retrieve all job offers from the database.
  * Handles GET requests, queries the database for job offers, and returns a JSON response.
- * @author Haziel Magallanes
  * @date May 11, 2025
  */
 ```
@@ -206,7 +199,6 @@ src/
  * @description API endpoint for adding a new language to the system. Only administrators are authorized to perform this action.
  * Handles POST requests, verifies admin permissions, and inserts the new language into the database.
  * Returns a standardized JSON response indicating success or failure.
- * @author Federico Nicolás Martínez
  * @date May 17, 2025
  */
 ```
@@ -224,7 +216,6 @@ src/
  * @description API endpoint for editing the name of a language. Only administrators are authorized to perform this action.
  * Handles PUT requests, verifies admin permissions, and updates the language name in the database.
  * Returns a standardized JSON response indicating success or failure.
- * @author Francesco Sidotti
  * @date May 17, 2025
  */
 ```
@@ -242,7 +233,6 @@ src/
  * @description API endpoint for adding a new tag to the system. Only administrators are authorized to perform this action.
  * Handles POST requests, verifies admin permissions, and inserts the new tag into the database.
  * Returns a standardized JSON response indicating success or failure.
- * @author Francesco Sidotti
  * @date May 17, 2025
  */
 ```
@@ -260,7 +250,6 @@ src/
  * @description API endpoint for editing the name of a tag. Only administrators are authorized to perform this action.
  * Handles PUT requests, verifies admin permissions, and updates the tag name in the database.
  * Returns a standardized JSON response indicating success or failure.
- * @author Francesco Sidotti
  * @date May 17, 2025
  */
 ```
@@ -278,7 +267,6 @@ src/
  * @description API endpoint for administrators to accept (activate) new user accounts.
  * Handles PUT requests, verifies admin permissions, and updates the 'enabled' status of the target user.
  * Returns a standardized JSON response indicating success or failure.
- * @author Federico Nicolás Martínez
  * @date May 17, 2025
  *
  * Usage:
@@ -305,7 +293,6 @@ src/
  * @file get-notification-data.php
  * @description API endpoint to retrieve all data for a specific notification by its ID.
  * Handles GET requests, validates input, queries the database, and returns a JSON response with the notification data.
- * @author Haziel Magallanes
  * @date May 14, 2025
  */
 ```
@@ -322,7 +309,6 @@ src/
  * @file get-languages.php
  * @description API endpoint to retrieve all available languages from the database.
  * Handles GET requests, queries the languages table, and returns a standardized JSON response with the list of languages or an error message.
- * @author Francesco Sidotti
  * @date May 17, 2025
  *
  * Usage:
@@ -346,7 +332,6 @@ src/
  * @file login.php
  * @description API endpoint for user login. Handles POST requests, validates credentials, and returns user data and status.
  * Returns a standardized JSON response with user info or error message.
- * @author Haziel Magallanes
  * @date May 11, 2025
  */
 ```
@@ -363,7 +348,6 @@ src/
  * @file user-register.php
  * @description API endpoint for registering a new user (student). Handles POST requests, validates input, checks for duplicate emails, inserts user data and related languages/tags, sends a confirmation email, and logs the registration.
  * Uses transactions for data integrity and returns standardized JSON responses.
- * @author Federico Nicolás Martínez
  * @date May 11, 2025
  */
 ```
@@ -382,7 +366,6 @@ src/
  * Handles PATCH requests, validates the current password, checks new password requirements, and updates the password in the database.
  * Ensures the new password is not the same as the current one and meets minimum security requirements.
  * Returns a standardized JSON response indicating success or failure.
- * @author Federico Nicolás Martínez
  * @date May 17, 2025
  *
  * Usage:
@@ -410,7 +393,6 @@ src/
  * @file retrieve-notifications.php
  * @description API endpoint to retrieve all notifications for a given user ID.
  * Handles GET requests, validates input, queries the database, and returns a JSON response with notifications.
- * @author Haziel Magallanes
  * @date May 14, 2025
  */
 ```
@@ -426,8 +408,7 @@ src/
 /**
  * @file user-info.php
  * @description API endpoint to retrieve a user's name and profile picture by user ID.
- * Handles GET requests, validates input, queries the database, and returns a JSON response.
- * @author Haziel Magallanes, Federico Nicolas Martinez.
+ * Handles GET requests, validates input, queries the database, and returns a JSON response., Federico Nicolas Martinez.
  * @date May 11, 2025
  */
 ```
@@ -446,7 +427,6 @@ src/
  * Handles GET requests, verifies that the user is a postulante (user_type_id = 2), and returns all their active applications.
  * Joins with applications and application_statuses tables to provide detailed information about each application.
  * Returns a standardized JSON response with the list of applications or an error message.
- * @author Federico Nicolás Martínez
  * @date May 17, 2025
  *
  * Usage:
@@ -473,7 +453,6 @@ src/
  * Handles PUT requests, validates input, and updates allowed user fields in the database.
  * Only updates fields that are present in the request and allowed for editing.
  * Returns a standardized JSON response indicating success or failure, and returns the updated user data on success.
- * @author Federico Nicolás Martínez
  * @date May 17, 2025
  *
  * Usage:
@@ -502,7 +481,6 @@ src/
  * @description Utility function to check if a user is an administrator.
  * Queries the database for the user's type and returns true if the user is an admin (user_type_id = 4).
  * Used to restrict access to admin-only API endpoints and actions.
- * @author Francesco Sidotti
  * @date May 17, 2025
  */
 ```
@@ -518,7 +496,6 @@ src/
 /**
  * @file security_functions.php
  * @description Contains security-related functions for password encryption and decryption.
- * @author Haziel Magallanes
  * @date May 14, 2025
  *
  * Usage:
@@ -545,7 +522,6 @@ src/
  * Deletes job offers with status = 0 (inactive) that are older than a specified number of days (default: 30).
  * Intended for use by administrators or as a scheduled maintenance task.
  * Returns a standardized JSON response indicating the number of deleted offers or an error message.
- * @author Federico Nicolás Martínez
  * @date May 17, 2025
  */
 ```
@@ -563,7 +539,6 @@ src/
  * @description Utility function to extract and sanitize user data from a request payload.
  * Converts and trims string fields, casts booleans and integers, and ensures all expected user fields are present.
  * Used to standardize user data input before database operations or further validation.
- * @author Federico Nicolás Martínez
  * @date May 17, 2025
  */
 ```
@@ -595,7 +570,6 @@ src/
  * @file send_email.php
  * @description Secure and standardized function to send emails using PHPMailer. 
  *              Returns true on success, false on failure. Logs errors if sending fails.
- * @author Haziel Magallanes
  * @date May 12, 2025
  *
  * Usage:
@@ -615,7 +589,6 @@ src/
 /**
  * @file send_notification.php
  * @description Utility function to log notifications into the database. Supports different notification types and messages.
- * @author Haziel Magallanes
  * @date May 14, 2025
  *
  * Usage:

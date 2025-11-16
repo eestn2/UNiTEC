@@ -89,7 +89,6 @@ src/
  * @file Label.tsx
  * @description A reusable React component for displaying a styled label with optional delete functionality.
  * Converts width and height from Figma units to responsive pixels based on screen size.
- * @author Daviel Díaz Gonzáles
  * @date May 11, 2025
  */
 ```
@@ -106,7 +105,6 @@ src/
  * @file LabelsContainer.tsx
  * @description A reusable React component for displaying a styled label with optional delete functionality.
  * Converts width and height from Figma units to responsive pixels based on screen size.
- * @author Daviel Díaz Gonzáles
  * @date May 11, 2025
  */
 ```
@@ -122,7 +120,6 @@ src/
  * @file LabelsSelection.tsx
  * @description A reusable React component for selecting languages and labels with checkboxes in a responsive layout.
  * Converts width and height from pixels to responsive units based on screen size.
- * @author Daviel Díaz Gonzáles
  * @date May 11, 2025
  */
 ```
@@ -138,7 +135,6 @@ src/
  * @file InputField.tsx
  * @description A reusable React component for creating responsive input fields in the app.
  * Converts width and height from pixels to responsive units based on screen size.
- * @author Haziel Magallanes, Daviel Díaz Gonzáles
  * @date May 11, 2025
  */
 ```
@@ -156,7 +152,6 @@ src/
  * @file TextBox.tsx
  * @description A reusable React component for creating responsive text areas in the app.
  * Converts width and height from pixels to responsive units based on screen size.
- * @author Daviel Díaz Gonzáles
  * @date May 11, 2025
  */
 ```
@@ -174,7 +169,6 @@ src/
  * @file SelectionField.tsx
  * @description A reusable React component for creating responsive select dropdowns.
  * Converts width and height from pixels to responsive units based on screen size.
- * @author Daviel Díaz Gonzáles
  * @date May 11, 2025
  */
 ```
@@ -190,7 +184,6 @@ src/
  * @file Notification.tsx
  * @description A reusable React component for displaying notification messages in a responsive box.
  * Converts width from pixels to responsive units based on screen size.
- * @author Haziel Magallanes
  * @date May 6, 2025
  */
 ```
@@ -207,7 +200,6 @@ src/
  * @returns {JSX.Element} A styled window displaying the job offer with author info and overflow handling.
  * @example
  * <JobOffer authorId={1} title="Frontend Developer" description="Join our team!" width={300} height={200} />
- * @author Haziel Magallanes
  */
 ```
 
@@ -221,7 +213,6 @@ src/
  * @file Logo.tsx
  * @description A reusable React component that displays the Unitec logo and text in a responsive window.
  * Converts width, height, and logo sizes from pixels to responsive units based on screen size.
- * @author Haziel Magallanes
  * @date May 11, 2025
  */
 ```
@@ -239,7 +230,6 @@ src/
  * @file Footer.tsx
  * @description Responsive footer component with Unitec and EEST2 logos, contact info, and useful links.
  * Uses Figma coordinate translation for spacing and layout.
- * @author Haziel Magallanes
  * @date May 11, 2025
  */
 ```
@@ -259,7 +249,6 @@ src/
  * @file RegisterUser.tsx
  * @description A reusable React component for rendering a responsive student registration form.
  * Converts width and height from pixels to responsive units based on screen size.
- * @author Daviel Díaz Gonzáles
  * @date May 11, 2025
  */
 ```
@@ -276,7 +265,6 @@ src/
  * @returns {JSX.Element} A styled window containing the enterprise registration form.
  * @example
  * <RegisterEnterprise />
- * @author Daviel Díaz Gonzáles
  */
 ```
 
@@ -294,7 +282,6 @@ src/
  * @returns {JSX.Element} A responsive feed layout with job offers, notifications, and navigation bar.
  * @example
  * <FeedBox />
- * @author Haziel Magallanes
  */
 ```
 
@@ -314,7 +301,6 @@ src/
  * @returns An object containing the current `width` and `height` of the window.
  * @example
  * const windowSize = useWindowSize();
- * @Author Haziel Magallanes
  */
 ```
 
@@ -330,7 +316,6 @@ src/
  * @description Custom React hook for managing the state and logic of a job offer window.
  * Handles author fetching, overflow detection, expansion/collapse, and Figma coordinate translation.
  * Intended for use in both preview and full-view job offer components.
- * @author Haziel Magallanes
  * @date May 16, 2025
  */
 ```
@@ -349,7 +334,6 @@ src/
  * @file JobOffer.ts
  * @description Type definition for a job offer object as returned by the backend API.
  * Includes all attributes present in the job offer response.
- * @author Haziel Magallanes
  * @date May 17, 2025
  */
 ```
@@ -365,7 +349,6 @@ src/
  * @file notification.ts
  * @description Type definition for Notification objects used in the application.
  * Represents the structure of a notification as received from the backend.
- * @author Haziel Magallanes
  * @date May 6, 2025
  */
 ```
@@ -382,7 +365,6 @@ src/
  * @description Type definitions for standard API responses used throughout the application.
  * Provides a generic interface for typed backend responses, including status, message, and optional data.
  * Used by components such as Notification.tsx to ensure type safety when handling API data.
- * @author Haziel Magallanes
  * @date May 6, 2025
  */
 ```
@@ -400,7 +382,6 @@ src/
  * @file TranslateFigmaCoords.ts
  * @description Utility functions that convert Figma coordinates and sizes to current window size.
  * Provides `translateFigmaX`, `translateFigmaY`, and `translateFigma` for responsive UI scaling.
- * @author Haziel Magallanes
  */
 ```
 
@@ -416,7 +397,6 @@ src/
 /**
  * @file ResponsiveComponent.ts
  * @description Interface for creating responsive UI components with consistent props.
- * @author Haziel Magallanes
  */
 ```
 
@@ -439,7 +419,6 @@ src/
  * @file globals.css
  * @description Global stylesheet for UNITEC application. Defines CSS variables, resets, and base styles for consistent appearance across the app.
  * Includes color palette, font settings, and link styles.
- * @author Haziel Magallanes, Daviel Díaz Gonzáles
  * @date May 11, 2025
  */
 ```
@@ -453,7 +432,6 @@ src/
  * @file index.css
  * @description Main stylesheet for the UNiTEC application. Provides responsive, accessible, and visually consistent styles for all UI components.
  * Includes global variables, typography, layout, form elements, navigation, job offers, notifications, and utility classes.
- * @author Haziel Magallanes, Daviel Díaz Gonzáles
  * @date May 11, 2025
  */
 ```

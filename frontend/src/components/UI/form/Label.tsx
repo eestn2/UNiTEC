@@ -2,7 +2,6 @@
  * @file Label.tsx
  * @description A reusable React component for displaying a styled label with optional delete functionality.
  * Converts width and height from Figma units to responsive pixels based on screen size.
- * @author Daviel Díaz Gonzáles
  * @date May 11, 2025
  */
 
@@ -19,7 +18,6 @@ import useResponsiveDimensions from "../../../hooks/responsive/useResponsiveDime
  * @property {string} [className] - Additional CSS class names for the label container.
  * @property {() => void} [onDelete] - Optional callback function triggered when the delete button is clicked.
  * 
- * @author Daviel Díaz Gonzáles
  */
 interface LabelProps {
     /** The text to display inside the label. */
@@ -56,7 +54,6 @@ interface LabelProps {
  * ```tsx
  * <Label text="Etiqueta" width={80} height={30} onDelete={() => alert("Deleted!")} />
  * ```
- * @author Daviel Díaz Gonzáles
  */
 const Label: React.FC<LabelProps> = ({ text, width = 50, height = 20, vertical = false, style, className, onDelete }) => {
     const { finalHeight, finalWidth } = useResponsiveDimensions({
