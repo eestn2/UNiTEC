@@ -26,9 +26,8 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST" ) return_response(status::METHOD_NOT_A
 $data = json_decode(file_get_contents("php://input"));
 if (!isset($data->email) || !isset($data->password)) return_response(status::BAD_REQUEST, "Faltan datos.");
 
-$email = $data->email;
-$password = $data->password;
-
+$email = trim($data->email, ' ');
+$password = trim($data->password, ' ');
 // Search for user email in database
 $stmt = $connection->prepare("SELECT * FROM users WHERE email = ?");
 $stmt->execute([$email]);

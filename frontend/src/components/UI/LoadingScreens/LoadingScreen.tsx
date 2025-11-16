@@ -14,7 +14,7 @@ export default function LoadingScreen({ loadingContent = false, size = "1" }: Lo
   return (
     <div style={{
       ...styles.container,
-      ...(loadingContent ? { position: 'absolute', top: '25%', transform: `scale(${size})`,backgroundColor:"red" } : { height: '100vh' }),
+      ...(loadingContent ? { position: 'absolute', top: '25%', transform: `scale(${size})` } : { height: '100vh' }),
     }}>
       <div style={styles.maskWrapper}>
         <svg

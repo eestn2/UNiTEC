@@ -44,7 +44,7 @@ try {
             SELECT 1 FROM applicants a
             WHERE a.offer_id = o.id
                 AND a.user_id = :userId
-                AND a.status = 2
+                AND NOT a.status = 0
         )
         ORDER BY o.id DESC
     ";

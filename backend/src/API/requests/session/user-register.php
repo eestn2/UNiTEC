@@ -9,7 +9,7 @@
  *   Send a POST request with JSON body containing user registration data.
  *
  * Example:
- *   POST /src/php/requests/session/user-register.php
+ *   POST /src/API/requests/session/user-register.php
  *   Body: { "email": "user@example.com", "password": "password123", ... }
  *   Response: { "status": "success", "message": "...", ... }
  */
@@ -31,8 +31,8 @@ if (!isset($data->email) || !isset($data->password) || !isset($data->user_type) 
 $name = $data->name ?? null;
 $user_age = $data->birth_date ?? date('Y-m-d H:i:s');
 $user_location = "" . ($data->location ?? null);
-$user_email = $data->email;
-$user_password = password_hash($data->password, PASSWORD_DEFAULT);
+$user_email = trim($data->email, ' ');
+$user_password = password_hash(trim($data->password, ' '), PASSWORD_DEFAULT);
 $user_description = $data->description ?? null;
 $user_last_update_date = date('Y-m-d H:i:s');
 $user_profile_picture = '';

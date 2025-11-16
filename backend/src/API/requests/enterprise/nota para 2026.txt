@@ -1,0 +1,1 @@
+el status 0 es pendiente, el status 1 es aceptado y el status 2 es rechazado.
