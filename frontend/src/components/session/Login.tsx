@@ -14,8 +14,6 @@ import ActionButton from "../UI/ActionButton";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import Lottie from "lottie-react";
-import throbber from "../../assets/animated/Insider-loading.json";
 import defaultError from "../../global/messages/defaultError";
 
 import styles from './login.module.css'
@@ -67,24 +65,11 @@ const Login: React.FC = () => {
                 <InputField name="password" type="password" vertical={true} placeholder="Contraseña" width={320} height={50}
                     onChange={(event: ChangeEvent<HTMLInputElement>) => { setPassword(event.target.value) }} />
                 <span style={{ color: "#d40202", width: TranslateFigmaCoords.translateFigmaXAlt(320), textAlign: "center" }}>{errors}</span>
-                {cargando ?
-                    <ActionButton vertical={true} height={50} width={200} text=""  style={{ backgroundColor: 'white', color: '#888', border: '2px solid #ccc', cursor: 'not-allowed'}} action={(event) => {
-                        event.preventDefault();
-                    }}> 
-                         <Lottie
-                                animationData={throbber}  
-                                loop={true}
-                                autoplay={true}
-                                style={{height:'100%',scale:1.5}}
-                            />
-                    </ActionButton>
-                    :
-                    <ActionButton vertical={true} width={200} height={50} text="Iniciar Sesión" action={(event) => {
-                        event.preventDefault();
-                        const form = document.getElementById("login") as HTMLFormElement;
-                        if (form) form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
-                    }} />
-                }
+                <ActionButton loading={cargando} vertical={true} width={200} height={50} text="Iniciar Sesión" action={(event) => {
+                    event.preventDefault();
+                    const form = document.getElementById("login") as HTMLFormElement;
+                    if (form) form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+                }} />
 
             </form>
             <div style={{

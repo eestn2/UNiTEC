@@ -2,7 +2,6 @@
  * @file RegisterEnterprise.tsx
  * @description A reusable React component for rendering a responsive enterprise registration form.
  * Converts width and height from pixels to responsive units based on screen size.
- * @author Daviel Díaz Gonzáles
  * @date May 11, 2025
  */
 
@@ -14,6 +13,7 @@ import TextBox from "../UI/form/TextBox";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from './RegisterEnterprise.module.css'
+
 /**
  * A React functional component that renders a registration form for enterprises inside a responsive window.
  * Handles form state, input validation, and submission to the backend. Includes fields for enterprise name, email, password, website, and description.
@@ -25,7 +25,6 @@ import styles from './RegisterEnterprise.module.css'
  * ```tsx
  * <RegisterEnterprise />
  * ```
- * @author Daviel Díaz Gonzáles
  */
 const RegisterEnterprise: React.FC = () => {
     // State variables for form inputs
@@ -34,6 +33,7 @@ const RegisterEnterprise: React.FC = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [website, setWebsite] = useState('');
+    const [loading, setLoading] = useState(false);
     const [description, setDescription] = useState('');
     const [emailError, setEmailError] = useState<ReactElement | null>(null);
     const [passError, setPassError] = useState<ReactElement | null>(null);
@@ -73,6 +73,7 @@ const RegisterEnterprise: React.FC = () => {
 
     const handleRegister = async (event: FormEvent) => {
         event.preventDefault();
+        setLoading(true);
         if (!valueForm()) return setError(<span className={'error'}>Por favor, complete todos los campos correctamente.</span>);
         try {
             const response = await axios.post(`/session/user-register.php`, {
@@ -90,12 +91,13 @@ const RegisterEnterprise: React.FC = () => {
         } catch (error) {
             if (axios.isAxiosError(error)) return setError(<span className="error">{error.response?.data?.message || "No se ha podido registrar. Intente de nuevo más tarde."}</span>);
             setError(<span className="error">No se ha podido establecer la conexión. Intentelo de nuevo más tarde.</span>);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <>
-
             <div className={`${styles['app-window']} app-window`}>
                 <Logo className={styles['logo-responsive']} logo_size={140} logo_text_size={40} vertical={true} />
                 <span className={`${styles['top-title']} title top-section`} >
@@ -169,7 +171,7 @@ const RegisterEnterprise: React.FC = () => {
                     <hr />
                     <div className={`${styles['vertical-sections']} vertical-sections`} >
                          <span className={`${styles['form-text']} form-text `}>Si has rellenado todos los campos necesarios solo queda:</span>
-                        <ActionButton height={'50px'} className={'action-button'} text={"Registrarse"} action={(event) => {
+                        <ActionButton height={'50px'} className={'action-button'} text={"Registrarse"} loading={loading} action={(event) => {
                             event.preventDefault();
                             const form = document.getElementById("register-enterprise") as HTMLFormElement;
                             if (form) form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));

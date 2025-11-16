@@ -56,6 +56,7 @@ function RegisterUser() {
     status_id: 0
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState<FormType>({
     name: "",
     birth_date: "",
@@ -115,7 +116,8 @@ function RegisterUser() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    setLoading(true);
+
     const languagesData = selectedItems
       .filter(item => item.block === "Idiomas")
       .reduce((acc, item) => {
@@ -176,6 +178,8 @@ function RegisterUser() {
     } catch (error) {
       if (axios.isAxiosError(error)) return setError(error.response?.data?.message || defaultError);
       setError(defaultError);
+    } finally {
+      setLoading(false);
     }
   };  
   const loadLanguages = async () => {
@@ -426,6 +430,7 @@ function RegisterUser() {
             text={"Registrarse"}
             width={'100%'}
             action={handleSubmit}
+            loading={loading}
             className={styles['action-button']}
           />
           <div className={`${styles.item} ${styles.delimiter} delimiter`}></div>
