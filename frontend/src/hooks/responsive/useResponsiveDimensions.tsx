@@ -4,7 +4,6 @@
  * Calculates pixel values for width and height, supporting both numeric and responsive string units (e.g., '100vh', '50%').
  * If the window is square-shaped (height equals width), both dimensions are calculated using the X-axis translation.
  * Otherwise, height and width are calculated independently using their respective translation functions.
- * @author Haziel Magallanes
  * @date June 26, 2025
  */
 import { useMemo } from "react";
@@ -31,7 +30,6 @@ interface UseResponsiveDimensionsProps {
  * const { finalHeight, finalWidth, translateX, translateY } = useResponsiveDimensions({ height: 100, width: 200, vertical: false });
  * // finalHeight and finalWidth are ready to be used in style props
  *
- * @author Haziel Magallanes
  */
 export default function useResponsiveDimensions({
   height,

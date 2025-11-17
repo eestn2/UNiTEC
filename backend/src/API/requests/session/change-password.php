@@ -5,7 +5,6 @@
  * Handles PATCH requests, validates the current password, checks new password requirements, and updates the password in the database.
  * Ensures the new password is not the same as the current one and meets minimum security requirements.
  * Returns a standardized JSON response indicating success or failure.
- * @author Federico Nicolás Martínez
  * @date May 17, 2025
  *
  * Usage:
@@ -17,61 +16,38 @@
  * Example:
  *   PATCH /src/API/requests/session/change-password.php
  *   Body: { "id": 7, "password": "oldpass", "new_password": "newpass123" }
- *   Response: { "status": "success", "message": "Contraseña cambiada correctamente.", "data": null }
+ *   Response: { "status": "OK", "message": "Contraseña cambiada correctamente.", "data": null }
  */
 
 session_start();
 require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . "/../../logic/database/connection.php";
 require_once __DIR__ . "/../../logic/communications/return_response.php";
+require_once __DIR__ . "/../../logic/security/security_functions.php";
 
-if ($_SERVER["REQUEST_METHOD"] !== "PATCH") {
-    return_response("failed", "Metodo no permitido.", null);
-    exit;
-}
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") return_response(status::OK, "Preflight OK.");
+if ($_SERVER["REQUEST_METHOD"] !== "PATCH") return_response(status::METHOD_NOT_ALLOWED, "Metodo no permitido.");
 
 $data = json_decode(file_get_contents("php://input"));
 
+if (!isset($data->password) || !isset($data->new_password)) return_response(status::BAD_REQUEST, "Faltan datos requeridos.");
 
-if (!isset($data->password) || !isset($data->new_password)) {
-    return_response("failed", "Faltan datos requeridos.", null);
-    exit;
-}
-
-if (!isset($_SESSION['user']['id'])) {
-    return_response("failed", "No autenticado.", null);
-    exit;
-}
+if (!isset($_SESSION['user']['id'])) return_response(status::UNAUTHORIZED, "No autenticado.");
 $user_id = intval($_SESSION['user']['id']);
-
-// Validar la nueva contraseña (longitud mínima, etc.)
-if (strlen($data->new_password) < 8) {
-    return_response("failed", "La nueva contraseña debe tener al menos 8 caracteres.", null);
-    exit;
-}
 
 try {
     // Verificar la contraseña actual
     $query = $connection->prepare("SELECT password FROM users WHERE id = :id");
     $query->execute([':id' => $user_id]);
     $result = $query->fetch(PDO::FETCH_ASSOC);
-    if (!$result || !password_verify($data->password, $result['password'])) {
-        return_response("failed", "La contraseña actual es incorrecta.", null);
-        exit;
-    }
+    if (!$result || !password_verify($data->password, $result['password'])) return_response(status::CONFLICT, "La contraseña actual es incorrecta.");
 
     // Evitar cambiar a la misma contraseña
-    if (password_verify($data->new_password, $result['password'])) {
-        return_response("failed", "La nueva contraseña no puede ser igual a la actual.", null);
-        exit;
-    }
+    if (password_verify($data->new_password, $result['password'])) return_response(status::CONFLICT, "La nueva contraseña no puede ser igual a la actual.");
 
     // Hashear la nueva contraseña
-    $hashed_new_password = password_hash($data->new_password, PASSWORD_DEFAULT);
-    if ($hashed_new_password === false) {
-        return_response("failed", "Error al hashear la nueva contraseña.", null);
-        exit;
-    }
+    $hashed_new_password = encryption($data->new_password);
+    if ($hashed_new_password === false) return_response(status::INTERNAL_SERVER_ERROR, "Error al hashear la nueva contraseña.");
 
     // Actualizar la contraseña en la base de datos
     $update_query = $connection->prepare("UPDATE users SET password = :new_password WHERE id = :id");
@@ -79,14 +55,10 @@ try {
         ':new_password' => $hashed_new_password,
         ':id' => $user_id
     ]);
-    if ($update_query->rowCount() > 0) {
-        return_response("success", "Contraseña cambiada correctamente.", null);
-    } else {
-        return_response("failed", "No se pudo cambiar la contraseña.", null);
-    }
+    if ($update_query->rowCount() > 0) return_response(status::OK, "Contraseña cambiada correctamente.");
+    return_response(status::INTERNAL_SERVER_ERROR, "No se pudo cambiar la contraseña.");
 } catch (PDOException $e) {
     // Log the error server-side if needed
-    return_response("failed", "Error al cambiar la contraseña.", null);
-    exit;
+    return_response(status::INTERNAL_SERVER_ERROR, "Error al cambiar la contraseña.");
 }
 ?>

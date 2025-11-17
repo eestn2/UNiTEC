@@ -5,18 +5,16 @@
  * Handles DELETE requests, verifies user permissions, checks offer ownership, and deletes the offer if authorized.
  * Only enterprise users (user_type = 1) and administrators (user_type = 4) can delete job offers.
  * Returns a standardized JSON response indicating success or failure.
- * @author Federico Nicolás Martínez
  * @date May 17, 2025
  *
  * Usage:
  *   Send a DELETE request with JSON body containing:
- *     - creator_id: (int) ID of the user requesting deletion (must be the creator or admin)
  *     - id: (int) ID of the job offer to delete
  *
  * Example:
  *   DELETE /src/API/requests/enterprise/delete-offer.php
- *   Body: { "creator_id": 5, "id": 7 }
- *   Response: { "status": "success", "message": "Oferta de trabajo eliminada con éxito.", "data": null }
+ *   Body: { "id": 7 }
+ *   Response: { "message": "Oferta de trabajo eliminada con éxito.", "data": null }
  */
 
 session_start();
@@ -24,12 +22,13 @@ require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "DELETE") return_response("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") return_response(status::OK, "Preflight OK.");
+if ($_SERVER["REQUEST_METHOD"] !== "DELETE") return_response(status::METHOD_NOT_ALLOWED, "Método no permitido.");
 $data = json_decode(file_get_contents("php://input"));
 
-if (!isset($data->id)) return_response("failed", "Faltan datos.", null);
+if (!isset($data->id)) return_response(status::BAD_REQUEST, "Faltan datos.");
 
-if (!isset($_SESSION['user']['id'])) return_response("failed", "No autenticado.", null);
+if (!isset($_SESSION['user']['id'])) return_response(status::UNAUTHORIZED, "No autenticado.");
 $creator_id = intval($_SESSION['user']['id']);
 $id = intval($data->id);
 
@@ -38,15 +37,11 @@ try{
     $stmt->bindParam(':id', $creator_id, PDO::PARAM_INT);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$user) {
-        return_response("failed", "Usuario no encontrado.", null);
-    }
+    if (!$user) return_response(status::NOT_FOUND, "Usuario no encontrado.");
     $isAdmin = intval($user['user_type']) === 4;
-    if (!in_array(intval($user['user_type']), [1, 4])){
-        return_response("failed", "Solo las empresas o el administrador pueden eliminar ofertas de trabajo.", null);
-    }
+    if (!in_array(intval($user['user_type']), [1, 4])) return_response(status::FORBIDDEN, "Solo las empresas o el administrador pueden eliminar ofertas de trabajo.");
 }catch (PDOException $e) {
-    return_response("failed", "Error al verificar el tipo de usuario.", null);
+    return_response(status::INTERNAL_SERVER_ERROR, "Error al verificar el tipo de usuario.");
 }
 
 try{
@@ -60,9 +55,7 @@ try{
     }
     $stmt->execute();
 
-    if (!$stmt->fetch()){
-        return_response("failed", "No se encontró la oferta de trabajo o no pertenece al usuario.", null);
-    }
+    if (!$stmt->fetch()) return_response(status::NOT_FOUND, "No se encontró la oferta de trabajo o no pertenece al usuario.");
 
     $connection->beginTransaction();
     // Delete all applicants for this offer first
@@ -76,12 +69,10 @@ try{
     $stmt->execute();
 
     $connection->commit();
-    return_response("success", "Oferta de trabajo eliminada con éxito.", null);
+    return_response(status::OK, "Oferta de trabajo eliminada con éxito.");
 }catch (PDOException $e){
-    if ($connection->inTransaction()) {
-        $connection->rollBack();
-    }
+    if ($connection->inTransaction()) $connection->rollBack();
     error_log("Error al eliminar la oferta de trabajo: " . $e->getMessage());
-    return_response("failed", "Error al eliminar la oferta de trabajo. ", null);
+    return_response(status::INTERNAL_SERVER_ERROR, "Error al eliminar la oferta de trabajo.");
 }
 ?>

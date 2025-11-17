@@ -2,7 +2,6 @@
  * @file ForgotPassword.tsx
  * @description A reusable React component for rendering a responsive password recovery form with validation.
  * Converts width and height from pixels to responsive units based on screen size.
- * @author Haziel Magallanes
  * @date May 11, 2025
  */
 import InputField from "../../UI/form/InputField";
@@ -24,7 +23,6 @@ import { useNavigate } from "react-router-dom";
  * ```tsx
  * <ForgotPassword />
  * ```
- * @author Haziel Magallanes
  */
 const ForgotPasswordNewPassword: React.FC = () => {
     const navigate = useNavigate();

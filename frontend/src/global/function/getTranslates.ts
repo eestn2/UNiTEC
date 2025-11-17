@@ -7,7 +7,6 @@ import TranslateFigmaCoords from "./TranslateFigmaCoords";
  *
  * @param vertical - If true, selects translation functions for vertical containers; otherwise, for horizontal containers.
  * @returns An array containing the appropriate X and Y translation functions.
- * @author Haziel Magallanes.
  */
 export function getTranslates(vertical: boolean): [(value: number) => number, (value: number) => number]{
     // Wich translate function should it use? For vertical or horizontal containers.

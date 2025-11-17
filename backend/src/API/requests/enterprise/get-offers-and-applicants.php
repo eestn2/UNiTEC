@@ -3,7 +3,6 @@
  * @file get-offers-and-applicants.php
  * @description API endpoint to retrieve all available offers and their applicants from the database.
  * Handles GET requests, queries the offers table, and returns a standardized JSON response with the list of offers or an error message.
- * @author Francesco Sidotti
  * @date June 6, 2025
  *
  * Usage:
@@ -11,7 +10,7 @@
  *
  * Example:
  *   GET /src/API/requests/enterprise/get-offers-and-applicants.php
- *   Response: { "status": "success", "message": "offers retrieved successfully.", "data": { "offers": [applicants[...], ... ] } }
+ *   Response: { "message": "Ofertas recuperadas correctamente.", "data": { "offers": [applicants[...], ... ] } }
  */
 
 session_start();
@@ -19,12 +18,10 @@ require_once __DIR__ . "/../cors-policy.php";
 require_once __DIR__ . '/../../logic/database/connection.php';
 require_once __DIR__ . '/../../logic/communications/return_response.php';
 
-if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response("failed", "Metodo no permitido.", null);
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") return_response(status::OK, "Preflight OK.");
+if ($_SERVER["REQUEST_METHOD"] !== "GET") return_response(status::METHOD_NOT_ALLOWED, "Método no permitido.");
 
-
-if (!isset($_SESSION['user']['id'])) {
-    return_response("failed", "No se ha iniciado sesión", null);
-}
+if (!isset($_SESSION['user']['id'])) return_response(status::UNAUTHORIZED, "No autenticado.");
 
 try {
     $stmt = $connection->prepare("
@@ -66,9 +63,10 @@ try {
         }
     }
 
-    return_response("success", "offers retrieved successfully.", [ "offers" => array_values($offers) ]);
+    return_response(status::OK, "Ofertas recuperadas correctamente.", [ "offers" => array_values($offers) ]);
 
 } catch (PDOException $e) {
-    echo json_encode(['error' => $e->getMessage()]);
+    error_log("Error retrieving offers and applicants: " . $e->getMessage());
+    return_response(status::INTERNAL_SERVER_ERROR, "Error al recuperar las ofertas y postulantes.");
 }
 ?>

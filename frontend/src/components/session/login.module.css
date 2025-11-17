@@ -1,0 +1,15 @@
+.app-window {
+    width: 370px!important;
+    display: flex;
+    flex-Direction: column;
+    row-Gap: 24px;
+    align-Items: center;
+}
+.link{
+    font-size: 15px!important;
+}
+@media (max-width: 400px) {
+    .app-window {
+        width: 100%!important;
+    }
+}

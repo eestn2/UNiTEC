@@ -2,7 +2,6 @@
  * @file notification.ts
  * @description Type definition for Notification objects used in the application.
  * Represents the structure of a notification as received from the backend.
- * @author Haziel Magallanes
  * @date May 6, 2025
  */
 

@@ -2,13 +2,13 @@
  * @file ActionButton.tsx
  * @description A reusable React component for rendering a responsive action button with customizable text and click handler.
  * Converts width and height from pixels to responsive units based on screen size.
- * @author Haziel Magallanes, Daviel Díaz Gonzáles
  * @date May 11, 2025
  */
 
 import React, { MouseEventHandler } from "react";
 import ResponsiveComponent from "../../global/interface/ResponsiveComponent";
-import useResponsiveDimensions from "../../hooks/responsive/useResponsiveDimensions";
+import Lottie from "lottie-react";
+import throbber from "../../assets/animated/Insider-loading.json";
 
 /**
  * Props for the `ActionButton` component.
@@ -23,11 +23,12 @@ import useResponsiveDimensions from "../../hooks/responsive/useResponsiveDimensi
  * @property style - Optional inline styles to apply to the button.
  * @property className - Optional custom CSS classes to apply to the button.
  * 
- * @author Haziel Magallanes, Daviel Díaz Gonzáles
  */
 export interface ActionButtonProps extends ResponsiveComponent {
     /** The text to display inside the button. */
     text?: string;
+    /** Loading state handler */
+    loading?: boolean;
     /** Optional click event handler for the button. */
     action?: MouseEventHandler;
 }
@@ -37,6 +38,7 @@ export interface ActionButtonProps extends ResponsiveComponent {
  *
  * @component
  * @param {string} text - The text to display inside the button.
+ * @param {boolean} loading - The loading state.
  * @param {number} [width] - The width of the button in Figma coordinates.
  * @param {number} [height=10] - The height of the button in Figma coordinates.
  * @param {boolean} [vertical] - Decides wich TranslateFigmaFunction to use (Default: false).
@@ -55,14 +57,8 @@ export interface ActionButtonProps extends ResponsiveComponent {
  *   action={() => alert("Button clicked!")}
  * />
  * ```
- * @author Haziel Magallanes, Daviel Díaz Gonzáles
  */
-const ActionButton: React.FC<ActionButtonProps> = ({ height = 10, vertical = false, width = 'auto', action, text, style, className, children }) => {
-    const { finalHeight, finalWidth, translateX } = useResponsiveDimensions({
-        height,
-        width,
-        vertical
-    });
+const ActionButton: React.FC<ActionButtonProps> = ({ height = '10px', loading = false, width = 'auto', action, text, style, className, children }) => {
     const animationDuration = 0.2; // seconds
     const buttonStyle: React.CSSProperties = {
         transition: `all ${animationDuration}s ease-in-out`,
@@ -71,12 +67,22 @@ const ActionButton: React.FC<ActionButtonProps> = ({ height = 10, vertical = fal
         justifyContent: "center",
         display: "flex",
         flexDirection: "row",
-        width: finalWidth,
-        height: finalHeight,
-        columnGap: translateX(4),
+        width: width,
+        height: height, 
         ...style,
     };
-
+    if (loading) return (
+        <button className={`action-button ${className || ''}`} style={{ backgroundColor: 'white', color: '#888', border: '2px solid #ccc', cursor: '', ...buttonStyle}} onClick={(event) => {
+            event.preventDefault();
+        }}> 
+            <Lottie
+                animationData={throbber}  
+                loop={true}
+                autoplay={true}
+                style={{height:'100%',scale:1.5}}
+            />
+        </button>
+    )
     return (
         <button className={`action-button ${className || ''}`} style={{...buttonStyle}} onClick={action} onMouseDown={(e) => {
             e.preventDefault(); // Prevent default button behavior

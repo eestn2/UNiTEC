@@ -10,6 +10,7 @@ import Tag from '../UI/Tag';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ActionButton from '../UI/ActionButton';
+import defaultError from '../../global/messages/defaultError';
 
 type LoadedLabel = {
   id: number;
@@ -38,47 +39,37 @@ const PublishOffer: React.FC = () => {
   const loadLanguages = async () => {
     try {
       const response = await axios.get("/function/get-languages.php");
-      if (response.status === 200 && response.data.status === "success") {
-        setLanguages(response.data.data.languages);
-      } else {
-        console.error("Failed to load languages:", response.data.message);
-      }
+      if (response) setLanguages(response.data.data.languages);
     } catch (error) {
-      console.error("An error occurred while loading languages:", error);
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
     }
   };
 
   const loadTags = async () => {
     try {
       const response = await axios.get('/function/get-tags.php');
-      if (response.status === 200 && response.data.status === "success") {
-        setTags(response.data.data.tags);
-      } else {
-        console.error("Failed to load tags:", response.data.message);
-      }
+      if (response) setTags(response.data.data.tags);
     } catch (error) {
-      console.error("An error occurred while loading tags:", error);
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
     }
   };
 
- const handleLenguajeSubmit = (item: LoadedLabel) => {
-  setSelectTags(prev => 
-    prev.some(t => t.id === item.id) ? prev : [...prev, item]
-  );
-};
+  const handleLenguajeSubmit = (item: LoadedLabel) => {
+    setSelectTags(prev => 
+      prev.some(t => t.id === item.id) ? prev : [...prev, item]
+    );
+  };
 
-const handleIdiomaSubmit = (item: LoadedLabel) => {
-  setSelectLanguages(prev => 
-    prev.some(l => l.id === item.id) ? prev : [...prev, item]
-  );
-};
+  const handleIdiomaSubmit = (item: LoadedLabel) => {
+    setSelectLanguages(prev => 
+      prev.some(l => l.id === item.id) ? prev : [...prev, item]
+    );
+  };
 
   const handleAddOffer = async (tit: string, desc: string, tags: number[], languages: number[]) => {
-    if (!tit.trim() || !desc.trim()) {
-      alert("Debes rellenar obligatoriamente el título y descripción de la oferta.");
-      return;
-    }
-
+    if (!tit.trim() || !desc.trim()) return alert("Debes rellenar obligatoriamente el título y descripción de la oferta.");
     try {
       const response = await axios.post('/enterprise/publish-offer.php', {
         title: tit,
@@ -86,15 +77,10 @@ const handleIdiomaSubmit = (item: LoadedLabel) => {
         tags: tags,
         languages: languages
       });
-      
-      if (response.data.status === "success") {
-        navigate('/');
-      } else {
-        alert("Error al publicar la oferta: " + (response.data.message || "Error desconocido"));
-      }
+      if (response) navigate('/');
     } catch (error) {
-      console.error("Error:", error);
-      alert("Ocurrió un error al publicar la oferta");
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
     }
   };
 

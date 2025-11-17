@@ -2,7 +2,6 @@
  * @file TextBox.tsx
  * @description A reusable React component for creating responsive text areas in the app.
  * Converts width and height from pixels to responsive units based on screen size.
- * @author Daviel Díaz Gonzáles
  * @date May 11, 2025
  */
 
@@ -23,7 +22,6 @@ import useResponsiveDimensions from "../../../hooks/responsive/useResponsiveDime
  * @property defaultValue - Optional default value for the selection field.
  * @property placeholder - Optional placeholder text shown as a non-selectable, hidden option.
  * 
- * @author Daviel Díaz Gonzáles
  */
 interface SelectionFieldProps extends ResponsiveComponent {
     /** The name attribute for the selection field, used for form submission. */
@@ -69,7 +67,6 @@ interface SelectionFieldProps extends ResponsiveComponent {
  *   placeholder="Select an option"
  * />
  * ```
- * @author Daviel Díaz Gonzáles
  */
 const SelectionField: React.FC<SelectionFieldProps> = ({
     width = 50,
@@ -109,7 +106,7 @@ const SelectionField: React.FC<SelectionFieldProps> = ({
                 style={{
                     width: "100%",
                     height: "100%",
-                    paddingLeft: `${TranslateFigmaCoords.translateFigmaX(18)}px`,
+                    paddingLeft:'18px',
                     backgroundColor: "transparent",
                     border: "none",
                     color: "#00317B",

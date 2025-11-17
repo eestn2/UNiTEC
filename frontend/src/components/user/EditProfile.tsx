@@ -8,6 +8,18 @@ import InputField from '../UI/form/InputField';
 import TextBox from '../UI/form/TextBox';
 import SelectionField from '../UI/form/SelectionField';
 import { UserStatusEnum, user as UserType, UserTypeEnum } from '../../types/user';
+import User from '../session/User';
+import { getTranslates } from '../../global/function/getTranslates';
+import axios from 'axios';
+import Logo from '../UI/unitec/Logo';
+import upload_picture from '../../assets/icons/upload-picture.svg';
+import edit_profile from '../../assets/icons/edit-picture.svg';
+import '../../styles/profile-info.css';
+import getUserStatus from '../../global/function/getUserStatus';
+import getUserType from '../../global/function/getUserType';
+import { sortByName } from '../../global/function/sortByName';
+import defaultError from '../../global/messages/defaultError';
+
 // --- Etiquetas y niveles ---
 type SelectedItem = {
   id: number;
@@ -21,26 +33,13 @@ type OptionItem = {
   name: string;
 };
 
-
-import User from '../session/User';
-import { getTranslates } from '../../global/function/getTranslates';
-import axios from 'axios';
-import Logo from '../UI/unitec/Logo';
-import upload_picture from '../../assets/icons/upload-picture.svg';
-import edit_profile from '../../assets/icons/edit-picture.svg';
-
-
-import '../../styles/profile-info.css';
-import getUserStatus from '../../global/function/getUserStatus';
-import getUserType from '../../global/function/getUserType';
-import { sortByName } from '../../global/function/sortByName';
-
 const STATUS_OPTIONS = Object.values(UserStatusEnum)
     .filter((v) => typeof v === "number")
     .map((value) => ({
         value: value as UserStatusEnum,
         label: getUserStatus(value as UserStatusEnum),
     }));
+
 const TYPE_OPTIONS = [
     { value: UserTypeEnum.Estudiante, label: getUserType(UserTypeEnum.Estudiante) },
     { value: UserTypeEnum.Egresado, label: getUserType(UserTypeEnum.Egresado) },
@@ -62,74 +61,6 @@ const EditProfile: React.FC = () => {
     const [Languages, setLanguages] = useState<OptionItem[]>([]);
     const [Tags, setTags] = useState<OptionItem[]>([]);
     const [filtroBloque, setFiltroBloque] = useState('Etiquetas');
-    // Cargar idiomas y etiquetas
-    useEffect(() => {
-        handleLoadLabels();
-    }, []);
-        useEffect(() => {
-        console.log(labelsFromSelection);
-    }, [labelsFromSelection]);
-
-const handleLoadLabels = async () => {
-    try {
-        const response = await axios.get('/user/get-languages-and-tags-edit.php');
-        if (response.data.status !== 'success') {
-            console.error('Error al cargar etiquetas y lenguajes:', response.data.message);
-            alert('Error al cargar etiquetas y lenguajes');
-            return;
-        }
-
-        // Get and sort all available options
-        const allTags : OptionItem[] = sortByName(response.data.data.tags || []);
-        const allLanguages : OptionItem[] = sortByName(response.data.data.languages || []);
-
-        const loadedTagsRaw = response.data.data.loadedTags || []; 
-        const loadedLanguagesRaw = response.data.data.loadedLanguages || [];
-
-        // Convert loaded items to proper format
-        const loadedTags: LoadedTag[] = loadedTagsRaw.map((t: { tag_id: number | string; level: number | string }) => ({
-            id: Number(t.tag_id),
-            level: Number(t.level)
-        }));
-
-        const loadedLanguages: LoadedLanguage[] = loadedLanguagesRaw.map((l: { language_id: number | string; level: number | string }) => ({
-            id: Number(l.language_id),
-            level: Number(l.level)
-        }));
-
-
-        // Create selected items for the UI 
-        const selectedItems: SelectedItem[] = [
-            ...loadedTags.map(t => {
-                const tag = allTags.find(tag => tag.id === t.id);
-                return {
-                    id: t.id,
-                    name: tag?.name || `Tag ${t.id}`,
-                    block: "Etiquetas" as const,
-                    level: t.level
-                };
-            }),
-            ...loadedLanguages.map(l => {
-                const lang = allLanguages.find(lang => lang.id === l.id);
-                return {
-                    id: l.id,
-                    name: lang?.name || `Language ${l.id}`,
-                    block: "Idiomas" as const,
-                    level: l.level
-                };
-            })
-        ];
-
-        // Save to state
-        setLabelsFromSelection(selectedItems);
-        setTags(allTags);
-        setLanguages(allLanguages);
-        console.log('Items seleccionados:', selectedItems);
-    } catch (error) {
-        console.error('Error al cargar etiquetas y lenguajes:', error);
-        alert('Error al cargar etiquetas y lenguajes');
-    }
-};
     const blocks = [
         {
             titulo: "Etiquetas",
@@ -142,17 +73,12 @@ const handleLoadLabels = async () => {
             placeholder: "Añadir un Idioma",
         },
     ];
+
     const searchData = {
         Etiquetas: Tags,
         Idiomas: Languages,
     };
 
-   
-  const handleDeleteItem = (id: number, block: "Etiquetas" | "Idiomas") => {
-    setLabelsFromSelection(prev =>
-      prev.filter(item => !(item.id === id && item.block === block))
-    );
-  };
     const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [newPicturePath, setNewPicturePath] = useState<string | null>(null);
@@ -162,6 +88,71 @@ const handleLoadLabels = async () => {
     useEffect(() => {
         setForm(User.data as FormType);
     }, []);
+
+    // Cargar idiomas y etiquetas
+    useEffect(() => {
+        const handleLoadLabels = async () => {
+            try {
+                const response = await axios.get('/user/get-languages-and-tags.php');
+                if (response) {
+                    // Get and sort all available options
+                    const allTags : OptionItem[] = sortByName(response.data.data.tags || []);
+                    const allLanguages : OptionItem[] = sortByName(response.data.data.languages || []);
+
+                    const loadedTagsRaw = response.data.data.loadedTags || []; 
+                    const loadedLanguagesRaw = response.data.data.loadedLanguages || [];
+
+                    // Convert loaded items to proper format
+                    const loadedTags: LoadedTag[] = loadedTagsRaw.map((t: { tag_id: number | string; level: number | string }) => ({
+                        id: Number(t.tag_id),
+                        level: Number(t.level)
+                    }));
+
+                    const loadedLanguages: LoadedLanguage[] = loadedLanguagesRaw.map((l: { language_id: number | string; level: number | string }) => ({
+                        id: Number(l.language_id),
+                        level: Number(l.level)
+                    }));
+
+
+                    // Create selected items for the UI 
+                    const selectedItems: SelectedItem[] = [
+                        ...loadedTags.map(t => {
+                            const tag = allTags.find(tag => tag.id === t.id);
+                            return {
+                                id: t.id,
+                                name: tag?.name || `Tag ${t.id}`,
+                                block: "Etiquetas" as const,
+                                level: t.level
+                            };
+                        }),
+                        ...loadedLanguages.map(l => {
+                            const lang = allLanguages.find(lang => lang.id === l.id);
+                            return {
+                                id: l.id,
+                                name: lang?.name || `Language ${l.id}`,
+                                block: "Idiomas" as const,
+                                level: l.level
+                            };
+                        })
+                    ];
+                    // Save to state
+                    setLabelsFromSelection(selectedItems);
+                    setTags(allTags);
+                    setLanguages(allLanguages);
+                }
+            } catch (error) {
+                if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+                alert(defaultError);
+            }
+        };
+        handleLoadLabels()
+    }, [setLabelsFromSelection, setTags, setLanguages]);
+
+   
+   
+    const handleDeleteItem = (id: number, block: "Etiquetas" | "Idiomas") => {
+        setLabelsFromSelection(prev => prev.filter(item => !(item.id === id && item.block === block)));
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         if (!form) return;
@@ -175,39 +166,37 @@ const handleLoadLabels = async () => {
             // If not empty, use newPicturePath, else just use the existing profile picture
             payload.profile_picture = newPicturePath ? newPicturePath : form?.profile_picture;
             // Agregar etiquetas y niveles
-                const languagesData = labelsFromSelection
-                .filter(item => item.block === "Idiomas")
-                .reduce((acc, item) => {
-                    acc.ids.push(item.id);
-                    acc.levels.push(item.level);
-                    return acc;
-                }, { ids: [] as number[], levels: [] as number[] });
+            const languagesData = labelsFromSelection
+            .filter(item => item.block === "Idiomas")
+            .reduce((acc, item) => {
+                acc.ids.push(item.id);
+                acc.levels.push(item.level);
+                return acc;
+            }, { ids: [] as number[], levels: [] as number[] });
 
-                const tagsData = labelsFromSelection
-                .filter(item => item.block === "Etiquetas")
-                .reduce((acc, item) => {
-                    acc.ids.push(item.id);
-                    acc.levels.push(item.level);
-                    return acc;
-                }, { ids: [] as number[], levels: [] as number[] });
+            const tagsData = labelsFromSelection
+            .filter(item => item.block === "Etiquetas")
+            .reduce((acc, item) => {
+                acc.ids.push(item.id);
+                acc.levels.push(item.level);
+                return acc;
+            }, { ids: [] as number[], levels: [] as number[] });
             payload.languages = languagesData.ids;
             payload.languages_levels = languagesData.levels;
             payload.tags = tagsData.ids;
             payload.tags_levels = tagsData.levels;
 
             const response = await axios.put('/user/edit-user.php', payload);
-            console.log(response.data);
-            if (response.data.status !== 'success') {
-                throw new Error(response.data.message || 'Error al actualizar el perfil');
-            } else {
+            if (response) {
                 alert('Perfil actualizado');
                 User.set({ ...User.data, ...payload }); // Update User session data
-                setNewPicture(null);
-                setNewPicturePath(null);
                 navigate(-1);
             }
-        } catch {
-            alert('Error al actualizar el perfil');
+        } catch (error) {
+            setNewPicture(null);
+            setNewPicturePath(null);
+            if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+            alert(defaultError);
         }
     };
 
@@ -238,19 +227,15 @@ const handleLoadLabels = async () => {
                     filename: file.name,
                     type: file.type,
                 });
-                if (response.data.status === 'success') {
+                if (response) {
                     setNewPicturePath(response.data.data.path); // Store path for form
-                    console.log('Foto de perfil subida:', response.data.data.path);
                     alert('Foto de perfil subida, recuerda guardar los cambios');
-                } else {
-                    alert(response.data.message || 'Error al subir la foto');
-                    setNewPicture(null);
-                    setNewPicturePath(null);
                 }
-            } catch {
-                alert('Error al subir la foto');
+            } catch (error) {
                 setNewPicture(null);
                 setNewPicturePath(null);
+                if (axios.isAxiosError(error)) return alert(error.response?.data?.message || 'Error al subir la foto');
+                alert('Error al subir la foto');
             } finally {
                 setUploading(false);
             }
@@ -264,7 +249,7 @@ const handleLoadLabels = async () => {
     const isPortrait = window.innerHeight > window.innerWidth;
     const windowWidth = window.innerWidth > window.innerHeight ? 980 : 1280;
     const [translateX, translateY] = getTranslates(isPortrait);
-   const isEmpresaOrAdmin = form.type === UserTypeEnum.Empresa || form.type === UserTypeEnum.Administrador;
+    const isEmpresaOrAdmin = form.type === UserTypeEnum.Empresa || form.type === UserTypeEnum.Administrador;
     return (
         <div>
             <Logo className='watermark' />

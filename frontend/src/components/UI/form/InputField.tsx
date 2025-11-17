@@ -2,13 +2,11 @@
  * @file InputField.tsx
  * @description A reusable React component for creating responsive input fields in the app.
  * Converts width and height from pixels to responsive units based on screen size.
- * @author Haziel Magallanes, Daviel Díaz Gonzáles, Matias Emiliano Grecco
  * @date May 11, 2025
  */
 
 import { ChangeEventHandler } from "react";
-import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
-import useResponsiveDimensions from "../../../hooks/responsive/useResponsiveDimensions";
+import ResponsiveComponent from "../../../global/interface/ResponsiveComponent"; 
 
 /**
  * Props for the `InputField` component.
@@ -25,7 +23,6 @@ import useResponsiveDimensions from "../../../hooks/responsive/useResponsiveDime
  * @property style - Optional inline styles to apply to the input field.
  * @property className - Optional custom CSS classes to apply to the input field.
  * 
- * @author Haziel Magallanes, Daviel Díaz Gonzáles
  */
 interface InputFieldProps extends ResponsiveComponent {
     /** The type of the input field (e.g., "text", "date", "email", etc.). */
@@ -84,15 +81,13 @@ interface InputFieldProps extends ResponsiveComponent {
  *   onChange={(e) => console.log(e.target.value)}
  * />
  * ```
- * @author Haziel Magallanes, Daviel Díaz Gonzáles
  */
 const InputField: React.FC<InputFieldProps> = ({
     width = 50,
     height = 10,
     onChange,
     type,
-    name,
-    vertical = false,
+    name, 
     placeholder = "Input field",
     style,
     className,
@@ -103,18 +98,13 @@ const InputField: React.FC<InputFieldProps> = ({
     onKeyDown,
     onFocus,
 }) => {
-    const { finalHeight, finalWidth, translateX } = useResponsiveDimensions({
-        height,
-        width,
-        vertical
-    });
-    
+  
     return (
         <input
             style={{
-                width: finalWidth,
-                height: finalHeight,
-                paddingLeft: `${translateX(18)}px`,
+                width: width,
+                height: height,
+                paddingLeft:'18px',
                 ...style,
             }}
             name={name}

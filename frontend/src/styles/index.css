@@ -2,7 +2,6 @@
  * @file index.css
  * @description Main stylesheet for the UNiTEC application. Provides responsive, accessible, and visually consistent styles for all UI components.
  * Includes global variables, typography, layout, form elements, navigation, job offers, notifications, and utility classes.
- * @author Haziel Magallanes, Daviel Díaz Gonzáles
  * @date May 11, 2025
  */
 
@@ -24,10 +23,11 @@
 
 @media (orientation: portrait) {
   :root {
-   --x-multiplier: 100vw;
-   --y-multiplier: 100vw;
-   --font-multiplier: 1.25; /* Adjust font size for better readability on smaller screens */
-   --nav-height: calc((35 / 720) * 100vh);
+    --x-multiplier: 100vw;
+    --y-multiplier: 100vw;
+    --font-multiplier: 1.25;
+    /* Adjust font size for better readability on smaller screens */
+    --nav-height: calc((35 / 720) * 100vh);
   }
 }
 
@@ -37,32 +37,44 @@
 body {
   font-family: var(--app-font-family);
   margin: 0;
-  font-size: calc((18 / 720) * var(--y-multiplier) * var(--font-multiplier)); 
+  font-size: calc((18 / 720) * var(--y-multiplier) * var(--font-multiplier));
   overflow-y: auto;
 }
+
 html {
   scroll-behavior: smooth;
 }
+
 html::-webkit-scrollbar {
   width: calc((12 / 1280) * var(--x-multiplier));
 }
+
 html::-webkit-scrollbar-track {
   border-radius: 0;
   border: none;
   background-color: var(--action-button);
 }
+
 html::-webkit-scrollbar-thumb {
   border-radius: 0;
   background-color: var(--icons-nav-bar);
 }
+
 html::-webkit-scrollbar-thumb:hover {
   background-color: var(--feed-title-BG);
 }
+
 h1 {
   font-size: calc((32 / 720) * var(--y-multiplier) * var(--font-multiplier));
   font-weight: 600;
 }
-.app-content{
+
+.app-content {
+  align-items: center !important;
+  justify-content: center !important;
+  display: flex;
+  padding: 5vh 0;
+  padding-bottom: 5vh;
   background-color: var(--BG);
   width: 100%;
   height: auto;
@@ -79,15 +91,18 @@ h1 {
 .scrollbar::-webkit-scrollbar {
   width: calc((6 / 1280) * var(--x-multiplier));
 }
+
 .scrollbar::-webkit-scrollbar-track {
   border-radius: calc((8 / 1280) * var(--x-multiplier));
   background-color: var(--action-button) !important;
   border: calc((1 / 1280) * var(--x-multiplier)) solid #cacaca;
 }
+
 .scrollbar::-webkit-scrollbar-thumb {
   border-radius: calc((8 / 1280) * var(--x-multiplier));
   background-color: var(--icons-nav-bar);
 }
+
 .scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: var(--feed-title-BG);
 }
@@ -100,13 +115,15 @@ h1 {
   text-decoration: underline;
   font-weight: 500;
 }
+
 .link:hover {
   color: var(--important-text);
   cursor: pointer;
 }
+
 .golden-link {
   color: var(--delimiters);
-  font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
+  font-size: 16px;
   font-weight: bold;
   text-decoration: underline;
 }
@@ -117,31 +134,36 @@ h1 {
 .title {
   color: #305894;
   font-weight: 550;
-  font-size: calc((40 / 720) * var(--y-multiplier) * var(--font-multiplier));
+  font-size: 32px;
 }
+
 .profile-title {
   color: #305894;
   font-size: calc((32 / 720) * var(--y-multiplier) * var(--font-multiplier));
   font-weight: 550;
 }
+
 .black-text {
   color: black;
   font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
   font-weight: 550;
 }
+
 .form-text {
   color: var(--forms-text);
-  font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
+  font-size: 16px;
   font-weight: bold;
 }
+
 .watermark {
   position: absolute;
   left: 0;
   top: calc((50 / 720) * var(--y-multiplier));
 }
+
 @media (orientation: portrait) {
   .watermark {
-   display: none;
+    display: none;
   }
 }
 
@@ -152,45 +174,54 @@ h1 {
 .selection-field {
   background-color: #dee0eb;
   border: none;
-  border-radius: calc((10 / 1280) * var(--x-multiplier));
+  border-radius: 10px;
   text-align: left;
   align-items: center;
   color: var(--input);
-  font-family: var(--app-font-family) ;
-  font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
+  font-family: var(--app-font-family);
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: 0;
   line-height: normal;
+  width: auto;
 }
+
 .input-field::placeholder {
   color: var(--input);
   font-family: var(--app-font-family);
   font-weight: 600;
 }
-.profile-field{
+
+.profile-field {
   text-indent: calc((18 / 1280) * var(--x-multiplier));
   align-content: center;
 }
+
 .input-field:focus,
 .selection-field:focus {
   outline: none;
   box-shadow: none;
 }
+
 textarea.input-field {
   resize: none;
 }
+
 textarea.input-field::-webkit-scrollbar {
   width: calc((8 / 1280) * var(--x-multiplier));
 }
+
 textarea.input-field::-webkit-scrollbar-track {
   background-color: #dee0eb;
   border-radius: calc((10 / 1280) * var(--x-multiplier));
 }
+
 textarea.input-field::-webkit-scrollbar-thumb {
   background-color: #305894;
   border-radius: calc((10 / 1280) * var(--x-multiplier));
   border: calc((2 / 1280) * var(--x-multiplier)) solid #dee0eb;
 }
+
 textarea.input-field::-webkit-scrollbar-thumb:hover {
   background-color: #1e3a6d;
 }
@@ -215,9 +246,11 @@ input[type="checkbox"] {
   vertical-align: middle;
   margin: 0px;
 }
+
 input[type="checkbox"]:checked {
   background-image: url("../assets/icons/bx-checkbox-checked.svg");
 }
+
 label {
   display: flex;
   align-items: center;
@@ -232,9 +265,10 @@ label {
   background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray"><path d="M7 10l5 5 5-5z"/></svg>');
   background-repeat: no-repeat;
   background-position: calc(100% - calc((15 / 1280) * var(--x-multiplier))) center;
-  background-size: calc((16 / 1280) * var(--x-multiplier));
-  padding-right: calc((30 / 1280) * var(--x-multiplier));
+  background-size: 16px;
+  padding-right: 30px;
 }
+
 .selection-input {
   appearance: none;
   -webkit-appearance: none;
@@ -245,12 +279,13 @@ label {
   text-decoration: underline;
   width: 100%;
   height: 100%;
-  padding-right: calc((30 / 1280) * var(--x-multiplier));
+  padding-right: 30px;
   background-image: url("../assets/icons/arrow.svg");
   background-repeat: no-repeat;
   background-position: calc(100% - calc((10 / 1280) * var(--x-multiplier))) center;
-  background-size: calc((10 / 1280) * var(--x-multiplier));
+  background-size: 13px;
 }
+
 .selection-input:focus {
   outline: none;
   border: none;
@@ -275,40 +310,35 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   align-items: center;
   flex-direction: column;
 }
+
 .row-layout {
   display: flex;
   flex-direction: row;
 }
-.horizontal-display {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 100%;
-  max-height: max-content;
-  padding-top: calc((15 / 720) * var(--y-multiplier));
-  justify-content: space-between;
-  column-gap:  calc((10 / 720) * var(--y-multiplier));
-}
+
 .vertical-sections {
   display: flex;
-  flex-direction: column; 
-  min-height: 100%; 
+  flex-direction: column;
+  min-height: 100%;
   width: 100%;
-  row-gap: calc((15 / 720) * var(--y-multiplier)); 
+  row-gap: calc((15 / 720) * var(--y-multiplier));
 }
+
 .left-section {
   border-right: solid var(--delimiters) calc((3 / 1280) * var(--x-multiplier));
 }
+
 .top-section {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: solid var(--delimiters) calc((3 / 720) * var(--y-multiplier));
+  border-bottom: solid var(--delimiters) 3px;
 }
+
 .delimiter {
   background-color: var(--delimiters);
   width: 100%;
-  height: calc((3 / 720) * var(--y-multiplier));
+  height: 3px;
 }
 
 /* =========================
@@ -316,99 +346,159 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   ========================= */
 .app-window {
   background-color: var(--window-outer);
-  border-radius: calc((20 / 1280) * var(--x-multiplier));
+  border-radius: 20px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px calc((6 / 720) * var(--y-multiplier)) calc((12 / 720) * var(--y-multiplier)) calc((-2 / 720) * var(--y-multiplier)), rgba(0, 0, 0, 0.3) 0px calc((3 / 720) * var(--y-multiplier)) calc((7 / 720) * var(--y-multiplier)) calc((-3 / 720) * var(--y-multiplier));
 }
 
 /* =========================
   NavBar Styles
   ========================= */
+
 .nav-bar {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  height: calc(var(--nav-height ) - calc((10 / 720) * var(--y-multiplier)));
+  height: auto;
   width: calc(var(--nav-width) - calc((10 / 1280) * var(--x-multiplier)));
-  margin-top: calc((20 / 720) * var(--y-multiplier));
-  padding-top: calc((5 / 720) * var(--y-multiplier));
-  padding-bottom: calc((5 / 720) * var(--y-multiplier));
-  padding-left: calc((5 / 1280) * var(--x-multiplier));
-  padding-right: calc((5 / 1280) * var(--x-multiplier));
-  margin-bottom: calc((20 / 720) * var(--y-multiplier));
+  margin-top: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-bottom: 20px;
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
   background-color: white;
-  border-radius: calc((30 / 1280) * var(--x-multiplier));
+  border-radius: 32px;
+  z-index: 2;
   box-shadow: rgba(50, 50, 93, 0.25) 0px calc((6 / 720) * var(--y-multiplier)) calc((12 / 720) * var(--y-multiplier)) calc((-2 / 720) * var(--y-multiplier)), rgba(0, 0, 0, 0.3) 0px calc((3 / 720) * var(--y-multiplier)) calc((7 / 720) * var(--y-multiplier)) calc((-3 / 720) * var(--y-multiplier));
 }
 
+.burger-menu{
+  display: none;
+}
 
+@media (max-width:720px) {
+ 
+
+  .icons-section.open {
+    display: flex;
+    height: auto;
+    position: absolute;
+    flex-direction: column;
+    padding: 15px 10px; 
+    background-color: #203654;
+    top: 110%;
+    right: 12.5px;
+    border-radius: 20px;
+  }
+
+  .icons-section {
+    display: none;
+
+  }
+
+  .burger-menu {
+    height: 37px;
+    width: 37px;
+    margin-right: 15px;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .burger-menu img {
+    width: 100%;
+    height: auto;
+  }
+
+}
+@media (min-width:720px) {
 .icons-section {
-  display: flex;
+  display: flex; 
+}
+}
+.icons-section { 
   justify-content: center;
   align-items: center;
-  gap: calc((15 / 1280) * var(--x-multiplier));
+  gap: 15px;
 }
+
 .icons-section img {
-  width: calc((30 / 1240) * var(--nav-width));
-  height: calc((30 / 60) * var(--nav-height));
+  width: 30px;
+  height: 30px;
   fill: var(--icons-nav-bar);
 }
+
 .icons-section.admin {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
 }
-.admin{
- font-weight: bold;
- 
+
+.admin {
+  font-weight: bold;
+
 }
+
 .icons-section.admin .admin {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-grow: 1;
   gap: calc((30 / 1280) * var(--x-multiplier));
- 
+
 }
 
 .icons-section.admin .profile-pic {
   margin-left: auto;
 }
+
 .nav-bar .logo-section {
   display: flex;
   justify-content: center;
   align-items: center;
   height: fit-content;
 }
+
 .unitec-text {
-  width: calc((130 / 1240) * var(--nav-width));
-  height: calc((35 / 60) * var(--nav-height));
-  margin-left: calc((20 / 1280) * var(--x-multiplier));
+  width: 130px;
+  height: 35px;
+  margin-left: 20px;
 }
-@media (orientation: portrait) {
+
+@media (max-width:0px) {
   .nav-bar {
     border-radius: calc((60 / 1280) * var(--x-multiplier));
   }
+
   .icons-section {
     gap: calc((60 / 1280) * var(--x-multiplier));
   }
+
   .bell {
     margin-bottom: calc((6 / 720) * var(--y-multiplier));
   }
+
   .icons-section img {
     width: calc((65 / 1240) * var(--nav-width));
     height: calc((67 / 60) * var(--nav-height));
     fill: var(--icons-nav-bar);
   }
+
   .nav-bar .profile-pic {
     width: calc((80 / 1240) * var(--nav-width));
     height: calc((80 / 1240) * var(--nav-width));
   }
+
   .unitec-text {
     margin-left: calc((40 / 1280) * var(--x-multiplier));
     width: calc((260 / 1240) * var(--nav-width));
@@ -424,157 +514,29 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-family: var(--app-font-family);
   justify-content: center;
   align-items: center;
-  border-radius: calc((30 / 1280) * var(--x-multiplier));
+  border-radius: 30px;
   background-color: var(--action-button);
-  font-size: calc((20 / 720) * var(--y-multiplier));
+  font-size: 16px;
   cursor: pointer;
-  padding: 0 calc((20 / 720) * var(--y-multiplier));
+  padding: 0 10px;
   width: auto;
   white-space: nowrap;
   font-weight: 400;
   text-decoration: none;
   box-shadow: none;
   border: none;
-  color: white; /* VERY IMPORTANT!!!!!!!!!!!!!!!!!!! */
-}
-
-/* =========================
-  FeedBox & Job Offer Styles
-  ========================= */
-.feedbox::-webkit-scrollbar {
-  width: calc((6 / 1280) * var(--x-multiplier));
-}
-.feedbox::-webkit-scrollbar-track {
-  border-radius: calc((8 / 1280) * var(--x-multiplier));
-  background-color: var(--action-button) !important;
-  border: calc((1 / 1280) * var(--x-multiplier)) solid #cacaca;
-}
-.feedbox::-webkit-scrollbar-thumb {
-  border-radius: calc((8 / 1280) * var(--x-multiplier));
-  background-color: var(--icons-nav-bar);
-}
-.feedbox::-webkit-scrollbar-thumb:hover {
-  background-color: var(--feed-title-BG);
-}
-
-.feed-title {
-  color: var(--feed-title);
-  background-color: var(--feed-title-BG);
-  border-radius: calc((20 / 1280) * var(--x-multiplier));
-  align-content: center;
-  text-align: center;
-  font-size: calc((32 / 720) * var(--y-multiplier) * var(--font-multiplier));
-  font-weight: 600;
-}
-.offer-title {
-  font-size: calc((32 / 720) * var(--y-multiplier) * var(--font-multiplier));
-  font-weight: 600;
-}
-.job-offer {
-  border: solid var(--job-title) calc((3 / 1280) * var(--x-multiplier));
-  border-radius: calc((20 / 1280) * var(--x-multiplier));
-  background-color: var(--job-title);
-  display: "flex";
-  flex-direction: "column";
-  overflow: hidden;
-}
-.job-offer .title {
-  background-color: var(--job-title);
   color: white;
-  border-radius: 0;
-  font-size: calc((34 / 720) * var(--y-multiplier) * var(--font-multiplier));
-}
-.job-offer .app-window {
-  color: black;
-  overflow: hidden;
-}
-.job-offer .text {
-  width: 96%;
-  margin-left: 2%;
-  margin-top: 2%;
-}
-.job-offer .fade-white {
-  position: absolute;
-  background-image: linear-gradient(0deg,rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+  /* VERY IMPORTANT!!!!!!!!!!!!!!!!!!! */
 }
 
-
-/* =========================
-  Notification Styles
-  ========================= */
-
-.notification-box {
-  direction: rtl;
-  overflow-y: scroll;
-  border-top-left-radius: calc((5 / 1280) * var(--x-multiplier));
-  border-bottom-left-radius: calc((5 / 1280) * var(--x-multiplier));
-}
-.notification-box::-webkit-scrollbar {
-  width: calc((6 / 1280) * var(--x-multiplier));
-  left: 0;
-}
-.notification-box::-webkit-scrollbar-track {
-  border-radius: calc((8 / 1280) * var(--x-multiplier));
-  background-color: var(--action-button);
-  border: calc((1 / 1280) * var(--x-multiplier)) solid #cacaca;
-}
-.notification-box::-webkit-scrollbar-thumb {
-  border-radius: calc((8 / 1280) * var(--x-multiplier));
-  background-color: var(--icons-nav-bar);
-}
-.notification-box::-webkit-scrollbar-thumb:hover {
-  background-color: var(--feed-title-BG);
-}
-  
-.notification {
-  color: #000000;
-  border: solid var(--job-title) calc((3 / 1280) * var(--x-multiplier));
-  border-radius: calc((15 / 1280) * var(--x-multiplier));
-  right: 50%;
-  transform: translateX(50%);
-  font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
-  font-weight: 600;
-  direction: ltr;
-}
-.notification .link {
-  color: black;
-  font-weight: 600;
-}
-.notification .view-more {
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-decoration: underline;
-  font-family: var(--app-font-family);
-  font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
-  color: black;
-  font-weight: 600;
-  text-indent: -6px;
-}
-.notification .state {
-  background-color: white;
-  border: solid var(--job-title) calc((3 / 1280) * var(--x-multiplier));
-  border-radius: 50%;
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  top: 0;
-  left: 0;
-  transform: translate(-50%, -50%);
-}
-.notification .state div {
-  border-radius: 50%;
-  transition: background-color 0.5s ease-in-out;
-}
 
 /* =========================
   Footer Styles
   ========================= */
-footer{
+footer {
   background-color: var(--footer);
   width: 100%;
-  height: calc((260 / 720) * var(--y-multiplier)); 
+  height: calc((260 / 720) * var(--y-multiplier));
   top: 100%;
 }
 
@@ -586,24 +548,29 @@ footer{
   height: 100%;
   flex-wrap: nowrap;
 }
+
 .footer-content .logo {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
-.footer-content .logo .unitec{
+
+.footer-content .logo .unitec {
   width: calc((140 / 1280) * var(--x-multiplier));
   height: calc((176 / 720) * var(--y-multiplier));
 }
-.footer-content .logo .eest2{
+
+.footer-content .logo .eest2 {
   width: calc((176 / 1280) * var(--x-multiplier));
   height: calc((176 / 720) * var(--y-multiplier));
 }
-.footer-content .logo .eest2.l{
+
+.footer-content .logo .eest2.l {
   display: none;
 }
-.footer-content > * {
+
+.footer-content>* {
   margin-top: calc((32 / 720) * var(--y-multiplier));
   margin-left: calc((66 / 1280) * var(--x-multiplier));
 }
@@ -615,31 +582,39 @@ footer{
   margin-top: calc((16 / 720) * var(--y-multiplier));
 }
 
-.contact, .links {
+.contact,
+.links {
   display: flex;
   flex-direction: column;
   gap: calc((8 / 720) * var(--y-multiplier));
 }
-.contact strong, .links strong {
+
+.contact strong,
+.links strong {
   margin-bottom: calc((8 / 720) * var(--y-multiplier));
-  font-size: calc((24 / 720) * var(--y-multiplier) * var(--font-multiplier));
+  font-size: 22px;
 }
-.contact a, .links a {
+
+.contact a,
+.links a {
   color: #fff;
   text-decoration: underline;
-  font-size: calc((20 / 720) * var(--y-multiplier) * var(--font-multiplier));
+  font-size: 18px;
 }
 
 /* --- Responsive Footer --- */
-@media (max-width: 700px), (orientation: portrait) {
-  footer{
+@media (max-width: 700px),
+(orientation: portrait) {
+  footer {
     height: fit-content;
   }
-  .footer-content > * {
+
+  .footer-content>* {
     margin-top: calc((38 / 720) * var(--y-multiplier));
     margin-left: calc((66 / 1280) * var(--x-multiplier));
   }
-  .footer-content .logo{
+
+  .footer-content .logo {
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -647,16 +622,20 @@ footer{
     margin-top: calc((12 / 720) * var(--y-multiplier));
     gap: 0;
   }
-  .footer-content .logo > *{
+
+  .footer-content .logo>* {
     margin-top: 0;
   }
-  .footer-content .logo .eest2.r{
+
+  .footer-content .logo .eest2.r {
     display: none;
   }
-  .footer-content .logo .eest2.l{
+
+  .footer-content .logo .eest2.l {
     display: flex;
   }
-  .footer-content .links{
+
+  .footer-content .links {
     margin-left: 0;
   }
 }
@@ -670,40 +649,8 @@ footer{
   width: 100%;
   background: var(--delimiters);
 }
-.offer-fv-deapply{
+
+.offer-fv-deapply {
   background-color: var(--danger);
   color: white;
 }
-
-
-/* =========================
-  Register Enterprise Styles
-  ========================= */
-
-  @media (orientation: portrait){
-    .register-enterprise-window {
-      width: 90% !important;
-      height: 36vh !important;
-    }
-
-    .register-enterprise-window .input-field {
-      font-size: 1em;
-      height: 30px !important;
-      min-width: 150px !important;
-    }
-    
-    .register-enterprise-window textarea.input-field {
-      font-size: 1em;
-      height: 60px !important;
-    }
-
-    .register-enterprise-window .action-button {
-      font-size: 1.9em;
-      height: 40px !important;
-      min-width: 90% !important;
-    }
-  }
-
-
-
-  

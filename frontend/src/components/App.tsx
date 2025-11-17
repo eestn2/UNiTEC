@@ -4,7 +4,6 @@
  * It initializes the app, sets up Axios interceptors, and defines the routes for the application.
  * @date May 11, 2025
  * 
- * @Author: Haziel Magallanes
  */
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -23,6 +22,7 @@ import JobOfferFV from './offers/JobOfferFV';
 import AdminIndex from './admin/AdminIndex';
 import ProfileInfo from './user/ProfileInfo';
 import { ToastManagerProvider } from './UI/ToastManager';
+import PageNotFound from './misc/PageNotFound';
 import { useEffect, useState } from 'react';
 import PublishOffer from './offers/PublishOffer';
 import SeeApplicants from './offers/SeeApplicants';
@@ -31,7 +31,9 @@ import { useWindowSize } from '../hooks/responsive/useWindowSize';
 import LoadingScreen from './UI/LoadingScreens/LoadingScreen';
 import type { user } from '../types/user';
 import EditProfile from './user/EditProfile';
-
+import OffersPostulated from './offers/OffersPostulated';
+import UserReview from './UI/user/UserReview';
+import ReportUser from './UI/user/ReportUser';
 /**
  * The main application component that handles routing and session management.
  * 
@@ -44,7 +46,6 @@ import EditProfile from './user/EditProfile';
  * @example
  * <App />
  * 
- * @Author: Haziel Magallanes
  */
 
 function App(): JSX.Element {
@@ -68,7 +69,7 @@ function App(): JSX.Element {
     // Check session from server
     axios.get('/session/me.php')
       .then(res => {
-        if (res.data.status === 'success' && res.data.data && res.data.data.user as user) {
+        if (res.status === 200 && res.data.data.user as user) {
           User.set(res.data.data.user as user);
           setSession(true);
         }
@@ -77,7 +78,7 @@ function App(): JSX.Element {
       .finally(() => setGettingSession(false));
   }, []); 
 
-  if (gettingSession ) {
+  if (gettingSession) {
     return <div className='app-content'><LoadingScreen /></div>;
   }
   // Browser routings
@@ -94,15 +95,22 @@ function App(): JSX.Element {
               <Route path='/password-reset' element={<ForgotPasswordMail />} />
               <Route path='/password-reset-code' element={<ForgotPasswordCode />} />
               <Route path='/password-reset-new' element={<ForgotPasswordNewPass />} />
+              <Route path='/password-reset-code' element={<ForgotPasswordCode />} />
+              <Route path='/password-reset-new' element={<ForgotPasswordNewPass />} />
               <Route path='/profile/:id' element={<ProfileInfo />} />
               <Route path='/edit-profile' element={<EditProfile />} />
               {/*Add default admin-menu route to the approve users one. */}
               <Route path='/admin-menu/:panel' element={<AdminIndex />} />
+              <Route path="/job-offer/:offerId/:showReviewButton" element={<JobOfferFV />} />
               <Route path="/job-offer/:offerId" element={<JobOfferFV />} />
               <Route path="/job-offer/:offerId/:message/:type" element={<JobOfferFV />} />
               <Route path="/publish-offer" element={<PublishOffer />} />
               <Route path="/see-applicants" element={<SeeApplicants />} />
               <Route path="/send-email" element={<SendEmail />} /> 
+              <Route path="/review/:reviewedId" element={<UserReview />} />
+              <Route path="/report/:reportedId" element={<ReportUser />} />
+              <Route path="/offers-postulated" element={<OffersPostulated />} />
+              <Route path='*' element={<PageNotFound />} />
           </Routes>
           </BrowserRouter>
         </div>

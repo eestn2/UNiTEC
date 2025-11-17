@@ -2,7 +2,6 @@
  * @file ChangePassword.tsx
  * @description A reusable React component for rendering a responsive password change form with validation.
  * Converts width and height from pixels to responsive units based on screen size.
- * @author Haziel Magallanes
  * @date May 11, 2025
  */
 
@@ -23,7 +22,6 @@ import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
  * ```tsx
  * <ChangePassword />
  * ```
- * @author Haziel Magallanes
  */
 const ChangePassword: React.FC = () => {
     return (

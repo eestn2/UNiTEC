@@ -2,7 +2,6 @@
  * @file offer.ts
  * @description Type definition for a job offer object as returned by the backend API.
  * Includes all attributes present in the job offer response.
- * @author Haziel Magallanes
  * @date May 17, 2025
  *
  * @property {number} id - Unique identifier for the job offer.

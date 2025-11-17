@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
  * @example
  * const windowSize = useWindowSize();
  * // Use width and height for responsive rendering if you need it.
- * @Author Haziel Magallanes
  */
 
 export function useWindowSize() {

@@ -3,7 +3,6 @@
  * @description User profile information display component with responsive layout.
  * Shows user details, tags, status, languages and provides options to edit profile, 
  * change password and logout.
- * @author Haziel Magallanes
  * @date May 20, 2025
  */
 
@@ -26,6 +25,7 @@ import { UserTypeEnum } from '../../types/user';
 
 import '../../styles/profile-info.css';
 import LoadingScreen from '../UI/LoadingScreens/LoadingScreen';
+import defaultError from '../../global/messages/defaultError';
 
 // Add types for tags and languages
 
@@ -51,45 +51,47 @@ const ProfileInfo: React.FC = () => {
     tags?: tag[];
     languages?: Language[];
   }>();
+
   const navigate = useNavigate();
   const showNotImplementedToast = useNotImplementedToast();
+
   useEffect(() => {
-  if (!id) return;
-  axios.get(`/user/user-info.php?id=${id}`)
-    .then((res) => {
-      const user = res?.data?.data?.user;
-      if (!user) return;
+    if (!id) return;
+    axios.get(`/user/user-info.php?id=${id}`)
+      .then((res) => {
+        const user = res?.data?.data?.user;
+        if (!user) return;
 
-      // Prefix portfolio only if present and missing protocol
-      if (typeof user.portfolio === 'string' && user.portfolio.length > 0 && !/^https?:\/\//i.test(user.portfolio)) {
-        user.portfolio = `http://${user.portfolio}`;
-      }
-
-      setUserData(user);
-    })
-    .catch((err) => {
-      console.error("Failed to load user-info", err);
-    });
-
+        // Prefix portfolio only if present and missing protocol
+        if (typeof user.portfolio === 'string' && user.portfolio.length > 0 && !/^https?:\/\//i.test(user.portfolio)) {
+          user.portfolio = `http://${user.portfolio}`;
+        }
+        setUserData(user);
+      })
+      .catch((error) => {
+        if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+        alert(defaultError);
+      });
   }, [id]);
-const normalize = (arr: unknown): Tag[] => {
-  if (!Array.isArray(arr)) return [];
-  return arr
-    .map((item: any) => {
-      if (Array.isArray(item)) {
-        const [name, level] = item;
+
+  const normalize = (arr: unknown): Tag[] => {
+    if (!Array.isArray(arr)) return [];
+    return arr
+      .map((item: any) => {
+        if (Array.isArray(item)) {
+          const [name, level] = item;
+          return {
+            name: String(name ?? ""),
+            level: level != null ? (Number(level) as 1 | 2 | 3) : undefined,
+          };
+        }
         return {
-          name: String(name ?? ""),
-          level: level != null ? (Number(level) as 1 | 2 | 3) : undefined,
+          name: String(item?.name ?? ""),
+          level: item?.level != null ? (Number(item.level) as 1 | 2 | 3) : undefined,
         };
-      }
-      return {
-        name: String(item?.name ?? ""),
-        level: item?.level != null ? (Number(item.level) as 1 | 2 | 3) : undefined,
-      };
-    })
-    .filter((t) => t.name.length > 0);
-};
+      })
+      .filter((t) => t.name.length > 0);
+  };
   // Example handlers
   const handleEditProfile = () => {
     navigate('/edit-profile');
@@ -101,12 +103,12 @@ const normalize = (arr: unknown): Tag[] => {
 
   const handleLogout = async () => {
     try {
-      await axios.get('/session/logout.php', { withCredentials: true });
+      await axios.get('/session/logout.php');
       User.clear();
       navigate('/');
     } catch (error) {
-      alert("Error al cerrar sesión. Por favor, inténtalo de nuevo.");
-      console.error("Logout failed:", error);
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
     }
   };
 
@@ -115,12 +117,14 @@ const normalize = (arr: unknown): Tag[] => {
   };
 
   const handleReport = () => {
-    console.log("Report clicked");
+    if (userData?.id) {
+      navigate(`/report/${userData.id}/`);
+    }
   };
 
   // Group tags and languages by level
- const tags: Tag[] = normalize(userData?.tags || []);
-const languages: Tag[] = normalize(userData?.languages || []);
+  const tags: Tag[] = normalize(userData?.tags || []);
+  const languages: Tag[] = normalize(userData?.languages || []);
   // For demonstration, using static languages if userData is not available
   const isPortrait = window.innerHeight > window.innerWidth;
   const windowWidth = window.innerWidth > window.innerHeight ? 980 : 1280;
@@ -140,7 +144,7 @@ const languages: Tag[] = normalize(userData?.languages || []);
   }
   return (
     <div>
-      <Logo className='watermark' />
+      <Logo className='watermark' style={{borderTopRightRadius: 16, borderBottomRightRadius: 16}}/>
       <AppWindow
         width={isEmpresaOrAdmin ? 600 : windowWidth}
         height={isPortrait ? undefined : 680}

@@ -6,77 +6,83 @@ import ActionButton from "../UI/ActionButton";
 import SearchBar from "../UI/admin/SearchBar";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
 import ProfilePicture from "../UI/user/ProfilePicture";
+import defaultError from "../../global/messages/defaultError";
 
 const AdminDesignate: React.FC = () => {
-    type Admin = {
-      id: number;
-      email: string;
-      name: string;
-    };
-    const [admins, setAdmins] = useState<Admin[]>([]);
-    const [suggestions, setSuggestions] = useState<string[]>([]);
-    const loadAdmins = async () => {
-      try {
-        const response = await axios.get('/admin/get-admins.php',
-          {withCredentials: true,});
-
-        if (response.status !== 200 || response.data.status !== "success") {
-          console.error("Failed to load admins:", response.data.message);
-        } else {
-          const adminsList = response.data.data.admins.map((admin: any) => ({
-            id: admin.id,
-            email: admin.email,
-            name: admin.name,
-          }));
-          console.log("Admins loaded successfully:", response.data.data.admins);
-          setAdmins(adminsList);
-        }
-      } catch (error) {
-        console.error("An error occurred while loading admins:", error);
+  type Admin = {
+    id: number;
+    email: string;
+    name: string;
+  };
+  const [admins, setAdmins] = useState<Admin[]>([]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const loadAdmins = async () => {
+    try {
+      const response = await axios.get('/admin/get-admins.php');
+      if (response) {
+        const adminsList = response.data?.data?.admins?.map((admin: Admin) => ({
+          id: admin.id,
+          email: admin.email,
+          name: admin.name,
+        })) ?? [];
+        setAdmins(adminsList);
       }
-    };
-    const handleAdd = async (attribute: string) => {
-      const response = await axios.post('/admin/add_admin.php', {
-          admin_email:attribute,
-          withCredentials: true,
+    } catch (error) {
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
+    }
+  };
+
+  const handleAdd = async (attribute: string) => {
+    try {
+      const response = await axios.post(
+        '/admin/add-admin.php',
+        { admin_email: attribute },
+      );
+      if (response) await loadAdmins();
+    } catch (error) {
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
+    }
+  };
+
+  const handleRemove = async (id: number) => {
+    try {
+      const response = await axios.delete('/admin/delete-user.php', {
+        data: {
+          id: id,
+        }
       });
-      console.log(response);
-      await loadAdmins();
-   };
+      if (response) await loadAdmins();
+    } catch (error) {
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
+    }
+    
+  };
+  const handleLoadSuggestions = async (input: string) => {
+    if (input.length < 3) {
+      setSuggestions([]);
+      return;
+    }
+    try {
+      const response = await axios.get('/admin/get-users-by-email.php', {
+        params: { email: input },
+      });
+      if (response) setSuggestions(response.data.data.users.map((u: any) => `${u.email}`));
+    } catch (error) { 
+      setSuggestions([]);
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
+     
+    }
+  };
+  useEffect(() => {
+    loadAdmins();
+  }, []);
 
-    const handleRemove = async (id: number) => {
-      const response = await axios.delete('/admin/delete_user.php', {
-          data:{
-            id:id,}
-      }); 
-      console.log(response);
-     await loadAdmins();
-    };
-    const handleLoadSuggestions = async (input: string) => {
-      if (input.length < 3) {
-        setSuggestions([]);
-        return;
-      }
-      try {
-        const response = await axios.get('/admin/get-users-by-email.php', {
-          params: { email: input },
-          withCredentials: true,
-        });
-        if (response.data.status === "success") {
-          setSuggestions(response.data.data.users.map((u: any) => `${u.email}`));
-        } else {
-          setSuggestions([]);
-        }
-      } catch (e) {
-        setSuggestions([]);
-      }
-    };
-    useEffect(() => {
-        loadAdmins();
-    }, []);
-
-    return (
-         <div>
+  return (
+    <div>
       <NavBar />
       <AppWindow
         height={500}
@@ -101,55 +107,58 @@ const AdminDesignate: React.FC = () => {
           }}
           onInputChange={handleLoadSuggestions}
           suggestions={suggestions}
-          style={{ marginBottom: `${TranslateFigmaCoords.translateFigmaX(20)}px`,  }}
+          style={{ marginBottom: `${TranslateFigmaCoords.translateFigmaX(20)}px`, }}
         />
         <h2 style={{ color: "#305894", textAlign: "center" }}>Lista de Administradores</h2>
-        <div style={{ display: "flex", flexDirection: "column",
+        <div style={{
+          display: "flex", flexDirection: "column",
           gap: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
           marginTop: `${TranslateFigmaCoords.translateFigmaX(10)}px`,
           overflowY: "scroll",
-          maxHeight: `${TranslateFigmaCoords.translateFigmaX(200)}px`}}>
+          maxHeight: `${TranslateFigmaCoords.translateFigmaX(200)}px`
+        }}>
           {admins.length === 0 ? (
-            <p style={{ textAlign: 'center', color:"#305894" }}>No hay admins aparte de usted.</p>
-        ) : (
+            <p style={{ textAlign: 'center', color: "#305894" }}>No hay admins aparte de usted.</p>
+          ) : (
 
-        admins.map((admin) => (
-          <div
-            key={admin.id}
-            style={{
-              color: "#6F88B3",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: `${TranslateFigmaCoords.translateFigmaX(4)}px ${TranslateFigmaCoords.translateFigmaX(20)}px`,
-              border: `${TranslateFigmaCoords.translateFigmaX(1)}px solid #5386FF`,
-              borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
-            }}
-          >
-            <span> <ProfilePicture userId={admin.id as number} size={30} vertical={window.innerWidth > window.innerHeight}></ProfilePicture> {admin.name} ({admin.email})</span>
-            <ActionButton
-              style={{
-                backgroundColor: "#D43D3D",
-                color: "white",
-                border: "none",
-                padding: `${TranslateFigmaCoords.translateFigmaX(15)}px ${TranslateFigmaCoords.translateFigmaX(22)}px`,
-                borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
-                cursor: "pointer",
-              }}
-              text={"Remover"}
-              action={() => {
-              alert(`Eliminaste a ${admin.name}`);
-              handleRemove(admin.id);}}>
-            </ActionButton>
-          </div>
-        ))
-      )}
-         
+            admins.map((admin) => (
+              <div
+                key={admin.id}
+                style={{
+                  color: "#6F88B3",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: `${TranslateFigmaCoords.translateFigmaX(4)}px ${TranslateFigmaCoords.translateFigmaX(20)}px`,
+                  border: `${TranslateFigmaCoords.translateFigmaX(1)}px solid #5386FF`,
+                  borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
+                }}
+              >
+                <span> <ProfilePicture userId={admin.id as number} size={30} vertical={window.innerWidth > window.innerHeight}></ProfilePicture> {admin.name} ({admin.email})</span>
+                <ActionButton
+                  style={{
+                    backgroundColor: "#D43D3D",
+                    color: "white",
+                    border: "none",
+                    padding: `${TranslateFigmaCoords.translateFigmaX(15)}px ${TranslateFigmaCoords.translateFigmaX(22)}px`,
+                    borderRadius: `${TranslateFigmaCoords.translateFigmaX(20)}px`,
+                    cursor: "pointer",
+                  }}
+                  text={"Remover"}
+                  action={() => {
+                    alert(`Eliminaste a ${admin.name}`);
+                    handleRemove(admin.id);
+                  }}>
+                </ActionButton>
+              </div>
+            ))
+          )}
+
         </div>
       </AppWindow>
     </div>
 
-    )
+  )
 }
 
 export default AdminDesignate

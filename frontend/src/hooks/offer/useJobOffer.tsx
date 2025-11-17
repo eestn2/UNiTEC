@@ -3,7 +3,6 @@
  * @description Custom React hook for managing the state and logic of a job offer window.
  *              Handles author fetching, overflow detection, expansion/collapse, and Figma coordinate translation.
  *              Intended for use in both preview and full-view job offer components.
- * @author Haziel Magallanes
  * @date May 16, 2025
  */
 
@@ -11,7 +10,7 @@ import { useEffect, useRef, useState, Ref } from "react";
 import axios from "axios";
 import useResponsiveDimensions from "../responsive/useResponsiveDimensions";
 import { ResponsiveUnit } from "../../global/interface/ResponsiveComponent";
-import { useWindowSize } from "../responsive/useWindowSize"; 
+import defaultError from "../../global/messages/defaultError";
 
 /**
  * Props for the `useJobOffer` hook.
@@ -76,9 +75,8 @@ export interface UseJobOfferProps {
  * ```
  */
 export function useJobOffer({ height, width, authorId, description, vertical = false }: UseJobOfferProps) {
-    const windowSize = useWindowSize();
     const rootRef = useRef<HTMLDivElement>(null);
-    const [author, setAuthor] = useState<{ name: string; profile_picture: string }>({ name: "Unknown", profile_picture: "" });
+    const [author, setAuthor] = useState<{ name: string; profile_picture: string }>({ name: "Cargando...", profile_picture: "" });
     const [overflowing, setOverflowing] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
     const appWindowRef: Ref<HTMLDivElement> = useRef<HTMLDivElement>(null);
@@ -96,15 +94,11 @@ export function useJobOffer({ height, width, authorId, description, vertical = f
     useEffect(() => {
         const fetchAuthorDetails = async () => {
             try {
-                const response = await axios.get(`/user/user-info.php`, {
-                    params: { id: authorId },
-                });
-                if (response.status === 200 && response.data.status === "success") {
-                    setAuthor({name: response.data.data.user.name, profile_picture: response.data.data.user.profile_picture});
-                    // console.log(`Author details fetched successfully for ID ${authorId}:`, response.data.data.user);
-                }
-            } catch {
-                // handle error
+                const response = await axios.get(`/user/user-info.php`, { params: { id: authorId }});
+                if (response) setAuthor({name: response.data.data.user.name, profile_picture: response.data.data.user.profile_picture});
+            } catch (error) {
+                if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+                alert(defaultError);
             }
         };
         fetchAuthorDetails();
@@ -130,7 +124,6 @@ export function useJobOffer({ height, width, authorId, description, vertical = f
     }, [isExpanded]);
 
     return {
-        windowSize,
         rootRef,
         author,
         overflowing,

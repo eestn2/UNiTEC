@@ -4,7 +4,6 @@
  * @description Utility function to check if a user is an administrator.
  * Queries the database for the user's type and returns true if the user is an admin (user_type_id = 4).
  * Used to restrict access to admin-only API endpoints and actions.
- * @author Francesco Sidotti
  * @date May 17, 2025
  *
  * Usage:

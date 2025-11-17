@@ -2,14 +2,13 @@
  * @file Logo.tsx
  * @description A reusable React component that displays the Unitec logo and text in a responsive window.
  * Converts width, height, and logo sizes from pixels to responsive units based on screen size.
- * @author Haziel Magallanes
  * @date May 11, 2025
  */
 
 import React from "react";
 import logo from "../../../assets/unitec/unitec-icon.svg";
 import logo_text from "../../../assets/unitec/unitec-text.svg";
-import AppWindow from "../AppWindow"; 
+import AppWindow from "../AppWindow";
 import ResponsiveComponent from "../../../global/interface/ResponsiveComponent";
 import { getTranslates } from "../../../global/function/getTranslates";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +21,6 @@ import { useNavigate } from "react-router-dom";
  * @property {number} [logo_size=140] - The size of the logo icon in Figma coordinates.
  * @property {number} [logo_text_size=38] - The size of the logo text in Figma coordinates.
  * 
- * @author Haziel Magallanes
  */
 interface LogoProps extends ResponsiveComponent {
     /** The size of the logo icon in Figma coordinates. */
@@ -50,31 +48,28 @@ interface LogoProps extends ResponsiveComponent {
  * ```tsx
  * <Logo width={210} height={210} logo_size={140} logo_text_size={38} />
  * ```
- * @author Haziel Magallanes
  */
 const Logo: React.FC<LogoProps> = ({
     width = 210,
     height = 210,
     logo_size = 140,
-    logo_text_size = 38,
-    vertical = false,
+    logo_text_size = 38, 
     style,
     className
 }) => {
-    const [ translateX ] = getTranslates(vertical);
     const navigate = useNavigate();
     return (
-        <AppWindow
-            width={width}
-            height={height}
-            vertical={vertical}
+        <div
             style={{
                 borderTopLeftRadius: 0,
                 borderBottomLeftRadius: 0,
-                boxShadow: "none",
+                boxShadow: "none", 
+                width: width,
+                height: height,
+                backgroundColor: 'var(--window-outer)',
                 ...style
             }}
-            className={className || ''}
+            className={className || 'app-window'}
         >
             <div
                 className="unitec-logo-container"
@@ -96,7 +91,7 @@ const Logo: React.FC<LogoProps> = ({
                     e.preventDefault();
                     e.currentTarget.style.scale = "0.9";
                 }}
-                onMouseUp = {(e) => {
+                onMouseUp={(e) => {
                     e.preventDefault();
                     e.currentTarget.style.scale = "1";
                 }}
@@ -108,17 +103,18 @@ const Logo: React.FC<LogoProps> = ({
                 <img
                     src={logo}
                     alt="Unitec Logo"
-                    width={translateX(logo_size)}
-                    height={translateX(logo_size)}
+                    width={logo_size}
+                    height={logo_size}
                 />
                 <img
+                id="TextLogo"
                     src={logo_text}
                     alt="Unitec Text"
-                    width={translateX(logo_size)}
-                    height={translateX(logo_text_size)}
+                    width={logo_size}
+                    height={logo_text_size}
                 />
             </div>
-        </AppWindow>
+        </div>
     );
 };
 

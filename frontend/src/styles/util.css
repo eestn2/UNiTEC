@@ -1,61 +1,73 @@
-.flex{
-    display: flex;
+.flex {
+  display: flex;
 }
-.flex-row{
-    display: flex;
-    flex-direction: row;
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
 }
-.flex-column{
-    display: flex;
-    flex-direction: column;
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
 }
-.white{
-    color: white;
+
+.white {
+  color: white;
 }
-.black{
-    color: black;
+
+.black {
+  color: black;
 }
-.centered{
-    position: absolute;
-    top: 50%;
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.centered-x {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.centered-y {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.centered-w-wm {
+  position: absolute;
+  top: 50%;
+  left: calc((240 / 1280) * 100vw);
+  transform: translateY(-50%);
+}
+
+@media (orientation: portrait) {
+  .centered-w-wm {
     left: 50%;
     transform: translate(-50%, -50%);
+  }
 }
-.centered-x{
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+
+.align-center {
+  align-items: center;
 }
-.centered-y{
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+
+.justify-center {
+  justify-content: center;
 }
-.centered-w-wm{
-    position: absolute;
-    top: 50%;
-    left: calc((240 / 1280) * 100vw);
-    transform: translateY(-50%);
-}
-@media (orientation: portrait) {
-    .centered-w-wm {
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-}
-.align-center{
-    align-items: center;
-}
-.justify-center{
-    justify-content: center;
-}
-.relative{
-    position: relative;
+
+.relative {
+  position: relative;
 }
 
 .error {
-    color: #d40202;
-    text-align: center;
+  color: #d40202;
+  text-align: center;
 }
 
 
@@ -67,11 +79,39 @@
   bottom: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999;
+}
+
+@media (max-width:480px) {
+  .modal-card {
+    min-width: 250px !important;
+  }
+
+  .modal-header {
+    gap: 5px !important;
+  }
+
+  .modal-title {
+    font-size: 23px !important;
+  }
+
+  .modal-close {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+.modal-close-icon {
+  width: 70px !important;
+  height: 70px !important; 
+}
+
+  .modal-message {
+    font-size: 20px !important; 
+  }
 }
 
 /* Card container */
@@ -79,12 +119,12 @@
   background-color: #fff;
   display: flex;
   flex-direction: column;
-  min-width: calc((400/1280) * var(--x-multiplier));
+  min-width: 400px;
   max-width: 90%;
   max-height: 85%;
-  border-radius: calc((20/1280) * var(--x-multiplier));
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 calc((4/1280) * var(--x-multiplier)) calc((12/1280) * var(--x-multiplier)) rgba(0,0,0,0.25);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   position: relative;
 }
 
@@ -93,13 +133,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: calc((3/1280) * var(--x-multiplier)) solid #3b82f6;
-  padding: calc((16/1280) * var(--x-multiplier));
+  border-bottom: 3px solid #3b82f6;
+  padding: 16px;
   background-color: #fff;
 }
 
 .modal-title {
-  font-size: calc((23/1280) * var(--x-multiplier));
+  font-size: 23px;
   font-weight: 500;
   color: #6F88B3;
 }
@@ -107,8 +147,8 @@
 .modal-close {
   border: none;
   background: crimson;
-  width: calc((50/1280) * var(--x-multiplier));
-  height: calc((50/1280) * var(--x-multiplier));
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
@@ -117,19 +157,19 @@
 }
 
 .modal-close-icon {
-  width: calc((80/1280) * var(--x-multiplier));
-  height: calc((80/1280) * var(--x-multiplier));
+  width: 80px;
+  height: 80px;
   object-fit: contain;
   fill: white;
 }
 
 /* Body */
 .modal-body {
-  padding: calc((20/1280) * var(--x-multiplier));
+  padding: 20px;
 }
 
 .modal-message {
-  font-size: calc((18/1280) * var(--x-multiplier));
+  font-size: 18px;
   color: #333;
 }
 
@@ -137,17 +177,17 @@
 .modal-footer {
   display: flex;
   justify-content: flex-end;
-  gap: calc((10/1280) * var(--x-multiplier));
-  padding: calc((16/1280) * var(--x-multiplier));
+  gap: 10px;
+  padding: 16px;
   background-color: #f9f9f9;
 }
 
 /* Buttons */
 .modal-btn {
   border: none;
-  border-radius: calc((8/1280) * var(--x-multiplier));
-  padding: calc((8/1280) * var(--x-multiplier)) calc((16/1280) * var(--x-multiplier));
-  font-size: calc((16/1280) * var(--x-multiplier));
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 16px;
   cursor: pointer;
   font-weight: 500;
   transition: background-color 0.2s ease;

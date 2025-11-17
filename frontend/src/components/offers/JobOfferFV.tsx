@@ -3,41 +3,41 @@ import AppWindow from "../UI/AppWindow";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import type { offer } from "../../types/JobOfferTypes";
-import type { TypedResponse } from "../../types/Response";
 import close_icon from "../../assets/icons/close.svg";
 import NavBar from "../UI/NavBar";
 import TranslateFigmaCoords from "../../global/function/TranslateFigmaCoords";
-import { useWindowSize } from "../../hooks/responsive/useWindowSize";
 import ActionButton from "../UI/ActionButton";
 import { user } from "../../types/user";
 import TextWithBreaks from "../UI/TextWithBreaks";
+import User from "../session/User";
 import ProfilePicture from "../UI/user/ProfilePicture";
+import defaultError from "../../global/messages/defaultError";
+import StateButton from "../UI/StateButton";
+import { usePostulate } from "../../hooks/user/usePostulate";
+import apply_icon from "../../assets/icons/apply.svg";
+import deapply_icon from "../../assets/icons/deapply.svg";
 
 const JobOfferFV: React.FC = () => {
-    // Re-Render on window resize
-    const windowSize = useWindowSize();
-    console.log("Window size:", windowSize);
     // State variables for job offer data
-    const { offerId, message, type } = useParams<{ offerId: string; message: string; type: string }>();
+    const { offerId, message, type, showReviewButton: showReviewParam } = useParams<{ offerId: string; message: string; type: string; showReviewButton?: string }>();
     const iType = type ? parseInt(type, 10) : undefined;
+    const numericOfferId = offerId ? parseInt(offerId, 10) : NaN;
     const [jobOffer, setJobOffer] = useState<offer | null>(null);
     const [author, setAuthor] = useState<user | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [offerLoading, setOfferLoading] = useState(true);
+    const { postulated, setPostulated, postulate, depostulate } = usePostulate(numericOfferId);
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchOffer = async () => {
             try {
-                const { data: response } = await axios.get<TypedResponse<offer>>(
-                    `/feed/job-offer.php?id=${offerId}`
-                );
-                if (response.status === "success") {
-                    setJobOffer(response.data);
-                }
-            } catch (e) {
-                console.error("Error fetching job offer:", e);
+                const response = await axios.get(`/feed/job-offer.php?id=${offerId}`);
+                if (response) setJobOffer(response.data.data);
+            } catch (error) {
+                if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+                alert(defaultError);
             } finally {
-                setLoading(false);
+                setOfferLoading(false);
             }
         };
         fetchOffer();
@@ -45,24 +45,32 @@ const JobOfferFV: React.FC = () => {
 
     useEffect(() => {
         const fetchAuthor = async () => {
+            if(!jobOffer) return;
+            setOfferLoading(true);
             try {
-                const { data: response } = await axios.get<TypedResponse<any>>(
-                    `/user/user-info.php?id=${jobOffer?.creator_id}`
-                );
-                if (response.status === "success") {
-                    setAuthor(response.data.user as user);
-                }
-            } catch (e) {
-                console.error("Error fetching job offer:", e);
+                const response = await axios.get(`/user/user-info.php?id=${jobOffer?.creator_id}`);
+                if (response) setAuthor(response.data.data.user as user);
+            } catch (error) {
+                if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+                alert(defaultError);
             } finally {
-                setLoading(false);
+                setOfferLoading(false);
             }
         };
         fetchAuthor();
     }, [jobOffer]);
-    console.log(author);
-    if (loading) return <div>Cargando...</div>;
+    
+    if (!offerId || isNaN(numericOfferId)) return <div>ID de oferta inválido.</div>;
+    if (offerLoading) return <div>Cargando...</div>;
     if (!jobOffer) return <div>No se encontró la oferta.</div>;
+
+    // Botón para reseñar si el estado de la oferta es 1, o si se pasa por params
+    let showReviewButton = false;
+    if (typeof showReviewParam !== 'undefined') {
+        showReviewButton = showReviewParam === 'true';
+    } else if (typeof showReviewParam === 'undefined') {
+        showReviewButton = false;
+    }
 
     return (<>
         <NavBar />
@@ -137,33 +145,60 @@ const JobOfferFV: React.FC = () => {
                             }}>{message}</span>
                         </div>
                     )}
-                    <div className="text" style={{ 
+                    <div className="text" style={{
                         marginBottom: `${TranslateFigmaCoords.translateFigmaY(5)}px`,
-                        marginTop: !message ? 0 : `${TranslateFigmaCoords.translateFigmaY(40)}px`}}>
+                        marginTop: !message ? 0 : `${TranslateFigmaCoords.translateFigmaY(40)}px`
+                    }}>
                         <span className="offer-title">{jobOffer.title}</span>
                         <br />
-                        <div className="offer-fv-description-delimiter" style={{marginBottom: `${TranslateFigmaCoords.translateFigmaY(4)}px`}}></div>
+                        <div className="offer-fv-description-delimiter" style={{ marginBottom: `${TranslateFigmaCoords.translateFigmaY(4)}px` }}></div>
                         <div style={{
                             width: `${TranslateFigmaCoords.translateFigmaX(1154)}px`,
                             height: `${TranslateFigmaCoords.translateFigmaY(350)}px`,
                             paddingRight: `${TranslateFigmaCoords.translateFigmaX(24)}px`,
-                            overflowY: "auto" 
+                            overflowY: "auto"
                         }}
-                        className="scrollbar">
+                            className="scrollbar">
                             <TextWithBreaks text={jobOffer.description} />
                         </div>
-                        <div className="offer-fv-description-delimiter" style={{marginTop: `${TranslateFigmaCoords.translateFigmaY(4)}px`}}></div>
+                        <div className="offer-fv-description-delimiter" style={{ marginTop: `${TranslateFigmaCoords.translateFigmaY(4)}px` }}></div>
                         {iType === 4 || iType === 5 ? null : (
                             // If notification type is 4 or 5, hide Deapply button
-                            <ActionButton text="Despostularse" className="offer-fv-deapply" height={40} style={{marginTop: `${TranslateFigmaCoords.translateFigmaY(6)}px`}}/>
-                        )}
-                        
+                            showReviewButton ? author && (
+                                <ActionButton
+                                    text={`Reseñar a ${author.name || "usuario"}`}
+                                    height={40}
+                                    style={{ marginTop: `${TranslateFigmaCoords.translateFigmaY(12)}px`, backgroundColor: "#3a3a7c", color: "#fff" }}
+                                    action={() => {
+                                        navigate(`/review/${author.id}/${encodeURIComponent(author.name)}/${User.data.id}/${encodeURIComponent(User.data.name)}`);
+                                    }}
+                                />
+                            ) :
+                                (
+                                    <StateButton
+                                        trueIcon={apply_icon}
+                                        falseIcon={deapply_icon}
+                                        trueText="Postularse"
+                                        falseText="Despostularse"
+                                        state={postulated as boolean}
+                                        setState={setPostulated}
+                                        action={() => {
+                                            if (postulated) return depostulate();
+                                            postulate();
+                                        }}
+                                    />
+                                )
+                        )
+                        }
+
+
                     </div>
                 </AppWindow>
             </AppWindow>
         </AppWindow>
     </>
     );
+
 };
 
 export default JobOfferFV;

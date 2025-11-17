@@ -4,42 +4,33 @@ import AppWindow from '../UI/AppWindow';
 import NavBar from '../UI/NavBar';
 import InputField from '../UI/form/InputField';
 import TextBox from '../UI/form/TextBox';
-import { useWindowSize } from '../../hooks/responsive/useWindowSize';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import defaultError from '../../global/messages/defaultError';
 
 interface SendEmailProps {
   id?: number;
 }
 const SendEmail: React.FC<SendEmailProps> = ({id}) => {
-
-  // Re-Render on window resize
-  const windowSize = useWindowSize();
   const [userEmail, setUserEmail] = useState<string>('');
   const [username, setUsername] = useState<string>('');
-   const handleGetUserEmail = async (id : number) => {
+  const handleGetUserEmail = async (id : number) => {
     try {
       const response = await axios.get('/enterprise/get-user-email.php', {
         params: {userId: id},
-
       });
-      if (response.status !== 200 && response.data.status !== "success") {
-        console.error("Failed to load tags:", response.data.message);
-      } else {
+      if (response) {
         setUserEmail(response.data.data.email);
         setUsername(response.data.data.name);
-        console.log(response.data.data.offers);
       }
     } catch (error) {
-      console.error("An error occurred while loading tags:", error);
+      if (axios.isAxiosError(error)) return alert(error.response?.data?.message || defaultError);
+      alert(defaultError);
     }
   };
-  console.log("Window size:", windowSize);
   useEffect(() => {
-    if (id) {
-      handleGetUserEmail(id);
-    }
-  }, []);
+    if (id) handleGetUserEmail(id);
+  }, [id]);
   return (
     <>
       <NavBar />

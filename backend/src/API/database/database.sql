@@ -217,6 +217,7 @@ CREATE TABLE `users` (
 
 -- --------------------------------------------------------
 
+-- --------------------------------------------------------
 --
 -- Estructura de tabla para la tabla `user_following`
 --
@@ -388,7 +389,7 @@ ALTER TABLE user_tags MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
 --
 ALTER TABLE `applicants`
   ADD CONSTRAINT `idPostulacion` FOREIGN KEY (`offer_id`) REFERENCES `offers` (`id`),
-  ADD CONSTRAINT `postulados_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `postulados_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `notifications`
