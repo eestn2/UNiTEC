@@ -217,13 +217,6 @@ CREATE TABLE `users` (
 
 -- --------------------------------------------------------
 
---
--- Volcado de datos para la tabla `users`
---
-
-INSERT INTO `users` (`id`, `name`, `birth_date`, `location`, `email`, `password`, `description`, `last_active_date`, `profile_picture`, `portfolio`, `enabled`, `user_type`, `status`) VALUES
-(1, 'UNiTEC SISTEMA', '2025-01-01', 'Buenos Aires, Argentina', 'unitec.no.reply@gmail.com', '$2y$10$Yczc9QY200wc5ZfXFYWESuM9Ej9kkLUGfywZCW0UaUqYE44e/fzAO', 'Cuenta de administración de UNiTEC.', '2025-08-31', '', '', 1, 4, 1);
-
 -- --------------------------------------------------------
 --
 -- Estructura de tabla para la tabla `user_following`
